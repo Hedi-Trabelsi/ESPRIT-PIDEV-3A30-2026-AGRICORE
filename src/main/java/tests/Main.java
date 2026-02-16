@@ -1,42 +1,22 @@
 package tests;
-import services.ServiceMaintenance;
-import entities.Maintenance;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-import java.time.LocalDate;
-import java.sql.SQLException;
+public class Main extends Application {
 
-public class Main {
-    public static void main(String[] args) {
-        ServiceMaintenance sm = new ServiceMaintenance();
+    @Override
 
-        try {
-            // Ajouter une maintenance
-         /*   Maintenance m1 = new Maintenance(
-                    "Révision",                 // type
-                    LocalDate.now(),            // dateDeclaration
-                    "Révision annuelle de la machine", // description
-                    "Oui",                      // statutory
-                    1                           // idTechnicien
-            );
-
-            sm.ajouter(m1);
-            System.out.println("Maintenance ajoutée !");*/
-            // 2 Modifier la maintenance
-
-         /*   Maintenance mToModify = new Maintenance(
-                    2,                              // id de la maintenance à modifier
-                    "Révision",                     // type
-                    LocalDate.now(),                // dateDeclaration
-                    "Description mise à jour",      // nouvelle description
-                    "Oui",                          // statut
-                    1                               // idTechnicien
-            );
-            sm.modifier(mToModify);
-            System.out.println("Maintenance modifiée !");*/
-            sm.supprimer(3);
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        public void start(Stage stage) throws Exception {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/AddMaintenance.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle(" work shop javafx ");
+            stage.show();
     }
+
+
 }

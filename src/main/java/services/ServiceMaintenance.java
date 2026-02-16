@@ -1,6 +1,6 @@
 package services;
 
-import entities.Maintenance;
+import models.Maintenance;
 import utils.MyDataBase;
 
 import java.sql.*;
@@ -16,12 +16,13 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
 
     @Override
     public void ajouter(Maintenance maintenance) throws SQLException {
-        String sql = "INSERT INTO maintenance(type,date_declaration, description, statut,id_technicien) VALUES ('"
+        maintenance.setStatut("en cours");
+        String sql = "INSERT INTO maintenance(type,date_declaration, description, statut,id_technicien,priorite) VALUES ('"
                 + maintenance.getType() + "', '"
                 + maintenance.getDateDeclaration() + "', '"
                 + maintenance.getDescription() + "', '"
-                + maintenance.getStatut() + "', NULL)";
-
+                + maintenance.getStatut() + "', NULL, '"
+                + maintenance.getPriorite() + "')";
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
     }
@@ -29,14 +30,16 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
 
     @Override
     public void modifier(Maintenance maintenance) throws SQLException {
-        String sql = "UPDATE maintenance SET type=?,date_declaration=?, description=?,statut=?, id_technicien=? WHERE id_maintenance=?";
+        String sql = "UPDATE maintenance SET type=?,date_declaration=?, description=?,statut=?, id_technicien=?,priorite=? WHERE id_maintenance=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, maintenance.getType());
         ps.setDate(2, Date.valueOf(maintenance.getDateDeclaration()));
         ps.setString(3, maintenance.getDescription());
         ps.setString(4, maintenance.getStatut());
         ps.setInt(5, maintenance.getIdTechnicien());
-        ps.setInt(6, maintenance.getId());
+        ps.setString(6, maintenance.getPriorite());
+        ps.setInt(7, maintenance.getId());
+
         ps.executeUpdate();
     }
 
@@ -63,7 +66,8 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
                     rs.getDate("dateDeclaration").toLocalDate(),
                     rs.getString("description"),
                     rs.getString("statutory"),
-                    rs.getInt("idTechnicien")
+                    rs.getInt("idTechnicien"),
+                    rs.getString("priorite")
             );
             maintenances.add(m);
         }

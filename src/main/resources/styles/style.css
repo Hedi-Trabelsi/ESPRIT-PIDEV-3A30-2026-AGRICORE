@@ -1,0 +1,174 @@
+/* ==================== Global ==================== */
+* {
+    -fx-font-family: "Segoe UI";
+}
+
+/* ==================== Sidebar Button ==================== */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 13;
+    -fx-padding: 8 15 8 15;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==================== Form Styling ==================== */
+.form-title {
+    -fx-font-size: 28;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.form-label {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7ca76f;
+}
+
+/* ==================== TextField ==================== */
+.form-input.text-field {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13;
+    -fx-control-inner-background: #f8f8f8;
+}
+
+.form-input.text-field:hover {
+    -fx-border-color: #5a8a52;
+    -fx-background-color: #ffffff;
+    -fx-control-inner-background: #ffffff;
+}
+
+.form-input.text-field:focused {
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-background-color: #ffffff;
+    -fx-control-inner-background: #ffffff;
+}
+
+.form-input.text-field: prompt-text-fill {
+    -fx-text-fill: #999999;
+}
+
+/* ==================== ChoiceBox ==================== */
+.form-input.choice-box {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13;
+}
+
+.form-input.choice-box:hover {
+    -fx-border-color: #5a8a52;
+    -fx-background-color: #ffffff;
+}
+
+.form-input.choice-box:focused {
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-background-color: #ffffff;
+}
+
+.form-input.choice-box .context-menu {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 1;
+}
+
+.form-input.choice-box .context-menu .menu-item:hover {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+}
+
+/* ==================== DatePicker ==================== */
+.form-input.date-picker {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13;
+}
+
+.form-input.date-picker:hover {
+    -fx-border-color: #5a8a52;
+    -fx-background-color: #ffffff;
+}
+
+.form-input.date-picker:focused {
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-background-color: #ffffff;
+}
+
+/* ==================== Buttons ==================== */
+/* ==================== Buttons ==================== */
+.btn-primary {
+    -fx-background-color: #7ca76f;  /* vert par défaut */
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 30 12 30;
+    -fx-border-radius: 8;
+    -fx-border-color: transparent;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #5a8a52;  /* vert plus foncé au survol */
+    -fx-cursor: hand;
+}
+
+.btn-primary:pressed {
+    -fx-background-color: #468540;  /* vert encore plus foncé quand pressé */
+}
+
+/* Désactivé */
+.btn-primary:disabled {
+    -fx-background-color: #cccccc;  /* gris clair */
+    -fx-text-fill: #666666;         /* texte gris */
+    -fx-cursor: default;
+}
+
+/* ==================== Secondary Buttons ==================== */
+.btn-secondary {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 30 12 30;
+    -fx-border-radius: 8;
+    -fx-border-color: transparent;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #5a8a52;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:pressed {
+    -fx-background-color: #468540;
+}
+
+.btn-secondary:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #666666;
+    -fx-cursor: default;
+}

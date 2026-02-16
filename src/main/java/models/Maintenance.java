@@ -1,4 +1,6 @@
-package entities;
+package models;
+
+import com.sun.org.apache.xpath.internal.objects.XString;
 
 import java.time.LocalDate;
 
@@ -9,22 +11,24 @@ public class Maintenance {
     private  String description;
     private  String statut;
     private  int idTechnicien;
+    private String priorite;
 
     public Maintenance() {
     }
 
-    public Maintenance(int id, String type, LocalDate dateDeclaration, String description, String statut, int idTechnicien) {
+    public Maintenance(int id, String type, LocalDate dateDeclaration, String description, String statut, int idTechnicien, String priorite) {
         this.id = id;
         this.type = type;
         this.dateDeclaration = dateDeclaration;
         this.description = description;
         this.statut = statut;
         this.idTechnicien = idTechnicien;
+        this.priorite = priorite;
     }
 
-    public Maintenance(String type, LocalDate dateDeclaration, String description, String statutory, int idTechnicien) {
+    public Maintenance(String type, LocalDate dateDeclaration, String description, String statutory, int idTechnicien,String priorite) {
         this.type = type;
-
+this.priorite = priorite;
         this.dateDeclaration = dateDeclaration;
         this.description = description;
         this.statut = statutory;
@@ -79,6 +83,14 @@ public class Maintenance {
         this.idTechnicien = idTechnicien;
     }
 
+    public String getPriorite() {
+        return priorite;
+    }
+
+    public void setPriorite(String priorite) {
+        this.priorite = priorite;
+    }
+
     @Override
     public String toString() {
         return "Maintenance{" +
@@ -86,8 +98,9 @@ public class Maintenance {
                 ", type='" + type + '\'' +
                 ", dateDeclaration=" + dateDeclaration +
                 ", description='" + description + '\'' +
-                ", statutory='" + statut + '\'' +
+                ", statut='" + statut + '\'' +
                 ", idTechnicien=" + idTechnicien +
+                ", priorite='" + priorite + '\'' +
                 '}';
     }
 }
