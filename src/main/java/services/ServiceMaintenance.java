@@ -33,17 +33,17 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
 
     @Override
     public void modifier(Maintenance maintenance) throws SQLException {
-        String sql = "UPDATE maintenance SET type=?,date_declaration=?, description=?,statut=?, id_technicien=?,priorite=? ,lieu=?,equipement=? WHERE id_maintenance=?";
+        String sql = "UPDATE maintenance SET type=?, date_declaration=?, description=?,statut=?, priorite=?,lieu=?, equipement=? WHERE id_maintenance=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, maintenance.getType());
         ps.setDate(2, Date.valueOf(maintenance.getDateDeclaration()));
         ps.setString(3, maintenance.getDescription());
         ps.setString(4, maintenance.getStatut());
-        ps.setInt(5, maintenance.getIdTechnicien());
-        ps.setString(6, maintenance.getPriorite());
-        ps.setString(7, maintenance.getLieu());
-        ps.setString(8, maintenance.getEquipement());
-        ps.setInt(7, maintenance.getId());
+
+        ps.setString(5, maintenance.getPriorite());
+        ps.setString(6, maintenance.getLieu());
+        ps.setString(7, maintenance.getEquipement());
+        ps.setInt(8, maintenance.getId());
 
         ps.executeUpdate();
     }

@@ -46,17 +46,14 @@ public class AddMaintenanceController {
         try {
             // Vérification des champs obligatoires
             if (type.getValue() == null || type.getValue().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez sélectionner un type");
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez selectionner un type");
                 return;
             }
             if (priorite.getValue() == null || priorite.getValue().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez sélectionner une priorité");
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez selectionner une priorite");
                 return;
             }
-            if (dateDeclarationDp.getValue() == null) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez sélectionner une date");
-                return;
-            }
+
             if (descriptionTf.getText() == null || descriptionTf.getText().trim().isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer une description");
                 return;
@@ -79,10 +76,22 @@ public class AddMaintenanceController {
             ms.ajouter(maintenance);
 
             // Message succès
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Maintenance enregistrée avec succès");
+            showAlert(Alert.AlertType.INFORMATION, "Succes", "Maintenance enregistree avec succes");
 
-            // Réinitialiser les champs
-            clearFields();
+            javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(1));
+            pause.setOnFinished(e -> {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+                    javafx.scene.Parent root = loader.load();
+
+                    // Utiliser event.getSource() pour récupérer la scène actuelle
+                    ((javafx.scene.Node) event.getSource()).getScene().setRoot(root);
+
+                } catch (Exception ex) {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner à la liste: " + ex.getMessage());
+                }
+            });
+            pause.play();
 
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
@@ -118,7 +127,7 @@ public class AddMaintenanceController {
     @FXML
     void navigateShowMaintenance(ActionEvent event) {
         try {
-            Parent root = new FXMLLoader(getClass().getResource("/ShowMaintenance.fxml")).load();
+            Parent root = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml")).load();
             Save.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de navigation", e.getMessage());

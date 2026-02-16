@@ -94,6 +94,12 @@
         <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0"
               style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" spacing="20.0">
             <children>
+                <HBox spacing="10" alignment="TOP_LEFT">
+                    <children>
+                        <Button fx:id="addBtn" text="Ajouter" prefWidth="120" prefHeight="30" styleClass="btn-primary"/>
+                    </children>
+                </HBox>
+
                 <VBox spacing="15">
                     <children>
                         <Label text="Liste des Maintenances" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
@@ -102,6 +108,7 @@
                 </VBox>
             </children>
         </VBox>
+
 
     </children>
 </AnchorPane>

@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.Maintenance;
 import services.ServiceMaintenance;
@@ -16,20 +17,21 @@ public class ShowMaintenanceController {
 
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
 
+
     @FXML
     private GridPane gridPane;
 
-    @FXML
+   /* @FXML
     void initialize() {
         loadMaintenances();
-    }
+    }*/
     @FXML
     private Button addBtn;
 
     @FXML
     void navigateAddMaintenance() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddMaintenance.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/AddMaintenance.fxml"));
             javafx.scene.Parent root = loader.load();
             addBtn.getScene().setRoot(root); // remplacer la scène par AddMaintenance
         } catch (Exception e) {
@@ -40,7 +42,28 @@ public class ShowMaintenanceController {
             alert.showAndWait();
         }
     }
+    @FXML
+    void initialize() {
+        loadMaintenances();
 
+        // Ajouter l'action pour le bouton Ajouter
+        addBtn.setOnAction(e -> navigateAddMaintenance());
+    }
+
+    @FXML
+ /*   void navigateAddMaintenance() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddMaintenance.fxml"));
+            javafx.scene.Parent root = loader.load();
+            addBtn.getScene().setRoot(root); // Remplace la scène par AddMaintenance
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Impossible d'ouvrir l'ajout");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }*/
     private void loadMaintenances() {
         try {
             List<Maintenance> maintenanceList = serviceMaintenance.afficher();
@@ -83,14 +106,38 @@ public class ShowMaintenanceController {
 
 
         Button deleteBtn = new Button("Supprimer");
-        deleteBtn.getStyleClass().add("btn-primary"); // ou btn-secondary
+        deleteBtn.getStyleClass().add("btn-primary");
+
+        Button btnUpdate = new Button("Modifier");
+        btnUpdate.getStyleClass().add("btn-primary");
+        HBox actions = new HBox(10);
+        actions.getChildren().addAll(btnUpdate, deleteBtn);
+
 
         deleteBtn.setOnAction(e -> {
             try {
                 serviceMaintenance.supprimer(m.getId());
-                loadMaintenances(); // refresh
+                loadMaintenances();
             } catch (SQLException ex) {
                 showAlert("Erreur", "Impossible de supprimer: " + ex.getMessage());
+            }
+        });
+
+        btnUpdate.setOnAction(e -> {
+            try {
+                // Mettre le chemin exact de ton FXML
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/UpdateMaintenance.fxml"));
+                javafx.scene.Parent root = loader.load();
+
+                // Récupérer le controller et passer la maintenance
+                UpdateMaintenanceController controller = loader.getController();
+                controller.setMaintenance(m);
+
+                // Remplacer la scène
+                btnUpdate.getScene().setRoot(root);
+
+            } catch (Exception ex) {
+                showAlert("Erreur", "Impossible d'ouvrir la modification: " + ex.getMessage());
             }
         });
 
@@ -103,7 +150,7 @@ public class ShowMaintenanceController {
                 descLabel,
                 lieuLabel,
                 equipementLabel,
-                deleteBtn
+                actions
         );
 
         return card;
