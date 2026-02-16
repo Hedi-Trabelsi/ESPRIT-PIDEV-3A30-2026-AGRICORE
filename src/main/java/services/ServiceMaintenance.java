@@ -80,6 +80,28 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
             maintenances.add(m);
         }
 
+
         return maintenances;
     }
+    public Maintenance getMaintenanceById(int id) throws SQLException {
+        String sql = "SELECT * FROM maintenance WHERE id_maintenance=?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return new Maintenance(
+                    rs.getInt("id_maintenance"),
+                    rs.getString("type"),
+                    rs.getDate("date_declaration").toLocalDate(),
+                    rs.getString("description"),
+                    rs.getString("statut"),
+                    rs.getInt("id_technicien"),
+                    rs.getString("priorite"),
+                    rs.getString("lieu"),
+                    rs.getString("equipement")
+            );
+        }
+        return null;
+    }
+
 }
