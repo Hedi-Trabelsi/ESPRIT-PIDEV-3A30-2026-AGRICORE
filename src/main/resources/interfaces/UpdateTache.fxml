@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="700.0" prefWidth="1210.0" style="-fx-background-color: #7ca76f;"
+            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.UpdateTacheController" stylesheets="@/styles/style.css">
+
+    <children>
+        <!-- Sidebar identique à AddTache -->
+        <VBox prefHeight="700.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
+            <!-- contenu du sidebar identique -->
+        </VBox>
+
+        <!-- Main content -->
+        <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0">
+            <children>
+                <VBox prefHeight="680.0" prefWidth="975.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" spacing="20.0">
+                    <children>
+                        <!-- Titre -->
+                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="945.0">
+                            <children>
+                                <Label text="Modifier la Tâche" styleClass="form-title" />
+                            </children>
+                        </HBox>
+
+                        <!-- Formulaire -->
+                        <VBox prefHeight="600.0" prefWidth="945.0" spacing="25.0" style="-fx-padding: 20;">
+                            <children>
+                                <!-- Date prévue -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Date Prévue" styleClass="form-label" />
+                                        <DatePicker fx:id="datePrevueDp" prefWidth="450.0" styleClass="form-input" />
+                                    </children>
+                                </VBox>
+
+                                <!-- Description -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Description" styleClass="form-label" />
+                                        <TextArea fx:id="descriptionTa" prefWidth="450.0" prefHeight="120.0" styleClass="form-input" promptText="Entrez la description de la tâche..." />
+                                    </children>
+                                </VBox>
+
+                                <!-- Coût estimé -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Coût Estimé" styleClass="form-label" />
+                                        <TextField fx:id="coutTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez le coût estimé..." />
+                                    </children>
+                                </VBox>
+
+                                <!-- Maintenance associée -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Maintenance associée" styleClass="form-label" />
+                                        <ChoiceBox fx:id="maintenanceCb" prefWidth="450.0" styleClass="form-input" />
+                                    </children>
+                                </VBox>
+
+                                <!-- Boutons -->
+                                <HBox prefHeight="50.0" prefWidth="945.0" spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                                    <children>
+                                        <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#saveTache" text="Mettre à jour" styleClass="btn-primary" prefWidth="150.0" prefHeight="45.0" />
+                                        <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancel" text="Annuler" styleClass="btn-secondary" prefWidth="150.0" prefHeight="45.0" />
+                                    </children>
+                                </HBox>
+
+                            </children>
+                        </VBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

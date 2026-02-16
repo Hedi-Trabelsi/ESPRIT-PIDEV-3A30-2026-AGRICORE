@@ -131,6 +131,19 @@ public class ShowTacheController {
                 showAlert("Erreur", "Impossible de supprimer: " + ex.getMessage());
             }
         });
+        btnUpdate.setOnAction(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/UpdateTache.fxml"));
+                Parent root = loader.load();
+
+                UpdateTacheController controller = loader.getController();
+                controller.setTache(t); // passer la tâche à modifier
+
+                btnUpdate.getScene().setRoot(root);
+            } catch (Exception ex) {
+                showAlert("Erreur", "Impossible d'ouvrir la modification: " + ex.getMessage());
+            }
+        });
 
         card.getChildren().addAll(dateLabel, descLabel, coutLabel, maintenanceInfoLabel, actions);
         return card;

@@ -1,7 +1,9 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -18,6 +20,21 @@ public class ShowTachesByMaintenanceController {
 
     @FXML
     private GridPane gridPane;
+    @FXML
+    private Button backBtn;
+
+    @FXML
+    void initialize() {
+        // Action pour revenir à la liste des maintenances
+        backBtn.setOnAction(e -> {
+            try {
+                javafx.scene.Parent root = FXMLLoader.load(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+                backBtn.getScene().setRoot(root);
+            } catch (Exception ex) {
+                showAlert("Erreur", "Impossible de revenir à la liste: " + ex.getMessage());
+            }
+        });
+    }
 
     // Méthode pour passer l'ID de la maintenance sélectionnée
     public void setMaintenanceId(int id) {
