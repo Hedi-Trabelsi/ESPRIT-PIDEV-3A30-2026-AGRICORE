@@ -12,11 +12,14 @@ public class Maintenance {
     private  String statut;
     private  int idTechnicien;
     private String priorite;
+    private String lieu;
+    private String equipement;
+
 
     public Maintenance() {
     }
 
-    public Maintenance(int id, String type, LocalDate dateDeclaration, String description, String statut, int idTechnicien, String priorite) {
+    public Maintenance(int id, String type, LocalDate dateDeclaration, String description, String statut, int idTechnicien, String priorite, String lieu, String equipement) {
         this.id = id;
         this.type = type;
         this.dateDeclaration = dateDeclaration;
@@ -24,16 +27,26 @@ public class Maintenance {
         this.statut = statut;
         this.idTechnicien = idTechnicien;
         this.priorite = priorite;
+        this.lieu = lieu;
+        this.equipement = equipement;
+
     }
 
-    public Maintenance(String type, LocalDate dateDeclaration, String description, String statutory, int idTechnicien,String priorite) {
-        this.type = type;
-this.priorite = priorite;
+
+    public Maintenance(LocalDate dateDeclaration, String type, String description, String statut, int idTechnicien, String priorite, String lieu, String equipement ) {
         this.dateDeclaration = dateDeclaration;
+
+        this.type = type;
         this.description = description;
-        this.statut = statutory;
+        this.statut = statut;
         this.idTechnicien = idTechnicien;
+        this.priorite = priorite;
+        this.lieu = lieu;
+        this.equipement = equipement;
+
     }
+
+
 
     public int getId() {
         return id;
@@ -91,6 +104,22 @@ this.priorite = priorite;
         this.priorite = priorite;
     }
 
+    public String getLieu() {
+        return lieu;
+    }
+
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
+    }
+
+    public String getEquipement() {
+        return equipement;
+    }
+
+    public void setEquipement(String equipement) {
+        this.equipement = equipement;
+    }
+
     @Override
     public String toString() {
         return "Maintenance{" +
@@ -101,6 +130,8 @@ this.priorite = priorite;
                 ", statut='" + statut + '\'' +
                 ", idTechnicien=" + idTechnicien +
                 ", priorite='" + priorite + '\'' +
+                ", lieu='" + lieu + '\'' +
+                ", equipement='" + equipement + '\'' +
                 '}';
     }
 }

@@ -58,9 +58,7 @@
     -fx-control-inner-background: #ffffff;
 }
 
-.form-input.text-field: prompt-text-fill {
-    -fx-text-fill: #999999;
-}
+
 
 /* ==================== ChoiceBox ==================== */
 .form-input.choice-box {

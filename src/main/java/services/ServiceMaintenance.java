@@ -17,12 +17,15 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
     @Override
     public void ajouter(Maintenance maintenance) throws SQLException {
         maintenance.setStatut("en cours");
-        String sql = "INSERT INTO maintenance(type,date_declaration, description, statut,id_technicien,priorite) VALUES ('"
+        String sql = "INSERT INTO maintenance(type,date_declaration, description, statut,id_technicien,priorite,lieu,equipement) VALUES ('"
                 + maintenance.getType() + "', '"
                 + maintenance.getDateDeclaration() + "', '"
                 + maintenance.getDescription() + "', '"
                 + maintenance.getStatut() + "', NULL, '"
-                + maintenance.getPriorite() + "')";
+                + maintenance.getPriorite() + "', '"
+                + maintenance.getLieu() + "', '"
+                + maintenance.getEquipement() + "')";
+
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
     }
@@ -30,7 +33,7 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
 
     @Override
     public void modifier(Maintenance maintenance) throws SQLException {
-        String sql = "UPDATE maintenance SET type=?,date_declaration=?, description=?,statut=?, id_technicien=?,priorite=? WHERE id_maintenance=?";
+        String sql = "UPDATE maintenance SET type=?,date_declaration=?, description=?,statut=?, id_technicien=?,priorite=? ,lieu=?,equipement=? WHERE id_maintenance=?";
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, maintenance.getType());
         ps.setDate(2, Date.valueOf(maintenance.getDateDeclaration()));
@@ -38,6 +41,8 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
         ps.setString(4, maintenance.getStatut());
         ps.setInt(5, maintenance.getIdTechnicien());
         ps.setString(6, maintenance.getPriorite());
+        ps.setString(7, maintenance.getLieu());
+        ps.setString(8, maintenance.getEquipement());
         ps.setInt(7, maintenance.getId());
 
         ps.executeUpdate();
@@ -61,13 +66,16 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
         while (rs.next()) {
             // On utilise le constructeur complet comme pour ServicePersonne
             Maintenance m = new Maintenance(
-                    rs.getInt("id"),
+                    rs.getInt("id_maintenance"),
                     rs.getString("type"),
-                    rs.getDate("dateDeclaration").toLocalDate(),
+                    rs.getDate("date_declaration").toLocalDate(),
                     rs.getString("description"),
-                    rs.getString("statutory"),
-                    rs.getInt("idTechnicien"),
-                    rs.getString("priorite")
+                    rs.getString("statut"),
+                    rs.getInt("id_technicien"),
+                    rs.getString("priorite"),
+                    rs.getString("lieu"),
+                    rs.getString("equipement")
+
             );
             maintenances.add(m);
         }

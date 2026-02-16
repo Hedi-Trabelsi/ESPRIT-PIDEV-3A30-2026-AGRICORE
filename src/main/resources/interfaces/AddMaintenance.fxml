@@ -101,6 +101,14 @@
                         <!-- Formulaire -->
                         <VBox prefHeight="600.0" prefWidth="945.0" spacing="25.0" style="-fx-padding: 20;">
                             <children>
+                                <!-- Date -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Date de Déclaration" styleClass="form-label" />
+                                        <DatePicker fx:id="dateDeclarationDp" prefWidth="450.0" styleClass="form-input" />
+                                    </children>
+                                </VBox>
+
                                 <!-- Type -->
                                 <VBox spacing="8.0">
                                     <children>
@@ -108,6 +116,24 @@
                                         <ChoiceBox fx:id="type" prefWidth="450.0" styleClass="form-input" />
                                     </children>
                                 </VBox>
+                                <!-- Lieu -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Lieu" styleClass="form-label" />
+                                        <TextField fx:id="lieuTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez le lieu de la maintenance..." />
+                                    </children>
+                                </VBox>
+
+                                <!-- Equipement -->
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Equipement" styleClass="form-label" />
+                                        <TextField fx:id="equipementTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez l'équipement concerné..." />
+                                    </children>
+                                </VBox>
+
+                                <!-- Image -->
+
 
                                 <!-- Priorité -->
                                 <VBox spacing="8.0">
@@ -117,13 +143,6 @@
                                     </children>
                                 </VBox>
 
-                                <!-- Date -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Date de Déclaration" styleClass="form-label" />
-                                        <DatePicker fx:id="dateDeclarationDp" prefWidth="450.0" styleClass="form-input" />
-                                    </children>
-                                </VBox>
 
                                 <!-- Description -->
                                 <VBox spacing="8.0" prefHeight="180.0">

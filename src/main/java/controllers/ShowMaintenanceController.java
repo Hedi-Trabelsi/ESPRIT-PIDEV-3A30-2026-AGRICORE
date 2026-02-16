@@ -1,0 +1,119 @@
+package controllers;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import models.Maintenance;
+import services.ServiceMaintenance;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class ShowMaintenanceController {
+
+    private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
+
+    @FXML
+    private GridPane gridPane;
+
+    @FXML
+    void initialize() {
+        loadMaintenances();
+    }
+    @FXML
+    private Button addBtn;
+
+    @FXML
+    void navigateAddMaintenance() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddMaintenance.fxml"));
+            javafx.scene.Parent root = loader.load();
+            addBtn.getScene().setRoot(root); // remplacer la scène par AddMaintenance
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Impossible d'ouvrir l'ajout");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+    private void loadMaintenances() {
+        try {
+            List<Maintenance> maintenanceList = serviceMaintenance.afficher();
+            gridPane.getChildren().clear();
+
+            int column = 0;
+            int row = 0;
+
+            for (Maintenance m : maintenanceList) {
+                VBox card = createCard(m);
+                gridPane.add(card, column, row);
+                column++;
+                if (column > 2) { // 3 cards per row
+                    column = 0;
+                    row++;
+                }
+            }
+
+        } catch (SQLException e) {
+            showAlert("Erreur", "Impossible de charger les maintenances: " + e.getMessage());
+        }
+    }
+
+    private VBox createCard(Maintenance m) {
+        VBox card = new VBox();
+        card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 15; "
+                + "-fx-spacing: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+
+        javafx.scene.control.Label typeLabel = new javafx.scene.control.Label("Type: " + m.getType());
+        javafx.scene.control.Label prioriteLabel = new javafx.scene.control.Label("Priorité: " + m.getPriorite());
+        javafx.scene.control.Label dateLabel = new javafx.scene.control.Label("Date: " + m.getDateDeclaration());
+        javafx.scene.control.Label statutLabel = new javafx.scene.control.Label("Statut: " + m.getStatut());
+        javafx.scene.control.Label descLabel = new javafx.scene.control.Label("Description: " + m.getDescription());
+        descLabel.setWrapText(true);
+
+        // Nouveaux champs
+        javafx.scene.control.Label lieuLabel = new javafx.scene.control.Label("Lieu: " + m.getLieu());
+        javafx.scene.control.Label equipementLabel = new javafx.scene.control.Label("Équipement: " + m.getEquipement());
+
+
+
+        Button deleteBtn = new Button("Supprimer");
+        deleteBtn.getStyleClass().add("btn-primary"); // ou btn-secondary
+
+        deleteBtn.setOnAction(e -> {
+            try {
+                serviceMaintenance.supprimer(m.getId());
+                loadMaintenances(); // refresh
+            } catch (SQLException ex) {
+                showAlert("Erreur", "Impossible de supprimer: " + ex.getMessage());
+            }
+        });
+
+        // Ajouter tous les labels à la card
+        card.getChildren().addAll(
+                typeLabel,
+                prioriteLabel,
+                dateLabel,
+                statutLabel,
+                descLabel,
+                lieuLabel,
+                equipementLabel,
+                deleteBtn
+        );
+
+        return card;
+    }
+
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+}
