@@ -113,6 +113,20 @@ public class ShowMaintenanceController {
         HBox actions = new HBox(10);
         actions.getChildren().addAll(btnUpdate, deleteBtn);
 
+        card.setOnMouseClicked(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTachesByMaintenance.fxml"));
+                javafx.scene.Parent root = loader.load();
+
+                ShowTachesByMaintenanceController controller = loader.getController();
+                controller.setMaintenanceId(m.getId()); // <-- il faut que cette méthode existe et charge le GridPane
+
+                card.getScene().setRoot(root);
+            } catch (Exception ex) {
+                showAlert("Erreur", "Impossible d'ouvrir les tâches: " + ex.getMessage());
+            }
+        });
+
 
         deleteBtn.setOnAction(e -> {
             try {

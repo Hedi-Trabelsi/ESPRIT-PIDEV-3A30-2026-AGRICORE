@@ -89,5 +89,27 @@ public class ServiceTache {
         }
 
         return taches;
+
     }
+    // Lister les tâches d'une maintenance spécifique
+    public List<Tache> getTachesByMaintenance(int idMaintenance) throws SQLException {
+        List<Tache> taches = new ArrayList<>();
+        String sql = "SELECT * FROM tache WHERE id_maintenace = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idMaintenance);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Tache t = new Tache(
+                    rs.getInt("id_tache"),
+                    rs.getString("date_prevue"),
+                    rs.getString("desciption"),
+                    rs.getInt("cout_estimee"),
+                    rs.getInt("id_maintenace")
+            );
+            taches.add(t);
+        }
+        return taches;
+    }
+
 }

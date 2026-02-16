@@ -39,6 +39,7 @@ public class AddTacheController {
     @FXML
     private Button cancelBtn;
 
+
     @FXML
     void initialize() {
         // Date prévue par défaut = aujourd'hui
@@ -50,12 +51,15 @@ public class AddTacheController {
             // Ajouter les maintenances au ChoiceBox
             maintenanceCb.getItems().addAll(maintenances);
 
-            // Convertir Maintenance en texte lisible
+            // Convertir Maintenance en texte lisible avec plus de détails
             maintenanceCb.setConverter(new javafx.util.StringConverter<Maintenance>() {
                 @Override
                 public String toString(Maintenance m) {
                     if (m == null) return "";
-                    return m.getType() + " - " + m.getDateDeclaration();
+                    return m.getType()
+                            + " | Date: " + m.getDateDeclaration()
+                            + " | Lieu: " + m.getLieu()
+                            + " | Équipement: " + m.getEquipement();
                 }
 
                 @Override
@@ -63,11 +67,22 @@ public class AddTacheController {
                     return null; // pas utilisé
                 }
             });
-
+            maintenanceCb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null) {
+                    try {
+                        // Changer le statut à "Planifié"
+                        newVal.setStatut("Planifié");
+                        serviceMaintenance.modifier(newVal); // Mettre à jour dans la base
+                    } catch (SQLException e) {
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de mettre à jour le statut: " + e.getMessage());
+                    }
+                }
+            });
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les maintenances: " + e.getMessage());
         }
     }
+
 
 
     @FXML

@@ -2,6 +2,7 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -94,7 +95,23 @@ public class ShowTacheController {
         }
 
         Label maintenanceInfoLabel = new Label("Maintenance: " + type + " - " + lieu);
+        card.setOnMouseClicked(e -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenanceDetails.fxml"));
+                Parent root = loader.load();
 
+                // Passer la maintenance au contrôleur
+                ShowMaintenanceDetailsController controller = loader.getController();
+                Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace());
+                controller.setMaintenance(m);
+
+                // Remplacer la scène
+                card.getScene().setRoot(root);
+
+            } catch (Exception ex) {
+                showAlert("Erreur", "Impossible d'ouvrir la maintenance: " + ex.getMessage());
+            }
+        });
         // Boutons
         Button deleteBtn = new Button("Supprimer");
         deleteBtn.getStyleClass().add("btn-primary");
