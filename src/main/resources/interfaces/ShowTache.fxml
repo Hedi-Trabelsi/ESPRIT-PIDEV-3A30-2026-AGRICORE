@@ -99,9 +99,13 @@
             <!-- Bouton Ajouter -->
             <HBox spacing="10" alignment="TOP_LEFT">
                 <children>
-                    <Button fx:id="addBtn" text="+ Ajouter Tâche" prefWidth="150" prefHeight="35" styleClass="btn-primary"/>
+                    <Label fx:id="voirListeLabel"
+                           text="Voir liste des Maintenance"
+                           style="-fx-text-fill: #2e7d32; -fx-font-size: 16px; -fx-underline: true; -fx-cursor: hand;"
+                           onMouseClicked="#navigateVoirListe"/>
                 </children>
             </HBox>
+
 
             <!-- Titre et GridPane -->
             <VBox spacing="15">

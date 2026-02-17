@@ -334,3 +334,10 @@
 .list-view .list-cell:focused {
     -fx-background-color: transparent; /* pas d'effet quand cliqué */
 }
+.form-input-disabled {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 5 10;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-text-fill: #555;
+}

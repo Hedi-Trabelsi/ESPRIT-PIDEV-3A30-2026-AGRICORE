@@ -14,14 +14,13 @@ import services.ServiceMaintenance;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
 
 public class UpdateTacheController {
 
     private final ServiceTache serviceTache = new ServiceTache();
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
 
-    private Tache tache; // La tâche à mettre à jour
+    private Tache tache; // La tâche a mettre a jour
 
     @FXML
     private DatePicker datePrevueDp;
@@ -33,7 +32,7 @@ public class UpdateTacheController {
     private TextField coutTf;
 
     @FXML
-    private ChoiceBox<Maintenance> maintenanceCb;
+    private Label maintenanceLbl; // Label pour la maintenance associee (non modifiable)
 
     @FXML
     private Button saveBtn;
@@ -41,90 +40,80 @@ public class UpdateTacheController {
     @FXML
     private Button cancelBtn;
 
-    // Méthode pour passer la tâche à modifier
+    /**
+     * Methode pour passer la tâche a modifier
+     */
     public void setTache(Tache tache) {
         this.tache = tache;
         populateFields();
     }
 
+    /**
+     * Remplit les champs avec les valeurs de la tâche
+     */
     private void populateFields() {
-        if (tache != null) {
-            datePrevueDp.setValue(LocalDate.parse(tache.getDate_prevue()));
-            descriptionTa.setText(tache.getDesciption());
-            coutTf.setText(String.valueOf(tache.getCout_estimee()));
-
-            try {
-                List<Maintenance> maintenances = serviceMaintenance.afficher();
-                maintenanceCb.getItems().addAll(maintenances);
-
-                // Sélectionner la maintenance associée
-                for (Maintenance m : maintenances) {
-                    if (m.getId() == tache.getId_maintenace()) {
-                        maintenanceCb.setValue(m);
-                        break;
-                    }
-                }
-
-                // Affichage lisible
-                maintenanceCb.setConverter(new javafx.util.StringConverter<Maintenance>() {
-                    @Override
-                    public String toString(Maintenance m) {
-                        if (m == null) return "";
-                        return m.getType() + " - " + m.getLieu(); // affichage lisible
-                    }
-
-                    @Override
-                    public Maintenance fromString(String string) {
-                        return null; // pas utilisé, nécessaire pour compiler
-                    }
-                });
-
-
-            } catch (SQLException e) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les maintenances: " + e.getMessage());
-            }
+        if (tache == null) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Tâche invalide");
+            return;
         }
+
+        // Champs modifiables
+        datePrevueDp.setValue(LocalDate.parse(tache.getDate_prevue()));
+        descriptionTa.setText(tache.getDesciption());
+        coutTf.setText(String.valueOf(tache.getCout_estimee()));
+
+        try {
+            Maintenance m = serviceMaintenance.getMaintenanceById(tache.getId_maintenace());
+            if (m != null) {
+                maintenanceLbl.setText(m.getType() + " - " + m.getLieu());
+            } else {
+                maintenanceLbl.setText("Maintenance inconnue");
+            }
+        } catch (SQLException e) {
+            maintenanceLbl.setText("Erreur chargement");
+        }
+
     }
 
+    /**
+     * Sauvegarde les modifications
+     */
     @FXML
     void saveTache(ActionEvent event) {
         try {
-            if (maintenanceCb.getValue() == null) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez sélectionner une maintenance");
-                return;
-            }
+            // Validation
             if (descriptionTa.getText() == null || descriptionTa.getText().trim().isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer une description");
                 return;
             }
             if (coutTf.getText() == null || coutTf.getText().trim().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer le coût estimé");
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer le coût estime");
                 return;
             }
             if (datePrevueDp.getValue() == null || datePrevueDp.getValue().isBefore(LocalDate.now())) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez choisir une date prévue valide");
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez choisir une date prevue valide");
                 return;
             }
 
             int cout = Integer.parseInt(coutTf.getText().trim());
 
-            // Mettre à jour la tâche
+            // Mise a jour de la tâche
             tache.setDate_prevue(datePrevueDp.getValue().toString());
             tache.setDesciption(descriptionTa.getText());
             tache.setCout_estimee(cout);
-            tache.setId_maintenace(maintenanceCb.getValue().getId());
 
             serviceTache.modifier(tache);
 
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche mise à jour avec succès");
+            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tâche mise a jour avec succes");
 
+            // Retour a la liste apres un court delai
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
                 try {
                     Parent root = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml")).load();
                     saveBtn.getScene().setRoot(root);
                 } catch (Exception ex) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner à la liste: " + ex.getMessage());
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + ex.getMessage());
                 }
             });
             pause.play();
@@ -132,20 +121,26 @@ public class UpdateTacheController {
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût estimé doit être un nombre entier");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût estime doit être un nombre entier");
         }
     }
 
+    /**
+     * Annule et retourne a la liste
+     */
     @FXML
     void cancel(ActionEvent event) {
         try {
             Parent root = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml")).load();
             cancelBtn.getScene().setRoot(root);
         } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner à la liste: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + e.getMessage());
         }
     }
 
+    /**
+     * Affiche une alerte
+     */
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

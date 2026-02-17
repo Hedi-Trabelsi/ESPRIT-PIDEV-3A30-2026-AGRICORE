@@ -2,8 +2,10 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -33,7 +35,7 @@ public class ShowMaintenanceController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/AddMaintenance.fxml"));
             javafx.scene.Parent root = loader.load();
-            addBtn.getScene().setRoot(root); // remplacer la scène par AddMaintenance
+            addBtn.getScene().setRoot(root); // remplacer la scene par AddMaintenance
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
@@ -55,7 +57,7 @@ public class ShowMaintenanceController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddMaintenance.fxml"));
             javafx.scene.Parent root = loader.load();
-            addBtn.getScene().setRoot(root); // Remplace la scène par AddMaintenance
+            addBtn.getScene().setRoot(root); // Remplace la scene par AddMaintenance
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
@@ -86,6 +88,35 @@ public class ShowMaintenanceController {
             showAlert("Erreur", "Impossible de charger les maintenances: " + e.getMessage());
         }
     }
+    @FXML
+    private Label planifierLabel; // ✅ correspond au FXML
+
+    @FXML
+    void navigatePlanifier() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/AddTache.fxml"));
+            javafx.scene.Parent root = loader.load();
+            // Utilise n'importe quel node existant pour obtenir la scene
+            planifierLabel.getScene().setRoot(root);
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible d'ouvrir la planification: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private Label voirListeLabel; // correspond au fx:id du FXML
+
+    @FXML
+    void navigateVoirListe() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml"));
+            Parent root = loader.load();
+            voirListeLabel.getScene().setRoot(root); // remplace la scene par ShowTache
+        } catch (Exception e) {
+            showAlert("Erreur", "Impossible d'ouvrir ShowTache: " + e.getMessage());
+        }
+    }
+
 
     private VBox createCard(Maintenance m) {
         VBox card = new VBox();
@@ -93,7 +124,7 @@ public class ShowMaintenanceController {
                 + "-fx-spacing: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
 
         javafx.scene.control.Label typeLabel = new javafx.scene.control.Label("Type: " + m.getType());
-        javafx.scene.control.Label prioriteLabel = new javafx.scene.control.Label("Priorité: " + m.getPriorite());
+        javafx.scene.control.Label prioriteLabel = new javafx.scene.control.Label("Priorite: " + m.getPriorite());
         javafx.scene.control.Label dateLabel = new javafx.scene.control.Label("Date: " + m.getDateDeclaration());
         javafx.scene.control.Label statutLabel = new javafx.scene.control.Label(m.getStatut());
         statutLabel.setStyle(getStatusStyle(m.getStatut()));
@@ -102,7 +133,7 @@ public class ShowMaintenanceController {
 
         // Nouveaux champs
         javafx.scene.control.Label lieuLabel = new javafx.scene.control.Label("Lieu: " + m.getLieu());
-        javafx.scene.control.Label equipementLabel = new javafx.scene.control.Label("Équipement: " + m.getEquipement());
+        javafx.scene.control.Label equipementLabel = new javafx.scene.control.Label("equipement: " + m.getEquipement());
 
 
 
@@ -114,19 +145,7 @@ public class ShowMaintenanceController {
         HBox actions = new HBox(10);
         actions.getChildren().addAll(btnUpdate, deleteBtn);
 
-        card.setOnMouseClicked(e -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTachesByMaintenance.fxml"));
-                javafx.scene.Parent root = loader.load();
 
-                ShowTachesByMaintenanceController controller = loader.getController();
-                controller.setMaintenanceId(m.getId()); // <-- il faut que cette méthode existe et charge le GridPane
-
-                card.getScene().setRoot(root);
-            } catch (Exception ex) {
-                showAlert("Erreur", "Impossible d'ouvrir les tâches: " + ex.getMessage());
-            }
-        });
 
 
         deleteBtn.setOnAction(e -> {
@@ -144,11 +163,11 @@ public class ShowMaintenanceController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/UpdateMaintenance.fxml"));
                 javafx.scene.Parent root = loader.load();
 
-                // Récupérer le controller et passer la maintenance
+                // Recuperer le controller et passer la maintenance
                 UpdateMaintenanceController controller = loader.getController();
                 controller.setMaintenance(m);
 
-                // Remplacer la scène
+                // Remplacer la scene
                 btnUpdate.getScene().setRoot(root);
 
             } catch (Exception ex) {
@@ -156,7 +175,7 @@ public class ShowMaintenanceController {
             }
         });
 
-        // Ajouter tous les labels à la card
+        // Ajouter tous les labels a la card
         card.getChildren().addAll(
                 typeLabel,
                 prioriteLabel,
@@ -183,15 +202,15 @@ public class ShowMaintenanceController {
 
         statut = statut.toLowerCase();
 
-        if (statut.contains("resol")) { // Résolu
+        if (statut.contains("resol")) { // Resolu
             return "-fx-background-color:#d4edda; -fx-text-fill:green; -fx-padding:5 10; -fx-background-radius:10;";
         } else if (statut.contains("cours")) { // En cours
             return "-fx-background-color:#d1ecf1; -fx-text-fill:#0c5460; -fx-padding:5 10; -fx-background-radius:10;";
-        } else if (statut.contains("attente") || statut.contains("plan")) { // En attente / Planifiée
+        } else if (statut.contains("attente") || statut.contains("plan")) { // En attente / Planifiee
             return "-fx-background-color:#fff3cd; -fx-text-fill:#856404; -fx-padding:5 10; -fx-background-radius:10;";
         }
 
-        // Par défaut si statut inconnu
+        // Par defaut si statut inconnu
         return "-fx-background-color:#f8d7da; -fx-text-fill:red; -fx-padding:5 10; -fx-background-radius:10;";
     }
 

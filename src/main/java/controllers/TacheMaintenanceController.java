@@ -34,7 +34,7 @@ public class TacheMaintenanceController {
         typeLabel.setText(maintenance.getType());
         descriptionLabel.setText(maintenance.getDescription());
 
-        // Récupérer les tâches associées à cette maintenance
+        // Recuperer les tâches associees a cette maintenance
         // tacheList.getItems().setAll(serviceTache.getTachesByMaintenance(maintenance.getId()));
     }
 }

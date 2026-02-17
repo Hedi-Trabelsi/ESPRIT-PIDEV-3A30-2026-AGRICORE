@@ -178,6 +178,12 @@
                             </VBox>
 
 
+                            <VBox spacing="8.0">
+                                <children>
+                                    <Label text="Maintenance associée" styleClass="form-label" />
+                                    <ChoiceBox fx:id="maintenanceCb" prefWidth="450.0" styleClass="form-input" />
+                                </children>
+                            </VBox>
 
 
                             <!-- Buttons -->
@@ -191,9 +197,9 @@
                                             prefHeight="45.0"/>
 
                                     <Button text="Annuler"
-                                            styleClass="btn-secondary"
-                                            prefWidth="150.0"
-                                            prefHeight="45.0"/>
+                                            onAction="#cancelUpdate"
+                                            styleClass="btn-secondary"/>
+
                                 </children>
                             </HBox>
 

@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
 
-        <?import javafx.scene.control.Button?>
-        <?import javafx.scene.control.ChoiceBox?>
-        <?import javafx.scene.control.DatePicker?>
-        <?import javafx.scene.control.TextField?>
-        <?import javafx.scene.control.Label?>
-        <?import javafx.scene.image.Image?>
-        <?import javafx.scene.image.ImageView?>
-        <?import javafx.scene.layout.AnchorPane?>
-        <?import javafx.scene.layout.HBox?>
-        <?import javafx.scene.layout.VBox?>
-        <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane prefHeight="720" prefWidth="1250"
             style="-fx-background-color: #7ca76f;"
             xmlns="http://javafx.com/javafx/25"
@@ -116,7 +116,7 @@
                     <VBox spacing="4.0" alignment="TOP_LEFT">
                         <HBox spacing="5" alignment="CENTER_LEFT">
                             <Label text="Date de Déclaration" styleClass="form-label"/>
-                            <Label fx:id="dateStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+
                         </HBox>
                         <TextField fx:id="dateDeclarationTf" prefWidth="450.0" styleClass="form-input" editable="false"/>
                     </VBox>
@@ -168,11 +168,18 @@
                         <TextField fx:id="descriptionTf" prefWidth="450.0" prefHeight="120.0" styleClass="form-input" promptText="Entrez la description..."/>
                     </VBox>
 
+
                     <!-- Boutons -->
                     <HBox spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
                         <Button fx:id="Save" mnemonicParsing="false" onAction="#saveMaintenance"
                                 text="Enregistrer" styleClass="btn-primary" prefWidth="180.0" prefHeight="40.0"/>
-                        <Button mnemonicParsing="false" text="Annuler" styleClass="btn-secondary" prefWidth="180.0" prefHeight="40.0"/>
+                        <Button mnemonicParsing="false"
+                                text="Annuler"
+                                onAction="#cancel"
+                                styleClass="btn-secondary"
+                                prefWidth="180.0"
+                                prefHeight="40.0"/>
+
                     </HBox>
 
                 </VBox>

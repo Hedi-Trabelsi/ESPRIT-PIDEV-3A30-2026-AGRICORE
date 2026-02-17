@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import models.Maintenance;
@@ -31,15 +32,33 @@ public class ShowMaintenanceDetailsController {
     private Label equipementLabel;
 
     /**
-     * Méthode pour passer la maintenance depuis un autre contrôleur
+     * Methode pour passer la maintenance depuis un autre contrôleur
      */
     public void setMaintenance(Maintenance maintenance) {
         this.maintenance = maintenance;
         showMaintenanceDetails();
     }
+    @FXML
+    private Label retourLabel; // correspond au fx:id du FXML
+
+    @FXML
+    void navigateRetour() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml"));
+            javafx.scene.Parent root = loader.load();
+            retourLabel.getScene().setRoot(root); // remplace la scene par ShowTache
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Impossible de retourner a la liste des tâches");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
 
     /**
-     * Affiche les détails de la maintenance dans les labels
+     * Affiche les details de la maintenance dans les labels
      */
     private void showMaintenanceDetails() {
         if (maintenance != null) {
@@ -53,8 +72,8 @@ public class ShowMaintenanceDetailsController {
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
-            alert.setHeaderText("Aucune maintenance sélectionnée");
-            alert.setContentText("Impossible d'afficher les détails.");
+            alert.setHeaderText("Aucune maintenance selectionnee");
+            alert.setContentText("Impossible d'afficher les details.");
             alert.showAndWait();
         }
     }

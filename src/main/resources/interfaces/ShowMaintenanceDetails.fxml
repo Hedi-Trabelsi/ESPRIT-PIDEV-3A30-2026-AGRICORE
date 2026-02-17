@@ -94,6 +94,11 @@
         <!-- Contenu principal à droite de la sidebar -->
         <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0"
               spacing="20" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;">
+            <!-- Label Retour cliquable -->
+            <Label fx:id="retourLabel"
+                   text="← Retour"
+                   style="-fx-text-fill: #2e7d32; -fx-font-size: 16px; -fx-underline: true; -fx-cursor: hand;"
+                   onMouseClicked="#navigateRetour"/>
 
             <!-- Titre -->
             <Label text="Détails de la Maintenance" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>

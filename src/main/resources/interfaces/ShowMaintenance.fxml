@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -90,11 +90,31 @@
           spacing="20" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;">
 
         <!-- Header -->
-        <HBox spacing="10" alignment="TOP_LEFT">
-            <children>
-                <Button fx:id="addBtn" text="Ajouter" prefWidth="120" prefHeight="30" styleClass="btn-primary"/>
-            </children>
+        <HBox alignment="CENTER_LEFT" spacing="10">
+
+            <!-- Texte cliquable à gauche -->
+            <Label fx:id="planifierLabel"
+                   text="Planifier une maintenance"
+                   style="-fx-text-fill: #2e7d32; -fx-font-size: 16px; -fx-underline: true; -fx-cursor: hand;"
+                   onMouseClicked="#navigatePlanifier"/>
+            <Label fx:id="voirListeLabel"
+                   text="Voir liste des tâches"
+                   style="-fx-text-fill: #2e7d32; -fx-font-size: 16px; -fx-underline: true; -fx-cursor: hand;"
+                   onMouseClicked="#navigateVoirListe"/>
+
+
+            <!-- espace flexible -->
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Bouton Ajouter à droite -->
+            <Button fx:id="addBtn"
+                    text="Ajouter"
+                    prefWidth="120"
+                    prefHeight="30"
+                    styleClass="btn-primary"/>
+
         </HBox>
+
 
         <!-- Liste des maintenances scrollable -->
         <VBox spacing="15" prefHeight="600">

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class UpdateMaintenanceController {
 
     private final ServiceMaintenance service = new ServiceMaintenance();
-    private Maintenance maintenance; // maintenance à modifier
+    private Maintenance maintenance; // maintenance a modifier
 
     @FXML
     private ChoiceBox<String> type;
@@ -36,7 +36,7 @@ public class UpdateMaintenanceController {
     @FXML
     private TextField imageTf;
 
-    // Méthode pour recevoir la maintenance sélectionnée
+    // Methode pour recevoir la maintenance selectionnee
     public void setMaintenance(Maintenance m) {
         this.maintenance = m;
         type.setValue(m.getType());
@@ -54,6 +54,20 @@ public class UpdateMaintenanceController {
         type.getItems().addAll("Preventive", "Corrective", "Predictive");
         priorite.getItems().addAll("Faible", "Normale", "Urgente");
     }
+    @FXML
+    void cancelUpdate(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+            javafx.scene.Parent root = loader.load();
+
+            // Remplacer la scene actuelle
+            ((javafx.scene.Node) event.getSource()).getScene().setRoot(root);
+
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur",
+                    "Impossible de retourner a la liste: " + e.getMessage());
+        }
+    }
 
     @FXML
     void updateMaintenance(ActionEvent event) {
@@ -66,13 +80,13 @@ public class UpdateMaintenanceController {
             maintenance.setLieu(lieuTf.getText());
             maintenance.setEquipement(equipementTf.getText());
 
-            // Appel à la méthode modifier de ServiceMaintenance
+            // Appel a la methode modifier de ServiceMaintenance
             service.modifier(maintenance);
 
-            // Affiche un message de succès
+            // Affiche un message de succes
             showAlert(Alert.AlertType.INFORMATION, "Succes", "Maintenance mise a jour avec succes");
 
-            // Pause de 1 seconde avant de revenir à ShowMaintenance
+            // Pause de 1 seconde avant de revenir a ShowMaintenance
             javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(1));
             pause.setOnFinished(e -> {
                 try {
@@ -80,10 +94,10 @@ public class UpdateMaintenanceController {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
                     javafx.scene.Parent root = loader.load();
 
-                    // Remplacer la scène actuelle par ShowMaintenance
+                    // Remplacer la scene actuelle par ShowMaintenance
                     ((javafx.scene.Node) event.getSource()).getScene().setRoot(root);
                 } catch (Exception ex) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner à la liste: " + ex.getMessage());
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + ex.getMessage());
                 }
             });
             pause.play();

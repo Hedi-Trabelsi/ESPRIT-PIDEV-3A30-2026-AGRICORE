@@ -110,7 +110,7 @@
                 <VBox spacing="4.0" alignment="TOP_LEFT">
                     <HBox spacing="5" alignment="CENTER_LEFT">
                         <Label text="Date Prévue" styleClass="form-label"/>
-                        <Label fx:id="dateStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+
                     </HBox>
                     <DatePicker fx:id="datePrevueDp" prefWidth="450.0" styleClass="form-input"/>
                     <Label fx:id="dateError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>

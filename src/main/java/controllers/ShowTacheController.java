@@ -25,27 +25,29 @@ public class ShowTacheController {
     @FXML
     private GridPane gridPane;
 
-    @FXML
-    private Button addBtn;
+
+
 
     @FXML
     void initialize() {
         loadTaches();
 
-        // Ajouter l'action pour le bouton Ajouter
-        addBtn.setOnAction(e -> navigateAddTache());
     }
+    @FXML
+    private Label voirListeLabel;
 
     @FXML
-    void navigateAddTache() {
+    void navigateVoirListe() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/AddTache.fxml"));
-            javafx.scene.Parent root = loader.load();
-            addBtn.getScene().setRoot(root); // remplacer la scène par AddTache
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+            Parent root = loader.load();
+            voirListeLabel.getScene().setRoot(root); // remplace la scene par ShowMaintenance
         } catch (Exception e) {
-            showAlert("Erreur", "Impossible d'ouvrir l'ajout: " + e.getMessage());
+            showAlert("Erreur", "Impossible d'ouvrir ShowMaintenance: " + e.getMessage());
         }
     }
+
+
 
     private void loadTaches() {
         try {
@@ -76,22 +78,22 @@ public class ShowTacheController {
                 + "-fx-spacing: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
 
         // Infos de la tâche
-        Label dateLabel = new Label("Date prévue: " + t.getDate_prevue());
+        Label dateLabel = new Label("Date prevue: " + t.getDate_prevue());
         Label descLabel = new Label("Description: " + t.getDesciption());
         descLabel.setWrapText(true);
-        Label coutLabel = new Label("Coût estimé: " + t.getCout_estimee());
+        Label coutLabel = new Label("Cout estime: " + t.getCout_estimee());
 
-        // Récupérer la maintenance correspondante
+        // Recuperer la maintenance correspondante
         String type = "Inconnu";
         String lieu = "Inconnu";
         try {
-            Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace()); // méthode à créer
+            Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace()); // methode a creer
             if (m != null) {
                 type = m.getType();
                 lieu = m.getLieu();
             }
         } catch (SQLException e) {
-            // gérer erreur si nécessaire
+            // gerer erreur si necessaire
         }
 
         Label maintenanceInfoLabel = new Label("Maintenance: " + type + " - " + lieu);
@@ -105,7 +107,7 @@ public class ShowTacheController {
                 Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace());
                 controller.setMaintenance(m);
 
-                // Remplacer la scène
+                // Remplacer la scene
                 card.getScene().setRoot(root);
 
             } catch (Exception ex) {
@@ -137,7 +139,7 @@ public class ShowTacheController {
                 Parent root = loader.load();
 
                 UpdateTacheController controller = loader.getController();
-                controller.setTache(t); // passer la tâche à modifier
+                controller.setTache(t); // passer la tâche a modifier
 
                 btnUpdate.getScene().setRoot(root);
             } catch (Exception ex) {

@@ -47,8 +47,19 @@ public class AddTacheController {
     private Label dateError, coutError, maintenanceError;
 
     @FXML
+    void cancel(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+            Parent root = loader.load();
+            cancelBtn.getScene().setRoot(root);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + e.getMessage());
+        }
+    }
+
+    @FXML
     void initialize() {
-        // Date prévue par défaut
+        // Date prevue par defaut
         datePrevueDp.setValue(LocalDate.now());
 
         try {
@@ -67,7 +78,7 @@ public class AddTacheController {
                     return m.getType()
                             + " | Date: " + m.getDateDeclaration()
                             + " | Lieu: " + m.getLieu()
-                            + " | Équipement: " + m.getEquipement()
+                            + " | equipement: " + m.getEquipement()
                             + " | Statut: " + m.getStatut()
                             + " | Priorite:" +m.getPriorite();
 
@@ -76,7 +87,7 @@ public class AddTacheController {
 
                 @Override
                 public Maintenance fromString(String string) {
-                    return null; // pas utilisé
+                    return null; // pas utilise
                 }
             });
 
@@ -151,36 +162,30 @@ public class AddTacheController {
             );
 
             serviceTache.ajouter(tache);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche enregistrée avec succès");
+            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tâche enregistree avec succes");
 
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
                 try {
-                    Parent root = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml")).load();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml"));
+                    Parent root = loader.load();
                     saveBtn.getScene().setRoot(root);
                 } catch (Exception ex) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner à la liste: " + ex.getMessage());
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + ex.getMessage());
                 }
             });
             pause.play();
 
+
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût estimé doit être un nombre entier");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût estime doit être un nombre entier");
         }
     }
 
 
-    @FXML
-    void cancel(ActionEvent event) {
-        try {
-            Parent root = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml")).load();
-            cancelBtn.getScene().setRoot(root);
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner à la liste: " + e.getMessage());
-        }
-    }
+
 
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
