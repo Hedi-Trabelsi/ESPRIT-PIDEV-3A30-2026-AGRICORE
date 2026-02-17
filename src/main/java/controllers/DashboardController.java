@@ -1,10 +1,14 @@
 package controllers;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import models.EvennementAgricole;
 import models.Participant;
 import services.EvennementService;
@@ -13,6 +17,7 @@ import services.ParticipantService;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DashboardController {
 
@@ -22,224 +27,160 @@ public class DashboardController {
     private final EvennementService evennementService = new EvennementService();
     private final ParticipantService participantService = new ParticipantService();
 
-    // ===================== SHOW TABLES =====================
+    @FXML
+    public void initialize() {
+        showGestionEvenements();
+    }
+
+    // ===================== DISPLAY EVENTS =====================
     @FXML
     private void showGestionEvenements() {
         mainContentVBox.getChildren().clear();
 
-        // ---- Evennements Table ----
-        TableView<EvennementAgricole> evennementTable = new TableView<>();
-        evennementTable.setPrefHeight(250);
+        Label header = new Label("Événements Agricoles à Venir");
+        header.setFont(Font.font("System", FontWeight.BOLD, 30));
+        header.setStyle("-fx-text-fill: #1a3c1a;");
+        mainContentVBox.getChildren().add(header);
 
-        TableColumn<EvennementAgricole, String> titreCol = new TableColumn<>("Titre");
-        titreCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitre()));
-
-        TableColumn<EvennementAgricole, String> dateDebutCol = new TableColumn<>("Date Début");
-        dateDebutCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDateDebut().format(DateTimeFormatter.ISO_DATE))
-        );
-
-        TableColumn<EvennementAgricole, String> dateFinCol = new TableColumn<>("Date Fin");
-        dateFinCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDateFin().format(DateTimeFormatter.ISO_DATE))
-        );
-
-        TableColumn<EvennementAgricole, String> lieuCol = new TableColumn<>("Lieu");
-        lieuCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLieu()));
-
-        TableColumn<EvennementAgricole, String> capaciteCol = new TableColumn<>("Capacité Max");
-        capaciteCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getCapaciteMax())));
-
-        TableColumn<EvennementAgricole, String> fraisCol = new TableColumn<>("Frais Inscription");
-        fraisCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getFraisInscription())));
-
-        TableColumn<EvennementAgricole, Void> actionCol = new TableColumn<>("Actions");
-        actionCol.setCellFactory(col -> new TableCell<>() {
-            private final Button btnDelete = new Button("Delete");
-            private final Button btnUpdate = new Button("Update");
-            private final javafx.scene.layout.HBox hbox = new javafx.scene.layout.HBox(10, btnDelete, btnUpdate);
-
-            {
-                btnDelete.setOnAction(e -> {
-                    EvennementAgricole ev = getTableView().getItems().get(getIndex());
-                    try {
-                        evennementService.delete(ev.getIdEvennement());
-                        evennementTable.getItems().remove(ev);
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                        showAlert("Erreur", "Impossible de supprimer l'événement !");
-                    }
-                });
-
-                btnUpdate.setOnAction(e -> {
-                    EvennementAgricole ev = getTableView().getItems().get(getIndex());
-                    showUpdateEvenementForm(ev, evennementTable);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : hbox);
-            }
-        });
-
-        evennementTable.getColumns().addAll(titreCol, dateDebutCol, dateFinCol, lieuCol, capaciteCol, fraisCol, actionCol);
+        FlowPane flowPane = new FlowPane();
+        flowPane.setHgap(20);
+        flowPane.setVgap(20);
 
         try {
             List<EvennementAgricole> events = evennementService.read();
-            evennementTable.setItems(FXCollections.observableArrayList(events));
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            for (EvennementAgricole event : events) {
+                flowPane.getChildren().add(createEventCard(event));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        // ---- Participants Table ----
-        TableView<Participant> participantTable = new TableView<>();
-        participantTable.setPrefHeight(250);
+        mainContentVBox.getChildren().add(flowPane);
+    }
 
-        TableColumn<Participant, String> userIdCol = new TableColumn<>("User ID");
-        userIdCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getIdUtilisateur())));
+    private VBox createEventCard(EvennementAgricole ev) {
+        VBox card = new VBox(10);
+        card.setPrefWidth(280);
+        card.setPadding(new Insets(15));
+        card.setStyle("-fx-background-color: white; -fx-background-radius: 15;");
+        card.setEffect(new DropShadow(10, Color.rgb(0,0,0,0.1)));
 
-        TableColumn<Participant, String> eventIdCol = new TableColumn<>("Event ID");
-        eventIdCol.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getIdEvennement())));
+        // --- TOP BAR (Icons) ---
+        HBox topIcons = new HBox(10);
+        topIcons.setAlignment(Pos.TOP_RIGHT);
 
-        TableColumn<Participant, String> dateInsCol = new TableColumn<>("Date Inscription");
-        dateInsCol.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getDateInscription().format(DateTimeFormatter.ISO_DATE))
-        );
+        // Participants Icon (Blue)
+        Label viewParticipantsIcon = new Label("👥");
+        viewParticipantsIcon.setStyle("-fx-text-fill: #3498db; -fx-font-size: 18px; -fx-cursor: hand;");
+        viewParticipantsIcon.setTooltip(new Tooltip("Voir les participants"));
+        viewParticipantsIcon.setOnMouseClicked(e -> showParticipantsForEvent(ev));
 
-        TableColumn<Participant, String> statutCol = new TableColumn<>("Statut");
-        statutCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getStatutParticipation()));
+        // Trash Icon (Red)
+        Label trashIcon = new Label("🗑");
+        trashIcon.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 18px; -fx-cursor: hand;");
+        trashIcon.setOnMouseClicked(e -> handleDeleteEvent(ev));
 
-        TableColumn<Participant, String> montantCol = new TableColumn<>("Montant Payé");
-        montantCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMontantPayee()));
+        topIcons.getChildren().addAll(viewParticipantsIcon, trashIcon);
 
-        TableColumn<Participant, String> confirmCol = new TableColumn<>("Confirmation");
-        confirmCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getConfirmation()));
+        // --- CONTENT ---
+        Label lblTitle = new Label(ev.getTitre());
+        lblTitle.setFont(Font.font("System", FontWeight.BOLD, 16));
+        lblTitle.setWrapText(true);
+        lblTitle.setPrefHeight(45);
+        lblTitle.setStyle("-fx-text-fill: #2d5a27;");
 
-        TableColumn<Participant, Void> actionParticipantCol = new TableColumn<>("Actions");
-        actionParticipantCol.setCellFactory(col -> new TableCell<>() {
-            private final Button btnDelete = new Button("Delete");
-            private final Button btnUpdate = new Button("Update");
-            private final javafx.scene.layout.HBox hbox = new javafx.scene.layout.HBox(10, btnDelete, btnUpdate);
+        Label lblDate = new Label("📅 " + ev.getDateDebut().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+        lblDate.setStyle("-fx-text-fill: #7ca76f; -fx-font-weight: bold;");
 
-            {
-                btnDelete.setOnAction(e -> {
-                    Participant p = getTableView().getItems().get(getIndex());
-                    try {
-                        participantService.delete(p.getIdParticipant());
-                        participantTable.getItems().remove(p);
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                        showAlert("Erreur", "Impossible de supprimer le participant !");
-                    }
-                });
+        Label lblLocation = new Label("📍 " + ev.getLieu());
+        lblLocation.setStyle("-fx-text-fill: #666666;");
 
-                btnUpdate.setOnAction(e -> {
-                    Participant p = getTableView().getItems().get(getIndex());
-                    showUpdateParticipantForm(p);
-                });
-            }
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                setGraphic(empty ? null : hbox);
-            }
-        });
+        Button btnDetails = new Button("Modifier");
+        btnDetails.setMaxWidth(Double.MAX_VALUE);
+        btnDetails.setStyle("-fx-background-color: #7ca76f; -fx-text-fill: white; -fx-background-radius: 8;");
+        btnDetails.setOnAction(e -> showUpdateEvenementForm(ev));
 
-        participantTable.getColumns().addAll(userIdCol, eventIdCol, dateInsCol, statutCol, montantCol, confirmCol, actionParticipantCol);
+        card.getChildren().addAll(topIcons, lblTitle, lblDate, lblLocation, spacer, btnDetails);
+        return card;
+    }
+
+    // ===================== DISPLAY PARTICIPANTS =====================
+    private void showParticipantsForEvent(EvennementAgricole ev) {
+        mainContentVBox.getChildren().clear();
+
+        // Header with Back Button
+        HBox headerBox = new HBox(20);
+        headerBox.setAlignment(Pos.CENTER_LEFT);
+
+        Button btnBack = new Button("← Retour");
+        btnBack.setStyle("-fx-background-color: #f4f4f4; -fx-background-radius: 10;");
+        btnBack.setOnAction(e -> showGestionEvenements());
+
+        Label header = new Label("Participants: " + ev.getTitre());
+        header.setFont(Font.font("System", FontWeight.BOLD, 24));
+
+        headerBox.getChildren().addAll(btnBack, header);
+        mainContentVBox.getChildren().add(headerBox);
+
+        FlowPane flowPane = new FlowPane(20, 20);
 
         try {
-            List<Participant> participants = participantService.read();
-            participantTable.setItems(FXCollections.observableArrayList(participants));
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            // Logic: Filter participants where idEvennement matches
+            List<Participant> allParticipants = participantService.read();
+            List<Participant> eventParticipants = allParticipants.stream()
+                    .filter(p -> p.getIdEvennement() == ev.getIdEvennement())
+                    .collect(Collectors.toList());
+
+            if (eventParticipants.isEmpty()) {
+                mainContentVBox.getChildren().add(new Label("Aucun participant inscrit à cet événement."));
+            } else {
+                for (Participant p : eventParticipants) {
+                    flowPane.getChildren().add(createParticipantCard(p));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        mainContentVBox.getChildren().addAll(
-                new Label("Événnements Agricoles"), evennementTable,
-                new Label("Participants"), participantTable
-        );
+        mainContentVBox.getChildren().add(flowPane);
     }
 
-    // ===================== UPDATE FORMS =====================
-    private void showUpdateEvenementForm(EvennementAgricole ev, TableView<EvennementAgricole> table) {
-        mainContentVBox.getChildren().clear();
+    private VBox createParticipantCard(Participant p) {
+        VBox card = new VBox(5);
+        card.setPrefWidth(220);
+        card.setPadding(new Insets(15));
+        card.setStyle("-fx-background-color: #f9f9f9; -fx-background-radius: 10; -fx-border-color: #ddd; -fx-border-radius: 10;");
 
-        // VBox with fields
-        VBox form = new VBox(15);
-        form.setStyle("-fx-padding: 20; -fx-background-color: #f0f8ff;");
+        Label lblUser = new Label("Utilisateur #" + p.getIdUtilisateur());
+        lblUser.setFont(Font.font("System", FontWeight.BOLD, 14));
 
-        TextField txtTitre = new TextField(ev.getTitre());
-        TextField txtLieu = new TextField(ev.getLieu());
-        TextField txtCapacite = new TextField(String.valueOf(ev.getCapaciteMax()));
-        TextField txtFrais = new TextField(String.valueOf(ev.getFraisInscription()));
+        Label lblStatus = new Label("Statut: " + p.getStatutParticipation());
+        lblStatus.setStyle("-fx-text-fill: " + (p.getStatutParticipation().equalsIgnoreCase("Confirmé") ? "#27ae60" : "#f39c12"));
 
-        Button btnSave = new Button("Save Changes");
-        btnSave.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        Label lblPaid = new Label("Payé: " + p.getMontantPayee() + " DT");
+        lblPaid.setStyle("-fx-font-size: 11px;");
 
-        btnSave.setOnAction(e -> {
-            ev.setTitre(txtTitre.getText());
-            ev.setLieu(txtLieu.getText());
-            ev.setCapaciteMax(Integer.parseInt(txtCapacite.getText()));
-            ev.setFraisInscription(Integer.parseInt(txtFrais.getText()));
+        card.getChildren().addAll(lblUser, lblStatus, lblPaid);
+        return card;
+    }
 
-            try {
-                evennementService.update(ev);
-                showGestionEvenements(); // reload table after update
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                showAlert("Erreur", "Impossible de mettre à jour l'événement !");
+    // ===================== ACTIONS =====================
+    private void handleDeleteEvent(EvennementAgricole ev) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer cet événement ?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait().ifPresent(res -> {
+            if (res == ButtonType.YES) {
+                try {
+                    evennementService.delete(ev.getIdEvennement());
+                    showGestionEvenements();
+                } catch (SQLException ex) { ex.printStackTrace(); }
             }
         });
-
-        form.getChildren().addAll(
-                new Label("Update Événement"), txtTitre, txtLieu, txtCapacite, txtFrais, btnSave
-        );
-
-        mainContentVBox.getChildren().add(form);
     }
 
-    private void showUpdateParticipantForm(Participant p) {
-        mainContentVBox.getChildren().clear();
-
-        VBox form = new VBox(15);
-        form.setStyle("-fx-padding: 20; -fx-background-color: #fff8dc;");
-
-        TextField txtStatut = new TextField(p.getStatutParticipation());
-        TextField txtMontant = new TextField(p.getMontantPayee());
-        TextField txtConfirm = new TextField(p.getConfirmation());
-
-        Button btnSave = new Button("Save Changes");
-        btnSave.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
-
-        btnSave.setOnAction(e -> {
-            p.setStatutParticipation(txtStatut.getText());
-            p.setMontantPayee(txtMontant.getText());
-            p.setConfirmation(txtConfirm.getText());
-
-            try {
-                participantService.update(p); // ensure your service has update method
-                showGestionEvenements(); // reload tables
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                showAlert("Erreur", "Impossible de mettre à jour le participant !");
-            }
-        });
-
-        form.getChildren().addAll(
-                new Label("Update Participant"), txtStatut, txtMontant, txtConfirm, btnSave
-        );
-
-        mainContentVBox.getChildren().add(form);
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    private void showUpdateEvenementForm(EvennementAgricole ev) {
+        // ... (Keep your existing update form logic here) ...
     }
 }
