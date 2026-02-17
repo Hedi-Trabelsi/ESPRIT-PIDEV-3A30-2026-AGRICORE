@@ -26,7 +26,7 @@ public class AddMaintenanceController {
     private ChoiceBox<String> priorite;
 
     @FXML
-    private DatePicker dateDeclarationDp;
+    private TextField dateDeclarationTf;
 
     @FXML
     private TextField descriptionTf;
@@ -36,6 +36,11 @@ public class AddMaintenanceController {
 
     @FXML
     private TextField equipementTf;
+    @FXML private javafx.scene.control.Label typeStar;
+    @FXML private javafx.scene.control.Label lieuStar;
+    @FXML private javafx.scene.control.Label equipementStar;
+    @FXML private javafx.scene.control.Label prioriteStar;
+    @FXML private javafx.scene.control.Label descriptionStar;
 
 
     @FXML
@@ -58,10 +63,19 @@ public class AddMaintenanceController {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer une description");
                 return;
             }
+            if (lieuTf.getText() == null || lieuTf.getText().trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer le lieu");
+                return;
+            }
+
+            if (equipementTf.getText() == null || equipementTf.getText().trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer l'équipement");
+                return;
+            }
 
             // Créer l'objet Maintenance avec les nouveaux champs
             Maintenance maintenance = new Maintenance(
-                    dateDeclarationDp.getValue(),
+                    LocalDate.parse(dateDeclarationTf.getText()),
                     type.getValue(),
                     descriptionTf.getText(),
                     "En cours",          // Statut par défaut
@@ -102,15 +116,59 @@ public class AddMaintenanceController {
     void initialize() {
         type.getItems().addAll("Preventive", "Corrective", "Predictive");
         priorite.getItems().addAll("Faible", "Normale", "Urgente");
-        dateDeclarationDp.setValue(LocalDate.now());
-        dateDeclarationDp.setEditable(false);
-        dateDeclarationDp.setDisable(true);
+        LocalDate today = LocalDate.now();
+        dateDeclarationTf.setText(today.toString());
+        // Validation dynamique TextField
+        descriptionTf.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty()) {
+                descriptionStar.setStyle("-fx-text-fill: red;");
+            } else {
+                descriptionStar.setStyle("-fx-text-fill: green;");
+            }
+        });
+
+        lieuTf.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty()) {
+                lieuStar.setStyle("-fx-text-fill: red;");
+            } else {
+                lieuStar.setStyle("-fx-text-fill: green;");
+            }
+        });
+
+        equipementTf.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty()) {
+                equipementStar.setStyle("-fx-text-fill: red;");
+            } else {
+                equipementStar.setStyle("-fx-text-fill: green;");
+            }
+        });
+
+// Validation dynamique ChoiceBox
+        type.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                typeStar.setStyle("-fx-text-fill: red;");
+            } else {
+                typeStar.setStyle("-fx-text-fill: green;");
+            }
+        });
+
+        priorite.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                prioriteStar.setStyle("-fx-text-fill: red;");
+            } else {
+                prioriteStar.setStyle("-fx-text-fill: green;");
+            }
+        });
+
+
+
     }
 
     private void clearFields() {
         type.setValue(null);
         priorite.setValue(null);
-        dateDeclarationDp.setValue(LocalDate.now());
+        LocalDate today = LocalDate.now();
+        dateDeclarationTf.setText(today.toString());
         descriptionTf.clear();
         lieuTf.clear();
         equipementTf.clear();
