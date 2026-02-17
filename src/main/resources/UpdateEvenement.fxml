@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.UpdateEvenementController">
+    <Label text="Update Événement"/>
+    <TextField fx:id="titreField" promptText="Titre"/>
+    <TextField fx:id="lieuField" promptText="Lieu"/>
+    <TextField fx:id="capaciteField" promptText="Capacité Max"/>
+    <TextField fx:id="fraisField" promptText="Frais Inscription"/>
+    <DatePicker fx:id="dateDebutPicker" promptText="Date Début"/>
+    <DatePicker fx:id="dateFinPicker" promptText="Date Fin"/>
+    <Button fx:id="saveButton" text="Save Changes" onAction="#saveChanges"/>
+</VBox>
