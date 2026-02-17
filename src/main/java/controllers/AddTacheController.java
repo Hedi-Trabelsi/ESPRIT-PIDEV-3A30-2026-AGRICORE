@@ -15,6 +15,7 @@ import services.ServiceMaintenance;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AddTacheController {
 
@@ -31,7 +32,7 @@ public class AddTacheController {
     private TextField coutTf;
 
     @FXML
-    private ChoiceBox<Maintenance> maintenanceCb;
+    private ComboBox<Maintenance> maintenanceCb;
 
     @FXML
     private Button saveBtn;
@@ -41,17 +42,24 @@ public class AddTacheController {
 
 
     @FXML
+    private Label dateStar, descriptionStar, coutStar, maintenanceStar;
+    @FXML
+    private Label dateError, coutError, maintenanceError;
+
+    @FXML
     void initialize() {
-        // Date prévue par défaut = aujourd'hui
+        // Date prévue par défaut
         datePrevueDp.setValue(LocalDate.now());
 
         try {
-            List<Maintenance> maintenances = serviceMaintenance.afficher();
+            List<Maintenance> maints = serviceMaintenance.afficher().stream()
+                    .filter(m -> !m.getStatut().equalsIgnoreCase("Planifie")
+                            && !m.getStatut().equalsIgnoreCase("Resolu")&& !m.getStatut().equalsIgnoreCase("Refuse"))
+                    .collect(Collectors.toList());
 
-            // Ajouter les maintenances au ChoiceBox
-            maintenanceCb.getItems().addAll(maintenances);
 
-            // Convertir Maintenance en texte lisible avec plus de détails
+            maintenanceCb.getItems().addAll(maints);
+
             maintenanceCb.setConverter(new javafx.util.StringConverter<Maintenance>() {
                 @Override
                 public String toString(Maintenance m) {
@@ -59,7 +67,11 @@ public class AddTacheController {
                     return m.getType()
                             + " | Date: " + m.getDateDeclaration()
                             + " | Lieu: " + m.getLieu()
-                            + " | Équipement: " + m.getEquipement();
+                            + " | Équipement: " + m.getEquipement()
+                            + " | Statut: " + m.getStatut()
+                            + " | Priorite:" +m.getPriorite();
+
+
                 }
 
                 @Override
@@ -67,64 +79,80 @@ public class AddTacheController {
                     return null; // pas utilisé
                 }
             });
-            maintenanceCb.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal != null) {
-                    try {
-                        // Changer le statut à "Planifié"
-                        newVal.setStatut("Planifié");
-                        serviceMaintenance.modifier(newVal); // Mettre à jour dans la base
-                    } catch (SQLException e) {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de mettre à jour le statut: " + e.getMessage());
-                    }
+
+
+            // Validation dynamique
+            maintenanceCb.valueProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal == null) {
+                    maintenanceStar.setStyle("-fx-text-fill: red;");
+                    maintenanceError.setText("Veuillez selectionner une maintenance");
+                } else {
+                    maintenanceStar.setStyle("-fx-text-fill: green;");
+                    maintenanceError.setText("");
                 }
             });
+
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les maintenances: " + e.getMessage());
         }
+
+        // Autres validations (date, cout, description)
+        datePrevueDp.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.isBefore(LocalDate.now())) {
+                dateStar.setStyle("-fx-text-fill: red;");
+                dateError.setText("La date doit etre aujourd'hui ou apres");
+            } else {
+                dateStar.setStyle("-fx-text-fill: green;");
+                dateError.setText("");
+            }
+        });
+
+        coutTf.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty() || newVal.matches("[a-zA-Z]+")) {
+                coutStar.setStyle("-fx-text-fill: red;");
+                coutError.setText("Le cout doit contenir au moins un chiffre");
+            } else {
+                coutStar.setStyle("-fx-text-fill: green;");
+                coutError.setText("");
+            }
+        });
+
+        descriptionTa.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty()) {
+                descriptionStar.setStyle("-fx-text-fill: red;");
+            } else {
+                descriptionStar.setStyle("-fx-text-fill: green;");
+            }
+        });
     }
-
-
 
     @FXML
     void saveTache(ActionEvent event) {
         try {
-            // Validation des champs
-            if (maintenanceCb.getValue() == null) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez selectionner une maintenance");
-                return;
-            }
-            if (descriptionTa.getText() == null || descriptionTa.getText().trim().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer une description");
-                return;
-            }
-            if (coutTf.getText() == null || coutTf.getText().trim().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer le coût estime");
-                return;
-            }
-            // Vérifier que la date n'est pas dans le passé
-            if (datePrevueDp.getValue() == null || datePrevueDp.getValue().isBefore(LocalDate.now())) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez choisir une date prévue valide (aujourd'hui ou plus tard).");
-                return;
-            }
+            boolean valid = true;
 
+            if (datePrevueDp.getValue() == null || datePrevueDp.getValue().isBefore(LocalDate.now())) valid = false;
+            if (descriptionTa.getText().trim().isEmpty()) valid = false;
+            if (coutTf.getText().trim().isEmpty() || coutTf.getText().matches("[a-zA-Z]+")) valid = false;
+            if (maintenanceCb.getValue() == null) valid = false;
+
+            if (!valid) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez corriger les champs en rouge.");
+                return;
+            }
 
             int cout = Integer.parseInt(coutTf.getText().trim());
 
-            // Création de l'objet Tache
             Tache tache = new Tache(
                     datePrevueDp.getValue().toString(),
                     descriptionTa.getText(),
                     cout,
-                    maintenanceCb.getValue().getId() // id_maintenance
+                    maintenanceCb.getValue().getId()
             );
 
-            // Sauvegarde
             serviceTache.ajouter(tache);
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche enregistrée avec succès");
 
-            // Message succès
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Tache enregistrée avec succes");
-
-            // Pause puis retour à la liste
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
                 try {
@@ -142,6 +170,7 @@ public class AddTacheController {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût estimé doit être un nombre entier");
         }
     }
+
 
     @FXML
     void cancel(ActionEvent event) {

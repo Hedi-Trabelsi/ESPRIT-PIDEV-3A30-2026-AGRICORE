@@ -95,7 +95,8 @@ public class ShowMaintenanceController {
         javafx.scene.control.Label typeLabel = new javafx.scene.control.Label("Type: " + m.getType());
         javafx.scene.control.Label prioriteLabel = new javafx.scene.control.Label("Priorité: " + m.getPriorite());
         javafx.scene.control.Label dateLabel = new javafx.scene.control.Label("Date: " + m.getDateDeclaration());
-        javafx.scene.control.Label statutLabel = new javafx.scene.control.Label("Statut: " + m.getStatut());
+        javafx.scene.control.Label statutLabel = new javafx.scene.control.Label(m.getStatut());
+        statutLabel.setStyle(getStatusStyle(m.getStatut()));
         javafx.scene.control.Label descLabel = new javafx.scene.control.Label("Description: " + m.getDescription());
         descLabel.setWrapText(true);
 
@@ -176,6 +177,22 @@ public class ShowMaintenanceController {
         alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    private String getStatusStyle(String statut) {
+        if (statut == null) return "";
+
+        statut = statut.toLowerCase();
+
+        if (statut.contains("resol")) { // Résolu
+            return "-fx-background-color:#d4edda; -fx-text-fill:green; -fx-padding:5 10; -fx-background-radius:10;";
+        } else if (statut.contains("cours")) { // En cours
+            return "-fx-background-color:#d1ecf1; -fx-text-fill:#0c5460; -fx-padding:5 10; -fx-background-radius:10;";
+        } else if (statut.contains("attente") || statut.contains("plan")) { // En attente / Planifiée
+            return "-fx-background-color:#fff3cd; -fx-text-fill:#856404; -fx-padding:5 10; -fx-background-radius:10;";
+        }
+
+        // Par défaut si statut inconnu
+        return "-fx-background-color:#f8d7da; -fx-text-fill:red; -fx-padding:5 10; -fx-background-radius:10;";
     }
 
 

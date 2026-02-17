@@ -1,0 +1,82 @@
+/* Card principale */
+.card {
+    -fx-background-color: white;
+    -fx-padding: 15;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: #eeeeee;
+}
+
+/* Titre */
+.title-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* Texte secondaire */
+.sub-label {
+    -fx-text-fill: #777;
+    -fx-font-size: 13;
+}
+
+/* Description */
+.desc-label {
+    -fx-text-fill: #555;
+}
+
+/* Badge statut */
+.status {
+    -fx-padding: 5 10;
+    -fx-background-radius: 20;
+}
+
+.status-en-cours {
+    -fx-background-color: #d1ecf1;
+    -fx-text-fill: #0c5460;
+}
+
+.status-en-attente {
+    -fx-background-color: #fff3cd;
+    -fx-text-fill: #856404;
+}
+
+.status-refusee {
+    -fx-background-color: #f8d7da;
+    -fx-text-fill: red;
+}
+
+.status-planifiee {
+    -fx-background-color: #d4edda;
+    -fx-text-fill: green;
+}
+
+/* Badge priorité */
+.priority {
+    -fx-text-fill: white;
+    -fx-padding: 5 10;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+}
+
+.priority-urgente {
+    -fx-background-color: #f5c6cb;
+}
+
+.priority-normale {
+    -fx-background-color: #ffeeba;
+}
+
+.priority-faible {
+    -fx-background-color: #c3e6cb;
+}
+
+/* Bouton poubelle */
+.delete-button {
+    -fx-background-color: transparent;
+    -fx-font-size: 18px;
+    -fx-text-fill: #7ca76f;
+}
+
+.delete-button:hover {
+    -fx-text-fill: red;
+}

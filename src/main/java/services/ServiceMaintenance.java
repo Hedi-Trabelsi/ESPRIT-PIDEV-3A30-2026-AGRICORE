@@ -16,7 +16,7 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
 
     @Override
     public void ajouter(Maintenance maintenance) throws SQLException {
-        maintenance.setStatut("en cours");
+        maintenance.setStatut("En attente");
         String sql = "INSERT INTO maintenance(type,date_declaration, description, statut,id_technicien,priorite,lieu,equipement) VALUES ('"
                 + maintenance.getType() + "', '"
                 + maintenance.getDateDeclaration() + "', '"

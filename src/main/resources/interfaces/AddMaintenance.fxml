@@ -1,19 +1,26 @@
-(<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+        <?import javafx.scene.control.Button?>
+        <?import javafx.scene.control.ChoiceBox?>
+        <?import javafx.scene.control.DatePicker?>
+        <?import javafx.scene.control.TextField?>
+        <?import javafx.scene.control.Label?>
+        <?import javafx.scene.image.Image?>
+        <?import javafx.scene.image.ImageView?>
+        <?import javafx.scene.layout.AnchorPane?>
+        <?import javafx.scene.layout.HBox?>
+        <?import javafx.scene.layout.VBox?>
+        <?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="720" prefWidth="1250"
+            style="-fx-background-color: #7ca76f;"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AddMaintenanceController"
+            stylesheets="@/styles/style.css">
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1210.0" style="-fx-background-color: #7ca76f;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddMaintenanceController" stylesheets="@/styles/style.css">
     <children>
+        <!-- Sidebar à gauche -->
+        <!-- ================= SIDEBAR ================= -->
         <VBox prefHeight="700.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
             <children>
                 <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
@@ -87,105 +94,97 @@
                 </HBox>
             </children>
         </VBox>
-        <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0">
-            <children>
-                <VBox prefHeight="680.0" prefWidth="975.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" spacing="20.0">
-                    <children>
-                        <!-- Titre -->
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="945.0">
-                            <children>
-                                <Label text="Ajouter une Maintenance" styleClass="form-title" />
-                            </children>
+
+
+
+        <!-- Zone principale -->
+        <!-- Zone principale -->
+        <HBox layoutX="220.0" layoutY="10.0" spacing="20.0" prefHeight="700.0" prefWidth="1010.0">
+
+            <VBox prefWidth="650.0" prefHeight="700.0"
+                  style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;"
+                  spacing="20.0"
+                  alignment="TOP_CENTER">
+
+                <!-- Titre -->
+                <Label text="Ajouter une Maintenance" styleClass="form-title"/>
+
+                <!-- Formulaire -->
+                <VBox spacing="15.0" alignment="TOP_LEFT">
+
+                    <!-- Date de Déclaration -->
+                    <VBox spacing="4.0" alignment="TOP_LEFT">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Date de Déclaration" styleClass="form-label"/>
+                            <Label fx:id="dateStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
                         </HBox>
+                        <TextField fx:id="dateDeclarationTf" prefWidth="450.0" styleClass="form-input" editable="false"/>
+                    </VBox>
 
-                        <!-- Formulaire -->
-                        <VBox prefHeight="600.0" prefWidth="945.0" spacing="25.0" style="-fx-padding: 20;">
-                            <children>
-                                <!-- Date -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Date de Déclaration" styleClass="form-label" />
-                                        <TextField fx:id="dateDeclarationTf" prefWidth="450.0"
-                                                   styleClass="form-input" editable="false" />
+                    <!-- Type -->
+                    <VBox spacing="4.0" alignment="TOP_LEFT">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Type de Maintenance" styleClass="form-label"/>
+                            <Label fx:id="typeStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                        </HBox>
+                        <ChoiceBox fx:id="type" prefWidth="450.0" styleClass="form-input"/>
+                    </VBox>
 
-                                    </children>
-                                </VBox>
+                    <!-- Lieu -->
+                    <VBox spacing="4.0" alignment="TOP_LEFT">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Lieu" styleClass="form-label"/>
+                            <Label fx:id="lieuStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                        </HBox>
+                        <TextField fx:id="lieuTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez le lieu..."/>
+                        <Label fx:id="lieuError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>
+                    </VBox>
 
-                                <!-- Type -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <HBox spacing="5">
-                                            <Label text="Type de Maintenance" styleClass="form-label"/>
-                                            <Label fx:id="typeStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
-                                        </HBox>
+                    <!-- Équipement -->
+                    <VBox spacing="4.0" alignment="TOP_LEFT">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Équipement" styleClass="form-label"/>
+                            <Label fx:id="equipementStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                        </HBox>
+                        <TextField fx:id="equipementTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez l'équipement..."/>
+                        <Label fx:id="equipementError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>
+                    </VBox>
 
-                                        <ChoiceBox fx:id="type" prefWidth="450.0" styleClass="form-input" />
-                                    </children>
-                                </VBox>
-                                <!-- Lieu -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <HBox spacing="5">
-                                            <Label text="Lieu" styleClass="form-label"/>
-                                            <Label fx:id="lieuStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
-                                        </HBox>
+                    <!-- Priorité -->
+                    <VBox spacing="4.0" alignment="TOP_LEFT">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Priorité" styleClass="form-label"/>
+                            <Label fx:id="prioriteStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                        </HBox>
+                        <ChoiceBox fx:id="priorite" prefWidth="450.0" styleClass="form-input"/>
+                    </VBox>
 
-                                        <TextField fx:id="lieuTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez le lieu de la maintenance..." />
-                                    </children>
-                                </VBox>
+                    <!-- Description -->
+                    <VBox spacing="4.0" alignment="TOP_LEFT">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <Label text="Description" styleClass="form-label"/>
+                            <Label fx:id="descriptionStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                        </HBox>
+                        <TextField fx:id="descriptionTf" prefWidth="450.0" prefHeight="120.0" styleClass="form-input" promptText="Entrez la description..."/>
+                    </VBox>
 
-                                <!-- Equipement -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <HBox spacing="5">
-                                            <Label text="Equipement" styleClass="form-label"/>
-                                            <Label fx:id="equipementStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
-                                        </HBox>
+                    <!-- Boutons -->
+                    <HBox spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                        <Button fx:id="Save" mnemonicParsing="false" onAction="#saveMaintenance"
+                                text="Enregistrer" styleClass="btn-primary" prefWidth="180.0" prefHeight="40.0"/>
+                        <Button mnemonicParsing="false" text="Annuler" styleClass="btn-secondary" prefWidth="180.0" prefHeight="40.0"/>
+                    </HBox>
 
-                                        <TextField fx:id="equipementTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez l'équipement concerné..." />
-                                    </children>
-                                </VBox>
-
-                                <!-- Image -->
-
-
-                                <!-- Priorité -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <HBox spacing="5">
-                                            <Label text="Priorité" styleClass="form-label"/>
-                                            <Label fx:id="prioriteStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
-                                        </HBox>
-
-                                        <ChoiceBox fx:id="priorite" prefWidth="450.0" styleClass="form-input" />
-                                    </children>
-                                </VBox>
-
-
-                                <!-- Description -->
-                                <VBox spacing="8.0" prefHeight="180.0">
-                                    <children>
-                                        <HBox spacing="5">
-                                            <Label text="Description" styleClass="form-label"/>
-                                            <Label fx:id="descriptionStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
-                                        </HBox>
-
-                                        <TextField fx:id="descriptionTf" prefWidth="450.0" prefHeight="120.0" styleClass="form-input" promptText="Entrez la description de la maintenance..." />
-                                    </children>
-                                </VBox>
-
-                                <!-- Boutons -->
-                                <HBox prefHeight="50.0" prefWidth="945.0" spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
-                                    <children>
-                                        <Button fx:id="Save" mnemonicParsing="false" onAction="#saveMaintenance" text="Enregistrer" styleClass="btn-primary" prefWidth="150.0" prefHeight="45.0" />
-                                        <Button mnemonicParsing="false" text="Annuler" styleClass="btn-secondary" prefWidth="150.0" prefHeight="45.0" />
-                                    </children>
-                                </HBox>
-                            </children>
-                        </VBox>
-                    </children>
                 </VBox>
-            </children>
-        </VBox>
+            </VBox>
+        </HBox>
+
+
+
+
+
+
+
+
     </children>
-</AnchorPane>)
+</AnchorPane>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.TacheMaintenanceController"
+            prefWidth="600" prefHeight="400"
+            style="-fx-background-color: #f9f9f9; -fx-padding: 20;">
+
+    <children>
+        <!-- Header -->
+        <VBox spacing="10" layoutX="20" layoutY="20">
+            <children>
+                <Label fx:id="typeLabel" text="Type de maintenance" style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+                <Label fx:id="descriptionLabel" text="Description de la maintenance" style="-fx-font-size:14px; -fx-text-fill:#555555;"/>
+            </children>
+        </VBox>
+
+        <!-- Liste des tâches -->
+        <ListView fx:id="tacheList"
+                  layoutX="20" layoutY="100"
+                  prefWidth="560" prefHeight="250"
+                  style="-fx-background-color:white; -fx-border-color:#dddddd; -fx-background-radius:10; -fx-border-radius:10;"/>
+
+        <!-- Boutons -->
+        <HBox spacing="10" layoutX="20" layoutY="360">
+            <children>
+                <Button fx:id="addTacheBtn" text="+ Ajouter Tâche" styleClass="btn-primary"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="closeBtn" text="Fermer" styleClass="btn-secondary"/>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

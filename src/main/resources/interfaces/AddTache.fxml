@@ -12,12 +12,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="700.0" prefWidth="1210.0" style="-fx-background-color: #7ca76f;"
             xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.AddTacheController" stylesheets="@/styles/style.css">
 
-        <!-- Sidebar (identique à AddMaintenance) -->
+
     <!-- Sidebar -->
     <children>
         <VBox prefHeight="700.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
@@ -95,65 +96,69 @@
         </VBox>
 
         <!-- Main content -->
-        <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0">
-            <children>
-                <VBox prefHeight="680.0" prefWidth="975.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" spacing="20.0">
-                    <children>
-                        <!-- Titre -->
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="945.0">
-                            <children>
-                                <Label text="Ajouter une Tâche" styleClass="form-title" />
-                            </children>
-                        </HBox>
+        <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0"
+              spacing="20.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;"
+              alignment="TOP_CENTER">
 
-                        <!-- Formulaire -->
-                        <VBox prefHeight="600.0" prefWidth="945.0" spacing="25.0" style="-fx-padding: 20;">
-                            <children>
-                                <!-- Date prévue -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Date Prévue" styleClass="form-label" />
-                                        <DatePicker fx:id="datePrevueDp" prefWidth="450.0" styleClass="form-input" />
-                                    </children>
-                                </VBox>
+            <!-- Titre -->
+            <Label text="Ajouter une Tâche" styleClass="form-title"/>
 
-                                <!-- Description -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Description" styleClass="form-label" />
-                                        <TextArea fx:id="descriptionTa" prefWidth="450.0" prefHeight="120.0" styleClass="form-input" promptText="Entrez la description de la tâche..." />
-                                    </children>
-                                </VBox>
+            <!-- Formulaire -->
+            <VBox spacing="15.0" alignment="TOP_LEFT">
 
-                                <!-- Coût estimé -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Coût Estimé" styleClass="form-label" />
-                                        <TextField fx:id="coutTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez le coût estimé..." />
-                                    </children>
-                                </VBox>
-
-                                <!-- Maintenance associée -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Maintenance associée" styleClass="form-label" />
-                                        <ChoiceBox fx:id="maintenanceCb" prefWidth="450.0" styleClass="form-input" />
-                                    </children>
-                                </VBox>
-
-                                <!-- Boutons -->
-                                <HBox prefHeight="50.0" prefWidth="945.0" spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
-                                    <children>
-                                        <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#saveTache" text="Enregistrer" styleClass="btn-primary" prefWidth="150.0" prefHeight="45.0" />
-                                        <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancel" text="Annuler" styleClass="btn-secondary" prefWidth="150.0" prefHeight="45.0" />
-                                    </children>
-                                </HBox>
-
-                            </children>
-                        </VBox>
-                    </children>
+                <!-- Date prévue -->
+                <VBox spacing="4.0" alignment="TOP_LEFT">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Date Prévue" styleClass="form-label"/>
+                        <Label fx:id="dateStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                    </HBox>
+                    <DatePicker fx:id="datePrevueDp" prefWidth="450.0" styleClass="form-input"/>
+                    <Label fx:id="dateError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>
                 </VBox>
-            </children>
+
+                <!-- Description -->
+                <VBox spacing="4.0" alignment="TOP_LEFT">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Description" styleClass="form-label"/>
+                        <Label fx:id="descriptionStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                    </HBox>
+                    <TextArea fx:id="descriptionTa" prefWidth="450.0" prefHeight="120.0"
+                              styleClass="form-input" promptText="Entrez la description de la tâche..."/>
+                </VBox>
+
+                <!-- Coût estimé -->
+                <VBox spacing="4.0" alignment="TOP_LEFT">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Coût Estimé" styleClass="form-label"/>
+                        <Label fx:id="coutStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                    </HBox>
+                    <TextField fx:id="coutTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez le coût estimé..."/>
+                    <Label fx:id="coutError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>
+                </VBox>
+
+
+                <!-- Maintenance associée -->
+                <VBox spacing="4.0" alignment="CENTER_LEFT">
+                    <HBox spacing="5">
+                        <Label text="Maintenance associée" styleClass="form-label"/>
+                        <Label fx:id="maintenanceStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
+                    </HBox>
+                    <ComboBox fx:id="maintenanceCb" prefWidth="450.0" styleClass="form-input"/>
+                    <Label fx:id="maintenanceError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>
+                </VBox>
+
+
+
+                <!-- Boutons -->
+                <HBox prefHeight="50.0" spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+                    <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#saveTache"
+                            text="Enregistrer" styleClass="btn-primary" prefWidth="150.0" prefHeight="45.0"/>
+                    <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancel"
+                            text="Annuler" styleClass="btn-secondary" prefWidth="150.0" prefHeight="45.0"/>
+                </HBox>
+
+            </VBox>
         </VBox>
+
     </children>
 </AnchorPane>
