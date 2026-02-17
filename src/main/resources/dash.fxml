@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="600" prefWidth="1200"
+            style="-fx-background-color: linear-gradient(to bottom,#7ca76f,#6b9a5f);"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ui.DashController">
+
+    <children>
+
+        <!-- SIDEBAR -->
+        <VBox prefWidth="220" spacing="20" layoutX="10" layoutY="20">
+
+            <ImageView fitHeight="100" preserveRatio="true">
+                <image>
+                    <Image url="@images/logo.png"/>
+                </image>
+            </ImageView>
+
+            <Button text="Gestion Utilisateurs" styleClass="menuBtn"/>
+            <Button text="Gestion Équipements" styleClass="menuBtn"/>
+            <Button text="Gestion Maintenance" styleClass="menuBtn"/>
+
+            <Button text="Gestion Événements"
+                    styleClass="menuBtn"
+                    onAction="#showEvennements"/>
+
+            <Button text="Gestion Animaux" styleClass="menuBtn"/>
+            <Button text="Gestion Financière" styleClass="menuBtn"/>
+
+        </VBox>
+
+        <!-- MAIN CONTENT -->
+        <VBox layoutX="230" layoutY="20"
+              prefWidth="930" prefHeight="560"
+              spacing="20"
+              styleClass="mainContainer">
+
+            <!-- TITLE -->
+            <Label text="Événements Agricoles à Venir"
+                   styleClass="title"/>
+
+            <!-- SCROLL CARDS -->
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+
+                <content>
+
+                    <HBox spacing="30">
+
+                        <padding>
+                            <Insets top="20" right="20" bottom="20" left="20"/>
+                        </padding>
+
+                        <!-- CARD 1 -->
+                        <VBox styleClass="card">
+                            <Label text="Titre" styleClass="smallLabel"/>
+                            <Label text="Salon International de l'Agriculture" styleClass="cardTitle"/>
+                            <Label text="Immersion dans les innovations agricoles." wrapText="true"/>
+                            <Label text="Date: 20 Mars 2026"/>
+                            <Label text="Lieu: Parc des Expos, Paris"/>
+                            <Button text="Voir Détails" styleClass="detailsBtn"/>
+                        </VBox>
+
+                        <!-- CARD 2 -->
+                        <VBox styleClass="card">
+                            <Label text="Titre" styleClass="smallLabel"/>
+                            <Label text="Forum Smart Farming" styleClass="cardTitle"/>
+                            <Label text="Technologies agricoles intelligentes." wrapText="true"/>
+                            <Label text="Date: 25 Mars 2026"/>
+                            <Label text="Lieu: Tunis"/>
+                            <Button text="Voir Détails" styleClass="detailsBtn"/>
+                        </VBox>
+
+                        <!-- CARD 3 -->
+                        <VBox styleClass="card">
+                            <Label text="Titre" styleClass="smallLabel"/>
+                            <Label text="Expo Équipements Agricoles" styleClass="cardTitle"/>
+                            <Label text="Machines modernes et irrigation." wrapText="true"/>
+                            <Label text="Date: 30 Mars 2026"/>
+                            <Label text="Lieu: Sfax"/>
+                            <Button text="Voir Détails" styleClass="detailsBtn"/>
+                        </VBox>
+
+                    </HBox>
+
+                </content>
+
+            </ScrollPane>
+
+        </VBox>
+
+    </children>
+
+</AnchorPane>
