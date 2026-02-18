@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.AdminController"
+            prefWidth="1000" prefHeight="650"
+            style="-fx-background-color: linear-gradient(to bottom right, #e0f2f1, #80cbc4);">
+
+    <!-- Top: Title and Search -->
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <Label text="🌱 Admin Dashboard"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+            <HBox spacing="10">
+                <TextField fx:id="searchField" promptText="Search users..." HBox.hgrow="ALWAYS"/>
+                <Button text="Search" fx:id="searchButton"/>
+                <Button text="Logout" fx:id="logoutButton"/>
+            </HBox>
+
+            <Label fx:id="statusLabel" text="" style="-fx-text-fill: green;"/>
+        </VBox>
+    </top>
+
+    <!-- Center: User Table -->
+    <center>
+        <TableView fx:id="userTable" style="-fx-background-color: white; -fx-font-size: 14px;">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="colNom" text="Nom" prefWidth="120"/>
+                <TableColumn fx:id="colPrenom" text="Prenom" prefWidth="120"/>
+                <TableColumn fx:id="colDateNaissance" text="Date Naissance" prefWidth="120"/>
+                <TableColumn fx:id="colAdresse" text="Adresse" prefWidth="150"/>
+                <TableColumn fx:id="colPhone" text="Phone" prefWidth="100"/>
+                <TableColumn fx:id="colGenre" text="Genre" prefWidth="80"/>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="180"/>
+                <TableColumn fx:id="colRole" text="Role" prefWidth="100"/>
+                <TableColumn fx:id="colActions" text="Actions" prefWidth="140"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <!-- Bottom: Optional Footer -->
+    <bottom>
+        <Label text="© 2026 AGRICOR - Admin Panel"
+               style="-fx-padding: 10; -fx-font-size: 12px;"
+               BorderPane.alignment="CENTER"/>
+    </bottom>
+</BorderPane>

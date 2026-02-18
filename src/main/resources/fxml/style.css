@@ -1,0 +1,95 @@
+/* Root Background */
+.root-pane {
+    -fx-background-color: linear-gradient(to bottom right, #1b5e20, #66bb6a);
+}
+
+/* White Card */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 30, 0.3, 0, 15);
+    -fx-padding: 40 50 40 50;
+}
+
+/* Title */
+.title-label {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1b5e20;
+}
+
+/* Subtitle */
+.subtitle-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #757575;
+}
+
+/* Modern Input Fields (TextField, PasswordField, ComboBox, DatePicker) */
+.modern-field {
+    -fx-background-color: #f5f5f5;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: transparent;
+    -fx-padding: 10 14 10 14;
+    -fx-font-size: 14px;
+    -fx-pref-height: 42;
+}
+
+/* Focus Effect */
+.modern-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #1b5e20;
+    -fx-border-width: 2;
+}
+
+/* ComboBox arrow */
+.combo-box .arrow {
+    -fx-background-color: #1b5e20;
+}
+
+/* DatePicker arrow */
+.date-picker .arrow-button {
+    -fx-background-color: #1b5e20;
+}
+
+/* Primary Button */
+.primary-button {
+    -fx-background-color: #1b5e20;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 30;
+    -fx-cursor: hand;
+    -fx-pref-height: 45;
+}
+
+/* Hover */
+.primary-button:hover {
+    -fx-background-color: #145a1f;
+}
+
+/* Press */
+.primary-button:pressed {
+    -fx-background-color: #0d3d15;
+}
+
+/* Hyperlink */
+.link-style {
+    -fx-text-fill: #1b5e20;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+/* Small muted text */
+.text-muted {
+    -fx-text-fill: #757575;
+    -fx-font-size: 13px;
+}
+
+/* Separator inside card */
+.card > Separator {
+    -fx-background-color: #e0e0e0;
+    -fx-pref-height: 1;
+}
+
+
