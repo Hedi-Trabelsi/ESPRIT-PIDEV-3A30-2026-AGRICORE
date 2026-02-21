@@ -80,3 +80,75 @@
 .delete-button:hover {
     -fx-text-fill: red;
 }
+
+
+.accept-button {
+    -fx-background-color: #28a745; /* vert */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+.refuse-button {
+    -fx-background-color: #ffc107; /* jaune/orange */
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+/* Style pour le badge de notification */
+.notification-bell {
+    -fx-cursor: hand;
+}
+
+.main-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+/* Style de base pour les boutons d'action dans la liste */
+/* Bouton ACCEPTER (Ton vert principal) */
+.action-button-accept {
+    -fx-background-color: #7ca76f; /* Ton vert spécifique */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+.action-button-accept:hover {
+    -fx-background-color: #6a915f; /* Un peu plus sombre pour le survol */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Bouton REFUSER (Rouge plus doux / moins foncé) */
+.action-button-refuse {
+    -fx-background-color: #ff7675; /* Rouge corail doux */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+.action-button-refuse:hover {
+    -fx-background-color: #fab1a0; /* Encore plus clair au survol */
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.action-button-refuse:hover {
+    -fx-background-color: #c0392b;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* Style de la carte pour bien aligner les boutons */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);
+    -fx-padding: 15;
+    -fx-alignment: CENTER_LEFT;
+}

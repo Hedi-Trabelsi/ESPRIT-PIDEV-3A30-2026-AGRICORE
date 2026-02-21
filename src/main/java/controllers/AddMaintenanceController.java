@@ -5,14 +5,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
+
 import models.Maintenance;
 import services.ServiceMaintenance;
 
-import java.io.File;
+
+
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
+
 
 public class AddMaintenanceController {
     ServiceMaintenance ms = new ServiceMaintenance();
@@ -90,6 +91,8 @@ public class AddMaintenanceController {
 
             // Sauvegarder
             ms.ajouter(maintenance);
+
+
 
             // Message succes
             showAlert(Alert.AlertType.INFORMATION, "Succes", "Maintenance enregistree avec succes");

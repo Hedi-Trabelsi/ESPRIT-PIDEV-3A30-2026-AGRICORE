@@ -1,20 +1,33 @@
 package controllers;
-
+import java.util.stream.Collectors;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import models.Maintenance;
 import services.ServiceMaintenance;
-
 import java.sql.SQLException;
 import java.util.List;
-
+//------------------------
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.geometry.Side;
+import javafx.scene.input.MouseEvent;
+//------------------------
 public class DashboardController {
+
+    @FXML
+    private Label notificationBadge;
+
+    @FXML
+    private ChoiceBox<String> priorityFilter;
 
     @FXML
     private ListView<Maintenance> mainList;
@@ -22,14 +35,95 @@ public class DashboardController {
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
 
     @FXML
+    private TextField searchField;
+
+    @FXML
     public void initialize() {
         loadData();
         setupCustomCells();
+        updateNotificationCount(); // Mise à jour au démarrage
+        // Listener pour la recherche
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> filterList(newValue));
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterList(newVal));
+        priorityFilter.valueProperty().addListener((obs, oldVal, newVal) -> filterList(searchField.getText()));
+        // Lier badge à la taille des notifications
+
     }
+//---------------------------------------------------
+    private void updateNotificationCount() {
+        try {
+            long count = serviceMaintenance.afficher().stream()
+                    .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
+                    .count();
+            notificationBadge.setText(String.valueOf(count));
+            notificationBadge.setVisible(count > 0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Dans DashboardController.java
+
+    @FXML
+    void showNotifications(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/NotificationView.fxml"));
+            Parent root = loader.load();
+
+            // On récupère le contrôleur de la vue notification
+            NotificationController controller = loader.getController();
+            // On lui passe l'instance actuelle pour le refreshAll()
+            controller.setParentController(this);
+
+            // ON CHANGE LA SCÈNE ACTUELLE (pas de nouvelle fenêtre)
+            notificationBadge.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Méthode utilitaire pour tout rafraîchir d'un coup
+    public void refreshAll() {
+        loadData(); // Rafraîchit la ListView principale
+        updateNotificationCount(); // Rafraîchit le badge de la cloche
+    }
+
+
+//-----------------------------------------------------------------
+    private void filterList(String keyword) {
+        try {
+            List<Maintenance> allMaintenances = serviceMaintenance.afficher();
+
+            // Crée une variable finale pour le lambda
+            final String priority = (priorityFilter.getValue() != null) ? priorityFilter.getValue() : "Toutes";
+
+            List<Maintenance> filtered = allMaintenances.stream()
+                    .filter(m -> (keyword == null || keyword.isEmpty() ||
+                            m.getType().toLowerCase().contains(keyword.toLowerCase()) ||
+                            m.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
+                            m.getLieu().toLowerCase().contains(keyword.toLowerCase()) ||
+                            m.getEquipement().toLowerCase().contains(keyword.toLowerCase())
+                    ))
+                    .filter(m -> priority.equals("Toutes") || m.getPriorite().equalsIgnoreCase(priority))
+                    .collect(Collectors.toList());
+
+            mainList.getItems().setAll(filtered);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
     private void loadData() {
         try {
-            List<Maintenance> list = serviceMaintenance.afficher();
+            List<Maintenance> list = serviceMaintenance.afficher().stream()
+                    .filter(m -> !"en attente".equalsIgnoreCase(m.getStatut())) // Exclure les "en attente"
+                    .collect(Collectors.toList());
             mainList.getItems().setAll(list);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -58,7 +152,7 @@ public class DashboardController {
                 Label lieuLabel = new Label("Lieu: " + m.getLieu());
                 lieuLabel.getStyleClass().add("sub-label");
 
-                Label equipLabel = new Label("equipement: " + m.getEquipement());
+                Label equipLabel = new Label("Equipement: " + m.getEquipement());
                 equipLabel.getStyleClass().add("sub-label");
 
                 VBox leftBox = new VBox(typeLabel, descLabel, lieuLabel, equipLabel);
@@ -74,7 +168,7 @@ public class DashboardController {
                     default: statusLabel.getStyleClass().add("status-planifiee");
                 }
 
-                // ==== Priorite ====
+                // ==== Priorité ====
                 Label priorityLabel = new Label(m.getPriorite());
                 priorityLabel.getStyleClass().add("priority");
                 switch (m.getPriorite().toLowerCase()) {
@@ -94,7 +188,7 @@ public class DashboardController {
                 container.getStyleClass().add("card");
 
                 // ==== Bouton supprimer ====
-                Button deleteBtn = new Button("supprimer");
+                Button deleteBtn = new Button("Supprimer");
                 deleteBtn.getStyleClass().add("delete-button");
                 deleteBtn.setOnAction(e -> {
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
@@ -113,23 +207,40 @@ public class DashboardController {
 
                 container.getChildren().add(deleteBtn);
 
-                // ==== Clic sur la carte ====
-                container.setOnMouseClicked(e -> {
-                    if ("planifiee".equalsIgnoreCase(m.getStatut())) {
-                        openTacheWindow(m, container);
-                    } else if ("en cours".equalsIgnoreCase(m.getStatut())) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Maintenance en cours");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Cette maintenance est deja en cours !");
-                        alert.showAndWait();
-                    }
-                });
+                // ==== Boutons accepter/refuser si en attente ====
+                if ("en attente".equalsIgnoreCase(m.getStatut())) {
+                    Button accepterBtn = new Button("Accepter");
+                    accepterBtn.getStyleClass().add("btn-success");
+                    accepterBtn.setOnAction(ev -> {
+                        try {
+                            m.setStatut("en cours");
+                            serviceMaintenance.modifier(m);
+                            loadData(); // recharge la liste
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+
+                    Button refuserBtn = new Button("Refuser");
+                    refuserBtn.getStyleClass().add("btn-danger");
+                    refuserBtn.setOnAction(ev -> {
+                        try {
+                            m.setStatut("refusee");
+                            serviceMaintenance.modifier(m);
+                            loadData();
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+
+                    container.getChildren().addAll(accepterBtn, refuserBtn);
+                }
 
                 setGraphic(container);
             }
         });
     }
+
 
     private void openTacheWindow(Maintenance maintenance, HBox card) {
         try {
@@ -176,4 +287,5 @@ public class DashboardController {
                 return "-fx-background-color:#d4edda; -fx-text-fill:green; -fx-padding:5 10; -fx-background-radius:20;";
         }
     }
+
 }

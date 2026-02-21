@@ -19,7 +19,8 @@ public class ShowMaintenanceController {
 
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
 
-
+    @FXML
+    private javafx.scene.control.TextField searchTf;
     @FXML
     private GridPane gridPane;
 
@@ -50,6 +51,7 @@ public class ShowMaintenanceController {
 
         // Ajouter l'action pour le bouton Ajouter
         addBtn.setOnAction(e -> navigateAddMaintenance());
+
     }
 
     @FXML
@@ -211,7 +213,7 @@ public class ShowMaintenanceController {
         }
 
         // Par defaut si statut inconnu
-        return "-fx-background-color:#f8d7da; -fx-text-fill:red; -fx-padding:5 10; -fx-background-radius:10;";
+        return "-fx-background-color:#d4edda; -fx-text-fill:red; -fx-padding:5 10; -fx-background-radius:10;";
     }
 
 

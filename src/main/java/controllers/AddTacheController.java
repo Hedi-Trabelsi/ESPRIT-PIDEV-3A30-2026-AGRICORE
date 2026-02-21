@@ -162,7 +162,10 @@ public class AddTacheController {
             );
 
             serviceTache.ajouter(tache);
-            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tâche enregistree avec succes");
+            Maintenance selectedMaintenance = maintenanceCb.getValue();
+            selectedMaintenance.setStatut("Planifie");  // ou "Planifiée" selon ce que tu utilises
+            serviceMaintenance.modifier(selectedMaintenance);
+            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tache enregistree avec succes");
 
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
