@@ -14,7 +14,7 @@ public class EmailService {
 
         // TES INFOS ICI
         String monEmail = "mrabetzeineb1@gmail.com";
-        String monPassword = "zrvx jojm ivvm sbry";
+        String monPassword = "";
 
         Session session = Session.getInstance(prop, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {

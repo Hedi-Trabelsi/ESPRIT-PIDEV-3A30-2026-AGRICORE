@@ -23,7 +23,8 @@ public class AddTacheController {
 
     private final ServiceTache serviceTache = new ServiceTache();
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
-
+    @FXML
+    private Button aiAssistantBtn;
     @FXML
     private DatePicker datePrevueDp;
 
@@ -144,7 +145,7 @@ public class AddTacheController {
 
     void saveTache(ActionEvent event) {
         try {
-            // --- 1. VALIDATION (Rapide, on reste sur le thread principal) ---
+            // --- 1. VALIDATION ---
             boolean valid = true;
             if (datePrevueDp.getValue() == null || datePrevueDp.getValue().isBefore(LocalDate.now())) valid = false;
             if (descriptionTa.getText().trim().isEmpty()) valid = false;
@@ -156,10 +157,12 @@ public class AddTacheController {
                 return;
             }
 
-            // --- 2. PRÉPARATION ---
+            // --- 2. PRePARATION ---
             int cout = Integer.parseInt(coutTf.getText().trim());
             Maintenance selectedMaintenance = maintenanceCb.getValue();
-            String nomFichier = System.getProperty("user.home") + "/Documents/Rapport_Tache_" + selectedMaintenance.getId() + ".pdf";
+
+            // Chemin du fichier PDF uniquement
+            String nomFichierPdf = System.getProperty("user.home") + "/Documents/Rapport_Tache_" + selectedMaintenance.getId() + ".pdf";
 
             Tache tache = new Tache(
                     datePrevueDp.getValue().toString(),
@@ -168,11 +171,11 @@ public class AddTacheController {
                     selectedMaintenance.getId()
             );
 
-            // --- 3. UI : INFORMER LE TECH QU'IL DOIT ATTENDRE ---
-            saveBtn.setDisable(true); // On désactive le bouton
-            saveBtn.setText(" Envoi en cours..."); // On change le texte du bouton
+            // --- 3. UI : PATIENCE ---
+            saveBtn.setDisable(true);
+            saveBtn.setText(" Traitement en cours...");
 
-            // --- 4. LANCER LE TRAVAIL LOURD DANS UN THREAD SÉPARÉ ---
+            // --- 4. LE THREAD (TRAVAIL LOURD) ---
             new Thread(() -> {
                 try {
                     // Actions BDD
@@ -185,32 +188,32 @@ public class AddTacheController {
                             descriptionTa.getText(),
                             datePrevueDp.getValue().toString(),
                             String.valueOf(cout),
-                            nomFichier
+                            nomFichierPdf
                     );
 
                     // API Email
-                    String emailDestinataire = "mrabetzeineb1@gmail.com";
                     services.EmailService.envoyerEmailTache(
-                            emailDestinataire,
+                            "mrabetzeineb1@gmail.com",
                             selectedMaintenance.getDescription(),
                             descriptionTa.getText(),
                             datePrevueDp.getValue().toString(),
                             String.valueOf(cout),
-                            nomFichier
+                            nomFichierPdf
                     );
 
-                    // --- 5. RETOUR SUR L'INTERFACE (UI) QUAND C'EST FINI ---
+                    // --- 5. RETOUR UI ---
                     javafx.application.Platform.runLater(() -> {
                         try {
-                            // Ouvrir le PDF
-                            java.awt.Desktop.getDesktop().open(new java.io.File(nomFichier));
+                            // On ouvre uniquement le PDF
+                            java.awt.Desktop.getDesktop().open(new java.io.File(nomFichierPdf));
                         } catch (Exception e) {
                             System.out.println("Erreur ouverture PDF : " + e.getMessage());
                         }
 
-                        showAlert(Alert.AlertType.INFORMATION, "Succes", "Tache enregistree, PDF genere et Email envoye !");
+                        showAlert(Alert.AlertType.INFORMATION, "Succes",
+                                "Tâche enregistree, Rapport PDF genere et Email envoye !");
 
-                        // Redirection après succès
+                        // Redirection
                         PauseTransition pause = new PauseTransition(Duration.seconds(1));
                         pause.setOnFinished(ev -> {
                             try {
@@ -225,11 +228,10 @@ public class AddTacheController {
                     });
 
                 } catch (Exception e) {
-                    // En cas d'erreur dans le thread
                     javafx.application.Platform.runLater(() -> {
                         saveBtn.setDisable(false);
                         saveBtn.setText("Enregistrer");
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue : " + e.getMessage());
+                        showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
                     });
                 }
             }).start();
@@ -240,8 +242,55 @@ public class AddTacheController {
     }
 
 
+    @FXML
+    void helpMeWithAI(ActionEvent event) {
+        Maintenance selectedMaint = maintenanceCb.getValue();
 
+        // On garde uniquement la condition sur la sélection de la maintenance
+        if (selectedMaint == null) {
+            showAlert(Alert.AlertType.WARNING, "Assistant IA", "Veuillez d'abord sélectionner une maintenance dans la liste.");
+            return;
+        }
 
+        // --- VARIABLES FINALES POUR LE THREAD ---
+        final String originalDescription = selectedMaint.getDescription();
+        final String equipement = selectedMaint.getEquipement();
+        final String type = selectedMaint.getType();
+        final String priorite = selectedMaint.getPriorite();
+
+        // On récupère les notes s'il y en a, sinon on envoie juste la description initiale
+        String notesText = descriptionTa.getText();
+        final String fullContext = "Description initiale de la panne : " + originalDescription +
+                ((notesText != null && !notesText.trim().isEmpty()) ? " | Complément tech : " + notesText : "");
+
+        // UI : On lance l'animation de chargement
+        aiAssistantBtn.setDisable(true);
+        aiAssistantBtn.setText(" IA en cours d'analyse...");
+
+        new Thread(() -> {
+            try {
+                // L'IA analyse désormais même si 'notesText' est vide
+                String diagnosticIA = services.OpenAIService.getAICompletion(type, priorite, equipement, fullContext);
+
+                javafx.application.Platform.runLater(() -> {
+                    // On affiche le résultat final dans le TextArea
+                    descriptionTa.setText("[RAPPEL PANNE] : " + originalDescription
+                            + "\n\n--- DIAGNOSTIC IA PRÉDICTIF ---\n"
+                            + diagnosticIA);
+
+                    aiAssistantBtn.setDisable(false);
+                    aiAssistantBtn.setText(" Aide Diagnostic IA");
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                javafx.application.Platform.runLater(() -> {
+                    aiAssistantBtn.setDisable(false);
+                    aiAssistantBtn.setText(" Aide Diagnostic IA");
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "L'IA n'a pas pu analyser la maintenance : " + e.getMessage());
+                });
+            }
+        }).start();
+    }
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

@@ -116,7 +116,7 @@
                     <Label fx:id="dateError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>
                 </VBox>
 
-                <!-- Description -->
+                <!-- Description -
                 <VBox spacing="4.0" alignment="TOP_LEFT">
                     <HBox spacing="5" alignment="CENTER_LEFT">
                         <Label text="Description" styleClass="form-label"/>
@@ -125,6 +125,9 @@
                     <TextArea fx:id="descriptionTa" prefWidth="450.0" prefHeight="120.0"
                               styleClass="form-input" promptText="Entrez la description de la tâche..."/>
                 </VBox>
+-->
+
+
 
                 <!-- Coût estimé -->
                 <VBox spacing="4.0" alignment="TOP_LEFT">
@@ -147,7 +150,20 @@
                     <Label fx:id="maintenanceError" text="" style="-fx-text-fill: red; -fx-font-size: 12;"/>
                 </VBox>
 
+                <VBox spacing="4.0" alignment="TOP_LEFT">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label text="Description" styleClass="form-label"/>
+                        <Label fx:id="descriptionStar" text="*" style="-fx-text-fill: red; -fx-font-size: 16;"/>
 
+                        <HBox HBox.hgrow="ALWAYS" />
+
+                        <Button fx:id="aiAssistantBtn" onAction="#helpMeWithAI"
+                                text="✨ Aide Diagnostic IA"
+                                style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 10; -fx-cursor: hand; -fx-font-size: 11;"/>
+                    </HBox>
+                    <TextArea fx:id="descriptionTa" prefWidth="450.0" prefHeight="120.0"
+                              styleClass="form-input" promptText="Entrez la description ou utilisez l'IA pour un diagnostic..."/>
+                </VBox>
 
                 <!-- Boutons -->
                 <HBox prefHeight="50.0" spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
