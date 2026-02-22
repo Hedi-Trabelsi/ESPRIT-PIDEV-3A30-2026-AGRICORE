@@ -36,7 +36,7 @@ public class DashboardController {
 
     @FXML
     private TextField searchField;
-
+    @FXML private Label urgencyDot;
     @FXML
     public void initialize() {
         loadData();
@@ -50,7 +50,7 @@ public class DashboardController {
 
     }
 //---------------------------------------------------
-    private void updateNotificationCount() {
+ /*   private void updateNotificationCount() {
         try {
             long count = serviceMaintenance.afficher().stream()
                     .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
@@ -61,9 +61,109 @@ public class DashboardController {
             e.printStackTrace();
         }
     }
+*/
 
-    // Dans DashboardController.java
+/*
+    private void updateNotificationCount() {
+        try {
+            List<Maintenance> toutes = serviceMaintenance.afficher();
 
+            // 1. Badge de DROITE : Le nombre total (Ton code inchangé)
+            long count = toutes.stream()
+                    .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
+                    .count();
+            notificationBadge.setText(String.valueOf(count));
+            notificationBadge.setVisible(count > 0);
+
+            // 2. Badge de GAUCHE : Le point "!" (Urgence ou Retard)
+            boolean hasUrgency = toutes.stream()
+                    .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
+                    .anyMatch(m -> {
+                        long jours = java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), java.time.LocalDate.now());
+                        return "urgente".equalsIgnoreCase(m.getPriorite()) || jours >= 2;
+                    });
+
+            // On affiche le point rouge à gauche SEULEMENT s'il y a une urgence
+            if (urgencyDot != null) {
+                urgencyDot.setVisible(hasUrgency);
+                if (hasUrgency) {
+                    urgencyDot.setText("!");
+                    urgencyDot.setStyle(
+                            "-fx-background-color: red; " +
+                                    "-fx-text-fill: white; " +
+                                    "-fx-font-weight: bold; " +
+                                    "-fx-background-radius: 50%; " + // Pour faire un rond
+                                    "-fx-min-width: 15px; " +
+                                    "-fx-min-height: 15px; " +
+                                    "-fx-alignment: center;"
+                    );
+                }
+            }
+
+            // 3. Ton Popup d'alerte (Inchangé)
+            if (hasUrgency) {
+                javafx.application.Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("ALERTE CRITIQUE");
+                    alert.setHeaderText("Maintenance Urgente Non Traitee !");
+                    alert.setContentText("Il y a des demandes urgentes ou en retard à gauche de la cloche !");
+                    alert.show();
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+*/
+private void updateNotificationCount() {
+    try {
+        List<Maintenance> toutes = serviceMaintenance.afficher();
+
+        // 1. Filtrer les demandes en attente
+        List<Maintenance> enAttente = toutes.stream()
+                .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
+                .collect(Collectors.toList());
+
+        long count = enAttente.size();
+
+        // 2. Vérifier s'il y a une urgence
+        boolean alerteUrgente = enAttente.stream()
+                .anyMatch(m -> "urgente".equalsIgnoreCase(m.getPriorite()));
+
+        // --- GESTION DU BADGE VISUEL ---
+        if (count > 0) {
+            notificationBadge.setVisible(true);
+
+            if (alerteUrgente) {
+                // MODE ALERTE : On affiche seulement !
+                notificationBadge.setText("!");
+                notificationBadge.getStyleClass().add("badge-alerte");
+            } else {
+                // MODE NORMAL : On affiche le nombre
+                notificationBadge.setText(String.valueOf(count));
+                notificationBadge.getStyleClass().add("badge-normal");
+            }
+        } else {
+            notificationBadge.setVisible(false);
+        }
+
+        // --- AJOUT DE LA PARTIE ALERTE (POPUP) ---
+        if (alerteUrgente) {
+            // Platform.runLater évite les erreurs de chargement de l'interface
+            javafx.application.Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("ALERTE CRITIQUE");
+                alert.setHeaderText("Maintenance Urgente Non Traitee !");
+                alert.setContentText("Il y a des demandes urgentes en attente. " +
+                        "Veuillez verifier l'onglet des notifications pour les traiter rapidement.");
+                alert.show();
+            });
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
     @FXML
     void showNotifications(MouseEvent event) {
         try {

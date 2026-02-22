@@ -94,11 +94,21 @@
                     <Label text="Demandes en Attente" styleClass="main-title"/>
                     <Region HBox.hgrow="ALWAYS"/>
 
-                    <TextField fx:id="searchField" promptText="Rechercher dans les attentes..." prefWidth="200" styleClass="search-field"/>
-                    <ChoiceBox fx:id="priorityFilter" prefWidth="120">
+                    <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="180" styleClass="search-field"/>
+
+                    <ChoiceBox fx:id="priorityFilter" prefWidth="100">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
                                 <String fx:value="Toutes"/><String fx:value="Faible"/><String fx:value="Normale"/><String fx:value="Urgente"/>
+                            </FXCollections>
+                        </items>
+                    </ChoiceBox>
+
+                    <ChoiceBox fx:id="dateSortPicker" prefWidth="120">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Plus recent"/>
+                                <String fx:value="Plus ancien"/>
                             </FXCollections>
                         </items>
                     </ChoiceBox>

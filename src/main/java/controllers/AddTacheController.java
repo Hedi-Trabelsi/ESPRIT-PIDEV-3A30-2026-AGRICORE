@@ -10,6 +10,7 @@ import javafx.util.Duration;
 import models.Tache;
 import models.Maintenance;
 import services.ServiceTache;
+import services.EmailService;
 import services.ServiceMaintenance;
 
 import java.sql.SQLException;
@@ -138,6 +139,7 @@ public class AddTacheController {
     }
 
     @FXML
+
     void saveTache(ActionEvent event) {
         try {
             boolean valid = true;
@@ -153,19 +155,36 @@ public class AddTacheController {
             }
 
             int cout = Integer.parseInt(coutTf.getText().trim());
+            Maintenance selectedMaintenance = maintenanceCb.getValue();
 
             Tache tache = new Tache(
                     datePrevueDp.getValue().toString(),
                     descriptionTa.getText(),
                     cout,
-                    maintenanceCb.getValue().getId()
+                    selectedMaintenance.getId()
             );
 
+            // 1. Enregistrement de la tâche
             serviceTache.ajouter(tache);
-            Maintenance selectedMaintenance = maintenanceCb.getValue();
-            selectedMaintenance.setStatut("Planifie");  // ou "Planifiée" selon ce que tu utilises
+
+            // 2. Mise a jour du statut de la maintenance
+            selectedMaintenance.setStatut("Planifie");
             serviceMaintenance.modifier(selectedMaintenance);
-            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tache enregistree avec succes");
+
+
+            String emailDestinataire = "mrabetzeineb1@gmail.com";
+
+
+            services.EmailService.envoyerEmailTache(
+                    emailDestinataire,
+                    selectedMaintenance.getDescription(),
+                    descriptionTa.getText(),
+                    datePrevueDp.getValue().toString(),
+                    String.valueOf(cout)
+            );
+            // --- FIN AJOUT EMAIL ---
+
+            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tache enregistree et Email envoye au client !");
 
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
@@ -178,7 +197,6 @@ public class AddTacheController {
                 }
             });
             pause.play();
-
 
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());

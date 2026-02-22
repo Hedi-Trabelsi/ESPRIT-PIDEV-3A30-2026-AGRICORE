@@ -152,3 +152,20 @@
     -fx-padding: 15;
     -fx-alignment: CENTER_LEFT;
 }
+/* Style de base pour tous les badges */
+.notification-badge {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 50%;
+    -fx-background-color: #e74c3c; /* Rouge par défaut */
+}
+
+/* Style spécifique au mode ALERTE (!) */
+.badge-alerte {
+    -fx-font-size: 14;
+}
+
+/* Style spécifique au mode NORMAL (nombre) */
+.badge-normal {
+    -fx-font-size: 10;
+}

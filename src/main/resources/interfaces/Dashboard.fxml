@@ -130,10 +130,12 @@
                                     <Image url="@/images/notification.png" />
                                 </image>
                             </ImageView>
+
                             <Label fx:id="notificationBadge" layoutX="18.0" layoutY="-5.0"
                                    prefHeight="18.0" prefWidth="18.0" alignment="CENTER"
                                    style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-size: 10; -fx-font-weight: bold;"
                                    text="0" />
+
                         </children>
                     </AnchorPane>
 
