@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import models.Tache;
 import models.Maintenance;
+import services.PdfService;
 import services.ServiceTache;
 import services.EmailService;
 import services.ServiceMaintenance;
@@ -40,7 +41,8 @@ public class AddTacheController {
 
     @FXML
     private Button cancelBtn;
-
+    @FXML
+    private Label statusLabel;
 
     @FXML
     private Label dateStar, descriptionStar, coutStar, maintenanceStar;
@@ -142,20 +144,22 @@ public class AddTacheController {
 
     void saveTache(ActionEvent event) {
         try {
+            // --- 1. VALIDATION (Rapide, on reste sur le thread principal) ---
             boolean valid = true;
-
             if (datePrevueDp.getValue() == null || datePrevueDp.getValue().isBefore(LocalDate.now())) valid = false;
             if (descriptionTa.getText().trim().isEmpty()) valid = false;
-            if (coutTf.getText().trim().isEmpty() || coutTf.getText().matches("[a-zA-Z]+")) valid = false;
+            if (coutTf.getText().trim().isEmpty() || coutTf.getText().matches(".*[a-zA-Z]+.*")) valid = false;
             if (maintenanceCb.getValue() == null) valid = false;
 
             if (!valid) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez corriger les champs en rouge.");
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez corriger les champs.");
                 return;
             }
 
+            // --- 2. PRÉPARATION ---
             int cout = Integer.parseInt(coutTf.getText().trim());
             Maintenance selectedMaintenance = maintenanceCb.getValue();
+            String nomFichier = System.getProperty("user.home") + "/Documents/Rapport_Tache_" + selectedMaintenance.getId() + ".pdf";
 
             Tache tache = new Tache(
                     datePrevueDp.getValue().toString(),
@@ -164,44 +168,74 @@ public class AddTacheController {
                     selectedMaintenance.getId()
             );
 
-            // 1. Enregistrement de la tâche
-            serviceTache.ajouter(tache);
+            // --- 3. UI : INFORMER LE TECH QU'IL DOIT ATTENDRE ---
+            saveBtn.setDisable(true); // On désactive le bouton
+            saveBtn.setText(" Envoi en cours..."); // On change le texte du bouton
 
-            // 2. Mise a jour du statut de la maintenance
-            selectedMaintenance.setStatut("Planifie");
-            serviceMaintenance.modifier(selectedMaintenance);
-
-
-            String emailDestinataire = "mrabetzeineb1@gmail.com";
-
-
-            services.EmailService.envoyerEmailTache(
-                    emailDestinataire,
-                    selectedMaintenance.getDescription(),
-                    descriptionTa.getText(),
-                    datePrevueDp.getValue().toString(),
-                    String.valueOf(cout)
-            );
-            // --- FIN AJOUT EMAIL ---
-
-            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tache enregistree et Email envoye au client !");
-
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(e -> {
+            // --- 4. LANCER LE TRAVAIL LOURD DANS UN THREAD SÉPARÉ ---
+            new Thread(() -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml"));
-                    Parent root = loader.load();
-                    saveBtn.getScene().setRoot(root);
-                } catch (Exception ex) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + ex.getMessage());
-                }
-            });
-            pause.play();
+                    // Actions BDD
+                    serviceTache.ajouter(tache);
+                    selectedMaintenance.setStatut("Planifie");
+                    serviceMaintenance.modifier(selectedMaintenance);
 
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
+                    // API PDF
+                    PdfService.genererRapportTache(
+                            descriptionTa.getText(),
+                            datePrevueDp.getValue().toString(),
+                            String.valueOf(cout),
+                            nomFichier
+                    );
+
+                    // API Email
+                    String emailDestinataire = "mrabetzeineb1@gmail.com";
+                    services.EmailService.envoyerEmailTache(
+                            emailDestinataire,
+                            selectedMaintenance.getDescription(),
+                            descriptionTa.getText(),
+                            datePrevueDp.getValue().toString(),
+                            String.valueOf(cout),
+                            nomFichier
+                    );
+
+                    // --- 5. RETOUR SUR L'INTERFACE (UI) QUAND C'EST FINI ---
+                    javafx.application.Platform.runLater(() -> {
+                        try {
+                            // Ouvrir le PDF
+                            java.awt.Desktop.getDesktop().open(new java.io.File(nomFichier));
+                        } catch (Exception e) {
+                            System.out.println("Erreur ouverture PDF : " + e.getMessage());
+                        }
+
+                        showAlert(Alert.AlertType.INFORMATION, "Succes", "Tache enregistree, PDF genere et Email envoye !");
+
+                        // Redirection après succès
+                        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                        pause.setOnFinished(ev -> {
+                            try {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml"));
+                                Parent root = loader.load();
+                                saveBtn.getScene().setRoot(root);
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        });
+                        pause.play();
+                    });
+
+                } catch (Exception e) {
+                    // En cas d'erreur dans le thread
+                    javafx.application.Platform.runLater(() -> {
+                        saveBtn.setDisable(false);
+                        saveBtn.setText("Enregistrer");
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur est survenue : " + e.getMessage());
+                    });
+                }
+            }).start();
+
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût estime doit être un nombre entier");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût doit être un nombre.");
         }
     }
 
