@@ -199,6 +199,12 @@ public class ShowAnimalsController {
             animalListView.getScene().setRoot(root);
         } catch (Exception e) { showAlert(e.getMessage()); }
     }
+    @FXML void navigateNotifications() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/NotificationDesktop.fxml"));
+            animalListView.getScene().setRoot(root);
+        } catch (Exception e) { showAlert(e.getMessage()); }
+    }
 
     private void showAlert(String msg) {
         new Alert(Alert.AlertType.ERROR, msg).show();
