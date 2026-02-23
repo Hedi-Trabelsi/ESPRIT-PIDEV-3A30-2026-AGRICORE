@@ -77,4 +77,23 @@ public class ParticipantService {
         }
         return "Utilisateur " + userId;
     }
+    /**
+     * Calculates the total number of seats reserved for a specific event.
+     * Uses SUM(nbr_places) instead of COUNT(*) to account for group registrations.
+     */
+    public int getReservedCount(int idEvennement) throws SQLException {
+        int totalReserved = 0;
+        String query = "SELECT SUM(nbr_places) FROM participants WHERE id_ev = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, idEvennement);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    totalReserved = rs.getInt(1);
+                }
+            }
+        }
+        return totalReserved;
+    }
+
 }
