@@ -3,74 +3,131 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="org.example.SigninController"
            fx:id="rootPane"
-           prefWidth="1000" prefHeight="650"
-           styleClass="root-pane"
+           fx:controller="Controller.SigninController"
+           prefWidth="1200" prefHeight="800"
+           styleClass="auth-root-pane"
            stylesheets="@style.css">
 
-    <VBox alignment="CENTER"
-          spacing="20"
-          maxWidth="400"
-          styleClass="card">
+    <!-- Decorative Background Elements -->
+    <children>
+        <Rectangle styleClass="auth-bg-circle1" />
+        <Rectangle styleClass="auth-bg-circle2" />
 
-        <padding>
-            <Insets top="40" right="60" bottom="40" left="60"/>
-        </padding>
+        <!-- Main Card -->
+        <VBox alignment="CENTER"
+              spacing="30"
+              maxWidth="450"
+              styleClass="auth-card">
 
-        <!-- Title -->
-        <VBox alignment="CENTER" spacing="5">
-            <Label text="🌱 AGRICOR"
-                   styleClass="title-label" />
-            <Label text="Sign in to your account"
-                   styleClass="subtitle-label" />
-        </VBox>
+            <padding>
+                <Insets top="50" right="50" bottom="50" left="50"/>
+            </padding>
 
-        <Separator />
+            <!-- Logo & Title Section -->
+            <VBox alignment="CENTER" spacing="15">
+                <Label text="🌱" styleClass="auth-logo-icon"/>
+                <Label text="AGRICOR" styleClass="auth-brand-label"/>
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Welcome Back!" styleClass="auth-title-label"/>
+                    <Label text="Sign in to your Smart Agriculture account"
+                           styleClass="auth-subtitle-label"
+                           wrapText="true"
+                           alignment="CENTER"/>
+                </VBox>
+            </VBox>
 
-        <!-- FORM -->
-        <VBox spacing="15">
+            <!-- Decorative Divider -->
+            <HBox alignment="CENTER" spacing="10">
+                <Line startX="0" endX="100" styleClass="auth-divider-line"/>
+                <Label text="🌾" styleClass="auth-divider-icon"/>
+                <Line startX="0" endX="100" styleClass="auth-divider-line"/>
+            </HBox>
 
-            <!-- Email -->
-            <TextField fx:id="emailField"
-                       promptText="Email"
-                       styleClass="modern-field"/>
+            <!-- Form Section -->
+            <VBox spacing="20" maxWidth="350">
 
-            <!-- Password -->
-            <PasswordField fx:id="passwordField"
-                           promptText="Password"
-                           styleClass="modern-field"/>
+                <!-- Email Field with Icon -->
+                <VBox spacing="5">
+                    <Label text="Email" styleClass="auth-field-label"/>
+                    <HBox spacing="10" styleClass="auth-field-container">
+                        <Label text="📧" styleClass="auth-field-icon"/>
+                        <TextField fx:id="emailField"
+                                   promptText="Enter your email"
+                                   styleClass="auth-field"/>
+                    </HBox>
+                </VBox>
 
-            <!-- Inline Error Label -->
-            <Label fx:id="errorLabel"
-                   text=""
-                   style="-fx-text-fill: red; -fx-font-weight: bold;"
-                   wrapText="true"
-                   visible="false"/>
+                <!-- Password Field with Icon -->
+                <VBox spacing="5">
+                    <Label text="Password" styleClass="auth-field-label"/>
+                    <HBox spacing="10" styleClass="auth-field-container">
+                        <Label text="🔒" styleClass="auth-field-icon"/>
+                        <PasswordField fx:id="passwordField"
+                                       promptText="Enter your password"
+                                       styleClass="auth-field"/>
+                    </HBox>
+                </VBox>
 
-            <!-- Sign In Button -->
-            <Button fx:id="signinButton"
-                    text="Sign In"
-                    prefWidth="200"
-                    styleClass="primary-button"
-                    onAction="#handleSignin"/>
+                <!-- Remember Me & Forgot Password -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <CheckBox text="Remember me" styleClass="auth-checkbox"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Hyperlink text="Forgot Password?"
+                               styleClass="auth-forgot-link"
+                               onAction="#openForgotPassword"/>
+                </HBox>
+
+                <!-- Sign In Button -->
+                <Button text="Sign In"
+                        maxWidth="Infinity"
+                        prefHeight="45"
+                        styleClass="auth-primary-button"
+                        onAction="#handleSignin"/>
+
+                <!-- OR Divider -->
+                <HBox alignment="CENTER" spacing="10">
+                    <Line startX="0" endX="80" styleClass="auth-or-line"/>
+                    <Label text="OR" styleClass="auth-or-label"/>
+                    <Line startX="0" endX="80" styleClass="auth-or-line"/>
+                </HBox>
+
+                <!-- Face Recognition Button -->
+                <Button text="Sign in with Face Recognition"
+                        maxWidth="Infinity"
+                        prefHeight="45"
+                        styleClass="auth-face-button"
+                        onAction="#handleFaceLogin">
+                    <graphic>
+                        <Label text="😊" style="-fx-font-size: 18px; -fx-padding: 0 10 0 0;"/>
+                    </graphic>
+                </Button>
+
+                <!-- Error/Success Message -->
+                <Label fx:id="errorLabel"
+                       text=""
+                       wrapText="true"
+                       visible="false"
+                       styleClass="auth-message-label"
+                       alignment="CENTER"/>
+            </VBox>
 
             <!-- Sign Up Link -->
-            <HBox alignment="CENTER" spacing="5">
-                <Label text="Don't have an account?" styleClass="subtitle-label"/>
+            <HBox alignment="CENTER" spacing="8">
+                <Label text="Don't have an account?" styleClass="auth-footer-label"/>
                 <Hyperlink fx:id="signupLink"
-                           text="Sign Up"
-                           styleClass="link-style"
+                           text="Create Account"
+                           styleClass="auth-signup-link"
                            onAction="#openSignupPage"/>
             </HBox>
 
-            <!-- Forget Password -->
-            <Hyperlink fx:id="forgetPasswordLink"
-                       text="Forgot Password?"
-                       styleClass="link-style"/>
+            <!-- Footer -->
+            <VBox alignment="CENTER" spacing="5">
+                <Label text="© 2026 AGRICOR - Smart Agriculture" styleClass="auth-footer-copyright"/>
+            </VBox>
         </VBox>
-    </VBox>
-
+    </children>
 </StackPane>

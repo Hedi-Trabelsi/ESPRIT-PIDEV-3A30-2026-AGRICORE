@@ -1,18 +1,21 @@
-package org.example;
+package Controller;
 
-import Controller.ProfileController; // ← correct import
 import Model.Utilisateur;
+import services.FacePPService;
+import services.UserService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.mindrot.jbcrypt.BCrypt;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.util.List;
 
 public class SigninController {
 
@@ -24,128 +27,185 @@ public class SigninController {
     @FXML
     public void initialize() {
         errorLabel.setVisible(false);
+        // Don't set action here since it's already in FXML
     }
 
+    // =========================================
+    // NORMAL LOGIN (EMAIL + PASSWORD)
+    // =========================================
     @FXML
     private void handleSignin() {
         errorLabel.setVisible(false);
 
         String email = emailField.getText().trim();
-        String password = passwordField.getText();
+        String passwordEntered = passwordField.getText();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            showError("Veuillez remplir tous les champs !");
+        if (email.isEmpty() || passwordEntered.isEmpty()) {
+            showError("Please fill all fields!");
             return;
         }
 
-        String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
+        try {
+            UserService userService = new UserService();
+            List<Utilisateur> users = userService.read();
+            Utilisateur matchedUser = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, email);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int role = rs.getInt("role"); // get role from DB
-
-                if (role == 0) {
-                    // Admin role
-                    openAdminPage();
-                } else {
-                    // Normal user
-                    openProfilePage();
+            // Find user
+            for (Utilisateur u : users) {
+                if (u.getEmail().equalsIgnoreCase(email) && BCrypt.checkpw(passwordEntered, u.getPassword())) {
+                    matchedUser = u;
+                    break;
                 }
+            }
 
+            if (matchedUser != null) {
+                // Check if user is admin (role == 0)
+                if (matchedUser.getRole() == 0) {
+                    openHomePage(matchedUser);
+                } else {
+                    showError("Access denied! Only administrators can access this application.");
+                }
             } else {
-                showError("Email ou mot de passe incorrect !");
+                showError("Invalid email or password!");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Erreur de connexion à la base !");
+            showError("Error during login!");
         }
     }
 
+    // =========================================
+    // FACE LOGIN
+    // =========================================
+    @FXML
+    private void handleFaceLogin() {
+        errorLabel.setStyle("-fx-text-fill: #1e88e5;");
+        errorLabel.setText("Opening camera...");
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FaceScan.fxml"));
+            Parent root = loader.load();
+
+            FaceScanController controller = loader.getController();
+            controller.setFaceCapturedListener(liveImage -> {
+                Platform.runLater(() -> errorLabel.setText("Scanning face..."));
+
+                new Thread(() -> {
+                    try {
+                        UserService userService = new UserService();
+                        List<Utilisateur> users = userService.read();
+
+                        Utilisateur matchedUser = null;
+
+                        for (Utilisateur u : users) {
+                            byte[] storedImage = u.getImage();
+                            if (storedImage == null) continue;
+
+                            double confidence = FacePPService.compareFaces(liveImage, storedImage);
+                            if (confidence >= 80.0) {
+                                matchedUser = u;
+                                break;
+                            }
+                        }
+
+                        if (matchedUser != null) {
+                            final Utilisateur finalUser = matchedUser;
+                            Platform.runLater(() -> {
+                                // Check if user is admin (role == 0)
+                                if (finalUser.getRole() == 0) {
+                                    errorLabel.setStyle("-fx-text-fill: green;");
+                                    errorLabel.setText("Face recognized! Welcome " + finalUser.getNom());
+                                    openHomePage(finalUser);
+                                } else {
+                                    errorLabel.setStyle("-fx-text-fill: red;");
+                                    errorLabel.setText("Access denied! Only administrators can access this application.");
+                                }
+                            });
+                        } else {
+                            Platform.runLater(() -> {
+                                errorLabel.setStyle("-fx-text-fill: red;");
+                                errorLabel.setText("Face not recognized. Try again.");
+                            });
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Platform.runLater(() -> showError("Error during face login: " + e.getMessage()));
+                    }
+                }).start();
+            });
+
+            Stage stage = new Stage();
+            stage.setTitle("Face Scan");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Error opening camera: " + e.getMessage());
+        }
+    }
+
+    // =========================================
+    // OPEN FORGOT PASSWORD PAGE
+    // =========================================
+    @FXML
+    private void openForgotPassword() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/forgotpassword.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Forgot Password");
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Cannot load Forgot Password page!");
+        }
+    }
+
+    // =========================================
+    // OPEN SIGNUP PAGE
+    // =========================================
     @FXML
     private void openSignupPage() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/gestion_utilisateur.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) signupLink.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Sign Up");
-
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             showError("Cannot load Sign Up page!");
         }
     }
 
-    private void openProfilePage() {
+    // =========================================
+    // OPEN HOMEPAGE (ADMIN ONLY)
+    // =========================================
+    private void openHomePage(Utilisateur user) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/profile.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/HomePage.fxml"));
             Parent root = loader.load();
 
-            // Get logged-in user info
-            String sql = "SELECT * FROM user WHERE email = ?";
-            Utilisateur user = null;
-
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-
-                ps.setString(1, emailField.getText());
-                ResultSet rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    user = new Utilisateur();
-                    user.setId(rs.getInt("id"));
-                    user.setNom(rs.getString("nom"));
-                    user.setPrenom(rs.getString("prenom"));
-                    user.setEmail(rs.getString("email"));
-                    user.setPhone(rs.getInt("numeroT"));
-                    user.setRole(rs.getInt("role"));
-                    user.setGenre(rs.getString("genre"));
-                    user.setDateNaissance(rs.getDate("date").toLocalDate());
-                }
-            }
-
-            if (user != null) {
-                // Pass user to ProfileController
-                ProfileController controller = loader.getController();
-                controller.setUser(user);
-            }
+            HomeController controller = loader.getController();
+            controller.setLoggedInUser(user);
 
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Profile");
-
+            stage.setTitle("Admin Dashboard - " + user.getNom());
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Cannot load Profile page!");
+            showError("Cannot load Home Page!");
         }
     }
 
-    private void openAdminPage() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminManagement.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) emailField.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Admin Management");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Cannot load Admin page!");
-        }
-    }
-
+    // =========================================
+    // SHOW ERROR
+    // =========================================
     private void showError(String message) {
-        errorLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+        errorLabel.setStyle("-fx-text-fill: red;");
         errorLabel.setText(message);
         errorLabel.setVisible(true);
     }

@@ -23,7 +23,7 @@ public class Main extends Application {
             Parent root = FXMLLoader.load(fxmlUrl);
 
             // Set up the primary stage
-            primaryStage.setTitle("Gestion d'utilisateur");
+            primaryStage.setTitle("Sign in");
             primaryStage.setScene(new Scene(root, 1000, 650));
             primaryStage.show();
 

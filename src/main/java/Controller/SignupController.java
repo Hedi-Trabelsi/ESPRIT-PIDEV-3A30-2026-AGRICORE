@@ -1,140 +1,155 @@
-package org.example;
+package Controller;
 
-import Model.Utilisateur;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.mindrot.jbcrypt.BCrypt;
+import Model.Utilisateur;
+import services.UserService;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
 
-public class SignupController implements Initializable {
+public class SignupController {
 
-    @FXML private StackPane rootPane;  // THIS MUST MATCH fx:id in FXML
     @FXML private TextField nomField;
     @FXML private TextField prenomField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private DatePicker datePicker;
+    @FXML private ComboBox<String> genreBox;
     @FXML private TextField adresseField;
     @FXML private TextField phoneField;
-    @FXML private ComboBox<String> genreBox;
     @FXML private ComboBox<String> roleBox;
-    @FXML private Button signupButton;
+    @FXML private Label errorLabel;
     @FXML private Hyperlink signInLink;
-    @FXML private Label errorLabel;   // Inline error label
+    @FXML private CheckBox termsCheckBox;
+    @FXML private ImageView profileImageView;
+    @FXML private Button uploadImageButton;
 
-    private final Map<String, Integer> roleMap = new HashMap<>();
+    private byte[] profileImageBytes;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        errorLabel.setVisible(false); // hide initially
+    @FXML
+    public void initialize() {
+        errorLabel.setVisible(false);
+        genreBox.getItems().addAll("Male", "Female");
+        roleBox.getItems().addAll("Agriculteur", "Technicien", "Fournisseur");
+        signInLink.setOnAction(e -> openSignInPage());
+    }
 
-        // Setup ComboBoxes
-        ObservableList<String> genres = FXCollections.observableArrayList("Male", "Female");
-        ObservableList<String> roles = FXCollections.observableArrayList("Agriculteur", "Technicien", "Fournisseur");
-        genreBox.setItems(genres);
-        roleBox.setItems(roles);
+    @FXML
+    private void handleImageUpload() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Profile Picture");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+        );
 
-        roleMap.put("Agriculteur", 1);
-        roleMap.put("Technicien", 2);
-        roleMap.put("Fournisseur", 3);
+        File file = fileChooser.showOpenDialog(uploadImageButton.getScene().getWindow());
+        if (file != null) {
+            try (FileInputStream fis = new FileInputStream(file)) {
+                profileImageBytes = fis.readAllBytes();
+                Image image = new Image(file.toURI().toString());
+                profileImageView.setImage(image);
 
-        // Signup button action
-        signupButton.setOnAction(event -> handleSignup());
+                showSuccess("Image uploaded successfully!");
 
-        // Sign In link action
-        signInLink.setOnAction(event -> openSignInPage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                showError("Failed to load image.");
+            }
+        }
     }
 
     @FXML
     private void handleSignup() {
-        errorLabel.setVisible(true);
-        errorLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-
-        String nom = nomField.getText().trim();
-        String prenom = prenomField.getText().trim();
-        String email = emailField.getText().trim();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
-        LocalDate dateNaissance = datePicker.getValue();
-        String adresse = adresseField.getText().trim();
-        String phoneStr = phoneField.getText().trim();
-        String genre = genreBox.getValue();
-        String roleStr = roleBox.getValue();
-
-        // Validation
-        if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || password.isEmpty() ||
-                confirmPassword.isEmpty() || dateNaissance == null || adresse.isEmpty() ||
-                phoneStr.isEmpty() || genre == null || roleStr == null) {
-            errorLabel.setText("Veuillez remplir tous les champs !");
-            return;
-        }
-
-        if (!email.matches("^\\S+@\\S+\\.\\S+$")) {
-            errorLabel.setText("Email invalide !");
-            return;
-        }
-
-        if (!phoneStr.matches("\\d+")) {
-            errorLabel.setText("Numéro de téléphone invalide !");
-            return;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            errorLabel.setText("Les mots de passe ne correspondent pas !");
-            return;
-        }
-
-        int phone = Integer.parseInt(phoneStr);
-        int role = roleMap.get(roleStr);
-
-        Utilisateur user = new Utilisateur(nom, prenom, dateNaissance, genre, adresse, phone, role, email, password);
+        errorLabel.setVisible(false);
 
         try {
-            insertUserToDB(user);
-            errorLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
-            errorLabel.setText("Utilisateur ajouté avec succès !");
-            clearFields();
-        } catch (SQLException e) {
+            // Check terms agreement
+            if (!termsCheckBox.isSelected()) {
+                showError("Please accept the Terms of Service and Privacy Policy");
+                return;
+            }
+
+            String nom = nomField.getText().trim();
+            String prenom = prenomField.getText().trim();
+            String email = emailField.getText().trim();
+            String password = passwordField.getText();
+            String confirmPassword = confirmPasswordField.getText();
+            String genre = genreBox.getValue();
+            String adresse = adresseField.getText().trim();
+            String phoneStr = phoneField.getText().trim();
+            String roleValue = roleBox.getValue();
+            LocalDate dateNaissance = datePicker.getValue();
+
+            if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty()
+                    || password.isEmpty() || confirmPassword.isEmpty()
+                    || genre == null || roleValue == null || dateNaissance == null) {
+                showError("Veuillez remplir tous les champs !");
+                return;
+            }
+
+            if (!password.equals(confirmPassword)) {
+                showError("Les mots de passe ne correspondent pas !");
+                return;
+            }
+
+            int phone;
+            try { phone = Integer.parseInt(phoneStr); }
+            catch (NumberFormatException e) { showError("Numéro invalide !"); return; }
+
+            int role;
+            switch (roleValue) {
+                case "Agriculteur" -> role = 1;
+                case "Technicien" -> role = 2;
+                case "Fournisseur" -> role = 3;
+                default -> role = 1;
+            }
+
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+            // ✅ Create user
+            Utilisateur user = new Utilisateur(nom, prenom, dateNaissance, genre, adresse, phone, role, email, hashedPassword, profileImageBytes);
+
+            UserService userService = new UserService();
+            userService.create(user);
+
+            showSuccess("Account created successfully! Please wait...");
+            PauseTransition pause = new PauseTransition(Duration.seconds(2));
+            pause.setOnFinished(event -> openSignInPage());
+            pause.play();
+
+        } catch (Exception e) {
             e.printStackTrace();
-            errorLabel.setText("Erreur lors de l'insertion !");
+            showError("Erreur lors de la création !");
         }
     }
 
-    private void insertUserToDB(Utilisateur user) throws SQLException {
-        String sql = "INSERT INTO user (nom, prenom, date, adresse, numeroT, genre, role, email, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private void showError(String message) {
+        errorLabel.getStyleClass().removeAll("success-label");
+        if (!errorLabel.getStyleClass().contains("error-label")) errorLabel.getStyleClass().add("error-label");
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+    }
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, user.getNom());
-            ps.setString(2, user.getPrenom());
-            ps.setDate(3, java.sql.Date.valueOf(user.getDateNaissance()));
-            ps.setString(4, user.getAdresse());
-            ps.setInt(5, user.getPhone());
-            ps.setString(6, user.getGenre());
-            ps.setInt(7, user.getRole());
-            ps.setString(8, user.getEmail());
-            ps.setString(9, user.getPassword());
-
-            ps.executeUpdate();
-        }
+    private void showSuccess(String message) {
+        errorLabel.getStyleClass().removeAll("error-label");
+        if (!errorLabel.getStyleClass().contains("success-label")) errorLabel.getStyleClass().add("success-label");
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
     }
 
     @FXML
@@ -142,28 +157,11 @@ public class SignupController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signin.fxml"));
             Parent root = loader.load();
-
-            Stage stage = (Stage) rootPane.getScene().getWindow();
+            Stage stage = (Stage) signInLink.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Sign In");
-            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            errorLabel.setText("Cannot load Sign In page!");
-            errorLabel.setVisible(true);
         }
-    }
-
-    private void clearFields() {
-        nomField.clear();
-        prenomField.clear();
-        emailField.clear();
-        passwordField.clear();
-        confirmPasswordField.clear();
-        datePicker.setValue(null);
-        adresseField.clear();
-        phoneField.clear();
-        genreBox.getSelectionModel().clearSelection();
-        roleBox.getSelectionModel().clearSelection();
     }
 }

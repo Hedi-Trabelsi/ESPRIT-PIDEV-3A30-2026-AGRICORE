@@ -35,10 +35,12 @@ public class UtilisateurServiceTest {
                 "TestNom",
                 "TestPrenom",
                 LocalDate.of(2000, 1, 1),
-                "Male",
-                "Test Adresse",
-                12345678,   // int phone
-                1           // role = 1 (ex: Technicien)
+                "Male",                 // genre
+                "Test Adresse",         // adresse
+                12345678,               // phone
+                1,                      // role
+                "test@example.com",     // email
+                "password123"           // password
         );
 
         service.ajouter(u);
@@ -46,7 +48,7 @@ public class UtilisateurServiceTest {
         List<Utilisateur> list = service.afficher();
 
         boolean existe = list.stream()
-                .anyMatch(user -> user.getNom().equals("TestNom"));
+                .anyMatch(user -> user.getEmail().equals("test@example.com")); // check by email
 
         assertTrue(existe, "User should exist after insertion");
     }
