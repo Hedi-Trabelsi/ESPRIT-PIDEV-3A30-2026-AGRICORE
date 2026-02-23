@@ -58,4 +58,31 @@ public class UpdateAnimalController {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
     }
+    private boolean validateAnimalFields() {
+        if (codeAnimalTf.getText().isEmpty()) {
+            showError("Le code de l'animal est obligatoire !");
+            return false;
+        }
+        if (especeTf.getText().isEmpty()) {
+            showError("L'espèce est obligatoire !");
+            return false;
+        }
+        if (raceTf.getText().isEmpty()) {
+            showError("La race est obligatoire !");
+            return false;
+        }
+        if (sexeTf.getText().isEmpty()) {
+            showError("Le sexe est obligatoire !");
+            return false;
+        }
+        if (datePicker.getValue() == null) {
+            showError("La date de naissance est obligatoire !");
+            return false;
+        }
+        return true;
+    }
+
+    private void showError(String msg) {
+        new Alert(Alert.AlertType.ERROR, msg).showAndWait();
+    }
 }

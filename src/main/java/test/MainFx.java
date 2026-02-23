@@ -12,7 +12,7 @@ public class MainFx extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/AddAnimal.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ShowAnimals.fxml"));
         Parent root = loader.load();
 
         stage.setScene(new Scene(root));

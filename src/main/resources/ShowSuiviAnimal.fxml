@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1210.0"
+            style="-fx-background-color: #7ca76f;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.ShowSuiviAnimalController">
+    <children>
+        <VBox prefHeight="600.0" prefWidth="216.0" spacing="10.0" style="-fx-padding: 20 0 0 0;">
+            <children>
+                <VBox alignment="CENTER" prefHeight="100.0">
+                    <children>
+                        <Label text="ZOO ADMIN" style="-fx-font-size:22px; -fx-font-weight:bold; -fx-text-fill: white; -fx-letter-spacing: 2;"/>
+                        <Separator maxWidth="150" style="-fx-opacity: 0.3; -fx-padding: 10 0 0 0;"/>
+                    </children>
+                </VBox>
+                <Button text="Gestion Utilisateurs" prefWidth="216" style="-fx-background-color: transparent; -fx-text-fill: #e0f2f1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 25; -fx-font-size: 13;"/>
+                <Button text="Gestion Équipements" prefWidth="216" style="-fx-background-color: transparent; -fx-text-fill: #e0f2f1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 25; -fx-font-size: 13;"/>
+                <Button text="Gestion Maintenance" prefWidth="216" style="-fx-background-color: transparent; -fx-text-fill: #e0f2f1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 25; -fx-font-size: 13;"/>
+                <Button text="Gestion Événements" prefWidth="216" style="-fx-background-color: transparent; -fx-text-fill: #e0f2f1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 25; -fx-font-size: 13;"/>
+
+                <Button text="Gestion Animaux" prefWidth="216"
+                        style="-fx-background-color: #ffffff22; -fx-text-fill: white; -fx-alignment: CENTER_LEFT; -fx-padding: 12 25; -fx-font-weight: bold; -fx-border-color: white; -fx-border-width: 0 0 0 4;"/>
+
+                <Button text="Gestion Financière" prefWidth="216" style="-fx-background-color: transparent; -fx-text-fill: #e0f2f1; -fx-alignment: CENTER_LEFT; -fx-padding: 12 25; -fx-font-size: 13;"/>
+            </children>
+        </VBox>
+
+        <VBox layoutX="225.0" layoutY="15.0" prefHeight="570.0" prefWidth="970.0" spacing="20"
+              style="-fx-background-color: #f8f9fa; -fx-background-radius: 30; -fx-padding: 30;">
+            <effect>
+                <DropShadow blurType="GAUSSIAN" height="30" radius="14" width="30">
+                    <color>
+                        <Color opacity="0.15" />
+                    </color>
+                </DropShadow>
+            </effect>
+
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="🔍 Rechercher un suivi..." prefWidth="400"
+                           style="-fx-background-radius: 12; -fx-padding: 10; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12; -fx-font-size: 13;"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label text="Trier par" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="triCombo" prefWidth="180"
+                          style="-fx-background-radius: 12; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12;"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <VBox>
+                    <Label text="Suivi de Santé" style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill: #2d3436;"/>
+                    <Label text="Consultez et gérez l'état de vos animaux" style="-fx-text-fill: #a0a0a0; -fx-font-size: 12;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button text="+ Ajouter Suivi" onAction="#navigateAddSuivi"
+                        style="-fx-background-color:#7ca76f; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Button text="📊 Stats" onAction="#navigateStatistiques"
+                        style="-fx-background-color:#6c5ce7; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                <Button text="Retour" onAction="#navigateBack"
+                        style="-fx-background-color:#fab1a0; -fx-text-fill:#d63031; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+            </HBox>
+
+            <ListView fx:id="suiviListView" VBox.vgrow="ALWAYS"
+                      style="-fx-background-radius: 15; -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 5;"/>
+        </VBox>
+    </children>
+</AnchorPane>

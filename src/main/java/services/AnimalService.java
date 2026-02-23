@@ -83,4 +83,22 @@ public class AnimalService implements IService<Animal>{
 
         return list;
     }
+    public Animal readById(int id) throws SQLException {
+        String sql = "SELECT * FROM animal WHERE idAnimal = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            Animal a = new Animal();
+            a.setIdAnimal(rs.getInt("idAnimal"));
+            a.setCodeAnimal(rs.getString("codeAnimal"));
+            a.setEspece(rs.getString("espece"));
+            a.setRace(rs.getString("race"));
+            a.setSexe(rs.getString("sexe"));
+            a.setDateNaissance(rs.getDate("dateNaissance"));
+            return a;
+        }
+        return null; // si aucun animal trouvé
+    }
 }

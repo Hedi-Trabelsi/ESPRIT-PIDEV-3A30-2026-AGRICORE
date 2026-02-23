@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="controllers.AddSuiviAnimalController"
+           style="-fx-background-color: linear-gradient(to bottom right, #e8f5e9, #ffffff);">
+
+    <VBox spacing="20" alignment="CENTER" maxWidth="550" maxHeight="750"
+          style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #A5D6A7; -fx-border-width: 1;">
+
+        <padding>
+            <Insets top="35" right="40" bottom="35" left="40"/>
+        </padding>
+
+        <effect>
+            <DropShadow blurType="GAUSSIAN" height="25" radius="12" width="25" color="#00000015"/>
+        </effect>
+
+        <VBox alignment="CENTER" spacing="5">
+            <Label text="🩺" style="-fx-font-size: 35px;"/>
+            <Label text="Carnet de Santé"
+                   style="-fx-text-fill: #1B5E20; -fx-font-size: 26px; -fx-font-weight: bold;"/>
+            <Label text="Enregistrement des paramètres vitaux"
+                   style="-fx-text-fill: #757575; -fx-font-size: 13px;"/>
+        </VBox>
+
+        <Separator maxWidth="300" style="-fx-opacity: 0.5;"/>
+
+        <GridPane vgap="18" hgap="20">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+
+            <VBox spacing="5" GridPane.columnSpan="2">
+                <Label text="Sélectionner l'animal" style="-fx-text-fill: #388E3C; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="comboAnimal" promptText="Choisir un matricule..." maxWidth="Infinity"
+                          style="-fx-background-color: #F1F8E9; -fx-background-radius: 8; -fx-padding: 5; -fx-border-color: #C8E6C9; -fx-border-radius: 8;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                <Label text="Température (°C)" style="-fx-text-fill: #666;"/>
+                <TextField fx:id="tempTf" promptText="38.5"
+                           style="-fx-background-radius: 8; -fx-padding: 10; -fx-border-color: #E0E0E0; -fx-border-radius: 8;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                <Label text="Poids (kg)" style="-fx-text-fill: #666;"/>
+                <TextField fx:id="poidsTf" promptText="450"
+                           style="-fx-background-radius: 8; -fx-padding: 10; -fx-border-color: #E0E0E0; -fx-border-radius: 8;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                <Label text="Rythme Cardiaque" style="-fx-text-fill: #666;"/>
+                <TextField fx:id="rythmeTf" promptText="70 bpm"
+                           style="-fx-background-radius: 8; -fx-padding: 10; -fx-border-color: #E0E0E0; -fx-border-radius: 8;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                <Label text="Niveau d'activité" style="-fx-text-fill: #666;"/>
+                <ComboBox fx:id="niveauCombo" promptText="Niveau" maxWidth="Infinity"
+                          style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-padding: 5;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                <Label text="État de santé général" style="-fx-text-fill: #666;"/>
+                <ComboBox fx:id="etatCombo" promptText="Évaluation de l'état..." maxWidth="Infinity"
+                          style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #E0E0E0; -fx-border-radius: 8; -fx-padding: 5;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="4" GridPane.columnSpan="2">
+                <Label text="Observations / Remarques" style="-fx-text-fill: #666;"/>
+                <TextArea fx:id="remarqueTf" promptText="Signes particuliers, traitement en cours..." prefHeight="100" wrapText="true"
+                          style="-fx-background-radius: 8; -fx-padding: 10; -fx-border-color: #E0E0E0; -fx-border-radius: 8;"/>
+            </VBox>
+        </GridPane>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="ENREGISTRER LE SUIVI" onAction="#saveSuivi"
+                    maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                    style="-fx-background-color: #2E7D32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 15; -fx-background-radius: 10; -fx-cursor: hand;"/>
+
+            <Button text="RETOUR" onAction="#goBack"
+                    style="-fx-background-color: #ECEFF1; -fx-text-fill: #546E7A; -fx-font-weight: bold; -fx-padding: 15; -fx-background-radius: 10; -fx-cursor: hand;"/>
+        </HBox>
+
+    </VBox>
+</StackPane>

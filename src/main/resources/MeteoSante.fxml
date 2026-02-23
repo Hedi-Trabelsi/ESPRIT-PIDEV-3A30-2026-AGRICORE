@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="700.0" prefWidth="1210.0"
+            style="-fx-background-color: #7ca76f;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.MeteoSanteController">
+    <children>
+
+        <!-- ══ MENU GAUCHE ══ -->
+        <VBox prefHeight="700.0" prefWidth="216.0" spacing="20.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="126.0">
+                    <Label text="LOGO" style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                </VBox>
+                <Button text="Gestion Utilisateurs" prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Équipements"  prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Maintenance"  prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Événements"   prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Animaux"      prefWidth="200" style="-fx-background-color:white;-fx-text-fill:black;"/>
+                <Button text="Gestion Financière"   prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+            </children>
+        </VBox>
+
+        <!-- ══ CONTENU ══ -->
+        <ScrollPane layoutX="217.0" prefHeight="700.0" prefWidth="980.0"
+                    fitToWidth="true"
+                    style="-fx-background-color:#f4f6f9;-fx-background:#f4f6f9;">
+            <VBox spacing="20" style="-fx-padding:25;">
+
+                <!-- TITRE -->
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="🌤️" style="-fx-font-size:32px;"/>
+                    <VBox>
+                        <Label text="Météo &amp; Santé Animale"
+                               style="-fx-font-size:22px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                        <Label text="Corrélation météo temps réel et risques sanitaires de votre troupeau"
+                               style="-fx-font-size:12px;-fx-text-fill:#888;"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="← Retour" onAction="#navigateBack"
+                            style="-fx-background-color:#546e7a;-fx-text-fill:white;
+                                   -fx-font-weight:bold;-fx-padding:10 18;
+                                   -fx-background-radius:10;-fx-cursor:hand;"/>
+                </HBox>
+
+                <Separator/>
+
+                <!-- BARRE DE RECHERCHE -->
+                <HBox spacing="12" alignment="CENTER_LEFT"
+                      style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                             -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+                    <Label text="📍" style="-fx-font-size:22px;"/>
+                    <TextField fx:id="villeTf"
+                               promptText="Entrez votre ville (ex: Tunis, Sfax, Paris...)"
+                               prefWidth="420"
+                               style="-fx-background-radius:8;-fx-padding:11;
+                                      -fx-border-color:#ddd;-fx-border-radius:8;-fx-font-size:14px;"/>
+                    <Button fx:id="btnMeteo" text="🔍 Analyser les risques"
+                            onAction="#rechercherMeteo"
+                            style="-fx-background-color:#1565c0;-fx-text-fill:white;
+                                   -fx-font-weight:bold;-fx-padding:12 22;
+                                   -fx-background-radius:10;-fx-cursor:hand;-fx-font-size:13px;"/>
+                    <ProgressIndicator fx:id="progressIndicator" prefWidth="32" prefHeight="32"/>
+                </HBox>
+
+                <!-- RÉSULTATS -->
+                <VBox fx:id="meteoBox" spacing="20">
+
+                    <!-- LIGNE 1 : Météo + Risques -->
+                    <HBox spacing="20">
+
+                        <!-- Carte Météo -->
+                        <VBox spacing="15" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+                            <Label text="🌡️ Conditions Météo Actuelles"
+                                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#333;"/>
+
+                            <HBox alignment="CENTER_LEFT" spacing="25">
+                                <Label fx:id="lblIconeMeteo" text="🌤️"
+                                       style="-fx-font-size:55px;"/>
+                                <VBox spacing="6">
+                                    <Label fx:id="lblVille" text="—"
+                                           style="-fx-font-size:17px;-fx-font-weight:bold;-fx-text-fill:#333;"/>
+                                    <Label fx:id="lblTempExt" text="—°C"
+                                           style="-fx-font-size:28px;-fx-font-weight:bold;"/>
+                                    <Label fx:id="lblDescription" text="—"
+                                           style="-fx-font-size:12px;-fx-text-fill:#666;"/>
+                                </VBox>
+                            </HBox>
+
+                            <HBox spacing="20">
+                                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color:#e3f2fd;-fx-padding:12;-fx-background-radius:10;">
+                                    <Label text="💧 Humidité" style="-fx-text-fill:#555;-fx-font-size:11px;-fx-font-weight:bold;"/>
+                                    <Label fx:id="lblHumidite" text="—%"
+                                           style="-fx-font-weight:bold;-fx-text-fill:#1565c0;-fx-font-size:18px;"/>
+                                </VBox>
+                                <VBox alignment="CENTER" spacing="4" HBox.hgrow="ALWAYS"
+                                      style="-fx-background-color:#e8f5e9;-fx-padding:12;-fx-background-radius:10;">
+                                    <Label text="💨 Vent" style="-fx-text-fill:#555;-fx-font-size:11px;-fx-font-weight:bold;"/>
+                                    <Label fx:id="lblVent" text="— km/h"
+                                           style="-fx-font-weight:bold;-fx-text-fill:#2e7d32;-fx-font-size:18px;"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Carte Risques -->
+                        <VBox spacing="10" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+                            <Label text="⚠️ Risques Sanitaires Détectés"
+                                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#c62828;"/>
+                            <VBox fx:id="risquesBox" spacing="8"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- LIGNE 2 : Conseils -->
+                    <VBox spacing="10"
+                          style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+                        <Label text="💊 Conseils &amp; Actions Recommandées"
+                               style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1565c0;"/>
+                        <VBox fx:id="conseilsBox" spacing="6"/>
+                    </VBox>
+
+                    <!-- LIGNE 3 : Corrélation par animal -->
+                    <VBox spacing="12"
+                          style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+                        <VBox spacing="3">
+                            <Label text="🐾 Corrélation avec vos animaux"
+                                   style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#333;"/>
+                            <Label text="Croisement des conditions météo avec le dernier suivi de chaque animal"
+                                   style="-fx-font-size:11px;-fx-text-fill:#888;"/>
+                        </VBox>
+                        <VBox fx:id="alertesAnimauxBox" spacing="10"/>
+                    </VBox>
+
+                </VBox>
+
+                <!-- INFO BAS DE PAGE -->
+                <HBox spacing="12" alignment="CENTER_LEFT"
+                      style="-fx-background-color:#e3f2fd;-fx-background-radius:10;-fx-padding:15;">
+                    <Label text="ℹ️" style="-fx-font-size:18px;"/>
+                    <VBox spacing="3">
+                        <Label text="API OpenWeatherMap — Clé active : a9eb50d5aa78991d8326e3599e86fad9"
+                               style="-fx-font-weight:bold;-fx-text-fill:#1565c0;-fx-font-size:12px;"/>
+                        <Label text="1000 appels gratuits/jour • Données mises à jour toutes les 10 minutes"
+                               style="-fx-text-fill:#555;-fx-font-size:11px;"/>
+                        <Label text="⚠️ Si erreur 401 : attendez 10-60 min, la clé est en cours d'activation"
+                               style="-fx-text-fill:#e65100;-fx-font-size:11px;"/>
+                    </VBox>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </children>
+</AnchorPane>
