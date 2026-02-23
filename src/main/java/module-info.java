@@ -2,6 +2,11 @@ module org.example.agricorejava {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires javafx.web;
+
+    // --- ADD THESE TWO LINES ---
+    requires jdk.jsobject;
+    // ---------------------------
 
     // JavaFX packages
     opens controllers to javafx.fxml;
