@@ -122,12 +122,20 @@
                 <HBox alignment="CENTER_LEFT" spacing="20">
                     <Label text="Maintenance Dashboard" styleClass="main-title"/>
                     <Region HBox.hgrow="ALWAYS"/>
-
+                    <AnchorPane onMouseClicked="#openStatsWindow" style="-fx-cursor: hand;" >
+                        <children>
+                            <ImageView fx:id="statsIcon" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@/images/stat.png" />
+                                </image>
+                            </ImageView>
+                        </children>
+                    </AnchorPane>
                     <AnchorPane onMouseClicked="#showNotifications" style="-fx-cursor: hand;">
                         <children>
-                            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                            <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                 <image>
-                                    <Image url="@/images/notification.png" />
+                                    <Image url="@/images/notif.png" />
                                 </image>
                             </ImageView>
 

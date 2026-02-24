@@ -94,7 +94,8 @@ public class NotificationController {
                 if (empty || m == null) {
                     setGraphic(null);
                 } else {
-                    // --- LOGIQUE D'ALERTE VISUELLE ---
+
+
                 /*    long joursAttente = java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), LocalDate.now());
                     boolean isCritical = m.getPriorite().equalsIgnoreCase("Urgente") && joursAttente >= 2;*/
                     // Remplace le 2 par 0 pour que ça s'affiche ROUGE dès aujourd'hui
@@ -107,7 +108,8 @@ public class NotificationController {
                     VBox leftInfoBox = new VBox(
                             typeLabel,
                             new Label(m.getDescription()),
-                            new Label("Equip: " + m.getEquipement())
+                            new Label("Equipement: " + m.getEquipement()),
+                            new Label("lieu: " + m.getLieu())
                     );
                     leftInfoBox.setSpacing(5);
 

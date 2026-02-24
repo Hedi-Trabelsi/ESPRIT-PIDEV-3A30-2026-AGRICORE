@@ -68,8 +68,7 @@ public class AddTacheController {
 
         try {
             List<Maintenance> maints = serviceMaintenance.afficher().stream()
-                    .filter(m -> !m.getStatut().equalsIgnoreCase("Planifie")
-                            && !m.getStatut().equalsIgnoreCase("Resolu")&& !m.getStatut().equalsIgnoreCase("Refuse"))
+                    .filter(m -> m.getStatut().equalsIgnoreCase("en cours"))
                     .collect(Collectors.toList());
 
 
@@ -139,6 +138,7 @@ public class AddTacheController {
                 descriptionStar.setStyle("-fx-text-fill: green;");
             }
         });
+
     }
 
     @FXML

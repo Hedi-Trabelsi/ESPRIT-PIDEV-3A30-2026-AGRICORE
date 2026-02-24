@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Button;
@@ -25,6 +26,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.geometry.Side;
 import javafx.scene.input.MouseEvent;
+
 //------------------------
 public class DashboardController {
 
@@ -221,31 +223,28 @@ private void updateNotificationCount() {
 
 
     @FXML
-    void openStatsWindow(javafx.event.ActionEvent event) {
+    private ImageView statsIcon;
+
+    @FXML
+    void openStatsWindow(MouseEvent event) {
         try {
-            // 1. Charger le fichier FXML des statistiques
+            // 1. Charger la vue des statistiques
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/StatsView.fxml"));
             Parent root = loader.load();
 
-            // 2. Créer une nouvelle fenêtre (Stage)
-            Stage stage = new Stage();
-            stage.setTitle("Tableau de Bord Analytique - Admin");
-            stage.setScene(new javafx.scene.Scene(root));
+            // 2. Changer la racine (root) de la scène actuelle
+            // On utilise 'statsIcon' car c'est lui qui a reçu le clic
+            statsIcon.getScene().setRoot(root);
 
-            // 3. Optionnel : rendre la fenêtre modale (bloque le dash derrière)
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-
-            stage.show();
-        } catch (java.io.IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");
-            alert.setHeaderText("Impossible d'ouvrir les statistiques");
-            alert.setContentText("Le fichier StatsView.fxml est introuvable.");
-            alert.showAndWait();
+            alert.setHeaderText("Navigation impossible");
+            alert.setContentText("Erreur lors du chargement des statistiques.");
+            alert.show();
         }
     }
-
 
 
     private void loadData() {
@@ -271,7 +270,7 @@ private void updateNotificationCount() {
                     return;
                 }
 
-                // ==== Contenu de la carte ====
+
                 Label typeLabel = new Label(m.getType());
                 typeLabel.getStyleClass().add("title-label");
 

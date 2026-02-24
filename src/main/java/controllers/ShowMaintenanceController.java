@@ -204,14 +204,19 @@ public class ShowMaintenanceController {
 
         statut = statut.toLowerCase();
 
-        if (statut.contains("resol")) { // Resolu
+        if (statut.contains("resolu")) { // Resolu
             return "-fx-background-color:#d4edda; -fx-text-fill:green; -fx-padding:5 10; -fx-background-radius:10;";
         } else if (statut.contains("cours")) { // En cours
             return "-fx-background-color:#d1ecf1; -fx-text-fill:#0c5460; -fx-padding:5 10; -fx-background-radius:10;";
-        } else if (statut.contains("attente") || statut.contains("plan")) { // En attente / Planifiee
+        } else if (statut.contains("attente")) { // Jaune/Orange (Attention)
             return "-fx-background-color:#fff3cd; -fx-text-fill:#856404; -fx-padding:5 10; -fx-background-radius:10;";
         }
-
+        else if (statut.contains("plan")) { // Mauve/Lilas (Futur/Planifié)
+            return "-fx-background-color:#e8e3f5; -fx-text-fill:#6f42c1; -fx-padding:5 10; -fx-background-radius:10;";
+        }
+        else if (statut.contains("refuse")) { // Rouge (Annulé)
+            return "-fx-background-color:#f8d7da; -fx-text-fill:#721c24; -fx-padding:5 10; -fx-background-radius:10;";
+        }
         // Par defaut si statut inconnu
         return "-fx-background-color:#d4edda; -fx-text-fill:red; -fx-padding:5 10; -fx-background-radius:10;";
     }
