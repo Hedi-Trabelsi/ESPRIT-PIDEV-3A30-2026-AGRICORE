@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<ScrollPane fitToWidth="true" styleClass="user-content-scroll" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ProfilePageController">
+    <VBox spacing="25" alignment="TOP_CENTER">
+        <padding>
+            <Insets top="30" right="40" bottom="40" left="40" />
+        </padding>
+
+        <!-- Page Title -->
+        <VBox spacing="5">
+            <Label styleClass="user-page-title" text="Mon Profil" />
+            <Label styleClass="user-greeting-label" text="Gérez vos informations personnelles" />
+        </VBox>
+
+        <!-- Profile Card -->
+        <VBox spacing="20" styleClass="user-profile-card">
+            <HBox alignment="CENTER_LEFT" spacing="25">
+                <!-- Profile Image -->
+                <StackPane>
+                    <Circle radius="80" styleClass="user-profile-big-circle" />
+                    <Circle radius="77" styleClass="user-profile-big-inner" />
+                    <ImageView fx:id="profileDetailImageView" fitHeight="150" fitWidth="150" styleClass="user-profile-big-image" />
+                </StackPane>
+
+                <!-- Profile Info -->
+                <VBox spacing="15" HBox.hgrow="ALWAYS">
+                    <VBox spacing="5">
+                        <Label fx:id="profileFullNameLabel" styleClass="user-profile-big-name" text="Nom Prénom" />
+                        <Label fx:id="profileRoleLabel" styleClass="user-profile-big-role" text="Rôle" />
+                    </VBox>
+
+                    <GridPane hgap="25" vgap="12" styleClass="user-info-grid">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="30" />
+                            <ColumnConstraints percentWidth="70" />
+                        </columnConstraints>
+
+                        <Label text="Email:" styleClass="user-info-label" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <Label fx:id="profileEmailDetailLabel" text="email@example.com" styleClass="user-info-value" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Téléphone:" styleClass="user-info-label" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <Label fx:id="profilePhoneDetailLabel" text="+216 XX XXX XXX" styleClass="user-info-value" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Adresse:" styleClass="user-info-label" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <Label fx:id="profileAddressDetailLabel" text="Adresse" styleClass="user-info-value" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label text="Membre depuis:" styleClass="user-info-label" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <Label fx:id="profileMemberSinceDetailLabel" text="Janvier 2026" styleClass="user-info-value" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    </GridPane>
+
+                    <HBox alignment="CENTER_RIGHT" spacing="12">
+                        <Button fx:id="editProfileDetailButton" text="Modifier le profil" styleClass="user-primary-button" />
+                        <Button fx:id="changePasswordDetailButton" text="Changer mot de passe" styleClass="user-secondary-button" />
+                    </HBox>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- Quick Stats -->
+        <GridPane hgap="20" vgap="20">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="33" />
+                <ColumnConstraints percentWidth="33" />
+                <ColumnConstraints percentWidth="34" />
+            </columnConstraints>
+
+            <VBox spacing="10" styleClass="user-stat-card" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="📅 Événements" styleClass="user-stat-title" />
+                <Label fx:id="profileEventsCount" text="3" styleClass="user-stat-number" />
+                <Label text="à venir" styleClass="user-stat-label" />
+            </VBox>
+
+            <VBox spacing="10" styleClass="user-stat-card" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="🐄 Animaux" styleClass="user-stat-title" />
+                <Label fx:id="profileAnimalsCount" text="12" styleClass="user-stat-number" />
+                <Label text="en bonne santé" styleClass="user-stat-label" />
+            </VBox>
+
+            <VBox spacing="10" styleClass="user-stat-card" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                <Label text="🚜 Équipement" styleClass="user-stat-title" />
+                <Label fx:id="profileEquipmentCount" text="5" styleClass="user-stat-number" />
+                <Label text="opérationnel" styleClass="user-stat-label" />
+            </VBox>
+        </GridPane>
+    </VBox>
+</ScrollPane>

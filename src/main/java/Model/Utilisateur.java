@@ -12,15 +12,17 @@ public class Utilisateur {
     private int phone;
     private String genre;
     private int role;
-    private String email;        // ✅ NEW
-    private String password;     // ✅ NEW
+    private String email;
+    private String password;
+
+    // ✅ NEW
+    private byte[] image;
 
     public Utilisateur() {}
 
-    // Constructor without id
     public Utilisateur(String nom, String prenom, LocalDate dateNaissance,
                        String genre, String adresse, int phone, int role,
-                       String email, String password) {
+                       String email, String password, byte[] image) {
 
         this.nom = nom;
         this.prenom = prenom;
@@ -31,6 +33,7 @@ public class Utilisateur {
         this.role = role;
         this.email = email;
         this.password = password;
+        this.image = image;
     }
 
     // Getters & Setters
@@ -59,9 +62,13 @@ public class Utilisateur {
     public int getRole() { return role; }
     public void setRole(int role) { this.role = role; }
 
-    public String getEmail() { return email; }      // ✅
+    public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getPassword() { return password; } // ✅
+    public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    // ✅ NEW
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
 }
