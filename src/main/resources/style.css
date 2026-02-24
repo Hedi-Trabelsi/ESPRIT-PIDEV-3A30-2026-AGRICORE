@@ -1,0 +1,193 @@
+/* ===== GLOBAL ===== */
+* {
+    -fx-font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== SIDEBAR BUTTONS ===== */
+.button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8 15 8 10;
+}
+
+.button:hover {
+    -fx-background-color: rgba(255,255,255,0.25);
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 6, 0, 0, 2);
+}
+
+.button:pressed {
+    -fx-background-color: rgba(255,255,255,0.45);
+    -fx-text-fill: #3a6b2e;
+}
+
+/* ===== ACTIVE BUTTON ===== */
+.button-active {
+    -fx-background-color: white;
+    -fx-text-fill: #4a7c40;
+    -fx-background-radius: 12;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 8, 0, 0, 3);
+}
+
+/* ===== ROLE CARDS (Login screen) ===== */
+.role-card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 20, 0, 0, 5);
+    -fx-cursor: hand;
+}
+
+.role-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(74,124,64,0.4), 25, 0, 0, 8);
+    -fx-background-color: #f8fff6;
+}
+
+/* ===== PRIMARY BUTTON ===== */
+.btn-primary {
+    -fx-background-color: #4a7c40;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 10 20;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #3a6b2e;
+    -fx-effect: dropshadow(gaussian, rgba(74,124,64,0.4), 10, 0, 0, 3);
+}
+
+/* ===== DANGER BUTTON ===== */
+.btn-danger {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 7 15;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #c0392b;
+}
+
+/* ===== WARNING BUTTON ===== */
+.btn-warning {
+    -fx-background-color: #f39c12;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 7 15;
+}
+
+.btn-warning:hover {
+    -fx-background-color: #e67e22;
+}
+
+/* ===== SUCCESS BUTTON ===== */
+.btn-success {
+    -fx-background-color: #27ae60;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 7 15;
+}
+
+.btn-success:hover {
+    -fx-background-color: #219a52;
+}
+
+/* ===== TEXT FIELDS ===== */
+.text-field, .combo-box {
+    -fx-background-color: #f5f9f4;
+    -fx-border-color: #c8ddc5;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 8 12;
+    -fx-font-size: 13px;
+}
+
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: #4a7c40;
+    -fx-effect: dropshadow(gaussian, rgba(74,124,64,0.2), 6, 0, 0, 0);
+}
+
+/* ===== TABLE VIEW ===== */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #4a7c40;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #e8f2e6;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #f7fbf6;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #d4edcf;
+    -fx-text-fill: #2d5a25;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #e8f5e4;
+}
+
+/* ===== LABELS ===== */
+.title-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2d5a25;
+}
+
+.subtitle-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #6a9c60;
+}
+
+.section-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4a7c40;
+}
+
+/* ===== CARD CONTAINER ===== */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 15, 0, 0, 4);
+    -fx-padding: 20;
+}
+
+/* ===== SEPARATOR ===== */
+.separator {
+    -fx-background-color: #e0eedc;
+}

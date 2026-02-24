@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="760.0" prefWidth="1250.0"
+            style="-fx-background-color: #f0f7ee;"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AjoutEquipementController">
+    <children>
+
+        <!-- ===== SIDEBAR ===== -->
+        <VBox prefHeight="760.0" prefWidth="230.0"
+              style="-fx-background-color: linear-gradient(to bottom, #1e3a1a, #3a6b2e, #4a7c40);"
+              spacing="0.0">
+            <children>
+
+                <!-- Logo -->
+                <VBox alignment="CENTER" prefHeight="130.0"
+                      style="-fx-background-color: rgba(0,0,0,0.25); -fx-border-color: rgba(255,255,255,0.08); -fx-border-width: 0 0 1 0;">
+                    <padding><Insets top="20" bottom="20"/></padding>
+                    <ImageView fitHeight="52.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/logo.png" /></image>
+                    </ImageView>
+                    <Label text="AgroManager" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 6 0 2 0;" />
+                    <Label text="Espace Fournisseur" style="-fx-font-size: 10px; -fx-text-fill: rgba(255,255,255,0.55); -fx-font-weight: bold;" />
+                </VBox>
+
+                <!-- Profile -->
+                <HBox alignment="CENTER_LEFT" spacing="10.0"
+                      style="-fx-background-color: rgba(255,255,255,0.07); -fx-padding: 14 18; -fx-border-color: rgba(255,255,255,0.06); -fx-border-width: 0 0 1 0;">
+                    <Label text="👤" style="-fx-font-size: 22px;" />
+                    <VBox spacing="2.0">
+                        <Label text="Fournisseur" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                        <Label text="Compte actif" style="-fx-font-size: 10px; -fx-text-fill: #7ddc6e;" />
+                    </VBox>
+                </HBox>
+
+                <!-- Navigation -->
+                <VBox spacing="2.0">
+                    <padding><Insets top="18" left="14" right="14" bottom="10"/></padding>
+                    <children>
+                        <Label text="NAVIGATION" style="-fx-font-size: 9px; -fx-text-fill: rgba(255,255,255,0.4); -fx-font-weight: bold; -fx-padding: 0 0 8 6;" />
+
+                        <HBox spacing="12.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand;"
+                              onMouseClicked="#goToListe">
+                            <Label text="🚜" style="-fx-font-size: 16px;" />
+                            <Label text="Liste Équipements" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.9);" />
+                        </HBox>
+
+                        <!-- Ajouter ACTIVE -->
+                        <HBox spacing="12.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, 2);">
+                            <Label text="➕" style="-fx-font-size: 16px;" />
+                            <Label text="Ajouter Équipement" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3a6b2e;" />
+                        </HBox>
+
+                        <HBox spacing="12.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-opacity: 0.65;">
+                            <Label text="👥" style="-fx-font-size: 16px;" />
+                            <Label text="Gestion Utilisateurs" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        </HBox>
+
+                        <HBox spacing="12.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-opacity: 0.65;">
+                            <Label text="⚙️" style="-fx-font-size: 16px;" />
+                            <Label text="Gestion Maintenance" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        </HBox>
+
+                        <HBox spacing="12.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-opacity: 0.65;">
+                            <Label text="📅" style="-fx-font-size: 16px;" />
+                            <Label text="Gestion Événements" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        </HBox>
+
+                        <HBox spacing="12.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-opacity: 0.65;">
+                            <Label text="🐄" style="-fx-font-size: 16px;" />
+                            <Label text="Gestion Animaux" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        </HBox>
+                    </children>
+                </VBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <VBox style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 14 18; -fx-border-color: rgba(255,255,255,0.08); -fx-border-width: 1 0 0 0;" spacing="8.0">
+                    <Button text="← Changer de rôle" onAction="#goToLogin"
+                            style="-fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 9 16; -fx-border-color: rgba(255,255,255,0.25); -fx-border-radius: 10;"
+                            maxWidth="Infinity" />
+                </VBox>
+            </children>
+        </VBox>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <VBox layoutX="230.0" layoutY="0.0" prefHeight="760.0" prefWidth="1020.0"
+              style="-fx-background-color: #f0f7ee;" spacing="0.0">
+            <children>
+
+                <!-- Top Bar -->
+                <HBox alignment="CENTER_LEFT" spacing="14.0"
+                      style="-fx-background-color: white; -fx-padding: 16 24; -fx-border-color: #ddeedd; -fx-border-width: 0 0 1 0; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);">
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="labelTitre" text="➕ Ajouter un Équipement"
+                               style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1e3a1a;" />
+                        <Label fx:id="labelSousTitre" text="Remplissez le formulaire pour enregistrer un nouvel équipement agricole"
+                               style="-fx-font-size: 12px; -fx-text-fill: #7a9c70;" />
+                    </VBox>
+                    <Button text="← Retour à la liste" onAction="#goToListe"
+                            style="-fx-background-color: #ecf0f1; -fx-text-fill: #555; -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 9 18;" />
+                </HBox>
+
+                <!-- Scrollable content -->
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                            style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background: #f0f7ee;">
+                    <content>
+                        <VBox spacing="18.0" style="-fx-background-color: #f0f7ee;">
+                            <padding><Insets top="24" right="28" bottom="28" left="28"/></padding>
+                            <children>
+
+                                <!-- ===== LIGNE HAUTE : Pays + Conversion ===== -->
+                                <HBox spacing="16.0">
+
+                                    <!-- CARTE RESTCOUNTRIES (API 1) -->
+                                    <VBox HBox.hgrow="ALWAYS" spacing="0.0"
+                                          style="-fx-background-color: white; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 3);">
+
+                                        <!-- Header carte pays -->
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0"
+                                              style="-fx-background-color: #3a6b2e; -fx-background-radius: 14 14 0 0; -fx-padding: 12 18;">
+                                            <Label text="🌍" style="-fx-font-size: 18px;" />
+                                            <Label text="Informations du pays fournisseur"
+                                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                                            <Region HBox.hgrow="ALWAYS" />
+                                            <Label text="via RestCountries API"
+                                                   style="-fx-font-size: 9px; -fx-text-fill: rgba(255,255,255,0.55); -fx-background-color: rgba(0,0,0,0.2); -fx-background-radius: 6; -fx-padding: 2 7;" />
+                                        </HBox>
+
+                                        <!-- Corps carte pays -->
+                                        <HBox spacing="0.0">
+
+                                            <!-- Drapeau / Nom pays -->
+                                            <VBox alignment="CENTER" spacing="6.0" prefWidth="140.0"
+                                                  style="-fx-background-color: #f5fbf3; -fx-padding: 18 14; -fx-border-color: #e0eedd; -fx-border-width: 0 1 0 0;">
+                                                <Label text="🇹🇳" style="-fx-font-size: 38px;" />
+                                                <Label fx:id="labelPaysNom" text="Tunisie"
+                                                       style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                                                <Label fx:id="labelPaysRegion" text="Afrique du Nord"
+                                                       style="-fx-font-size: 10px; -fx-text-fill: #7a9c70;" wrapText="true" maxWidth="120" />
+                                            </VBox>
+
+                                            <!-- Détails pays -->
+                                            <VBox spacing="10.0" HBox.hgrow="ALWAYS"
+                                                  style="-fx-padding: 16 18;">
+
+                                                <HBox spacing="10.0" alignment="CENTER_LEFT"
+                                                      style="-fx-background-color: #f5fbf3; -fx-background-radius: 8; -fx-padding: 9 12;">
+                                                    <Label text="🏛" style="-fx-font-size: 14px;" />
+                                                    <VBox spacing="1.0">
+                                                        <Label text="Capitale"
+                                                               style="-fx-font-size: 10px; -fx-text-fill: #999;" />
+                                                        <Label fx:id="labelPaysCapitale" text="Tunis"
+                                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                                                    </VBox>
+                                                </HBox>
+
+                                                <HBox spacing="10.0" alignment="CENTER_LEFT"
+                                                      style="-fx-background-color: #f5fbf3; -fx-background-radius: 8; -fx-padding: 9 12;">
+                                                    <Label text="💰" style="-fx-font-size: 14px;" />
+                                                    <VBox spacing="1.0">
+                                                        <Label text="Devise"
+                                                               style="-fx-font-size: 10px; -fx-text-fill: #999;" />
+                                                        <Label fx:id="labelPaysDevise" text="Dinar Tunisien (TND)"
+                                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                                                    </VBox>
+                                                </HBox>
+
+                                                <HBox spacing="10.0" alignment="CENTER_LEFT"
+                                                      style="-fx-background-color: #f5fbf3; -fx-background-radius: 8; -fx-padding: 9 12;">
+                                                    <Label text="👥" style="-fx-font-size: 14px;" />
+                                                    <VBox spacing="1.0">
+                                                        <Label text="Population"
+                                                               style="-fx-font-size: 10px; -fx-text-fill: #999;" />
+                                                        <Label fx:id="labelPaysPopulation" text="11 818 619 hab."
+                                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #333;" />
+                                                    </VBox>
+                                                </HBox>
+
+                                            </VBox>
+                                        </HBox>
+                                    </VBox>
+
+                                    <!-- CARTE CONVERSION (API 2) -->
+                                    <VBox prefWidth="310.0" spacing="0.0"
+                                          style="-fx-background-color: white; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 3);">
+
+                                        <!-- Header carte conversion -->
+                                        <HBox alignment="CENTER_LEFT" spacing="10.0"
+                                              style="-fx-background-color: #1565c0; -fx-background-radius: 14 14 0 0; -fx-padding: 12 18;">
+                                            <Label text="💱" style="-fx-font-size: 18px;" />
+                                            <Label text="Conversion en temps réel"
+                                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                                            <Region HBox.hgrow="ALWAYS" />
+                                            <Label text="via ExchangeRate API"
+                                                   style="-fx-font-size: 9px; -fx-text-fill: rgba(255,255,255,0.55); -fx-background-color: rgba(0,0,0,0.2); -fx-background-radius: 6; -fx-padding: 2 7;" />
+                                        </HBox>
+
+                                        <!-- Corps conversion -->
+                                        <VBox spacing="12.0" style="-fx-padding: 16 18;">
+
+                                            <Label text="Saisissez un prix pour voir la conversion automatique"
+                                                   style="-fx-font-size: 11px; -fx-text-fill: #999;" wrapText="true" />
+
+                                            <HBox spacing="10.0" alignment="CENTER_LEFT"
+                                                  style="-fx-background-color: #e8f5e4; -fx-background-radius: 8; -fx-padding: 10 14;">
+                                                <Label text="🇹🇳" style="-fx-font-size: 16px;" />
+                                                <Label text="TND" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Label text="→" style="-fx-font-size: 14px; -fx-text-fill: #999;" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="labelPrixEUR" text="Saisir un prix..."
+                                                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                                            </HBox>
+
+                                            <HBox spacing="10.0" alignment="CENTER_LEFT"
+                                                  style="-fx-background-color: #e3f2fd; -fx-background-radius: 8; -fx-padding: 10 14;">
+                                                <Label text="🇺🇸" style="-fx-font-size: 16px;" />
+                                                <Label text="USD" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Label text="→" style="-fx-font-size: 14px; -fx-text-fill: #999;" />
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Label fx:id="labelPrixUSD" text=""
+                                                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" />
+                                            </HBox>
+
+                                        </VBox>
+                                    </VBox>
+
+                                </HBox>
+
+                                <!-- ===== FORMULAIRE ===== -->
+                                <VBox style="-fx-background-color: white; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 15, 0, 0, 4);"
+                                      spacing="0.0">
+
+                                    <!-- Card Header -->
+                                    <HBox style="-fx-background-color: #f5fbf3; -fx-padding: 16 24; -fx-background-radius: 16 16 0 0; -fx-border-color: #e8f5e4; -fx-border-width: 0 0 1 0;"
+                                          spacing="10.0" alignment="CENTER_LEFT">
+                                        <Label text="📝" style="-fx-font-size: 18px;" />
+                                        <Label text="Informations de l'équipement"
+                                               style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                                    </HBox>
+
+                                    <!-- Champs -->
+                                    <VBox spacing="20.0">
+                                        <padding><Insets top="26" right="30" bottom="26" left="30"/></padding>
+                                        <children>
+
+                                            <HBox spacing="20.0">
+                                                <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                                    <Label text="Nom de l'équipement"
+                                                           style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                                    <TextField fx:id="fieldNom" promptText="Ex: Tracteur John Deere 6120M"
+                                                               style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;" />
+                                                </VBox>
+                                                <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                                    <Label text="Type d'équipement"
+                                                           style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                                    <TextField fx:id="fieldType" promptText="Ex: Machinerie, Outil, Véhicule..."
+                                                               style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;" />
+                                                </VBox>
+                                            </HBox>
+
+                                            <HBox spacing="20.0">
+                                                <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                                    <Label text="Prix unitaire (TND)"
+                                                           style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                                    <TextField fx:id="fieldPrix" promptText="Ex: 2500.00"
+                                                               style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;"
+                                                               onKeyReleased="#mettreAJourConversion" />
+                                                </VBox>
+                                                <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                                    <Label text="Quantité en stock"
+                                                           style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                                    <TextField fx:id="fieldQuantite" promptText="Ex: 10"
+                                                               style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;" />
+                                                </VBox>
+                                            </HBox>
+
+                                            <Label fx:id="labelMessage" text=""
+                                                   style="-fx-font-size: 13px; -fx-text-fill: #e74c3c;" />
+
+                                            <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                                                <Button text="🗑 Vider" onAction="#clearForm"
+                                                        style="-fx-background-color: #ecf0f1; -fx-text-fill: #666; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 11 22;" />
+                                                <Button fx:id="btnAction" text="✅ Ajouter l'équipement" onAction="#sauvegarder"
+                                                        style="-fx-background-color: #4a7c40; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 12 30;" />
+                                            </HBox>
+                                        </children>
+                                    </VBox>
+                                </VBox>
+
+                                <!-- ===== CONSEILS ===== -->
+                                <HBox spacing="14.0" alignment="CENTER_LEFT"
+                                      style="-fx-background-color: #e8f5e4; -fx-background-radius: 12; -fx-padding: 14 20;">
+                                    <Label text="💡" style="-fx-font-size: 18px;" />
+                                    <VBox spacing="3.0">
+                                        <Label text="Conseils de saisie"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                                        <Label text="• Entrez un nom descriptif (marque + modèle) pour faciliter les recherches."
+                                               style="-fx-font-size: 11px; -fx-text-fill: #5a8a50;" />
+                                        <Label text="• Types disponibles : Machinerie, Outil, Véhicule, Irrigation, Semence, Engrais."
+                                               style="-fx-font-size: 11px; -fx-text-fill: #5a8a50;" />
+                                        <Label text="• Le prix doit être en TND — la conversion EUR/USD s'affiche automatiquement."
+                                               style="-fx-font-size: 11px; -fx-text-fill: #5a8a50;" />
+                                    </VBox>
+                                </HBox>
+
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+
+    </children>
+</AnchorPane>
