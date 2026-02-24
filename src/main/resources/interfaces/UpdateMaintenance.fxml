@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <AnchorPane prefHeight="720.0" prefWidth="1210.0"
             style="-fx-background-color: #7ca76f;"
             xmlns="http://javafx.com/javafx/21"
@@ -160,15 +161,19 @@
                         </VBox>
 
                         <!-- Description -->
-                        <VBox spacing="8.0">
-                            <Label text="Description" styleClass="form-label"/>
-                            <TextField fx:id="descriptionTf"
-                                       prefWidth="450.0"
-                                       prefHeight="120.0"
-                                       styleClass="form-input"/>
+                        <VBox spacing="4.0" alignment="TOP_LEFT">
+                            <HBox spacing="5" alignment="CENTER_LEFT">
+                                <Label text="Description" styleClass="form-label"/>
+                            </HBox>
+                            <TextArea fx:id="descriptionTf"
+                                      prefWidth="450.0"
+                                      prefHeight="120.0"
+                                      styleClass="form-input"
+                                      promptText="Modifier la description..."
+                                      wrapText="true" />
                         </VBox>
 
-                        <!-- Maintenance associée -->
+
 
 
                         <!-- Buttons -->

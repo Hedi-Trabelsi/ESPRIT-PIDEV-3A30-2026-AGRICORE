@@ -200,7 +200,13 @@ public class AddTacheController {
                             String.valueOf(cout),
                             nomFichierPdf
                     );
+                    String messageSms = " Nouvelle tâche de maintenance !\n" +
+                            "Équipement: " + selectedMaintenance.getEquipement() + "\n" +
+                            "Date prévue: " + datePrevueDp.getValue().toString() + "\n" +
+                            "Lieu: " + selectedMaintenance.getLieu();
 
+                    // Remplace par le numéro du technicien (ou le tien pour le test)
+                    services.SmsService.envoyerSms("+21651042268", messageSms);
                     // --- 5. RETOUR UI ---
                     javafx.application.Platform.runLater(() -> {
                         try {

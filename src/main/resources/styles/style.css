@@ -341,3 +341,12 @@
     -fx-background-radius: 5;
     -fx-text-fill: #555;
 }
+.text-area {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+
+/* Pour enlever la bordure bleue quand on clique dessus si nécessaire */
+.text-area .content {
+    -fx-background-color: white;
+}

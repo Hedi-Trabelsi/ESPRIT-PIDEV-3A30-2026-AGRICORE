@@ -111,12 +111,7 @@
                                 </VBox>
 
                                 <!-- Description -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Description" styleClass="form-label" />
-                                        <TextArea fx:id="descriptionTa" prefWidth="450.0" prefHeight="120.0" styleClass="form-input" promptText="Entrez la description de la tâche..." />
-                                    </children>
-                                </VBox>
+
 
                                 <!-- Coût estimé -->
                                 <VBox spacing="8.0">
@@ -128,7 +123,17 @@
 
                                 <!-- Maintenance associée -->
                                 <Label fx:id="maintenanceLbl" prefWidth="450.0" styleClass="form-input-disabled" />
-
+                                <VBox spacing="8.0">
+                                    <children>
+                                        <Label text="Description" styleClass="form-label" />
+                                        <TextArea fx:id="descriptionTa"
+                                                  prefWidth="450.0"
+                                                  prefHeight="250.0"
+                                                  styleClass="form-input"
+                                                  wrapText="true"
+                                                  promptText="Modifier la description de la tâche..." />
+                                    </children>
+                                </VBox>
                                 <!-- Boutons -->
                                 <HBox prefHeight="50.0" prefWidth="945.0" spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
                                     <children>

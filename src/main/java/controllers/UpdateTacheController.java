@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.util.Duration;
 import models.Tache;
 import models.Maintenance;
+import services.OpenAIService;
 import services.ServiceTache;
 import services.ServiceMaintenance;
 
@@ -147,4 +148,5 @@ public class UpdateTacheController {
         alert.setHeaderText(message);
         alert.showAndWait();
     }
+
 }

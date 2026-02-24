@@ -1,5 +1,9 @@
 package controllers;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.stream.Collectors;
+
+import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Button;
@@ -10,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Maintenance;
 import services.ServiceMaintenance;
@@ -215,7 +220,31 @@ private void updateNotificationCount() {
     }
 
 
+    @FXML
+    void openStatsWindow(javafx.event.ActionEvent event) {
+        try {
+            // 1. Charger le fichier FXML des statistiques
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/StatsView.fxml"));
+            Parent root = loader.load();
 
+            // 2. Créer une nouvelle fenêtre (Stage)
+            Stage stage = new Stage();
+            stage.setTitle("Tableau de Bord Analytique - Admin");
+            stage.setScene(new javafx.scene.Scene(root));
+
+            // 3. Optionnel : rendre la fenêtre modale (bloque le dash derrière)
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+            stage.show();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Impossible d'ouvrir les statistiques");
+            alert.setContentText("Le fichier StatsView.fxml est introuvable.");
+            alert.showAndWait();
+        }
+    }
 
 
 

@@ -28,7 +28,7 @@ public class AddMaintenanceController {
     private TextField dateDeclarationTf;
 
     @FXML
-    private TextField descriptionTf;
+    private TextArea descriptionTf;
 
     @FXML
     private TextField lieuTf;

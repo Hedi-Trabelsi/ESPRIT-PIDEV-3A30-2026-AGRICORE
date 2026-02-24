@@ -25,7 +25,7 @@ public class UpdateMaintenanceController {
     private DatePicker dateDeclarationDp;
 
     @FXML
-    private TextField descriptionTf;
+    private TextArea descriptionTf;
 
     @FXML
     private TextField lieuTf;
