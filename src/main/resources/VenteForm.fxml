@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.VenteFormController"
+      spacing="0" prefWidth="400.0" prefHeight="530.0"
+      stylesheets="@venteform.css" styleClass="form-card">
+    <children>
+
+        <!-- ── Header ── -->
+        <HBox styleClass="form-header" alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <VBox spacing="2.0">
+                    <children>
+                        <Label text="Nouvelle vente" styleClass="form-header-title"/>
+                        <Label text="Remplissez les champs ci-dessous" styleClass="form-header-sub"/>
+                    </children>
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="✕" onAction="#cancel" styleClass="form-close-btn"/>
+            </children>
+        </HBox>
+
+        <!-- ── Body ── -->
+        <VBox spacing="14.0" styleClass="form-body">
+            <children>
+
+                <!-- Prix unitaire + Quantité side by side -->
+                <HBox spacing="12.0">
+                    <children>
+                        <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Prix unitaire (DT)" styleClass="form-field-label"/>
+                                <TextField fx:id="prixField" promptText="ex: 12.50"
+                                           styleClass="form-input"/>
+                                <Label fx:id="prixError" styleClass="error-label" text=" "/>
+                            </children>
+                        </VBox>
+                        <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Quantité" styleClass="form-field-label"/>
+                                <TextField fx:id="quantiteField" promptText="ex: 3"
+                                           styleClass="form-input"/>
+                                <Label fx:id="quantiteError" styleClass="error-label" text=" "/>
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+
+                <!-- CA live preview -->
+                <HBox styleClass="ca-preview-box" spacing="10.0" alignment="CENTER_LEFT">
+                    <children>
+                        <Label text="Chiffre d'affaires calculé" styleClass="ca-preview-label"/>
+                        <Pane HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="caValue" text="0.00 DT" styleClass="ca-preview-value"/>
+                    </children>
+                </HBox>
+
+                <!-- Produit -->
+                <VBox spacing="6.0">
+                    <children>
+                        <Label text="Produit" styleClass="form-field-label"/>
+                        <TextField fx:id="produitField" promptText="Nom du produit"
+                                   styleClass="form-input"/>
+                        <Label fx:id="produitError" styleClass="error-label" text=" "/>
+                    </children>
+                </VBox>
+
+                <!-- Date -->
+                <VBox spacing="6.0">
+                    <children>
+                        <Label text="Date de vente" styleClass="form-field-label"/>
+                        <DatePicker fx:id="dateField" maxWidth="Infinity"
+                                    styleClass="form-datepicker"/>
+                        <Label fx:id="dateError" styleClass="error-label" text=" "/>
+                    </children>
+                </VBox>
+
+            </children>
+        </VBox>
+
+        <!-- ── Divider ── -->
+        <Separator styleClass="form-divider"/>
+
+        <!-- ── Footer ── -->
+        <HBox spacing="10.0" styleClass="form-footer" alignment="CENTER_RIGHT">
+            <children>
+                <Button text="Annuler" onAction="#cancel" styleClass="ghost-button"/>
+                <Button fx:id="saveBtn" text="Enregistrer la vente"
+                        onAction="#save" styleClass="form-save-btn"/>
+            </children>
+        </HBox>
+
+    </children>
+</VBox>

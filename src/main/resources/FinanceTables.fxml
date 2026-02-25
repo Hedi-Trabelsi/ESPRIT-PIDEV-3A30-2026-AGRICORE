@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="1000.0" prefHeight="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.FinanceTablesController"
+            stylesheets="@tables.css">
+    <children>
+        <HBox spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <fx:include fx:id="sidebar" source="front.fxml"/>
+
+                <VBox spacing="16.0" AnchorPane.topAnchor="16.0" AnchorPane.leftAnchor="16.0"
+                      AnchorPane.rightAnchor="16.0" AnchorPane.bottomAnchor="16.0"
+                      prefWidth="784.0" style="-fx-padding: 16px;">
+                    <children>
+
+                        <!-- Top bar -->
+                        <HBox spacing="8.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Label fx:id="titleLabel" styleClass="page-title" text="Finances"/>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <Button text="← Retour" onAction="#goBack" styleClass="secondary"/>
+                            </children>
+                        </HBox>
+
+                        <!-- Two-column feed layout -->
+                        <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+                            <children>
+
+                                <!-- LEFT: Dépenses feed -->
+                                <VBox styleClass="panel" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
+                                            <children>
+                                                <Label text="●" styleClass="feed-dot-depense"/>
+                                                <Label text="Dépenses" styleClass="panel-title"/>
+                                            </children>
+                                        </HBox>
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
+                                            <content>
+                                                <VBox fx:id="depenseFeed" styleClass="feed-list" spacing="0"/>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+
+                                <!-- RIGHT: Ventes feed -->
+                                <VBox styleClass="panel" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
+                                            <children>
+                                                <Label text="●" styleClass="feed-dot-vente"/>
+                                                <Label text="Ventes" styleClass="panel-title"/>
+                                            </children>
+                                        </HBox>
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
+                                            <content>
+                                                <VBox fx:id="venteFeed" styleClass="feed-list" spacing="0"/>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+
+                            </children>
+                        </HBox>
+
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<AnchorPane prefWidth="1000.0" prefHeight="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.AnomalyPageController"
+            stylesheets="@anomaly.css">
+    <children>
+        <HBox spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <VBox spacing="14.0" prefWidth="784.0" style="-fx-padding: 16px 18px;"
+                      AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
+                    <children>
+
+                        <!-- ══ HEADER ══ -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT">
+                            <children>
+                                <VBox spacing="2.0">
+                                    <children>
+                                        <Label fx:id="titleLabel" styleClass="page-title"
+                                               text="Anomalies dépenses"/>
+                                        <Label text="Détection statistique · intervalles de confiance"
+                                               styleClass="page-subtitle"/>
+                                    </children>
+                                </VBox>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <Button text="↻  Actualiser" onAction="#refresh"
+                                        styleClass="secondary"/>
+                            </children>
+                        </HBox>
+
+                        <!-- ══ KPI STRIP ══ -->
+                        <HBox spacing="10.0">
+                            <children>
+                                <VBox styleClass="kpi-mini" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" spacing="2.0">
+                                    <children>
+                                        <Label text="ANOMALIES" styleClass="kpi-mini-label"/>
+                                        <Label fx:id="totalAnomaliesLabel" text="0" styleClass="kpi-mini-value kpi-depense"/>
+                                    </children>
+                                </VBox>
+                                <VBox styleClass="kpi-mini" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" spacing="2.0">
+                                    <children>
+                                        <Label text="Z-SCORE MAX" styleClass="kpi-mini-label"/>
+                                        <Label fx:id="maxZLabel" text="0.00" styleClass="kpi-mini-value kpi-trend"/>
+                                    </children>
+                                </VBox>
+                                <VBox styleClass="kpi-mini" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" spacing="2.0">
+                                    <children>
+                                        <Label text="MONTANT TOTAL" styleClass="kpi-mini-label"/>
+                                        <Label fx:id="totalMontantLabel" text="0.00 DT" styleClass="kpi-mini-value kpi-depense"/>
+                                    </children>
+                                </VBox>
+                                <VBox styleClass="kpi-mini" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" spacing="2.0">
+                                    <children>
+                                        <Label text="TAUX" styleClass="kpi-mini-label"/>
+                                        <Label fx:id="tauxLabel" text="0%" styleClass="kpi-mini-value kpi-benef"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <!-- ══ MAIN CONTENT: chart left + list right ══ -->
+                        <HBox spacing="12.0" VBox.vgrow="ALWAYS">
+                            <children>
+
+                                <!-- ── Z-Score bar chart ── -->
+                                <VBox styleClass="panel" prefWidth="320.0">
+                                    <children>
+                                        <HBox styleClass="panel-header" alignment="CENTER_LEFT">
+                                            <children>
+                                                <Label text="Distribution Z-Scores" styleClass="panel-title"/>
+                                            </children>
+                                        </HBox>
+                                        <VBox style="-fx-padding: 12px;" spacing="8.0" VBox.vgrow="ALWAYS">
+                                            <children>
+                                                <BarChart fx:id="zscoreChart"
+                                                          prefHeight="260.0"
+                                                          VBox.vgrow="ALWAYS"
+                                                          animated="true"
+                                                          legendVisible="false">
+                                                    <xAxis>
+                                                        <CategoryAxis label="Transaction"/>
+                                                    </xAxis>
+                                                    <yAxis>
+                                                        <NumberAxis label="Z-Score" lowerBound="0"/>
+                                                    </yAxis>
+                                                </BarChart>
+                                                <!-- Threshold legend -->
+                                                <HBox spacing="14.0" alignment="CENTER">
+                                                    <children>
+                                                        <HBox spacing="4.0" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Region styleClass="legend-dot-red" prefWidth="10" prefHeight="10"/>
+                                                                <Label text="Anomalie (z&gt;2.5)" styleClass="kpi-mini-label"/>
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox spacing="4.0" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Region styleClass="legend-dot-amber" prefWidth="10" prefHeight="10"/>
+                                                                <Label text="Borderline" styleClass="kpi-mini-label"/>
+                                                            </children>
+                                                        </HBox>
+                                                        <HBox spacing="4.0" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <Region styleClass="legend-dot-green" prefWidth="10" prefHeight="10"/>
+                                                                <Label text="Normal" styleClass="kpi-mini-label"/>
+                                                            </children>
+                                                        </HBox>
+                                                    </children>
+                                                </HBox>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+
+                                <!-- ── Anomaly list ── -->
+                                <VBox styleClass="panel" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
+                                            <children>
+                                                <Label text="●" styleClass="feed-dot-depense"/>
+                                                <Label text="Transactions détectées" styleClass="panel-title"/>
+                                            </children>
+                                        </HBox>
+                                        <!-- Column headers -->
+                                        <HBox styleClass="list-col-header" spacing="0">
+                                            <children>
+                                                <Label text="Type" prefWidth="100.0" styleClass="list-col-label"/>
+                                                <Label text="Date" prefWidth="90.0" styleClass="list-col-label"/>
+                                                <Label text="Montant" prefWidth="90.0" styleClass="list-col-label"/>
+                                                <Label text="Z-Score" prefWidth="70.0" styleClass="list-col-label"/>
+                                                <Label text="Intervalle" HBox.hgrow="ALWAYS" styleClass="list-col-label"/>
+                                            </children>
+                                        </HBox>
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                                    styleClass="card-scroll" prefHeight="330.0">
+                                            <content>
+                                                <VBox fx:id="anomFeed" styleClass="anom-list" spacing="0"/>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+
+                            </children>
+                        </HBox>
+
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

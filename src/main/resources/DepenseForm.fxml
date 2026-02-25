@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.DepenseFormController"
+      spacing="0" prefWidth="400.0" prefHeight="480.0"
+      stylesheets="@form.css" styleClass="form-card">
+    <children>
+
+        <!-- ── Header bar ── -->
+        <HBox styleClass="form-header" alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <VBox spacing="2.0">
+                    <children>
+                        <Label text="Nouvelle dépense" styleClass="form-header-title"/>
+                        <Label text="Remplissez les champs ci-dessous" styleClass="form-header-sub"/>
+                    </children>
+                </VBox>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="✕" onAction="#cancel" styleClass="form-close-btn"/>
+            </children>
+        </HBox>
+
+        <!-- ── Body ── -->
+        <VBox spacing="16.0" styleClass="form-body">
+            <children>
+
+                <!-- Type -->
+                <VBox spacing="6.0">
+                    <children>
+                        <Label text="Type de dépense" styleClass="form-field-label"/>
+                        <ComboBox fx:id="typeField" promptText="Sélectionner un type"
+                                  maxWidth="Infinity" styleClass="form-combo"/>
+                        <Label fx:id="typeError" styleClass="error-label" text=" "/>
+                    </children>
+                </VBox>
+
+                <!-- Montant -->
+                <VBox spacing="6.0">
+                    <children>
+                        <Label text="Montant (DT)" styleClass="form-field-label"/>
+                        <TextField fx:id="montantField" promptText="ex: 100.00"
+                                   styleClass="form-input"/>
+                        <Label fx:id="montantError" styleClass="error-label" text=" "/>
+                    </children>
+                </VBox>
+
+                <!-- Description -->
+                <VBox spacing="6.0">
+                    <children>
+                        <HBox spacing="6.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Label text="Description" styleClass="form-field-label"/>
+                                <Label text="optionnel" styleClass="form-field-optional"/>
+                            </children>
+                        </HBox>
+                        <TextField fx:id="descField" promptText="Ajouter une note…"
+                                   styleClass="form-input"/>
+                    </children>
+                </VBox>
+
+                <!-- Date -->
+                <VBox spacing="6.0">
+                    <children>
+                        <Label text="Date" styleClass="form-field-label"/>
+                        <DatePicker fx:id="dateField" maxWidth="Infinity"
+                                    styleClass="form-datepicker"/>
+                        <Label fx:id="dateError" styleClass="error-label" text=" "/>
+                    </children>
+                </VBox>
+
+            </children>
+        </VBox>
+
+        <!-- ── Divider ── -->
+        <Separator styleClass="form-divider"/>
+
+        <!-- ── Footer actions ── -->
+        <HBox spacing="10.0" styleClass="form-footer" alignment="CENTER_RIGHT">
+            <children>
+                <Button text="Annuler" onAction="#cancel" styleClass="ghost-button"/>
+                <Button fx:id="saveBtn" text="Enregistrer la dépense"
+                        onAction="#save" styleClass="form-save-btn"/>
+            </children>
+        </HBox>
+
+    </children>
+</VBox>

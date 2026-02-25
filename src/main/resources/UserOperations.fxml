@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="1000.0" prefHeight="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.UserOperationsController"
+            stylesheets="@design.css">
+    <children>
+        <HBox spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <fx:include source="front.fxml"/>
+                <VBox spacing="16.0" AnchorPane.topAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" prefWidth="784.0" prefHeight="600.0" style="-fx-padding: 16px;">
+                    <children>
+
+                        <!-- Top bar -->
+                        <HBox spacing="8.0" alignment="CENTER_LEFT">
+                            <children>
+                                <Button text="← Retour" onAction="#goBack" styleClass="secondary"/>
+                                <Label fx:id="userTitle" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Utilisateur"/>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <Button text="+ Dépense" onAction="#showDepenseForm"/>
+                                <Button text="+ Vente" onAction="#showVenteForm"/>
+                            </children>
+                        </HBox>
+
+                        <!-- Inline forms (hidden by default) -->
+                        <HBox spacing="24.0" visible="false" managed="false" fx:id="depenseVenteForms">
+                            <children>
+                                <VBox spacing="8.0" fx:id="depenseFormBox" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label text="Ajouter Dépense"/>
+                                        <ComboBox fx:id="depenseType" promptText="Type" maxWidth="Infinity"/>
+                                        <TextField fx:id="depenseMontant" promptText="Montant (ex: 100.0)"/>
+                                        <TextField fx:id="depenseDesc" promptText="Description"/>
+                                        <DatePicker fx:id="depenseDate" maxWidth="Infinity"/>
+                                        <Button text="Enregistrer Dépense" onAction="#saveDepense" maxWidth="Infinity"/>
+                                    </children>
+                                </VBox>
+                                <VBox spacing="8.0" fx:id="venteFormBox" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label text="Ajouter Vente"/>
+                                        <TextField fx:id="ventePrixUnitaire" promptText="Prix unitaire"/>
+                                        <TextField fx:id="venteQuantite" promptText="Quantité"/>
+                                        <TextField fx:id="venteProduit" promptText="Produit"/>
+                                        <HBox spacing="8.0">
+                                            <children>
+                                                <Label text="CA:"/>
+                                                <Label fx:id="venteCAValue" text="0.0"/>
+                                            </children>
+                                        </HBox>
+                                        <DatePicker fx:id="venteDate" maxWidth="Infinity"/>
+                                        <Button text="Enregistrer Vente" onAction="#saveVente" maxWidth="Infinity"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Panels stacked: Dépenses on top, Ventes below -->
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
+                            <content>
+                                <VBox spacing="16.0">
+                                    <children>
+
+                                        <!-- Dépenses panel -->
+                                        <VBox styleClass="panel">
+                                            <children>
+                                                <HBox styleClass="panel-header">
+                                                    <children>
+                                                        <Label text="Dépenses" styleClass="panel-title"/>
+                                                    </children>
+                                                </HBox>
+                                                <FlowPane fx:id="depenseCardsPane"
+                                                          styleClass="cards-flow"
+                                                          hgap="12" vgap="12"
+                                                          prefWrapLength="760"
+                                                          style="-fx-padding: 12px;"/>
+                                            </children>
+                                        </VBox>
+
+                                        <!-- Ventes panel -->
+                                        <VBox styleClass="panel">
+                                            <children>
+                                                <HBox styleClass="panel-header">
+                                                    <children>
+                                                        <Label text="Ventes" styleClass="panel-title"/>
+                                                    </children>
+                                                </HBox>
+                                                <FlowPane fx:id="venteCardsPane"
+                                                          styleClass="cards-flow"
+                                                          hgap="12" vgap="12"
+                                                          prefWrapLength="760"
+                                                          style="-fx-padding: 12px;"/>
+                                            </children>
+                                        </VBox>
+
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
+
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>
