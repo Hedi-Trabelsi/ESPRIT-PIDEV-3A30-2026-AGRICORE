@@ -9,6 +9,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.Region?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="700.0" prefWidth="1210.0"
             style="-fx-background-color: #7ca76f;"
@@ -108,12 +111,33 @@
 
 
             <!-- Titre et GridPane -->
-            <VBox spacing="15">
+            <VBox spacing="15" VBox.vgrow="ALWAYS">
                 <children>
                     <Label text="Liste des Tâches" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-                    <GridPane fx:id="gridPane" hgap="20" vgap="20"/>
+
+                    <Region prefHeight="10.0" />
+
+                    <ScrollPane fitToWidth="true"
+                                prefHeight="550"
+                                style="-fx-background-color: transparent;
+                           -fx-background: #ffffff;
+                           -fx-border-color: #e8e8e8;
+                           -fx-border-width: 1;
+                           -fx-border-radius: 15;
+                           -fx-background-radius: 15;">
+                        <content>
+                            <StackPane alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 40 20 20 20;">
+                                <children>
+                                    <GridPane fx:id="gridPane" hgap="30" vgap="30" alignment="CENTER">
+                                    </GridPane>
+                                </children>
+                            </StackPane>
+                        </content>
+                    </ScrollPane>
                 </children>
             </VBox>
+
+
         </VBox>
 
     </children>

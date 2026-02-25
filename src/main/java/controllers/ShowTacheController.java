@@ -76,79 +76,102 @@ public class ShowTacheController {
         VBox card = new VBox();
         card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 15; "
                 + "-fx-spacing: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        card.getStyleClass().add("task-card");
+        card.setMinWidth(250); card.setMaxWidth(250);
+        card.setMinHeight(280); card.setMaxHeight(280);
 
-        // Infos de la tâche
-        Label dateLabel = new Label("Date prevue: " + t.getDate_prevue());
-        Label descLabel = new Label("Description: " + t.getDesciption());
-        descLabel.setWrapText(true);
-        Label coutLabel = new Label("Cout estime: " + t.getCout_estimee());
-
-        // Recuperer la maintenance correspondante
         String type = "Inconnu";
         String lieu = "Inconnu";
+        String statutMaintenance = "Inconnu";
+
+        // 1. Récupérer la maintenance parente
         try {
-            Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace()); // methode a creer
+            Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace());
             if (m != null) {
                 type = m.getType();
                 lieu = m.getLieu();
+                statutMaintenance = m.getStatut();
             }
         } catch (SQLException e) {
-            // gerer erreur si necessaire
+            e.printStackTrace();
         }
 
-        Label maintenanceInfoLabel = new Label("Maintenance: " + type + " - " + lieu);
+        // --- TON ACTION DE CLIC POUR VOIR LES DÉTAILS ---
         card.setOnMouseClicked(e -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenanceDetails.fxml"));
                 Parent root = loader.load();
-
-                // Passer la maintenance au contrôleur
                 ShowMaintenanceDetailsController controller = loader.getController();
                 Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace());
                 controller.setMaintenance(m);
-
-                // Remplacer la scene
                 card.getScene().setRoot(root);
-
             } catch (Exception ex) {
                 showAlert("Erreur", "Impossible d'ouvrir la maintenance: " + ex.getMessage());
             }
         });
-        // Boutons
+
+        // 2. Créer le Badge de Statut (selon tes couleurs)
+        Label statusBadge = new Label(statutMaintenance.toUpperCase());
+        statusBadge.setStyle(getStatusStyle(statutMaintenance));
+
+        Label maintenanceInfoLabel = new Label("📍 Maintenance: " + type + " - " + lieu);
+        Label dateLabel = new Label("📅 Date prévue: " + t.getDate_prevue());
+        Label coutLabel = new Label("💰 Coût estimé: " + t.getCout_estimee() + " DT");
+
+        Label descLabel = new Label("Description: " + t.getDesciption());
+        descLabel.setWrapText(true);
+        descLabel.setMinHeight(50);
+        descLabel.setMaxHeight(50);
+
+        // 3. Boutons
         Button deleteBtn = new Button("Supprimer");
         deleteBtn.getStyleClass().add("btn-primary");
-
         Button btnUpdate = new Button("Modifier");
         btnUpdate.getStyleClass().add("btn-primary");
 
-        HBox actions = new HBox(10);
-        actions.getChildren().addAll(btnUpdate, deleteBtn);
+        // --- SÉCURITÉ : VERROUILLAGE SI RÉSOLU OU REFUSÉ ---
+        if (statutMaintenance.toLowerCase().contains("resolu") || statutMaintenance.toLowerCase().contains("refuse")) {
+            btnUpdate.setDisable(true);
+            btnUpdate.setOpacity(0.5);
+            btnUpdate.setText("Modifier");
+        }
 
-        // Action supprimer
+        HBox actions = new HBox(10, btnUpdate, deleteBtn);
+
+        // Actions des boutons
         deleteBtn.setOnAction(e -> {
             try {
                 serviceTache.supprimer(t.getId_tache());
                 loadTaches();
-            } catch (SQLException ex) {
-                showAlert("Erreur", "Impossible de supprimer: " + ex.getMessage());
-            }
+            } catch (SQLException ex) { showAlert("Erreur", ex.getMessage()); }
         });
+
         btnUpdate.setOnAction(e -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/UpdateTache.fxml"));
                 Parent root = loader.load();
-
                 UpdateTacheController controller = loader.getController();
-                controller.setTache(t); // passer la tâche a modifier
-
+                controller.setTache(t);
                 btnUpdate.getScene().setRoot(root);
-            } catch (Exception ex) {
-                showAlert("Erreur", "Impossible d'ouvrir la modification: " + ex.getMessage());
-            }
+            } catch (Exception ex) { showAlert("Erreur", ex.getMessage()); }
         });
 
-        card.getChildren().addAll(dateLabel, descLabel, coutLabel, maintenanceInfoLabel, actions);
+        // On assemble tout
+        card.getChildren().addAll(statusBadge, maintenanceInfoLabel, dateLabel, coutLabel, descLabel, actions);
         return card;
+    }
+
+    // AJOUTE CETTE MÉTHODE SI ELLE N'EST PAS DÉJÀ LÀ
+    private String getStatusStyle(String statut) {
+        if (statut == null) return "";
+        statut = statut.toLowerCase();
+
+        if (statut.contains("resolu")) {
+            return "-fx-background-color:#d4edda; -fx-text-fill:green; -fx-padding:3 8; -fx-background-radius:10; -fx-font-size:10px; -fx-font-weight:bold;";
+        } else if (statut.contains("plan")) {
+            return "-fx-background-color:#e8e3f5; -fx-text-fill:#6f42c1; -fx-padding:3 8; -fx-background-radius:10; -fx-font-size:10px; -fx-font-weight:bold;";
+        }
+        return "-fx-background-color:#f1f2f6; -fx-text-fill:#2f3542; -fx-padding:3 8; -fx-background-radius:10; -fx-font-size:10px;";
     }
 
     private void showAlert(String title, String content) {

@@ -39,36 +39,49 @@ public class StatsController {
             statutPieChart.getData().clear();
             Map<String, Long> statutCounts = toutes.stream()
                     .collect(Collectors.groupingBy(m -> m.getStatut().toLowerCase(), Collectors.counting()));
-            List.of("en cours", "planifiee", "resolu", "en attente").forEach(s -> {
+            List.of("en cours", "planifie", "resolu", "en attente").forEach(s -> {
                 long count = statutCounts.getOrDefault(s, 0L);
                 statutPieChart.getData().add(new PieChart.Data(s.toUpperCase() + " (" + count + ")", count));
             });
 
             //  ACTIVITÉ PAR JOUR
+            // 1. Nettoyage du graphique
             barChart.getData().clear();
+
+// 2. Création de la série et remplissage des données
             XYChart.Series<String, Number> series = new XYChart.Series<>();
             series.setName("Demandes");
+
             Map<LocalDate, Long> demandesParJour = toutes.stream()
                     .filter(m -> m.getDateDeclaration() != null)
                     .collect(Collectors.groupingBy(Maintenance::getDateDeclaration, TreeMap::new, Collectors.counting()));
+
             demandesParJour.forEach((date, count) -> {
                 series.getData().add(new XYChart.Data<>(date.toString(), count));
             });
+
+// 3. AJOUT UNIQUE au graphique (On ne le fait qu'une seule fois !)
             barChart.getData().add(series);
 
-            // COULEUR ICI : Appliquer le vert #7ca76f à toutes les barres
+// 4. APPLICATION DE LA COULEUR
+// On vérifie que le Node existe avant d'appliquer le style
             for (XYChart.Data<String, Number> data : series.getData()) {
-                data.getNode().setStyle("-fx-bar-fill: #7ca76f;");
+                if (data.getNode() != null) {
+                    data.getNode().setStyle("-fx-bar-fill: #7ca76f;");
+                }
             }
-            barChart.getData().add(series);
+
+// 5. CONFIGURATION DES AXES
             NumberAxis yAxis = (NumberAxis) barChart.getYAxis();
             yAxis.setTickUnit(1);
             yAxis.setMinorTickVisible(false);
+            yAxis.setAutoRanging(true); // Permet d'ajuster l'échelle automatiquement
 
             CategoryAxis xAxis = (CategoryAxis) barChart.getXAxis();
             xAxis.setTickLabelRotation(0);
 
-            barChart.setCategoryGap(90.0);
+// 6. RÉGLAGES VISUELS
+            barChart.setCategoryGap(50.0); // Réduit un peu pour que les barres soient visibles
             barChart.setBarGap(10.0);
 
         } catch (SQLException e) {

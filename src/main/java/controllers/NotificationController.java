@@ -34,7 +34,9 @@ public class NotificationController {
     public void initialize() {
 
         if (dateSortPicker != null) {
-            dateSortPicker.setValue("Plus récent"); // Par défaut
+            // Ajoute les options manuellement si ce n'est pas fait dans SceneBuilder
+            dateSortPicker.getItems().setAll("Plus récent", "Plus ancien");
+            dateSortPicker.setValue("Plus récent");
             dateSortPicker.valueProperty().addListener((obs, oldVal, newVal) -> filterList(searchField.getText()));
         }
 
@@ -61,28 +63,48 @@ public class NotificationController {
 
     private void filterList(String keyword) {
         try {
+            // On récupère la base
+            List<Maintenance> all = service.afficher();
+
             final String priority = (priorityFilter.getValue() != null) ? priorityFilter.getValue() : "Toutes";
             final String sortOrder = (dateSortPicker != null && dateSortPicker.getValue() != null) ? dateSortPicker.getValue() : "Plus récent";
 
-            List<Maintenance> filtered = service.afficher().stream()
+            List<Maintenance> filtered = all.stream()
+                    // 1. CONDITION STRICTE : Uniquement les "en attente"
                     .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
+
+                    // 2. RECHERCHE MULTI-CRITÈRES (Comme le Dashboard)
                     .filter(m -> (keyword == null || keyword.isEmpty() ||
                             m.getType().toLowerCase().contains(keyword.toLowerCase()) ||
-                            m.getEquipement().toLowerCase().contains(keyword.toLowerCase())))
+                            m.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
+                            m.getLieu().toLowerCase().contains(keyword.toLowerCase()) ||
+                            m.getEquipement().toLowerCase().contains(keyword.toLowerCase()) ||
+                            m.getPriorite().toLowerCase().contains(keyword.toLowerCase())
+                    ))
+
+                    // 3. FILTRE DE PRIORITÉ (ChoiceBox)
                     .filter(m -> priority.equals("Toutes") || m.getPriorite().equalsIgnoreCase(priority))
-                    // --- AJOUT DU TRI ---
+
+                    // 4. TRI PAR DATE (Correction du comparateur)
                     .sorted((m1, m2) -> {
-                        if (m1.getDateDeclaration() == null || m2.getDateDeclaration() == null) return 0;
-                        if (sortOrder.equals("Plus récent")) {
-                            return m2.getDateDeclaration().compareTo(m1.getDateDeclaration()); // Décroissant
+                        LocalDate d1 = m1.getDateDeclaration();
+                        LocalDate d2 = m2.getDateDeclaration();
+
+                        if (d1 == null || d2 == null) return 0;
+
+                        if ("Plus récent".equals(sortOrder)) {
+                            return d2.compareTo(d1); // Plus récent en haut (Date la plus grande)
                         } else {
-                            return m1.getDateDeclaration().compareTo(m2.getDateDeclaration()); // Croissant
+                            return d1.compareTo(d2); // Plus ancien en haut
                         }
                     })
                     .collect(Collectors.toList());
 
             notifList.getItems().setAll(filtered);
-        } catch (SQLException e) { e.printStackTrace(); }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupCustomCells() {
@@ -193,10 +215,30 @@ public class NotificationController {
 
     private String calculateTimeAgo(LocalDate date) {
         if (date == null) return "Date inconnue";
+
         long days = java.time.temporal.ChronoUnit.DAYS.between(date, LocalDate.now());
+
         if (days == 0) return "Aujourd'hui";
         if (days == 1) return "Hier";
-        return "Il y a " + days + " jours";
+
+        // Moins d'une semaine
+        if (days < 7) return "Il y a " + days + " jours";
+
+        // Entre 1 semaine et 4 semaines (Affichage par semaine)
+        if (days < 30) {
+            long weeks = days / 7;
+            return (weeks == 1) ? "Il y a 1 semaine" : "Il y a " + weeks + " semaines";
+        }
+
+        // Plus de 30 jours (Affichage par mois)
+        long months = days / 30;
+        if (months < 12) {
+            return (months == 1) ? "Il y a 1 mois" : "Il y a " + months + " mois";
+        }
+
+        // Plus d'un an
+        long years = days / 365;
+        return (years == 1) ? "Il y a 1 an" : "Il y a " + years + " ans";
     }
 
     // --- LA NOUVELLE MÉTHODE D'ALERTE POPUP ---

@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -26,6 +27,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.geometry.Side;
 import javafx.scene.input.MouseEvent;
+import services.ServiceTache;
 
 //------------------------
 public class DashboardController {
@@ -40,7 +42,7 @@ public class DashboardController {
     private ListView<Maintenance> mainList;
 
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
-
+    private final ServiceTache serviceTache = new ServiceTache();
     @FXML
     private TextField searchField;
     @FXML private Label urgencyDot;
@@ -48,80 +50,16 @@ public class DashboardController {
     public void initialize() {
         loadData();
         setupCustomCells();
-        updateNotificationCount(); // Mise à jour au démarrage
-        // Listener pour la recherche
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> filterList(newValue));
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterList(newVal));
-        priorityFilter.valueProperty().addListener((obs, oldVal, newVal) -> filterList(searchField.getText()));
-        // Lier badge à la taille des notifications
+        updateNotificationCount();
 
+        // Un seul listener suffit
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterList(newVal));
+
+        // Le filtre de priorité appelle aussi filterList
+        priorityFilter.valueProperty().addListener((obs, oldVal, newVal) -> filterList(searchField.getText()));
     }
 //---------------------------------------------------
- /*   private void updateNotificationCount() {
-        try {
-            long count = serviceMaintenance.afficher().stream()
-                    .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
-                    .count();
-            notificationBadge.setText(String.valueOf(count));
-            notificationBadge.setVisible(count > 0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-*/
 
-/*
-    private void updateNotificationCount() {
-        try {
-            List<Maintenance> toutes = serviceMaintenance.afficher();
-
-            // 1. Badge de DROITE : Le nombre total (Ton code inchangé)
-            long count = toutes.stream()
-                    .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
-                    .count();
-            notificationBadge.setText(String.valueOf(count));
-            notificationBadge.setVisible(count > 0);
-
-            // 2. Badge de GAUCHE : Le point "!" (Urgence ou Retard)
-            boolean hasUrgency = toutes.stream()
-                    .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
-                    .anyMatch(m -> {
-                        long jours = java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), java.time.LocalDate.now());
-                        return "urgente".equalsIgnoreCase(m.getPriorite()) || jours >= 2;
-                    });
-
-            // On affiche le point rouge à gauche SEULEMENT s'il y a une urgence
-            if (urgencyDot != null) {
-                urgencyDot.setVisible(hasUrgency);
-                if (hasUrgency) {
-                    urgencyDot.setText("!");
-                    urgencyDot.setStyle(
-                            "-fx-background-color: red; " +
-                                    "-fx-text-fill: white; " +
-                                    "-fx-font-weight: bold; " +
-                                    "-fx-background-radius: 50%; " + // Pour faire un rond
-                                    "-fx-min-width: 15px; " +
-                                    "-fx-min-height: 15px; " +
-                                    "-fx-alignment: center;"
-                    );
-                }
-            }
-
-            // 3. Ton Popup d'alerte (Inchangé)
-            if (hasUrgency) {
-                javafx.application.Platform.runLater(() -> {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("ALERTE CRITIQUE");
-                    alert.setHeaderText("Maintenance Urgente Non Traitee !");
-                    alert.setContentText("Il y a des demandes urgentes ou en retard à gauche de la cloche !");
-                    alert.show();
-                });
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-*/
 private void updateNotificationCount() {
     try {
         List<Maintenance> toutes = serviceMaintenance.afficher();
@@ -190,16 +128,15 @@ private void updateNotificationCount() {
     }
 
     // Méthode utilitaire pour tout rafraîchir d'un coup
-    public void refreshAll() {
-        loadData(); // Rafraîchit la ListView principale
-        updateNotificationCount(); // Rafraîchit le badge de la cloche
-    }
+
 
 
 //-----------------------------------------------------------------
     private void filterList(String keyword) {
         try {
-            List<Maintenance> allMaintenances = serviceMaintenance.afficher();
+            List<Maintenance> allMaintenances = serviceMaintenance.afficher().stream()
+                    .filter(m -> !"en attente".equalsIgnoreCase(m.getStatut()))
+                    .collect(Collectors.toList());
 
             // Crée une variable finale pour le lambda
             final String priority = (priorityFilter.getValue() != null) ? priorityFilter.getValue() : "Toutes";
@@ -220,7 +157,10 @@ private void updateNotificationCount() {
             e.printStackTrace();
         }
     }
-
+    public void refreshAll() {
+        loadData(); // Rafraîchit la ListView principale
+        updateNotificationCount(); // Rafraîchit le badge de la cloche
+    }
 
     @FXML
     private ImageView statsIcon;
@@ -232,8 +172,7 @@ private void updateNotificationCount() {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/StatsView.fxml"));
             Parent root = loader.load();
 
-            // 2. Changer la racine (root) de la scène actuelle
-            // On utilise 'statsIcon' car c'est lui qui a reçu le clic
+
             statsIcon.getScene().setRoot(root);
 
         } catch (IOException e) {
@@ -257,7 +196,7 @@ private void updateNotificationCount() {
             e.printStackTrace();
         }
     }
-
+/*
     private void setupCustomCells() {
         mainList.setCellFactory(param -> new ListCell<Maintenance>() {
 
@@ -369,6 +308,128 @@ private void updateNotificationCount() {
         });
     }
 
+*/
+private void setupCustomCells() {
+    mainList.setCellFactory(param -> new ListCell<Maintenance>() {
+        @Override
+        protected void updateItem(Maintenance m, boolean empty) {
+            super.updateItem(m, empty);
+
+            if (empty || m == null) {
+                setGraphic(null);
+                return;
+            }
+
+            // --- 1. CALCUL DES INFOS DEPUIS LA TABLE TACHE ---
+            double totalCout = 0;
+            java.time.LocalDate datePlusProche = null;
+
+            try {
+                // Filtre les tâches par ID de maintenance
+                List<models.Tache> tachesLies = serviceTache.afficher().stream()
+                        .filter(t -> t.getId_maintenace() == m.getId())
+                        .collect(Collectors.toList());
+
+                for (models.Tache t : tachesLies) {
+                    totalCout += t.getCout_estimee();
+                    if (t.getDate_prevue() != null && !t.getDate_prevue().isEmpty()) {
+                        try {
+                            java.time.LocalDate dateTache = java.time.LocalDate.parse(t.getDate_prevue());
+                            if (datePlusProche == null || dateTache.isBefore(datePlusProche)) {
+                                datePlusProche = dateTache;
+                            }
+                        } catch (java.time.format.DateTimeParseException e) {
+                            System.err.println("Erreur date : " + t.getDate_prevue());
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            // --- 2. CRÉATION DES LABELS ---
+            Label typeLabel = new Label(m.getType());
+            typeLabel.getStyleClass().add("title-label");
+
+            Label descLabel = new Label(m.getDescription());
+            descLabel.getStyleClass().add("desc-label");
+
+            Label lieuLabel = new Label("Lieu: " + m.getLieu());
+            lieuLabel.getStyleClass().add("sub-label");
+
+            Label equipLabel = new Label("Equipement: " + m.getEquipement());
+            equipLabel.getStyleClass().add("sub-label");
+
+            VBox leftBox = new VBox(typeLabel, descLabel, lieuLabel, equipLabel);
+            leftBox.setSpacing(5);
+
+            // --- 3. AFFICHAGE CONDITIONNEL (REFUSÉ vs PLANIFIÉ) ---
+            if ("refusee".equalsIgnoreCase(m.getStatut())) {
+                // Style ROUGE pour les refusées
+                Label refuseInfo = new Label("❌ Pas de date prévue | 💰 " + String.format("%.2f", totalCout) + " DT");
+                refuseInfo.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-padding: 5 0 0 0;");
+                leftBox.getChildren().add(refuseInfo);
+            }
+            else if (!"en attente".equalsIgnoreCase(m.getStatut())) {
+                // Style VERT pour les validées/en cours
+                String dateTxt = (datePlusProche != null) ? datePlusProche.toString() : "À définir";
+                Label planifInfo = new Label("📅 " + dateTxt + " | 💰 " + String.format("%.2f", totalCout) + " DT");
+                planifInfo.setStyle("-fx-text-fill: #2e7d32; -fx-font-weight: bold; -fx-padding: 5 0 0 0;");
+                leftBox.getChildren().add(planifInfo);
+            }
+
+            // --- 4. STATUT ET PRIORITÉ ---
+            Label statusLabel = new Label(m.getStatut());
+            statusLabel.getStyleClass().add("status");
+
+            // Logique de couleur pour le badge de statut
+            switch (m.getStatut().toLowerCase()) {
+                case "en cours": statusLabel.getStyleClass().add("status-en-cours"); break;
+                case "refusee": statusLabel.getStyleClass().add("status-refusee"); break;
+                case "en attente": statusLabel.getStyleClass().add("status-en-attente"); break;
+                default: statusLabel.getStyleClass().add("status-planifiee");
+            }
+
+            Label priorityLabel = new Label(m.getPriorite());
+            priorityLabel.getStyleClass().add("priority");
+            priorityLabel.getStyleClass().add("priority-" + m.getPriorite().toLowerCase());
+
+            HBox statusBox = new HBox(statusLabel, priorityLabel);
+            statusBox.setSpacing(10);
+            statusBox.setAlignment(Pos.CENTER);
+
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+
+            // --- 5. BOUTONS D'ACTION ---
+            Button deleteBtn = new Button("Supprimer");
+            deleteBtn.getStyleClass().add("delete-button");
+            deleteBtn.setOnAction(e -> {
+                Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer cette maintenance ?", ButtonType.YES, ButtonType.NO);
+                confirm.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.YES) {
+                        try {
+                            serviceMaintenance.supprimer(m.getId());
+                            refreshAll();
+                        } catch (SQLException ex) { ex.printStackTrace(); }
+                    }
+                });
+            });
+
+            HBox container = new HBox(leftBox, spacer, statusBox, deleteBtn);
+            container.setSpacing(15);
+            container.getStyleClass().add("card");
+            container.setAlignment(Pos.CENTER_LEFT);
+
+            // Boutons Accepter/Refuser (uniquement si en attente)
+            if ("en attente".equalsIgnoreCase(m.getStatut())) {
+                // ... Ajoute tes boutons accepter/refuser ici si besoin sur le Dashboard ...
+            }
+
+            setGraphic(container);
+        }
+    });
+}
 
     private void openTacheWindow(Maintenance maintenance, HBox card) {
         try {

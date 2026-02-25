@@ -49,7 +49,7 @@ public class ShowMaintenanceDetailsController {
             ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
             serviceMaintenance.modifier(maintenance);
 
-            // 3. Feedback visuel
+
             statutLabel.setText("Resolu");
             statutLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
             btnTerminer.setDisable(true); // On désactive le bouton car c'est fini
@@ -102,6 +102,12 @@ public class ShowMaintenanceDetailsController {
             prioriteLabel.setText(maintenance.getPriorite());
             lieuLabel.setText(maintenance.getLieu());
             equipementLabel.setText(maintenance.getEquipement());
+            if ("Resolu".equalsIgnoreCase(maintenance.getStatut())) {
+                btnTerminer.setVisible(false); // Le bouton disparaît complètement
+                // OU tu peux utiliser : btnTerminer.setDisable(true);
+            } else {
+                btnTerminer.setVisible(true);
+            }
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur");

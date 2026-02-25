@@ -121,11 +121,25 @@
             <children>
                 <Label text="Liste des Maintenances" style="-fx-font-size: 24px; -fx-font-weight: bold;" />
 
-                <ScrollPane fitToWidth="true" prefHeight="550" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                    <content>
-                        <GridPane fx:id="gridPane" hgap="20" vgap="20"/>
-                    </content>
-                </ScrollPane>
+                <VBox spacing="15" prefHeight="600">
+                    <children>
+                        <ScrollPane fitToWidth="true" prefHeight="550"
+                                    style="-fx-background-color: transparent;
+                           -fx-background: #ffffff;
+                           -fx-border-color: #e0e0e0;
+                           -fx-border-width: 1;
+                           -fx-border-radius: 15;
+                           -fx-background-radius: 15;">
+                            <content>
+                                <StackPane alignment="CENTER" style="-fx-background-color: #ffffff; -fx-padding: 40 25 25 25;">
+                                    <children>
+                                        <GridPane fx:id="gridPane" hgap="30" vgap="30" alignment="CENTER"/>
+                                    </children>
+                                </StackPane>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </VBox>
 
             </children>
         </VBox>

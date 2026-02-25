@@ -18,7 +18,7 @@ import java.util.List;
 public class ShowMaintenanceController {
 
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
-
+    private final services.ServiceTache serviceTache = new services.ServiceTache(); // Assure-toi que le nom du service est correct
     @FXML
     private javafx.scene.control.TextField searchTf;
     @FXML
@@ -124,6 +124,10 @@ public class ShowMaintenanceController {
         VBox card = new VBox();
         card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 15; "
                 + "-fx-spacing: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);");
+        card.setMinWidth(250);
+        card.setMaxWidth(250);
+        card.setMinHeight(300);
+        card.setMaxHeight(330);
 
         javafx.scene.control.Label typeLabel = new javafx.scene.control.Label("Type: " + m.getType());
         javafx.scene.control.Label prioriteLabel = new javafx.scene.control.Label("Priorite: " + m.getPriorite());
@@ -133,51 +137,76 @@ public class ShowMaintenanceController {
         javafx.scene.control.Label descLabel = new javafx.scene.control.Label("Description: " + m.getDescription());
         descLabel.setWrapText(true);
 
-        // Nouveaux champs
         javafx.scene.control.Label lieuLabel = new javafx.scene.control.Label("Lieu: " + m.getLieu());
-        javafx.scene.control.Label equipementLabel = new javafx.scene.control.Label("equipement: " + m.getEquipement());
+        javafx.scene.control.Label equipementLabel = new javafx.scene.control.Label("Equipement: " + m.getEquipement());
 
+        // --- CALCUL DU COUT ET DE LA DATE ---
+        double totalCout = 0;
+        java.time.LocalDate datePlusProche = null;
+        try {
+            List<models.Tache> tachesLies = serviceTache.afficher().stream()
+                    .filter(t -> t.getId_maintenace() == m.getId())
+                    .collect(java.util.stream.Collectors.toList());
 
+            for (models.Tache t : tachesLies) {
+                totalCout += t.getCout_estimee();
+                if (t.getDate_prevue() != null && !t.getDate_prevue().isEmpty()) {
+                    try {
+                        java.time.LocalDate dateTache = java.time.LocalDate.parse(t.getDate_prevue());
+                        if (datePlusProche == null || dateTache.isBefore(datePlusProche)) {
+                            datePlusProche = dateTache;
+                        }
+                    } catch (Exception e) {}
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
 
+        javafx.scene.control.Label infoSupLabel = new javafx.scene.control.Label();
+        if ("refusee".equalsIgnoreCase(m.getStatut())) {
+            infoSupLabel.setText("❌ Pas de date | Coût: " + String.format("%.2f", totalCout) + " DT");
+            infoSupLabel.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+        } else {
+            String dtStr = (datePlusProche != null) ? datePlusProche.toString() : "À définir";
+            infoSupLabel.setText("📅 " + dtStr + " | Coût: " + String.format("%.2f", totalCout) + " DT");
+            infoSupLabel.setStyle("-fx-text-fill: #2e7d32; -fx-font-weight: bold;");
+        }
+
+        // --- BOUTONS ---
         Button deleteBtn = new Button("Supprimer");
         deleteBtn.getStyleClass().add("btn-primary");
 
         Button btnUpdate = new Button("Modifier");
         btnUpdate.getStyleClass().add("btn-primary");
+
+        // --- SÉCURITÉ : DÉSACTIVER MODIFIER SI RÉSOLU OU REFUSÉ ---
+        String currentStatus = m.getStatut().toLowerCase();
+        if (currentStatus.contains("resolu") || currentStatus.contains("refuse")) {
+            btnUpdate.setDisable(true); // Désactive le bouton
+            btnUpdate.setOpacity(0.5);   // Le rend un peu transparent
+            btnUpdate.setText("Modifier");
+        }
+
         HBox actions = new HBox(10);
         actions.getChildren().addAll(btnUpdate, deleteBtn);
 
-
-
-
+        // Actions
         deleteBtn.setOnAction(e -> {
             try {
                 serviceMaintenance.supprimer(m.getId());
                 loadMaintenances();
-            } catch (SQLException ex) {
-                showAlert("Erreur", "Impossible de supprimer: " + ex.getMessage());
-            }
+            } catch (SQLException ex) { showAlert("Erreur", "Impossible de supprimer: " + ex.getMessage()); }
         });
 
         btnUpdate.setOnAction(e -> {
             try {
-                // Mettre le chemin exact de ton FXML
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/UpdateMaintenance.fxml"));
                 javafx.scene.Parent root = loader.load();
-
-                // Recuperer le controller et passer la maintenance
                 UpdateMaintenanceController controller = loader.getController();
                 controller.setMaintenance(m);
-
-                // Remplacer la scene
                 btnUpdate.getScene().setRoot(root);
-
-            } catch (Exception ex) {
-                showAlert("Erreur", "Impossible d'ouvrir la modification: " + ex.getMessage());
-            }
+            } catch (Exception ex) { showAlert("Erreur", "Impossible d'ouvrir la modification: " + ex.getMessage()); }
         });
 
-        // Ajouter tous les labels a la card
         card.getChildren().addAll(
                 typeLabel,
                 prioriteLabel,
@@ -186,6 +215,7 @@ public class ShowMaintenanceController {
                 descLabel,
                 lieuLabel,
                 equipementLabel,
+                infoSupLabel,
                 actions
         );
 
