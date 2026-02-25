@@ -15,7 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 import models.Depense;
 import models.User;
 import models.Vente;
@@ -299,9 +298,13 @@ public class UserAnalyticsController {
     }
 
     @FXML
-    void closeWindow() {
-        Stage stage = (Stage) userTitle.getScene().getWindow();
-        stage.close();
+    void goBack() {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/ShowUsers.fxml"));
+            javafx.scene.Parent root = loader.load();
+            userTitle.getScene().setRoot(root);
+        } catch (Exception e) {
+        }
     }
 
     public static class AnomRow {

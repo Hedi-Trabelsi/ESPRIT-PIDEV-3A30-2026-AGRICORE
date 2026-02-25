@@ -119,11 +119,14 @@ public class ShowUsersController {
         actions.setAlignment(Pos.CENTER_LEFT);
         Button open = new Button("Ouvrir");
         Button analyse = new Button("Analyse");
+        Button details = new Button("Détails");
         open.getStyleClass().add("accent-button");
         analyse.getStyleClass().add("ghost-button");
+        details.getStyleClass().add("ghost-button");
         open.setOnAction(e -> openUserOperations(user));
         analyse.setOnAction(e -> openUserAnalytics(user));
-        actions.getChildren().addAll(open, analyse);
+        details.setOnAction(e -> openFinanceFor(user));
+        actions.getChildren().addAll(open, analyse, details);
 
         box.getChildren().addAll(header, actions);
         root.getChildren().add(box);
@@ -193,10 +196,7 @@ public class ShowUsersController {
             javafx.scene.Parent root = loader.load();
             controllers.UserAnalyticsController controller = loader.getController();
             controller.setUser(user);
-            javafx.stage.Stage stage = new javafx.stage.Stage();
-            stage.setTitle("Analyse financière: " + user.getFirstName() + " " + user.getLastName());
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.show();
+            cardsPane.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert("Navigation error", e.getMessage());
         }

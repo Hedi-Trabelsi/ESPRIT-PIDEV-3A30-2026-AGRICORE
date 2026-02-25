@@ -9,8 +9,7 @@
     <children>
         <HBox spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <fx:include source="front.fxml"/>
-                <VBox spacing="16.0" AnchorPane.topAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" prefWidth="784.0" prefHeight="600.0" style="-fx-padding: 16px;">
+                <VBox spacing="16.0" AnchorPane.topAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" prefWidth="784.0" prefHeight="600.0" HBox.hgrow="ALWAYS" style="-fx-padding: 16px;">
                     <children>
 
                         <!-- Top bar -->

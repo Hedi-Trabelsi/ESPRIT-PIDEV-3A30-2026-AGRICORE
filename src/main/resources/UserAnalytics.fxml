@@ -14,8 +14,6 @@
               AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <fx:include fx:id="sidebar" source="front.fxml"/>
-
                 <VBox spacing="0.0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
                       style="-fx-padding: 20px 20px 20px 20px;">
                     <children>
@@ -33,10 +31,8 @@
                                     </children>
                                 </VBox>
                                 <Pane HBox.hgrow="ALWAYS"/>
-                                <Button text="↻  Actualiser" onAction="#refreshAnalytics"
-                                        styleClass="secondary"/>
-                                <Button text="✕  Fermer" onAction="#closeWindow"
-                                        styleClass="secondary"/>
+                                <Button text="↻  Actualiser" onAction="#refreshAnalytics" styleClass="secondary"/>
+                                <Button text="← Retour" onAction="#goBack" styleClass="secondary"/>
                             </children>
                         </HBox>
 

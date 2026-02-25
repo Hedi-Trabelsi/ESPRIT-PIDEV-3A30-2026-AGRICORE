@@ -11,7 +11,7 @@
         <HBox spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
               AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <VBox spacing="14.0" prefWidth="784.0" style="-fx-padding: 16px 18px;"
+                <VBox spacing="14.0" prefWidth="784.0" HBox.hgrow="ALWAYS" style="-fx-padding: 16px 18px;"
                       AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
                     <children>
 

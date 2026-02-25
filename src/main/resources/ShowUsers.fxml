@@ -13,8 +13,7 @@
     <children>
         <HBox spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <fx:include source="front.fxml"/>
-                <AnchorPane prefWidth="884.0" style="-fx-background-color: linear-gradient(to bottom, #f7faf7, #eef7ee);">
+                <AnchorPane prefWidth="884.0" HBox.hgrow="ALWAYS" style="-fx-background-color: linear-gradient(to bottom, #f7faf7, #eef7ee);">
                     <children>
                         <VBox spacing="12.0" layoutX="16.0" layoutY="16.0" prefWidth="852.0" prefHeight="568.0">
                             <children>
