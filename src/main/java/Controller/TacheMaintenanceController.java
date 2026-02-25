@@ -1,19 +1,11 @@
-package controllers;
+package Controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import models.Maintenance;
-import models.Tache;
-import services.ServiceTache;
+import Model.Maintenance;
+import Model.Tache;
 
-import java.sql.SQLException;
-import java.util.List;
 public class TacheMaintenanceController {
 
     private Maintenance maintenance;

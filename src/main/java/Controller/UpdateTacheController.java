@@ -1,4 +1,4 @@
-package controllers;
+package Controller;
 
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -7,9 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.util.Duration;
-import models.Tache;
-import models.Maintenance;
-import services.OpenAIService;
+import Model.Tache;
+import Model.Maintenance;
 import services.ServiceTache;
 import services.ServiceMaintenance;
 
@@ -111,7 +110,7 @@ public class UpdateTacheController {
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(e -> {
                 try {
-                    Parent root = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml")).load();
+                    Parent root = new FXMLLoader(getClass().getResource("/fxml/ShowTache.fxml")).load();
                     saveBtn.getScene().setRoot(root);
                 } catch (Exception ex) {
                     showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + ex.getMessage());
@@ -132,7 +131,7 @@ public class UpdateTacheController {
     @FXML
     void cancel(ActionEvent event) {
         try {
-            Parent root = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml")).load();
+            Parent root = new FXMLLoader(getClass().getResource("/fxml/ShowTache.fxml")).load();
             cancelBtn.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + e.getMessage());

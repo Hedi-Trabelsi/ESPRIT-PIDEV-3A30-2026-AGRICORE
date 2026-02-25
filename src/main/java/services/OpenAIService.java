@@ -12,11 +12,11 @@ public class OpenAIService {
 
     public static String getAICompletion(String type, String priorite, String equipement, String descAgriculteur) throws Exception {
 
-        // 1. Nettoyage de la description (pour éviter l'erreur 400)
+
         String descNettoyee = (descAgriculteur != null) ? descAgriculteur.replace("\"", "\\\"").replace("\n", " ") : "";
 
-        // 2. ICI ON MET LE PROMPT INTELLIGENT
-        // Il combine les choix du technicien ET les mots de l'agriculteur
+
+
         String prompt = String.format(
                 "Tu es un expert en maintenance agricole. Analyse ces deux sources d'infos :\\n" +
                         "1. DONNÉES TECHNIQUES : Machine %s, Type d'entretien %s.\\n" +
@@ -33,7 +33,6 @@ public class OpenAIService {
                 + "\"temperature\": 0.5"
                 + "}";
 
-        // 4. Envoi de la requête
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(URL))

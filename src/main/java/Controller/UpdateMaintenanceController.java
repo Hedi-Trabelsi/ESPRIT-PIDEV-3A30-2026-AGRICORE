@@ -1,14 +1,13 @@
-package controllers;
+package Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
-import models.Maintenance;
+import Model.Maintenance;
 import services.ServiceMaintenance;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class UpdateMaintenanceController {
 
@@ -57,7 +56,7 @@ public class UpdateMaintenanceController {
     @FXML
     void cancelUpdate(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
             javafx.scene.Parent root = loader.load();
 
             // Remplacer la scene actuelle
@@ -91,7 +90,7 @@ public class UpdateMaintenanceController {
             pause.setOnFinished(e -> {
                 try {
                     // Charger ShowMaintenance.fxml
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
                     javafx.scene.Parent root = loader.load();
 
                     // Remplacer la scene actuelle par ShowMaintenance

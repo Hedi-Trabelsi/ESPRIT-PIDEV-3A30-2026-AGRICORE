@@ -1,4 +1,4 @@
-package controllers;
+package Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -8,7 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import models.Maintenance;
+import Model.Maintenance;
 import services.ServiceMaintenance;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -208,7 +208,7 @@ public class NotificationController {
     @FXML
     void closeWindow(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/interfaces/Dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
             ((javafx.scene.Node) event.getSource()).getScene().setRoot(root);
         } catch (Exception e) { e.printStackTrace(); }
     }

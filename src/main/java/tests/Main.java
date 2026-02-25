@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import services.SmsService;
 
 
 public class Main extends Application {
@@ -12,8 +11,8 @@ public class Main extends Application {
     @Override
 
         public void start(Stage stage) throws Exception {
-          FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
-        //    FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/Dashboard.fxml"));
+         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
+         // FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             stage.setScene(scene);

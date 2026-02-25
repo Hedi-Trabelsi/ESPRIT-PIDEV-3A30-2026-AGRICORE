@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
 <?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import java.lang.String?>
-<AnchorPane prefHeight="720" prefWidth="1250" style="-fx-background-color: #7ca76f;"
-            stylesheets="@/styles/style.css, @/styles/dashboard.css"
-            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.NotificationController">
+<AnchorPane prefHeight="720" prefWidth="1250" style="-fx-background-color: #7ca76f;" stylesheets="@/styles/styleM.css, @/styles/dashboard.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DashboardController">
+
 
     <children>
+
+        <!-- ================= SIDEBAR ================= -->
         <VBox prefHeight="700.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
             <children>
                 <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
@@ -85,39 +93,90 @@
                 </HBox>
             </children>
         </VBox>
-
+        <!-- ================= MAIN CONTENT ================= -->
         <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0"
               style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" spacing="20.0">
+
             <children>
+
+                <!-- HEADER
                 <HBox alignment="CENTER_LEFT" spacing="20">
-                    <Button text="← Retour" onAction="#closeWindow" styleClass="sidebar-button" style="-fx-background-color: #7ca76f; -fx-text-fill: white;"/>
-                    <Label text="Demandes en Attente" styleClass="main-title"/>
+                    <Label text="Maintenance Dashboard" styleClass="main-title"/>
                     <Region HBox.hgrow="ALWAYS"/>
-
-                    <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="180" styleClass="search-field"/>
-
-                    <ChoiceBox fx:id="priorityFilter" prefWidth="100">
+                    <TextField fx:id="searchField" promptText="Rechercher..."
+                               prefWidth="250"
+                               styleClass="search-field"/>
+                    <ChoiceBox fx:id="priorityFilter" prefWidth="150">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Toutes"/><String fx:value="Faible"/><String fx:value="Normale"/><String fx:value="Urgente"/>
-                            </FXCollections>
-                        </items>
-                    </ChoiceBox>
-
-                    <ChoiceBox fx:id="dateSortPicker" prefWidth="120">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Plus recent"/>
-                                <String fx:value="Plus ancien"/>
+                                <String fx:value="Toutes"/>
+                                <String fx:value="Faible"/>
+                                <String fx:value="Normale"/>
+                                <String fx:value="Urgente"/>
                             </FXCollections>
                         </items>
                     </ChoiceBox>
                 </HBox>
 
+-->
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <Label text="Maintenance Dashboard" styleClass="main-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <AnchorPane onMouseClicked="#openStatsWindow" style="-fx-cursor: hand;" >
+                        <children>
+                            <ImageView fx:id="statsIcon" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@/images/stat.png" />
+                                </image>
+                            </ImageView>
+                        </children>
+                    </AnchorPane>
+                    <AnchorPane onMouseClicked="#showNotifications" style="-fx-cursor: hand;">
+                        <children>
+                            <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@/images/notif.png" />
+                                </image>
+                            </ImageView>
+
+                            <Label fx:id="notificationBadge" layoutX="18.0" layoutY="-5.0"
+                                   prefHeight="18.0" prefWidth="18.0" alignment="CENTER"
+                                   style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-size: 10; -fx-font-weight: bold;"
+                                   text="0" />
+                            <!--  <Button text="Statistiques"
+                                    onAction="#openStatsWindow"
+                                    styleClass="sidebar-button"/>
+-->
+
+                        </children>
+                    </AnchorPane>
+
+                    <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="250" styleClass="search-field"/>
+                    <ChoiceBox fx:id="priorityFilter" prefWidth="150">
+                        <items>
+                            <FXCollections fx:factory="observableArrayList">
+                                <String fx:value="Toutes"/>
+                                <String fx:value="Faible"/>
+                                <String fx:value="Normale"/>
+                                <String fx:value="Urgente"/>
+                            </FXCollections>
+                        </items>
+                    </ChoiceBox>
+                </HBox>
+
+
+
+                <!-- Séparateur -->
+
                 <Region prefHeight="1" styleClass="separator"/>
 
-                <ListView fx:id="notifList" VBox.vgrow="ALWAYS" styleClass="maintenance-list"/>
+                <!-- ✅ LISTE DES MAINTENANCES -->
+                <ListView fx:id="mainList"
+                          VBox.vgrow="ALWAYS"
+                          styleClass="maintenance-list"/>
+
             </children>
         </VBox>
+
     </children>
 </AnchorPane>

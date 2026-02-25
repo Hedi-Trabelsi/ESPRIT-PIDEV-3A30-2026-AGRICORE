@@ -1,10 +1,8 @@
-package controllers;
-import java.awt.event.ActionEvent;
+package Controller;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
@@ -16,16 +14,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import models.Maintenance;
+import Model.Maintenance;
 import services.ServiceMaintenance;
 import java.sql.SQLException;
 import java.util.List;
 //------------------------
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.geometry.Side;
 import javafx.scene.input.MouseEvent;
 import services.ServiceTache;
 
@@ -93,8 +86,9 @@ private void updateNotificationCount() {
         }
 
         // --- AJOUT DE LA PARTIE ALERTE (POPUP) ---
+        /*
         if (alerteUrgente) {
-            // Platform.runLater évite les erreurs de chargement de l'interface
+
             javafx.application.Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("ALERTE CRITIQUE");
@@ -103,8 +97,22 @@ private void updateNotificationCount() {
                         "Veuillez verifier l'onglet des notifications pour les traiter rapidement.");
                 alert.show();
             });
-        }
 
+
+        }
+*/
+        // --- GESTION DE L'ALERTE SUR LE DESKTOP ---
+        if (alerteUrgente) {
+            javafx.application.Platform.runLater(() -> {
+                try {
+                    // On appelle la fonction qui affiche le message sur le bureau (Desktop)
+                    notifierSurDesktop("ALERTE : Demande Urgente",
+                            "Attention ! Une ou plusieurs maintenances urgentes sont en attente.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     } catch (SQLException e) {
         e.printStackTrace();
     }
@@ -112,7 +120,7 @@ private void updateNotificationCount() {
     @FXML
     void showNotifications(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/NotificationView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NotificationView.fxml"));
             Parent root = loader.load();
 
             // On récupère le contrôleur de la vue notification
@@ -169,7 +177,7 @@ private void updateNotificationCount() {
     void openStatsWindow(MouseEvent event) {
         try {
             // 1. Charger la vue des statistiques
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/StatsView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/StatsView.fxml"));
             Parent root = loader.load();
 
 
@@ -326,11 +334,11 @@ private void setupCustomCells() {
 
             try {
                 // Filtre les tâches par ID de maintenance
-                List<models.Tache> tachesLies = serviceTache.afficher().stream()
+                List<Model.Tache> tachesLies = serviceTache.afficher().stream()
                         .filter(t -> t.getId_maintenace() == m.getId())
                         .collect(Collectors.toList());
 
-                for (models.Tache t : tachesLies) {
+                for (Model.Tache t : tachesLies) {
                     totalCout += t.getCout_estimee();
                     if (t.getDate_prevue() != null && !t.getDate_prevue().isEmpty()) {
                         try {
@@ -433,7 +441,7 @@ private void setupCustomCells() {
 
     private void openTacheWindow(Maintenance maintenance, HBox card) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenanceDetails.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
             Parent root = loader.load();
 
             ShowMaintenanceDetailsController controller = loader.getController();
@@ -474,6 +482,36 @@ private void setupCustomCells() {
                 return "-fx-background-color:#f8d7da; -fx-text-fill:red; -fx-padding:5 10; -fx-background-radius:20;";
             default: // planifiee ou resolu
                 return "-fx-background-color:#d4edda; -fx-text-fill:green; -fx-padding:5 10; -fx-background-radius:20;";
+        }
+    }
+
+    private void notifierSurDesktop(String titre, String message) {
+        if (!java.awt.SystemTray.isSupported()) {
+            System.out.println("Le Desktop ne supporte pas les notifications.");
+            return;
+        }
+
+        try {
+            java.awt.SystemTray tray = java.awt.SystemTray.getSystemTray();
+
+            // On crée une icône temporaire (invisible ou petite) pour Windows
+            java.awt.Image image = java.awt.Toolkit.getDefaultToolkit().createImage("");
+            java.awt.TrayIcon trayIcon = new java.awt.TrayIcon(image, "GMAO");
+
+            trayIcon.setImageAutoSize(true);
+            tray.add(trayIcon);
+
+            // C'est ici que la magie opère : l'alerte s'affiche sur le bureau !
+            trayIcon.displayMessage(titre, message, java.awt.TrayIcon.MessageType.WARNING);
+
+            // On retire l'icône après 4 secondes pour ne pas encombrer la barre des tâches
+            new Thread(() -> {
+                try { Thread.sleep(4000); } catch (InterruptedException e) {}
+                tray.remove(trayIcon);
+            }).start();
+
+        } catch (java.awt.AWTException e) {
+            e.printStackTrace();
         }
     }
 

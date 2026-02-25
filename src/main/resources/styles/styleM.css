@@ -345,8 +345,22 @@
     -fx-background-radius: 5;
     -fx-border-radius: 5;
 }
+/* Réduit la taille globale du menu déroulant */
+.menu-button .context-menu {
+    -fx-padding: 2px;
+    -fx-min-width: 80px; /* Force une largeur petite */
+    -fx-background-radius: 5px;
+}
 
-/* Pour enlever la bordure bleue quand on clique dessus si nécessaire */
-.text-area .content {
-    -fx-background-color: white;
+/* Réduit l'espace entre les choix */
+.menu-button .menu-item {
+    -fx-padding: 4px 8px;
+}
+
+/* Supprime la flèche moche */
+.menu-button .arrow-button {
+    -fx-padding: 0;
+}
+.menu-button .arrow {
+    -fx-shape: "";
 }

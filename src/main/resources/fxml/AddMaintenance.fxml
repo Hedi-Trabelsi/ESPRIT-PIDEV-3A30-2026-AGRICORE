@@ -17,8 +17,8 @@
             style="-fx-background-color: #7ca76f;"
             xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controllers.AddMaintenanceController"
-            stylesheets="@/styles/style.css">
+            fx:controller="Controller.AddMaintenanceController"
+            stylesheets="@/styles/styleM.css">
 
     <children>
         <!-- Sidebar à gauche -->

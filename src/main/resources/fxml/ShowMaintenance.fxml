@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1250.0"
+            style="-fx-background-color: #7ca76f;"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.ShowMaintenanceController"
+            stylesheets="@/styles/styleM.css">
+
+    <VBox prefHeight="720.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
+        <children>
+            <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
+                <children>
+                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@/images/logo.png" />
+                        </image>
+                    </ImageView>
+                </children>
+            </VBox>
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                <children>
+                    <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/group.png" /></image>
+                    </ImageView>
+                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Mon Profil" styleClass="sidebar-button" />
+                </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                <children>
+                    <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/tracktor.png" /></image>
+                    </ImageView>
+                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Équipements" styleClass="sidebar-button" />
+                </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                <children>
+                    <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/electricity.png" /></image>
+                    </ImageView>
+                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Maintenance" styleClass="sidebar-button" />
+                </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                <children>
+                    <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/booking.png" /></image>
+                    </ImageView>
+                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Événements" styleClass="sidebar-button" />
+                </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                <children>
+                    <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/paw.png" /></image>
+                    </ImageView>
+                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Mes Animaux" styleClass="sidebar-button" />
+                </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                <children>
+                    <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/money-bag.png" /></image>
+                    </ImageView>
+                    <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Financière" styleClass="sidebar-button" />
+                </children>
+            </HBox>
+        </children>
+    </VBox>
+
+    <VBox layoutX="217.0" layoutY="10.0" prefHeight="700.0" prefWidth="1010.0"
+          spacing="20" style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-padding: 30;">
+
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <VBox HBox.hgrow="ALWAYS">
+                <Label text="Gestion des Interventions" style="-fx-text-fill: #94a3b8; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 0 0 5 0;"/>
+                <Label text="Liste des Maintenances" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+            </VBox>
+
+            <Button fx:id="addBtn" text="+ Nouvelle Maintenance" onAction="#navigateAddMaintenance"
+                    style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 12; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(46,125,50,0.3), 10, 0, 0, 5);"/>
+        </HBox>
+
+        <Separator />
+
+        <HBox spacing="15" style="-fx-background-color: #f1f5f9; -fx-padding: 15; -fx-background-radius: 12;" alignment="CENTER_LEFT">
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                <image><Image url="@/images/chercher.png" /></image> </ImageView>
+            <TextField fx:id="searchTf" promptText="Rechercher une maintenance..." HBox.hgrow="ALWAYS"
+                       style="-fx-background-color: transparent; -fx-font-size: 14px;"/>
+        </HBox>
+
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                <content>
+                    <StackPane alignment="TOP_CENTER" style="-fx-background-color: transparent; -fx-padding: 10 5 10 5;">
+                        <children>
+                            <GridPane fx:id="gridPane" hgap="30" vgap="30" alignment="TOP_CENTER"/>
+                        </children>
+                    </StackPane>
+                </content>
+            </ScrollPane>
+        </VBox>
+
+    </VBox>
+
+</AnchorPane>

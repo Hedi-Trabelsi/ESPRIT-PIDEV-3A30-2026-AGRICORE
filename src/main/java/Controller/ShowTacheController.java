@@ -1,4 +1,4 @@
-package controllers;
+package Controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,8 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import models.Tache;
-import models.Maintenance;
+import Model.Tache;
+import Model.Maintenance;
 import services.ServiceTache;
 import services.ServiceMaintenance;
 
@@ -39,7 +39,7 @@ public class ShowTacheController {
     @FXML
     void navigateVoirListe() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
             Parent root = loader.load();
             voirListeLabel.getScene().setRoot(root); // remplace la scene par ShowMaintenance
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class ShowTacheController {
         // --- TON ACTION DE CLIC POUR VOIR LES DÉTAILS ---
         card.setOnMouseClicked(e -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenanceDetails.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
                 Parent root = loader.load();
                 ShowMaintenanceDetailsController controller = loader.getController();
                 Maintenance m = serviceMaintenance.getMaintenanceById(t.getId_maintenace());
@@ -148,7 +148,7 @@ public class ShowTacheController {
 
         btnUpdate.setOnAction(e -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/UpdateTache.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateTache.fxml"));
                 Parent root = loader.load();
                 UpdateTacheController controller = loader.getController();
                 controller.setTache(t);

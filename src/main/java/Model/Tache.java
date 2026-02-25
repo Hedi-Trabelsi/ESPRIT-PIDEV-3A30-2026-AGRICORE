@@ -1,28 +1,36 @@
-package models;
+package Model;
 
 public class Tache {
-   int id_tache;
-   String date_prevue;
-   String desciption;
-   int cout_estimee;
-   int  id_maintenace;
+    private int id_tache;
+    private String nomTache; // Nouveau champ
+    private String date_prevue;
+    private String desciption; // Gardé tel quel selon ton code
+    private int cout_estimee;
+    private int id_maintenace;
 
     public Tache() {
     }
 
-    public Tache(int id_tache, String date_prevue, String desciption, int cout_estimee, int id_maintenace) {
+    // Constructeur complet (pour la lecture depuis la DB)
+    public Tache(int id_tache, String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace) {
         this.id_tache = id_tache;
+        this.nomTache = nomTache;
         this.date_prevue = date_prevue;
         this.desciption = desciption;
         this.cout_estimee = cout_estimee;
         this.id_maintenace = id_maintenace;
     }
-    public Tache(String date_prevue, String desciption, int cout_estimee, int id_maintenace) {
+
+    // Constructeur sans ID (pour l'ajout)
+    public Tache(String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace) {
+        this.nomTache = nomTache;
         this.date_prevue = date_prevue;
         this.desciption = desciption;
         this.cout_estimee = cout_estimee;
         this.id_maintenace = id_maintenace;
     }
+
+    // --- GETTERS & SETTERS ---
 
     public int getId_tache() {
         return id_tache;
@@ -30,6 +38,14 @@ public class Tache {
 
     public void setId_tache(int id_tache) {
         this.id_tache = id_tache;
+    }
+
+    public String getNomTache() {
+        return nomTache;
+    }
+
+    public void setNomTache(String nomTache) {
+        this.nomTache = nomTache;
     }
 
     public String getDate_prevue() {
@@ -68,11 +84,11 @@ public class Tache {
     public String toString() {
         return "Tache{" +
                 "id_tache=" + id_tache +
+                ", nomTache='" + nomTache + '\'' +
                 ", date_prevue='" + date_prevue + '\'' +
                 ", desciption='" + desciption + '\'' +
                 ", cout_estimee=" + cout_estimee +
                 ", id_maintenace=" + id_maintenace +
                 '}';
     }
-
 }

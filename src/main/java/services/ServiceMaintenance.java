@@ -1,6 +1,6 @@
 package services;
 
-import models.Maintenance;
+import Model.Maintenance;
 import utils.MyDataBase;
 
 import java.sql.*;

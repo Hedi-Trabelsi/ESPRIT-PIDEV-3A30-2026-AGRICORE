@@ -1,5 +1,5 @@
 
-import models.Maintenance;
+import Model.Maintenance;
 import org.junit.jupiter.api.*;
 import services.ServiceMaintenance;
 

@@ -1,4 +1,4 @@
-package controllers;
+package Controller;
 
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
@@ -7,11 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.util.Duration;
-import models.Tache;
-import models.Maintenance;
+import Model.Tache;
+import Model.Maintenance;
 import services.PdfService;
 import services.ServiceTache;
-import services.EmailService;
 import services.ServiceMaintenance;
 
 import java.sql.SQLException;
@@ -35,6 +34,9 @@ public class AddTacheController {
     private TextField coutTf;
 
     @FXML
+    private TextField nomTacheTf; // AJOUT : Champ pour le nom
+
+    @FXML
     private ComboBox<Maintenance> maintenanceCb;
 
     @FXML
@@ -46,14 +48,24 @@ public class AddTacheController {
     private Label statusLabel;
 
     @FXML
-    private Label dateStar, descriptionStar, coutStar, maintenanceStar;
+    private Label dateStar, descriptionStar, coutStar, maintenanceStar, nomStar; // AJOUT : nomStar
     @FXML
-    private Label dateError, coutError, maintenanceError;
+    private Label dateError, coutError, maintenanceError, nomError; // AJOUT : nomError
+    private Maintenance maintenanceAutomatique;
 
+    public void setMaintenanceSelectionnee(Maintenance m) {
+        this.maintenanceAutomatique = m;
+        if (m != null && maintenanceCb != null) {
+            maintenanceCb.getItems().clear();
+            maintenanceCb.getItems().add(m);
+            maintenanceCb.setValue(m);
+            maintenanceCb.setDisable(true);
+        }
+    }
     @FXML
     void cancel(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowMaintenance.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
             Parent root = loader.load();
             cancelBtn.getScene().setRoot(root);
         } catch (Exception e) {
@@ -66,51 +78,15 @@ public class AddTacheController {
         // Date prevue par defaut
         datePrevueDp.setValue(LocalDate.now());
 
-        try {
-            List<Maintenance> maints = serviceMaintenance.afficher().stream()
-                    .filter(m -> m.getStatut().equalsIgnoreCase("en cours"))
-                    .collect(Collectors.toList());
+        // AJOUT : Écouteur pour le nom de la tâche
+        nomTacheTf.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty()) {
+                nomStar.setStyle("-fx-text-fill: red;");
+            } else {
+                nomStar.setStyle("-fx-text-fill: green;");
+            }
+        });
 
-
-            maintenanceCb.getItems().addAll(maints);
-
-            maintenanceCb.setConverter(new javafx.util.StringConverter<Maintenance>() {
-                @Override
-                public String toString(Maintenance m) {
-                    if (m == null) return "";
-                    return m.getType()
-                            + " | Date: " + m.getDateDeclaration()
-                            + " | Lieu: " + m.getLieu()
-                            + " | equipement: " + m.getEquipement()
-                            + " | Statut: " + m.getStatut()
-                            + " | Priorite:" +m.getPriorite();
-
-
-                }
-
-                @Override
-                public Maintenance fromString(String string) {
-                    return null; // pas utilise
-                }
-            });
-
-
-            // Validation dynamique
-            maintenanceCb.valueProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal == null) {
-                    maintenanceStar.setStyle("-fx-text-fill: red;");
-                    maintenanceError.setText("Veuillez selectionner une maintenance");
-                } else {
-                    maintenanceStar.setStyle("-fx-text-fill: green;");
-                    maintenanceError.setText("");
-                }
-            });
-
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de charger les maintenances: " + e.getMessage());
-        }
-
-        // Autres validations (date, cout, description)
         datePrevueDp.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null || newVal.isBefore(LocalDate.now())) {
                 dateStar.setStyle("-fx-text-fill: red;");
@@ -142,29 +118,36 @@ public class AddTacheController {
     }
 
     @FXML
-
     void saveTache(ActionEvent event) {
         try {
             // --- 1. VALIDATION ---
             boolean valid = true;
+            if (nomTacheTf.getText().trim().isEmpty()) valid = false; // AJOUT : Validation nom
             if (datePrevueDp.getValue() == null || datePrevueDp.getValue().isBefore(LocalDate.now())) valid = false;
             if (descriptionTa.getText().trim().isEmpty()) valid = false;
             if (coutTf.getText().trim().isEmpty() || coutTf.getText().matches(".*[a-zA-Z]+.*")) valid = false;
-            if (maintenanceCb.getValue() == null) valid = false;
+
+            // ON UTILISE UNIQUEMENT LA VARIABLE PASSÉE DEPUIS L'AUTRE PAGE
+            Maintenance selectedMaintenance = this.maintenanceAutomatique;
+
+            if (selectedMaintenance == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune maintenance associée.");
+                return;
+            }
 
             if (!valid) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez corriger les champs.");
                 return;
             }
 
-            // --- 2. PRePARATION ---
+            // --- 2. PREPARATION ---
             int cout = Integer.parseInt(coutTf.getText().trim());
-            Maintenance selectedMaintenance = maintenanceCb.getValue();
 
-            // Chemin du fichier PDF uniquement
             String nomFichierPdf = System.getProperty("user.home") + "/Documents/Rapport_Tache_" + selectedMaintenance.getId() + ".pdf";
 
+            // AJOUT : Inclusion du nomTache dans l'objet Tache
             Tache tache = new Tache(
+                    nomTacheTf.getText(),
                     datePrevueDp.getValue().toString(),
                     descriptionTa.getText(),
                     cout,
@@ -175,15 +158,13 @@ public class AddTacheController {
             saveBtn.setDisable(true);
             saveBtn.setText(" Traitement en cours...");
 
-            // --- 4. LE THREAD (TRAVAIL LOURD) ---
+            // --- 4. LE THREAD ---
             new Thread(() -> {
                 try {
-                    // Actions BDD
                     serviceTache.ajouter(tache);
                     selectedMaintenance.setStatut("Planifie");
                     serviceMaintenance.modifier(selectedMaintenance);
 
-                    // API PDF
                     PdfService.genererRapportTache(
                             descriptionTa.getText(),
                             datePrevueDp.getValue().toString(),
@@ -191,7 +172,7 @@ public class AddTacheController {
                             nomFichierPdf
                     );
 
-                    // API Email
+                    /* --- PARTIE EMAIL DÉSACTIVÉE ---
                     services.EmailService.envoyerEmailTache(
                             "mrabetzeineb1@gmail.com",
                             selectedMaintenance.getDescription(),
@@ -200,35 +181,30 @@ public class AddTacheController {
                             String.valueOf(cout),
                             nomFichierPdf
                     );
-                    String messageSms = " Nouvelle tâche de maintenance !\n" +
-                            "Équipement: " + selectedMaintenance.getEquipement() + "\n" +
-                            "Date prévue: " + datePrevueDp.getValue().toString() + "\n" +
-                            "Lieu: " + selectedMaintenance.getLieu();
+                    -------------------------------- */
 
-                    // Remplace par le numéro du technicien (ou le tien pour le test)
+                    /* --- PARTIE SMS DÉSACTIVÉE ---
+                    String messageSms = " Nouvelle tâche !\n" +
+                            "Équipement: " + selectedMaintenance.getEquipement() + "\n" +
+                            "Date: " + datePrevueDp.getValue().toString();
+
                     services.SmsService.envoyerSms("+21651042268", messageSms);
-                    // --- 5. RETOUR UI ---
+                    ------------------------------- */
+
                     javafx.application.Platform.runLater(() -> {
                         try {
-                            // On ouvre uniquement le PDF
                             java.awt.Desktop.getDesktop().open(new java.io.File(nomFichierPdf));
-                        } catch (Exception e) {
-                            System.out.println("Erreur ouverture PDF : " + e.getMessage());
-                        }
+                        } catch (Exception e) {}
 
-                        showAlert(Alert.AlertType.INFORMATION, "Succes",
-                                "Tâche enregistree, Rapport PDF genere et Email envoye !");
+                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche enregistrée !");
 
-                        // Redirection
                         PauseTransition pause = new PauseTransition(Duration.seconds(1));
                         pause.setOnFinished(ev -> {
                             try {
-                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/interfaces/ShowTache.fxml"));
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowTache.fxml"));
                                 Parent root = loader.load();
                                 saveBtn.getScene().setRoot(root);
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
+                            } catch (Exception ex) { ex.printStackTrace(); }
                         });
                         pause.play();
                     });
@@ -252,34 +228,28 @@ public class AddTacheController {
     void helpMeWithAI(ActionEvent event) {
         Maintenance selectedMaint = maintenanceCb.getValue();
 
-        // On garde uniquement la condition sur la sélection de la maintenance
         if (selectedMaint == null) {
             showAlert(Alert.AlertType.WARNING, "Assistant IA", "Veuillez d'abord sélectionner une maintenance dans la liste.");
             return;
         }
 
-        // --- VARIABLES FINALES POUR LE THREAD ---
         final String originalDescription = selectedMaint.getDescription();
         final String equipement = selectedMaint.getEquipement();
         final String type = selectedMaint.getType();
         final String priorite = selectedMaint.getPriorite();
 
-        // On récupère les notes s'il y en a, sinon on envoie juste la description initiale
         String notesText = descriptionTa.getText();
         final String fullContext = "Description initiale de la panne : " + originalDescription +
                 ((notesText != null && !notesText.trim().isEmpty()) ? " | Complément tech : " + notesText : "");
 
-        // UI : On lance l'animation de chargement
         aiAssistantBtn.setDisable(true);
         aiAssistantBtn.setText(" IA en cours d'analyse...");
 
         new Thread(() -> {
             try {
-                // L'IA analyse désormais même si 'notesText' est vide
                 String diagnosticIA = services.OpenAIService.getAICompletion(type, priorite, equipement, fullContext);
 
                 javafx.application.Platform.runLater(() -> {
-                    // On affiche le résultat final dans le TextArea
                     descriptionTa.setText("[RAPPEL PANNE] : " + originalDescription
                             + "\n\n--- DIAGNOSTIC IA PRÉDICTIF ---\n"
                             + diagnosticIA);

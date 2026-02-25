@@ -1,11 +1,11 @@
-package controllers;
+package Controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.chart.*;
 import javafx.event.ActionEvent;
-import models.Maintenance;
+import Model.Maintenance;
 import services.ServiceMaintenance;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -92,7 +92,7 @@ public class StatsController {
     @FXML
     void goBack(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/interfaces/Dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
             barChart.getScene().setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
