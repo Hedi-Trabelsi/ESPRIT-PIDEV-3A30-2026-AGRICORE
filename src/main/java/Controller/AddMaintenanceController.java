@@ -13,7 +13,7 @@ import services.ServiceMaintenance;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-
+import javafx.scene.input.MouseEvent;
 
 public class AddMaintenanceController {
     ServiceMaintenance ms = new ServiceMaintenance();
@@ -50,7 +50,16 @@ public class AddMaintenanceController {
 
     @FXML
     private Label equipementError;
-
+    @FXML
+    void cancel(MouseEvent event) { // Changé ActionEvent en MouseEvent
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ShowMaintenance.fxml"));
+            // On récupère la scène à partir du Label cliqué
+            ((javafx.scene.Node) event.getSource()).getScene().setRoot(root);
+        } catch (Exception e) {
+            showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de retourner à la liste : " + e.getMessage());
+        }
+    }
     @FXML
     void saveMaintenance(ActionEvent event) {
         try {

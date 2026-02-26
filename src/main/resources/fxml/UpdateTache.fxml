@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="700.0" prefWidth="1210.0" style="-fx-background-color: #7ca76f;"
+            prefHeight="720.0" prefWidth="1210.0" style="-fx-background-color: #7ca76f;"
             xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controller.UpdateTacheController" stylesheets="@/styles/styleM.css">
 
     <children>
-        <!-- Sidebar identique à AddTache -->
-        <VBox prefHeight="700.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
+        <VBox prefHeight="720.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
             <children>
                 <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
                     <children>
@@ -87,66 +84,84 @@
                 </HBox>
             </children>
         </VBox>
-        <!-- Main content -->
-        <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0">
-            <children>
-                <VBox prefHeight="680.0" prefWidth="975.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" spacing="20.0">
-                    <children>
-                        <!-- Titre -->
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="945.0">
-                            <children>
-                                <Label text="Modifier la Tâche" styleClass="form-title" />
-                            </children>
-                        </HBox>
 
-                        <!-- Formulaire -->
-                        <VBox prefHeight="600.0" prefWidth="945.0" spacing="25.0" style="-fx-padding: 20;">
-                            <children>
-                                <!-- Date prévue -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Date Prévue" styleClass="form-label" />
-                                        <DatePicker fx:id="datePrevueDp" prefWidth="450.0" styleClass="form-input" />
-                                    </children>
-                                </VBox>
+        <VBox layoutX="220.0" layoutY="10.0" prefHeight="700.0" prefWidth="975.0"
+              spacing="20" style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-padding: 30;">
 
-                                <!-- Description -->
-
-
-                                <!-- Coût estimé -->
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Coût Estimé" styleClass="form-label" />
-                                        <TextField fx:id="coutTf" prefWidth="450.0" styleClass="form-input" promptText="Entrez le coût estimé..." />
-                                    </children>
-                                </VBox>
-
-                                <!-- Maintenance associée -->
-                                <Label fx:id="maintenanceLbl" prefWidth="450.0" styleClass="form-input-disabled" />
-                                <VBox spacing="8.0">
-                                    <children>
-                                        <Label text="Description" styleClass="form-label" />
-                                        <TextArea fx:id="descriptionTa"
-                                                  prefWidth="450.0"
-                                                  prefHeight="250.0"
-                                                  styleClass="form-input"
-                                                  wrapText="true"
-                                                  promptText="Modifier la description de la tâche..." />
-                                    </children>
-                                </VBox>
-                                <!-- Boutons -->
-                                <HBox prefHeight="50.0" prefWidth="945.0" spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
-                                    <children>
-                                        <Button fx:id="saveBtn" mnemonicParsing="false" onAction="#saveTache" text="Mettre à jour" styleClass="btn-primary" prefWidth="150.0" prefHeight="45.0" />
-                                        <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancel" text="Annuler" styleClass="btn-secondary" prefWidth="150.0" prefHeight="45.0" />
-                                    </children>
-                                </HBox>
-
-                            </children>
-                        </VBox>
-                    </children>
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="← Annuler et retourner" onMouseClicked="#cancelAction"
+                           style="-fx-text-fill: #2e7d32; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 0 5 0; -fx-underline: true;"/>
+                    <Label text="Modifier la Tâche" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
                 </VBox>
-            </children>
+                <Button fx:id="saveBtn" text=" Mettre à jour" onAction="#saveTache"
+                        style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 12; -fx-cursor: hand;"/>
+            </HBox>
+
+            <VBox spacing="5" style="-fx-background-color: #f1f5f9; -fx-padding: 15; -fx-background-radius: 12; -fx-border-color: #e2e8f0; -fx-border-width: 1;">
+                <children>
+                    <HBox alignment="CENTER_LEFT">
+                        <children>
+                            <Label fx:id="maintenanceInfoLabel" text="CHARGEMENT MAINTENANCE..."
+                                   style="-fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="maintenanceDateLabel" text="📅 --/--/----"
+                                   style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        </children>
+                    </HBox>
+
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <children>
+                            <ImageView fitHeight="30" fitWidth="30">
+                                <image><Image url="@/images/localisation.gif" /></image>
+                            </ImageView>
+                            <Label fx:id="maintenanceDetailsLabel" text="Lieu de l'intervention"
+                                   style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+
+            <Separator />
+
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                <content>
+                    <VBox spacing="25" style="-fx-background-color: transparent;">
+
+                        <GridPane hgap="40">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50" />
+                                <ColumnConstraints percentWidth="50" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="8" GridPane.columnIndex="0">
+                                    <Label text="NOM DE LA TÂCHE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <TextField fx:id="nomTacheTf" styleClass="form-input" />
+                                </VBox>
+
+                                <VBox spacing="8" GridPane.columnIndex="1">
+                                    <Label text="DATE PRÉVUE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <DatePicker fx:id="datePrevueDp" prefWidth="1000.0" styleClass="form-input"/>
+                                </VBox>
+                            </children>
+                        </GridPane>
+
+                        <VBox spacing="8" maxWidth="450.0">
+                            <Label text="COÛT ESTIMÉ (DT)" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                            <TextField fx:id="coutTf" styleClass="form-input" />
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <Label text="DESCRIPTION ET DIAGNOSTIC" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                            <TextArea fx:id="descriptionTa"
+                                      prefHeight="180.0"
+                                      wrapText="true"
+                                      styleClass="form-input"
+                                      style="-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #e2e8f0;"/>
+                        </VBox>
+                    </VBox>
+                </content>
+            </ScrollPane>
         </VBox>
     </children>
 </AnchorPane>

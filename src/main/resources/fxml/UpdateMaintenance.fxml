@@ -1,30 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextArea?>
-<AnchorPane prefHeight="720.0" prefWidth="1210.0"
+<AnchorPane prefHeight="720" prefWidth="1210.0"
             style="-fx-background-color: #7ca76f;"
-            xmlns="http://javafx.com/javafx/21"
+            xmlns="http://javafx.com/javafx/25"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="Controller.UpdateMaintenanceController"
             stylesheets="@/styles/styleM.css">
 
-
-
-    <!-- Sidebar -->
     <children>
-        <VBox prefHeight="680.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
+        <VBox prefHeight="720.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
             <children>
                 <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
                     <children>
@@ -98,102 +87,80 @@
             </children>
         </VBox>
 
-        <!-- Main Content -->
-        <!-- Main Content -->
-        <!-- Main Content Scrollable -->
-        <ScrollPane layoutX="230.0" layoutY="20.0"
-                    prefWidth="975.0" prefHeight="680.0"
-                    fitToWidth="true"
-                    hbarPolicy="NEVER"
-                    vbarPolicy="AS_NEEDED">
+        <VBox layoutX="220.0" layoutY="10.0" prefHeight="700.0" prefWidth="975.0"
+              spacing="25" style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-padding: 30;">
 
-            <content>
-                <VBox prefWidth="950.0"
-                      style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;"
-                      spacing="20.0">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="← Annuler et retourner" onMouseClicked="#cancelUpdate"
+                           style="-fx-text-fill: #2e7d32; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 0 5 0; -fx-underline: true;"/>
+                    <Label text="Modifier la Demande de Maintenance" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                </VBox>
+                <Button fx:id="updateBtn" text=" Mettre à jour" onAction="#updateMaintenance"
+                        style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 12; -fx-cursor: hand;"/>
+            </HBox>
 
-                    <!-- Title -->
-                    <HBox alignment="CENTER">
-                        <Label text="Modifier la Maintenance" styleClass="form-title"/>
-                    </HBox>
+            <Separator />
 
-                    <!-- Form -->
-                    <VBox spacing="25.0" style="-fx-padding: 20;">
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                <content>
+                    <VBox spacing="30" style="-fx-background-color: transparent;">
 
-                        <!-- Date -->
-                        <VBox spacing="8.0">
-                            <Label text="Date de Déclaration" styleClass="form-label"/>
-                            <DatePicker fx:id="dateDeclarationDp"
-                                        prefWidth="450.0"
-                                        styleClass="form-input"/>
-                        </VBox>
+                        <GridPane hgap="40" vgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50" />
+                                <ColumnConstraints percentWidth="50" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="8" GridPane.columnIndex="0">
+                                    <Label text="TYPE D'INTERVENTION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <ChoiceBox fx:id="type" prefWidth="1000.0" styleClass="form-input" />
+                                </VBox>
+                                <VBox spacing="8" GridPane.columnIndex="1">
+                                    <Label text="PRIORITÉ" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <ChoiceBox fx:id="priorite" prefWidth="1000.0" styleClass="form-input" />
+                                </VBox>
+                            </children>
+                        </GridPane>
 
-                        <!-- Type -->
-                        <VBox spacing="8.0">
-                            <Label text="Type de Maintenance" styleClass="form-label"/>
-                            <ChoiceBox fx:id="type"
+                        <GridPane hgap="40" vgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50" />
+                                <ColumnConstraints percentWidth="50" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="8" GridPane.columnIndex="0">
+                                    <Label text="LIEU" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <TextField fx:id="lieuTf" styleClass="form-input" />
+                                </VBox>
+                                <VBox spacing="8" GridPane.columnIndex="1">
+                                    <Label text="ÉQUIPEMENT" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <TextField fx:id="equipementTf" styleClass="form-input" />
+                                </VBox>
+                            </children>
+                        </GridPane>
+
+                        <VBox spacing="8">
+                            <Label text="DATE DE DÉCLARATION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                            <TextField fx:id="dateDeclarationTf"
+                                       editable="false"
                                        prefWidth="450.0"
-                                       styleClass="form-input"/>
+                                       styleClass="form-input"
+                                       style="-fx-background-color: #e2e8f0; -fx-text-fill: #64748b;"/>
                         </VBox>
 
-                        <!-- Lieu -->
-                        <VBox spacing="8.0">
-                            <Label text="Lieu" styleClass="form-label"/>
-                            <TextField fx:id="lieuTf"
-                                       prefWidth="450.0"
-                                       styleClass="form-input"/>
-                        </VBox>
-
-                        <!-- Equipement -->
-                        <VBox spacing="8.0">
-                            <Label text="Equipement" styleClass="form-label"/>
-                            <TextField fx:id="equipementTf"
-                                       prefWidth="450.0"
-                                       styleClass="form-input"/>
-                        </VBox>
-
-                        <!-- Priorité -->
-                        <VBox spacing="8.0">
-                            <Label text="Priorité" styleClass="form-label"/>
-                            <ChoiceBox fx:id="priorite"
-                                       prefWidth="450.0"
-                                       styleClass="form-input"/>
-                        </VBox>
-
-                        <!-- Description -->
-                        <VBox spacing="4.0" alignment="TOP_LEFT">
-                            <HBox spacing="5" alignment="CENTER_LEFT">
-                                <Label text="Description" styleClass="form-label"/>
-                            </HBox>
+                        <VBox spacing="10">
+                            <Label text="DESCRIPTION DU PROBLÈME" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                             <TextArea fx:id="descriptionTf"
-                                      prefWidth="450.0"
-                                      prefHeight="120.0"
+                                      prefHeight="150.0"
                                       styleClass="form-input"
-                                      promptText="Modifier la description..."
-                                      wrapText="true" />
+                                      wrapText="true"
+                                      style="-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #e2e8f0;"/>
                         </VBox>
-
-
-
-
-                        <!-- Buttons -->
-                        <HBox spacing="20.0" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
-                            <Button text="Mettre à jour"
-                                    onAction="#updateMaintenance"
-                                    styleClass="btn-primary"
-                                    prefWidth="150.0"
-                                    prefHeight="45.0"/>
-                            <Button text="Annuler"
-                                    onAction="#cancelUpdate"
-                                    styleClass="btn-secondary"/>
-                        </HBox>
 
                     </VBox>
-                </VBox>
-            </content>
-        </ScrollPane>
-
-
-
+                </content>
+            </ScrollPane>
+        </VBox>
     </children>
 </AnchorPane>

@@ -99,6 +99,13 @@
                         style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 12; -fx-cursor: hand;"/>
             </HBox>
 
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Tâches planifiées" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS" />
+                <Label text="Total Budget :" style="-fx-text-fill: #64748b;"/>
+                <Label fx:id="totalPrixLabel" text="0.00 DT" />
+            </HBox>
+
             <Separator />
 
             <GridPane hgap="40" vgap="20">

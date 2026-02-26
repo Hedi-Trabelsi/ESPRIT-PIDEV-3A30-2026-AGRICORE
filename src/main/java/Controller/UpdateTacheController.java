@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import Model.Tache;
 import Model.Maintenance;
@@ -19,133 +20,98 @@ public class UpdateTacheController {
 
     private final ServiceTache serviceTache = new ServiceTache();
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
+    private Tache tache;
 
-    private Tache tache; // La tâche a mettre a jour
+    @FXML private TextField nomTacheTf;
+    @FXML private DatePicker datePrevueDp;
+    @FXML private TextArea descriptionTa;
+    @FXML private TextField coutTf;
+    @FXML private Button saveBtn;
 
-    @FXML
-    private DatePicker datePrevueDp;
+    // Rectangle de rappel Maintenance
+    @FXML private Label maintenanceInfoLabel;
+    @FXML private Label maintenanceDetailsLabel;
+    @FXML private Label maintenanceDateLabel;
 
-    @FXML
-    private TextArea descriptionTa;
-
-    @FXML
-    private TextField coutTf;
-
-    @FXML
-    private Label maintenanceLbl; // Label pour la maintenance associee (non modifiable)
-
-    @FXML
-    private Button saveBtn;
-
-    @FXML
-    private Button cancelBtn;
-
-    /**
-     * Methode pour passer la tâche a modifier
-     */
     public void setTache(Tache tache) {
         this.tache = tache;
         populateFields();
     }
 
-    /**
-     * Remplit les champs avec les valeurs de la tâche
-     */
     private void populateFields() {
-        if (tache == null) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Tâche invalide");
-            return;
-        }
+        if (tache == null) return;
 
-        // Champs modifiables
+        // Remplissage des champs de la tâche
+        nomTacheTf.setText(tache.getNomTache());
         datePrevueDp.setValue(LocalDate.parse(tache.getDate_prevue()));
         descriptionTa.setText(tache.getDesciption());
         coutTf.setText(String.valueOf(tache.getCout_estimee()));
 
+        // Remplissage du rectangle de rappel (Maintenance)
         try {
             Maintenance m = serviceMaintenance.getMaintenanceById(tache.getId_maintenace());
             if (m != null) {
-                maintenanceLbl.setText(m.getType() + " - " + m.getLieu());
-            } else {
-                maintenanceLbl.setText("Maintenance inconnue");
+                maintenanceInfoLabel.setText(m.getType() + " - " + m.getEquipement());
+                maintenanceDateLabel.setText("📅 " + m.getDateDeclaration().toString());
+                maintenanceDetailsLabel.setText(m.getLieu());
             }
         } catch (SQLException e) {
-            maintenanceLbl.setText("Erreur chargement");
+            maintenanceInfoLabel.setText("Erreur de chargement");
         }
-
     }
 
-    /**
-     * Sauvegarde les modifications
-     */
     @FXML
     void saveTache(ActionEvent event) {
         try {
-            // Validation
-            if (descriptionTa.getText() == null || descriptionTa.getText().trim().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer une description");
-                return;
-            }
-            if (coutTf.getText() == null || coutTf.getText().trim().isEmpty()) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer le coût estime");
-                return;
-            }
-            if (datePrevueDp.getValue() == null || datePrevueDp.getValue().isBefore(LocalDate.now())) {
-                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez choisir une date prevue valide");
+            if (nomTacheTf.getText().trim().isEmpty() || datePrevueDp.getValue() == null ||
+                    descriptionTa.getText().trim().isEmpty() || coutTf.getText().trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez remplir tous les champs.");
                 return;
             }
 
             int cout = Integer.parseInt(coutTf.getText().trim());
 
-            // Mise a jour de la tâche
+            tache.setNomTache(nomTacheTf.getText());
             tache.setDate_prevue(datePrevueDp.getValue().toString());
             tache.setDesciption(descriptionTa.getText());
             tache.setCout_estimee(cout);
 
             serviceTache.modifier(tache);
 
-            showAlert(Alert.AlertType.INFORMATION, "Succes", "Tâche mise a jour avec succes");
+            saveBtn.setDisable(true);
+            saveBtn.setText(" Mise à jour...");
 
-            // Retour a la liste apres un court delai
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche mise à jour !");
+
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(e -> {
-                try {
-                    Parent root = new FXMLLoader(getClass().getResource("/fxml/ShowTache.fxml")).load();
-                    saveBtn.getScene().setRoot(root);
-                } catch (Exception ex) {
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + ex.getMessage());
-                }
-            });
+            pause.setOnFinished(e -> returnToList());
             pause.play();
 
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût estime doit être un nombre entier");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût doit être un nombre.");
         }
     }
 
-    /**
-     * Annule et retourne a la liste
-     */
     @FXML
-    void cancel(ActionEvent event) {
+    void cancelAction(MouseEvent event) {
+        returnToList();
+    }
+
+    private void returnToList() {
         try {
-            Parent root = new FXMLLoader(getClass().getResource("/fxml/ShowTache.fxml")).load();
-            cancelBtn.getScene().setRoot(root);
-        } catch (Exception e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner a la liste: " + e.getMessage());
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
+            saveBtn.getScene().setRoot(root);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
-    /**
-     * Affiche une alerte
-     */
     private void showAlert(Alert.AlertType type, String title, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(message);
         alert.showAndWait();
     }
-
 }
