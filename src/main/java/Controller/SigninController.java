@@ -30,6 +30,26 @@ public class SigninController {
         // Don't set action here since it's already in FXML
     }
 
+    private void openUserHomePage(Utilisateur user) {
+        try {
+            System.out.println("Opening User Home Page for: " + user.getEmail());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UserHomePage.fxml"));
+            Parent root = loader.load();
+
+            UserHomeController controller = loader.getController();
+            controller.setLoggedInUser(user);  // This must be called with non-null user
+
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("My Farm - " + user.getNom());
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Cannot load User Home Page: " + e.getMessage());
+        }
+    }
+
     // =========================================
     // NORMAL LOGIN (EMAIL + PASSWORD)
     // =========================================
@@ -59,11 +79,12 @@ public class SigninController {
             }
 
             if (matchedUser != null) {
-                // Check if user is admin (role == 0)
                 if (matchedUser.getRole() == 0) {
+                    // Admin user - open admin home
                     openHomePage(matchedUser);
                 } else {
-                    showError("Access denied! Only administrators can access this application.");
+                    // Normal user - open user home
+                    openUserHomePage(matchedUser);
                 }
             } else {
                 showError("Invalid email or password!");

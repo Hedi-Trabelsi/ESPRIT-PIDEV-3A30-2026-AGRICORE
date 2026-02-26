@@ -13,7 +13,11 @@ public interface IService<T> {
 
     List<T> read() throws SQLException;
 
-    T findByEmail(String email) throws SQLException;
+    // This method might not be needed for all services
+    // You can keep it as default or remove it
+    default T findByEmail(String email) throws SQLException {
+        return null; // Default implementation
+    }
 
 
 }

@@ -11,7 +11,10 @@ import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
 import services.UserService;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.LocalDate;
@@ -31,7 +34,7 @@ public class EditUserController {
     private byte[] profileImageBytes;
     private Runnable onUserUpdated;
     private boolean isImageChanged = false;
-    private HomeController homeController; // Reference to home controller
+    private HomeController homeController;
 
     @FXML
     public void initialize() {
@@ -91,7 +94,8 @@ public class EditUserController {
         if (currentUser.getImage() != null) {
             try {
                 profileImageBytes = currentUser.getImage();
-                profileImageView.setImage(new Image(new ByteArrayInputStream(profileImageBytes)));
+                Image img = new Image(new ByteArrayInputStream(profileImageBytes));
+                profileImageView.setImage(img);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -102,20 +106,59 @@ public class EditUserController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Profile Picture");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
 
         File file = fileChooser.showOpenDialog(uploadImageButton.getScene().getWindow());
         if (file == null) return;
 
-        try (FileInputStream fis = new FileInputStream(file)) {
-            profileImageBytes = fis.readAllBytes();
-            profileImageView.setImage(new Image(file.toURI().toString()));
+        try {
+            // Read the image
+            BufferedImage originalImage = ImageIO.read(file);
+
+            // Resize the image to max 200x200 pixels
+            BufferedImage resizedImage = resizeImage(originalImage, 200, 200);
+
+            // Compress and convert to bytes
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(resizedImage, "jpg", baos);
+            profileImageBytes = baos.toByteArray();
+
+            // Display the resized image
+            Image img = new Image(new ByteArrayInputStream(profileImageBytes));
+            profileImageView.setImage(img);
             isImageChanged = true;
-            showSuccess("Image uploaded successfully!");
+
+            showSuccess("Image uploaded and optimized successfully!");
+
         } catch (Exception e) {
+            e.printStackTrace();
             showError("Failed to load image: " + e.getMessage());
         }
+    }
+
+    /**
+     * Resize image to fit within maxWidth and maxHeight while maintaining aspect ratio
+     */
+    private BufferedImage resizeImage(BufferedImage originalImage, int maxWidth, int maxHeight) {
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+
+        // Calculate new dimensions
+        double widthRatio = (double) maxWidth / originalWidth;
+        double heightRatio = (double) maxHeight / originalHeight;
+        double ratio = Math.min(widthRatio, heightRatio);
+
+        int newWidth = (int) (originalWidth * ratio);
+        int newHeight = (int) (originalHeight * ratio);
+
+        // Create resized image
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        java.awt.Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
+        g.dispose();
+
+        return resizedImage;
     }
 
     private void handleSave() {
@@ -166,6 +209,7 @@ public class EditUserController {
             }).start();
 
         } catch (Exception e) {
+            e.printStackTrace();
             showError("Error updating user: " + e.getMessage());
         }
     }

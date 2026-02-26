@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<ScrollPane fitToWidth="true" styleClass="event-scroll-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.EventPageController">
+    <VBox spacing="20" alignment="TOP_CENTER" styleClass="event-container">
+        <padding>
+            <Insets top="30" right="40" bottom="40" left="40" />
+        </padding>
+
+        <!-- Title Row with Bell and Calendar Icons -->
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="event-header-row">
+            <Label styleClass="event-main-title" text="Catalogue AgriCore" />
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Notification Bell -->
+            <StackPane fx:id="notificationBell" styleClass="event-bell-container">
+                <Label styleClass="event-bell-icon" text="🔔" />
+                <Label fx:id="notificationBadge" styleClass="event-badge" text="0" visible="false" />
+            </StackPane>
+
+            <!-- Calendar Icon -->
+            <VBox fx:id="calendarIcon" styleClass="event-calendar-icon" alignment="CENTER" spacing="2">
+                <Label styleClass="event-calendar-emoji" text="📅" />
+            </VBox>
+        </HBox>
+
+        <!-- Search and Filter Bar -->
+        <HBox spacing="15" styleClass="event-search-bar">
+            <TextField fx:id="searchInput" promptText="Rechercher..." styleClass="event-search-field" HBox.hgrow="ALWAYS" />
+            <DatePicker fx:id="datePicker" promptText="Date" styleClass="event-date-picker" />
+            <Separator orientation="VERTICAL" styleClass="event-filter-separator" />
+
+            <!-- Price Filter -->
+            <VBox spacing="2" styleClass="event-price-filter">
+                <Label styleClass="event-filter-label" text="Budget Max" />
+                <HBox spacing="5" alignment="CENTER">
+                    <Slider fx:id="priceSlider" min="0" max="500" value="100" styleClass="event-price-slider" />
+                    <Label fx:id="priceValueLabel" styleClass="event-price-value" text="100 DT" />
+                </HBox>
+            </VBox>
+
+            <Button fx:id="resetButton" styleClass="event-reset-button" text="Réinitialiser" />
+        </HBox>
+
+        <!-- Events Grid -->
+        <GridPane fx:id="eventGrid" styleClass="event-grid" hgap="25" vgap="25">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50" />
+                <ColumnConstraints percentWidth="50" />
+            </columnConstraints>
+        </GridPane>
+    </VBox>
+</ScrollPane>

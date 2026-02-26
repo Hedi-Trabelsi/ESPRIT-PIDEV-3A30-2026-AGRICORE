@@ -132,11 +132,6 @@ public class HomeController {
             controller.setHomeController(this);
 
             mainBorderPane.setCenter(userView);
-
-            // Force a small delay to ensure the view is properly rendered
-            Platform.runLater(() -> {
-                // The controller already loads users in setLoggedInUser
-            });
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load User Management page!", Alert.AlertType.ERROR);
@@ -180,6 +175,11 @@ public class HomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EventManagement.fxml"));
             Parent eventView = loader.load();
+
+            // If your EventManagementController needs the logged in user, uncomment these lines:
+            // EventManagementController controller = loader.getController();
+            // controller.setLoggedInUser(loggedInUser);
+
             mainBorderPane.setCenter(eventView);
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,24 +198,50 @@ public class HomeController {
         }
     }
 
-    // ========== NEW METHODS FOR EDIT USER CONTROLLER ==========
-
-    /**
-     * Get the currently logged in user
-     * @return the logged in user
-     */
     public Utilisateur getLoggedInUser() {
         return loggedInUser;
     }
 
-    /**
-     * Update the logged in user's information in the sidebar
-     * @param updatedUser the updated user object
-     */
+    public void setLoggedInUser(Utilisateur user) {
+        this.loggedInUser = user;
+
+        // Update profile info
+        if (nameLabel != null) {
+            nameLabel.setText(user.getNom() + " " + user.getPrenom());
+        }
+        if (emailLabel != null) {
+            emailLabel.setText(user.getEmail());
+        }
+        if (userMenuLabel != null) {
+            userMenuLabel.setText(user.getNom());
+        }
+        if (welcomeLabel != null) {
+            welcomeLabel.setText("Welcome back, " + user.getNom() + "!");
+        }
+        if (roleLabel != null) {
+            roleLabel.setText("Role: " + getRoleText(user.getRole()));
+        }
+
+        // Set profile image
+        if (user.getImage() != null && user.getImage().length > 0) {
+            try {
+                Image img = new Image(new ByteArrayInputStream(user.getImage()));
+                if (profileImageView != null) {
+                    profileImageView.setImage(img);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Load User Management by default
+        loadUserManagement();
+    }
+
     public void updateLoggedInUser(Utilisateur updatedUser) {
         this.loggedInUser = updatedUser;
 
-        // Update profile info in sidebar
+        // Update profile info
         if (nameLabel != null) {
             nameLabel.setText(updatedUser.getNom() + " " + updatedUser.getPrenom());
         }
@@ -243,32 +269,6 @@ public class HomeController {
                 e.printStackTrace();
             }
         }
-    }
-
-    // ===========================================================
-
-    public void setLoggedInUser(Utilisateur user) {
-        this.loggedInUser = user;
-
-        // Update profile info
-        nameLabel.setText(user.getNom() + " " + user.getPrenom());
-        emailLabel.setText(user.getEmail());
-        userMenuLabel.setText(user.getNom());
-        welcomeLabel.setText("Welcome back, " + user.getNom() + "!");
-        roleLabel.setText("Role: " + getRoleText(user.getRole()));
-
-        // Set profile image
-        if (user.getImage() != null && user.getImage().length > 0) {
-            try {
-                Image img = new Image(new ByteArrayInputStream(user.getImage()));
-                profileImageView.setImage(img);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Load User Management by default
-        loadUserManagement();
     }
 
     private String getRoleText(int roleValue) {

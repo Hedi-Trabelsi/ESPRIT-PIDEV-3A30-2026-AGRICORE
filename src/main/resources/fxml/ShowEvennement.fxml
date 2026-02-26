@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.ShowEvennementController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a;" text="Liste des Événements" />
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+        <TableView fx:id="tableEvennements" style="-fx-background-color: white; -fx-background-radius: 15;">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                <TableColumn fx:id="colTitre" text="Titre" prefWidth="150" />
+                <TableColumn fx:id="colDescription" text="Description" prefWidth="200" />
+                <TableColumn fx:id="colLieu" text="Lieu" prefWidth="120" />
+                <TableColumn fx:id="colDateDebut" text="Date Début" prefWidth="150" />
+                <TableColumn fx:id="colDateFin" text="Date Fin" prefWidth="150" />
+                <TableColumn fx:id="colCapacite" text="Capacité" prefWidth="80" />
+                <TableColumn fx:id="colFrais" text="Frais (DT)" prefWidth="80" />
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" />
+            </columns>
+        </TableView>
+    </ScrollPane>
+</VBox>
