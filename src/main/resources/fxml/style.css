@@ -2243,3 +2243,46 @@
     -fx-font-weight: bold;
     -fx-font-size: 14px;
 }
+
+.auth-google-button {
+    -fx-background-color: white;
+    -fx-text-fill: #757575;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+    -fx-border-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 2);
+}
+
+.auth-google-button:hover {
+    -fx-background-color: #f8f8f8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 3);
+}
+
+/* Google Sign-In Button */
+.auth-google-button {
+    -fx-background-color: white;
+    -fx-text-fill: #757575;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 25;
+    -fx-cursor: hand;
+    -fx-border-color: #dadce0;
+    -fx-border-width: 1;
+    -fx-border-radius: 25;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 5, 0, 0, 1);
+    -fx-padding: 8 16;
+}
+
+.auth-google-button:hover {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #c0c4c9;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 8, 0, 0, 2);
+}
+
+.auth-google-button:pressed {
+    -fx-background-color: #f1f3f4;
+}

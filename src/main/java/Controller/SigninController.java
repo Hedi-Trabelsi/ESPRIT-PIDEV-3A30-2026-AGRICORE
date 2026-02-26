@@ -30,7 +30,7 @@ public class SigninController {
         // Don't set action here since it's already in FXML
     }
 
-    private void openUserHomePage(Utilisateur user) {
+    void openUserHomePage(Utilisateur user) {
         try {
             System.out.println("Opening User Home Page for: " + user.getEmail());
 
@@ -185,6 +185,32 @@ public class SigninController {
         }
     }
 
+    @FXML
+    private void handleGoogleSignIn() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GoogleSignIn.fxml"));
+            Parent root = loader.load();
+
+            GoogleSignInController controller = loader.getController();
+            controller.setSigninController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Google Sign-In");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Cannot open Google Sign-In: " + e.getMessage());
+        }
+    }
+
+    public void showSuccess(String message) {
+        errorLabel.setStyle("-fx-text-fill: green;");
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+    }
+
     // =========================================
     // OPEN SIGNUP PAGE
     // =========================================
@@ -205,7 +231,7 @@ public class SigninController {
     // =========================================
     // OPEN HOMEPAGE (ADMIN ONLY)
     // =========================================
-    private void openHomePage(Utilisateur user) {
+    void openHomePage(Utilisateur user) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/HomePage.fxml"));
             Parent root = loader.load();

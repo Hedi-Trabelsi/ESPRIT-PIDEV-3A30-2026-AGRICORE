@@ -13,11 +13,11 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.mindrot.jbcrypt.BCrypt;
 import Model.Utilisateur;
+import services.GoogleSignInService;
 import services.UserService;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.sql.Connection;
 import java.time.LocalDate;
 
@@ -162,6 +162,77 @@ public class SignupController {
             stage.setTitle("Sign In");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleGoogleSignUp() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GoogleSignIn.fxml"));
+            Parent root = loader.load();
+
+            GoogleSignInController controller = loader.getController();
+
+            // Pass the signup controller reference
+            controller.setSignupController(this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Google Sign-Up");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Cannot open Google Sign-Up: " + e.getMessage());
+        }
+    }
+
+    // Add this method to be called from GoogleSignInController after successful Google auth
+    public void handleGoogleSignUpSuccess(GoogleSignInService.GoogleUserInfo userInfo) {
+        try {
+            // Pre-fill the form with Google data
+            nomField.setText(userInfo.getFirstName());
+            prenomField.setText(userInfo.getLastName());
+            emailField.setText(userInfo.getEmail());
+            emailField.setDisable(true); // Email comes from Google, cannot change
+
+            // Try to load profile picture from Google
+            if (userInfo.getPictureUrl() != null && !userInfo.getPictureUrl().isEmpty()) {
+                new Thread(() -> {
+                    try {
+                        URL url = new URL(userInfo.getPictureUrl());
+                        Image image = new Image(url.toString());
+                        javafx.application.Platform.runLater(() -> {
+                            profileImageView.setImage(image);
+                        });
+
+                        // Download image bytes for later storage
+                        try (InputStream in = url.openStream()) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            byte[] buffer = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = in.read(buffer)) != -1) {
+                                baos.write(buffer, 0, bytesRead);
+                            }
+                            profileImageBytes = baos.toByteArray();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+
+            // Disable password fields (will use Google login)
+            passwordField.setDisable(true);
+            passwordField.setPromptText("Google account");
+            confirmPasswordField.setDisable(true);
+            confirmPasswordField.setPromptText("Google account");
+
+            showSuccess("Google account connected! Please complete your profile.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Error loading Google profile: " + e.getMessage());
         }
     }
 }

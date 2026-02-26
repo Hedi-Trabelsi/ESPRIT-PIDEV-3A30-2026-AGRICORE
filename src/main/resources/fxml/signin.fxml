@@ -106,6 +106,19 @@
                     </graphic>
                 </Button>
 
+                <!-- Google Sign-In Button (NEW) -->
+                <Button text="Sign in with Google"
+                        maxWidth="Infinity"
+                        prefHeight="45"
+                        styleClass="auth-google-button"
+                        onAction="#handleGoogleSignIn">
+                    <graphic>
+                        <HBox alignment="CENTER" spacing="5">
+                            <Label text="G" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #4285f4;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
                 <!-- Error/Success Message -->
                 <Label fx:id="errorLabel"
                        text=""
