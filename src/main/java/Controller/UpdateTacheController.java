@@ -63,19 +63,40 @@ public class UpdateTacheController {
     @FXML
     void saveTache(ActionEvent event) {
         try {
-            if (nomTacheTf.getText().trim().isEmpty() || datePrevueDp.getValue() == null ||
-                    descriptionTa.getText().trim().isEmpty() || coutTf.getText().trim().isEmpty()) {
+            String nom = nomTacheTf.getText();
+            String desc = descriptionTa.getText();
+            String coutStr = coutTf.getText().trim();
+
+            // 1. Validation : Champs vides
+            if (nom == null || nom.trim().isEmpty() ||
+                    desc == null || desc.trim().isEmpty() ||
+                    coutStr.isEmpty() || datePrevueDp.getValue() == null) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez remplir tous les champs.");
                 return;
             }
 
-            int cout = Integer.parseInt(coutTf.getText().trim());
+            // 2. Validation du Titre : Pas uniquement des chiffres
+            if (isNumericOnly(nom.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Le titre ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
 
-            tache.setNomTache(nomTacheTf.getText());
+            // 3. Validation de la Description : Pas uniquement des chiffres
+            if (isNumericOnly(desc.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "La description ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
+
+            // 4. Conversion du coût
+            int cout = Integer.parseInt(coutStr);
+
+            // --- Si tout est valide, on met à jour l'objet ---
+            tache.setNomTache(nom.trim());
             tache.setDate_prevue(datePrevueDp.getValue().toString());
-            tache.setDesciption(descriptionTa.getText());
+            tache.setDesciption(desc.trim());
             tache.setCout_estimee(cout);
 
+            // Appel au service
             serviceTache.modifier(tache);
 
             saveBtn.setDisable(true);
@@ -90,8 +111,13 @@ public class UpdateTacheController {
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût doit être un nombre.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût doit être un nombre entier.");
         }
+    }
+
+    // Méthode utilitaire à ajouter dans ton contrôleur si elle n'y est pas déjà
+    private boolean isNumericOnly(String str) {
+        return str.matches("\\d+");
     }
 
     @FXML

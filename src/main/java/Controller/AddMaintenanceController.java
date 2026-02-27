@@ -8,9 +8,6 @@ import javafx.scene.control.*;
 
 import Model.Maintenance;
 import services.ServiceMaintenance;
-
-
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import javafx.scene.input.MouseEvent;
@@ -31,7 +28,9 @@ public class AddMaintenanceController {
     @FXML private javafx.scene.control.Label descriptionStar;
     @FXML private TextField nomMaintenanceTf; // Nouveau
     @FXML private Label nomMaintenanceStar;
-
+    private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
+    @FXML
+    private ComboBox<Maintenance> maintenanceCb;
     @FXML
     private javafx.scene.control.Button Save;
 
@@ -40,6 +39,7 @@ public class AddMaintenanceController {
 
     @FXML
     private Label equipementError;
+
     @FXML
     void cancel(MouseEvent event) { // Changé ActionEvent en MouseEvent
         try {
@@ -50,9 +50,29 @@ public class AddMaintenanceController {
             showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de retourner à la liste : " + e.getMessage());
         }
     }
-    @FXML
-    void saveMaintenance(ActionEvent event) {
+    @FXML  void saveMaintenance(ActionEvent event) {
         try {
+            String nom = nomMaintenanceTf.getText();
+            String desc = descriptionTf.getText();
+
+            // 1. Validation du Titre (Nom)
+            if (nom == null || nom.trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Le titre ne peut pas être vide.");
+                return;
+            }
+            if (isNumericOnly(nom.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Le titre ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
+            // 2. Validation de la Description
+            if (desc == null || desc.trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "La description ne peut pas être vide.");
+                return;
+            }
+            if (isNumericOnly(desc.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "La description ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
             if (nomMaintenanceTf.getText() == null || nomMaintenanceTf.getText().trim().isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer un titre  pour la maintenance");
                 return;
@@ -118,9 +138,7 @@ public class AddMaintenanceController {
             showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage());
         }
     }
-    private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
-    @FXML
-    private ComboBox<Maintenance> maintenanceCb;
+
 
     @FXML
     void cancel(ActionEvent event) {
@@ -132,7 +150,9 @@ public class AddMaintenanceController {
         }
     }
 
-
+    private boolean isNumericOnly(String text) {
+        return text != null && text.matches("\\d+");
+    }
     @FXML
     void initialize() {
         dateDeclarationTf.setText(LocalDate.now().toString());

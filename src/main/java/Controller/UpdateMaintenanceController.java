@@ -48,10 +48,31 @@ public class UpdateMaintenanceController {
             equipementTf.setText(m.getEquipement());
         }
     }
-
+    private boolean isNumericOnly(String text) {
+        return text != null && text.matches("\\d+");
+    }
     @FXML
     void updateMaintenance(ActionEvent event) {
         try {
+            String nom = nomMaintenanceTf.getText();
+            String desc = descriptionTf.getText();
+            if (nom == null || nom.trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Le titre ne peut pas être vide.");
+                return;
+            }
+            if (isNumericOnly(nom.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Le titre ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
+            // 2. Validation de la Description
+            if (desc == null || desc.trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "La description ne peut pas être vide.");
+                return;
+            }
+            if (isNumericOnly(desc.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "La description ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
             if (nomMaintenanceTf.getText().trim().isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Le titre de la maintenance est obligatoire.");
                 return;

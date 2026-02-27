@@ -3,11 +3,9 @@ package Controller;
 import java.io.IOException;
 import java.util.stream.Collectors;
 import javafx.geometry.Pos;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,6 +48,7 @@ public class DashboardController {
             List<Maintenance> filtered = serviceMaintenance.afficher().stream()
                     .filter(m -> !"en attente".equalsIgnoreCase(m.getStatut()))
                     .filter(m -> keyword.isEmpty() ||
+                            (m.getNom_maintenance() != null && m.getNom_maintenance().toLowerCase().contains(keyword)) || // Recherche par titre ajoutée ici
                             m.getType().toLowerCase().contains(keyword) ||
                             m.getDescription().toLowerCase().contains(keyword) ||
                             m.getLieu().toLowerCase().contains(keyword) ||
@@ -75,33 +74,35 @@ public class DashboardController {
                     return;
                 }
 
-                // 1. Calcul du coût
-                double totalCout = 0;
-                try {
-                    totalCout = serviceTache.afficher().stream()
-                            .filter(t -> t.getId_maintenace() == m.getId())
-                            .mapToDouble(Model.Tache::getCout_estimee).sum();
-                } catch (SQLException e) { e.printStackTrace(); }
-
-                // 2. CONTENU GAUCHE (Inversion Titre -> Équipement)
-                // L'équipement est maintenant le titre principal
-                Label equipLabel = new Label(m.getEquipement().toUpperCase());
-                equipLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
+                // 1. CONTENU GAUCHE
+                Label equipLabel = new Label(m.getNom_maintenance().toUpperCase());
+                equipLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
 
                 Label descLabel = new Label(m.getDescription());
                 descLabel.setStyle("-fx-text-fill: #64748b; -fx-font-size: 13px;");
+                descLabel.setWrapText(true);
+                descLabel.setMaxWidth(400); // Limite la largeur pour éviter que le texte ne pousse tout
 
-                // Le type de maintenance est maintenant ici avec le lieu
-                Label detailsLabel = new Label("📍 " + m.getLieu() + " | 🛠 " + m.getType());
+                Label detailsLabel = new Label("Lieu: " + m.getLieu());
                 detailsLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 12px;");
 
-                Label costLabel = new Label("💰 " + String.format("%.2f", totalCout) + " DT");
-                costLabel.setStyle("-fx-text-fill: #2e7d32; -fx-font-weight: bold;");
+                // --- CORRECTION : PLUS FIN ET PLUS CLAIR ---
+                Label btnDetails = new Label("Voir détails →");
 
-                VBox leftBox = new VBox(equipLabel, descLabel, detailsLabel, costLabel);
-                leftBox.setSpacing(5);
+// On utilise un vert plus éclatant (#10b981) et on retire le bold (font-weight: normal)
+                String styleClair = "-fx-text-fill: #1e293b; -fx-font-weight: normal; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 5 0; -fx-underline: false;";
 
-                // 3. CONTENU DROITE (Inchangé)
+// Au survol, on garde la même finesse mais on souligne
+                String styleSurvol = "-fx-text-fill: #1e293b; -fx-font-weight: normal; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 5 0; -fx-underline: true;";
+
+                btnDetails.setStyle(styleClair);
+                btnDetails.setOnMouseEntered(e -> btnDetails.setStyle(styleSurvol));
+                btnDetails.setOnMouseExited(e -> btnDetails.setStyle(styleClair));
+
+                VBox leftBox = new VBox(equipLabel, descLabel, detailsLabel, btnDetails);
+                leftBox.setSpacing(8);
+
+                // 2. CONTENU DROITE (Badges et Poubelle)
                 Label statusLabel = new Label(m.getStatut().toUpperCase());
                 statusLabel.setStyle(getStatusStyle(m.getStatut()));
 
@@ -113,12 +114,12 @@ public class DashboardController {
                 badgesBox.setAlignment(Pos.TOP_RIGHT);
 
                 Label deleteNode = new Label("🗑");
-                deleteNode.setStyle("-fx-font-size: 22px; -fx-text-fill: #fca5a5; -fx-cursor: hand;");
-                deleteNode.setOnMouseEntered(e -> deleteNode.setStyle("-fx-font-size: 22px; -fx-text-fill: #ef4444; -fx-cursor: hand;"));
-                deleteNode.setOnMouseExited(e -> deleteNode.setStyle("-fx-font-size: 22px; -fx-text-fill: #fca5a5; -fx-cursor: hand;"));
+                deleteNode.setStyle("-fx-font-size: 20px; -fx-text-fill: #fca5a5; -fx-cursor: hand;");
+                deleteNode.setOnMouseEntered(e -> deleteNode.setStyle("-fx-font-size: 20px; -fx-text-fill: #ef4444; -fx-cursor: hand;"));
+                deleteNode.setOnMouseExited(e -> deleteNode.setStyle("-fx-font-size: 20px; -fx-text-fill: #fca5a5; -fx-cursor: hand;"));
 
                 deleteNode.setOnMouseClicked(event -> {
-                    event.consume();
+                    event.consume(); // Empêche d'ouvrir les détails quand on clique sur supprimer
                     Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer définitivement ?", ButtonType.YES, ButtonType.NO);
                     confirm.showAndWait().ifPresent(res -> {
                         if (res == ButtonType.YES) {
@@ -132,7 +133,7 @@ public class DashboardController {
 
                 VBox rightBox = new VBox();
                 rightBox.setAlignment(Pos.TOP_RIGHT);
-                rightBox.setSpacing(20);
+                rightBox.setSpacing(15);
                 Region verticalSpacer = new Region();
                 VBox.setVgrow(verticalSpacer, Priority.ALWAYS);
                 rightBox.getChildren().addAll(badgesBox, verticalSpacer, deleteNode);
@@ -140,32 +141,31 @@ public class DashboardController {
                 Region horizontalSpacer = new Region();
                 HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
 
-                // 4. ASSEMBLAGE DE LA CARTE
+                // 3. ASSEMBLAGE DE LA CARTE
                 HBox card = new HBox(leftBox, horizontalSpacer, rightBox);
                 card.setAlignment(Pos.CENTER_LEFT);
 
-                String baseStyle = "-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 20; " +
-                        "-fx-border-color: #f1f5f9; -fx-border-radius: 20; -fx-border-width: 2; " +
-                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);";
+                String baseStyle = "-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 18; " +
+                        "-fx-border-color: #f1f5f9; -fx-border-radius: 18; -fx-border-width: 1.5; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);";
                 card.setStyle(baseStyle);
 
-                card.setOnMouseEntered(e -> {
-                    card.setStyle(baseStyle + "-fx-background-color: #f8fafc; -fx-border-color: #cbd5e1;");
-                });
-                card.setOnMouseExited(e -> {
-                    card.setStyle(baseStyle);
-                });
+                // Effet de survol sur toute la carte
+                card.setOnMouseEntered(e -> card.setStyle(baseStyle + "-fx-background-color: #f8fafc; -fx-border-color: #cbd5e1;"));
+                card.setOnMouseExited(e -> card.setStyle(baseStyle));
 
-                card.setOnMouseClicked(event -> {
-                    if (event.getClickCount() == 2) openTacheWindow(m);
+                // Clique sur toute la carte pour ouvrir les détails
+                card.setOnMouseClicked(e -> {
+                    if (m != null) {
+                        openTacheWindow(m);
+                    }
                 });
 
                 setGraphic(card);
-                setStyle("-fx-background-color: transparent; -fx-padding: 10 0;");
+                setStyle("-fx-background-color: transparent; -fx-padding: 8 0;");
             }
         });
     }
-
     // --- MÉTHODE DE NOTIFICATION DESKTOP ---
     private void notifierSurDesktop(String titre, String message) {
         if (!java.awt.SystemTray.isSupported()) {
@@ -225,12 +225,29 @@ public class DashboardController {
     // Styles (Status et Priorité)
     private String getStatusStyle(String statut) {
         if (statut == null) return "";
-        switch (statut.toLowerCase()) {
-            case "en cours": return "-fx-background-color:#d1ecf1; -fx-text-fill:#0c5460; -fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;";
-            case "en attente": return "-fx-background-color:#fff3cd; -fx-text-fill:#856404; -fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;";
-            case "refusee": return "-fx-background-color:#f8d7da; -fx-text-fill:red; -fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;";
-            default: return "-fx-background-color:#d4edda; -fx-text-fill:green; -fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;";
+        statut = statut.toLowerCase();
+
+        // On utilise exactement ta base : radius 20 et padding 5 10
+        String base = "-fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;";
+
+        if (statut.contains("resolu")) {
+            // Même Vert que "faible"
+            return "-fx-background-color:#c3e6cb; -fx-text-fill:#155724; " + base;
         }
+        if (statut.contains("accepter")) {
+            // Un Bleu doux (pour changer du vert/rouge)
+            return "-fx-background-color:#e0f2fe; -fx-text-fill:#0369a1; " + base;
+        }
+        if (statut.contains("planifier")) {
+            // Même Jaune que "normale"
+            return "-fx-background-color:#ffeeba; -fx-text-fill:#856404; " + base;
+        }
+        if (statut.contains("refuse")) {
+            // Même Rouge que "urgente"
+            return "-fx-background-color:#f5c6cb; -fx-text-fill:#721c24; " + base;
+        }
+        // Gris par défaut (comme ton default)
+        return "-fx-background-color:#e2e3e5; -fx-text-fill:#383d41; " + base;
     }
 
     private String getPriorityStyle(String priorite) {
@@ -263,11 +280,16 @@ public class DashboardController {
 
     private void openTacheWindow(Maintenance m) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MaintenanceDetail.fxml"));
             Parent root = loader.load();
-            ShowMaintenanceDetailsController controller = loader.getController();
-            controller.setMaintenance(m);
-            mainList.getScene().setRoot(root);
-        } catch (Exception e) { e.printStackTrace(); }
+
+            MaintenanceDetailController controller = loader.getController();
+            controller.setMaintenance(m); // envoie la maintenance sélectionnée
+
+            mainList.getScene().setRoot(root); // remplace la scène actuelle
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 }

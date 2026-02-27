@@ -3,6 +3,7 @@ package Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,7 +11,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import Model.Maintenance;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import services.ServiceMaintenance;
+
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -57,7 +62,6 @@ public class NotificationController {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    // --- CORRECTION DU FILTRE ET TRI ---
     private void filterList() {
         try {
             String keyword = (searchField.getText() == null) ? "" : searchField.getText().toLowerCase().trim();
@@ -67,10 +71,11 @@ public class NotificationController {
             List<Maintenance> filtered = service.afficher().stream()
                     .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
                     .filter(m -> keyword.isEmpty() ||
-                            m.getEquipement().toLowerCase().contains(keyword) ||
-                            m.getType().toLowerCase().contains(keyword) ||
-                            m.getDescription().toLowerCase().contains(keyword) ||
-                            m.getLieu().toLowerCase().contains(keyword))
+                            (m.getNom_maintenance() != null && m.getNom_maintenance().toLowerCase().contains(keyword)) || // Ajout du titre (nom)
+                            (m.getEquipement() != null && m.getEquipement().toLowerCase().contains(keyword)) ||
+                            (m.getType() != null && m.getType().toLowerCase().contains(keyword)) ||
+                            (m.getDescription() != null && m.getDescription().toLowerCase().contains(keyword)) ||
+                            (m.getLieu() != null && m.getLieu().toLowerCase().contains(keyword)))
                     .filter(m -> priority.equals("Toutes les priorités") || priority.equals("Toutes") || m.getPriorite().equalsIgnoreCase(priority))
                     .sorted((m1, m2) -> {
                         if (m1.getDateDeclaration() == null || m2.getDateDeclaration() == null) return 0;
@@ -92,91 +97,108 @@ public class NotificationController {
                 if (empty || m == null) {
                     setGraphic(null);
                     setStyle("-fx-background-color: transparent;");
-                } else {
-                    // 1. Logique de calcul du retard
-                    long joursAttente = java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), java.time.LocalDate.now());
-                    boolean isCritical = m.getPriorite().equalsIgnoreCase("Urgente") && joursAttente >= 0;
+                    return;
+                }
 
-                    // 2. Création des Labels (Style Dashboard)
-                    Label equipLabel = new Label(m.getEquipement().toUpperCase());
-                    equipLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
+                Label nomLabel = new Label(m.getNom_maintenance().toUpperCase());
+                nomLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
 
-                    Label descLabel = new Label(m.getDescription());
-                    descLabel.setStyle("-fx-text-fill: #64748b; -fx-font-size: 13px;");
+                Label descLabel = new Label(m.getDescription());
+                descLabel.setStyle("-fx-text-fill: #64748b; -fx-font-size: 13px;");
+                descLabel.setWrapText(true);
+                descLabel.setMaxWidth(500);
 
-                    Label detailsLabel = new Label("📍 " + m.getLieu() + " | 🛠 " + m.getType());
-                    detailsLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 12px;");
+                Label equipLabel = new Label("• Équipement : " + m.getEquipement());
+                equipLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 12px;");
 
-                    VBox leftBox = new VBox(equipLabel, descLabel, detailsLabel);
-                    leftBox.setSpacing(5);
+                Label lieuLabel = new Label("• Lieu : " + m.getLieu());
+                lieuLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 12px;");
 
-                    // 3. Badges et Temps
-                    Label timeLabel = new Label(calculateTimeAgo(m.getDateDeclaration()));
-                    timeLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #b2bec3; -fx-font-style: italic;");
+                // --- 2. BOUTONS ---
+                Button accBtn = new Button("Accepter");
+                accBtn.setStyle("-fx-background-color: #ecfdf5; -fx-text-fill: #059669; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 8 20;");
+                accBtn.setOnAction(e -> handleAction(m, "accepter"));
 
-                    Label pLabel = new Label(m.getPriorite().toUpperCase());
-                    pLabel.setStyle(getPriorityStyle(m.getPriorite()));
+                Button refBtn = new Button("Refuser");
+                refBtn.setStyle("-fx-background-color: #fef2f2; -fx-text-fill: #dc2626; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 8 20;");
+                refBtn.setOnAction(e -> handleAction(m, "refusee"));
 
-                    Label sLabel = new Label(m.getStatut().toUpperCase());
-                    sLabel.setStyle("-fx-background-color:#fff3cd; -fx-text-fill:#856404; -fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;");
+                HBox actionsBox = new HBox(accBtn, refBtn);
+                actionsBox.setSpacing(15);
+                actionsBox.setPadding(new javafx.geometry.Insets(10, 0, 0, 0));
 
-                    HBox badges = new HBox(sLabel, pLabel);
-                    badges.setSpacing(8);
-                    badges.setAlignment(Pos.TOP_RIGHT);
+                VBox leftBox = new VBox(nomLabel, descLabel, equipLabel, lieuLabel, actionsBox);
+                leftBox.setSpacing(6);
 
-                    VBox rightBox = new VBox(timeLabel, badges);
-                    rightBox.setSpacing(10);
-                    rightBox.setAlignment(Pos.TOP_RIGHT);
+                // --- 3. TEMPS ET PRIORITÉ DROITE ---
+                Label timeAgoLabel = new Label(calculateTimeAgo(m.getDateDeclaration()));
+                timeAgoLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-style: italic;");
 
-                    Region spacer = new Region();
-                    HBox.setHgrow(spacer, Priority.ALWAYS);
+                Label priorityLabel = new Label(m.getPriorite().toUpperCase());
+                priorityLabel.setStyle(getPriorityStyle(m.getPriorite()));
 
-                    Label alertIcon = new Label();
-                    if (isCritical) {
-                        alertIcon.setText("⚠ RETARD");
-                        alertIcon.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
-                    }
+                VBox rightBox = new VBox(timeAgoLabel, priorityLabel);
+                rightBox.setSpacing(8);
+                rightBox.setAlignment(Pos.TOP_RIGHT);
 
-                    HBox topRow = new HBox(leftBox, spacer, alertIcon, rightBox);
-                    topRow.setAlignment(Pos.TOP_LEFT);
+                Region horizontalSpacer = new Region();
+                HBox.setHgrow(horizontalSpacer, Priority.ALWAYS);
 
-                    // 4. Boutons Accepter/Refuser (Position Centrale)
-                    Button accBtn = new Button("Accepter");
-                    accBtn.getStyleClass().add("action-button-accept");
-                    accBtn.setOnAction(e -> handleAction(m, "en cours"));
+                // --- 4. STYLE DYNAMIQUE (URGENT = ROUGE) ---
+                boolean isUrgent = "urgente".equalsIgnoreCase(m.getPriorite());
 
-                    Button refBtn = new Button("Refuser");
-                    refBtn.getStyleClass().add("action-button-refuse");
-                    refBtn.setOnAction(e -> handleAction(m, "refusee"));
+                // Si urgent : fond très légèrement rouge et bordure rouge
+                String backgroundColor = isUrgent ? "#fff1f2" : "white";
+                String borderColor = isUrgent ? "#fecaca" : "#f1f5f9";
+                String hoverColor = isUrgent ? "#ffe4e6" : "#f8fafc";
+                String hoverBorder = isUrgent ? "#f87171" : "#cbd5e1";
 
-                    HBox buttonRow = new HBox(accBtn, refBtn);
-                    buttonRow.setSpacing(40);
-                    buttonRow.setAlignment(Pos.CENTER);
-                    buttonRow.setPadding(new javafx.geometry.Insets(15, 0, 0, 0));
+                String baseStyle = String.format(
+                        "-fx-background-color: %s; -fx-padding: 20; -fx-background-radius: 18; " +
+                                "-fx-border-color: %s; -fx-border-radius: 18; -fx-border-width: 1.5; " +
+                                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.04), 10, 0, 0, 4);",
+                        backgroundColor, borderColor
+                );
 
-                    // 5. Assemblage et Style de la Card
-                    VBox cardLayout = new VBox(topRow, buttonRow);
-                    cardLayout.setSpacing(10);
+                HBox card = new HBox(leftBox, horizontalSpacer, rightBox);
+                card.setAlignment(Pos.TOP_LEFT);
+                card.setStyle(baseStyle);
 
-                    String baseStyle = "-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 20; " +
-                            "-fx-border-color: #f1f5f9; -fx-border-radius: 20; -fx-border-width: 2; " +
-                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);";
+                // Effets au survol adaptés à l'état urgent
+                card.setOnMouseEntered(e -> card.setStyle(baseStyle + String.format("-fx-background-color: %s; -fx-border-color: %s;", hoverColor, hoverBorder)));
+                card.setOnMouseExited(e -> card.setStyle(baseStyle));
 
-                    if (isCritical) {
-                        cardLayout.setStyle(baseStyle + "-fx-border-color: #e74c3c; -fx-background-color: #fff5f5;");
-                    } else {
-                        cardLayout.setStyle(baseStyle);
-                        cardLayout.setOnMouseEntered(e -> cardLayout.setStyle(baseStyle + "-fx-background-color: #f8fafc; -fx-border-color: #cbd5e1;"));
-                        cardLayout.setOnMouseExited(e -> cardLayout.setStyle(baseStyle));
-                    }
+                card.setOnMouseClicked(e -> {
+                    if (e.getTarget() instanceof Button) return;
+                    openTacheWindow(m);
+                });
 
-                    setGraphic(cardLayout);
-                    setStyle("-fx-background-color: transparent; -fx-padding: 10 20;");
-                } // Fin du else (m != null)
-            } // Fin de updateItem
-        }); // Fin de setCellFactory
+                setGraphic(card);
+                setStyle("-fx-background-color: transparent; -fx-padding: 10 0;");
+            }
+        });
     }
+    private void openTacheWindow(Maintenance m) {
+        try {
+            java.net.URL fxmlLocation = getClass().getResource("/fxml/DetailsMaintenanceView.fxml");
 
+            if (fxmlLocation == null) {
+                System.err.println("ERREUR : Le fichier FXML n'a pas été trouvé au chemin indiqué !");
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(fxmlLocation);
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Détails : " + m.getNom_maintenance());
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private String getPriorityStyle(String priorite) {
         String base = "-fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;";
         if (priorite == null) return "-fx-background-color:#b0b0b0; -fx-text-fill:white; " + base;
@@ -223,14 +245,7 @@ public class NotificationController {
                 .filter(m -> m.getDateDeclaration() != null &&
                         java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), LocalDate.now()) >= 2)
                 .count();
-        if (count > 0) {
-            Platform.runLater(() -> {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Alertes de Retard");
-                alert.setHeaderText(count + " demande(s) urgente(s) critique(s) !");
-                alert.setContentText("Ces demandes attendent depuis plus de 48h.");
-                alert.show();
-            });
-        }
+      
     }
+
 }

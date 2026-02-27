@@ -9,7 +9,7 @@ public class Maintenance {
     private LocalDate dateDeclaration;
     private String description;
     private String statut;
-    private int idTechnicien;
+    private int idAgriculteur;
     private String priorite;
     private String lieu;
     private String equipement;
@@ -18,28 +18,27 @@ public class Maintenance {
     public Maintenance() {
     }
 
-    // Constructeur complet (avec ID - pour la récupération de la BD)
-    public Maintenance(int id, String nom_maintenance, String type, LocalDate dateDeclaration, String description, String statut, int idTechnicien, String priorite, String lieu, String equipement) {
+    public Maintenance(int id, String nom_maintenance, String type, LocalDate dateDeclaration, String description, String statut, int idAgriculteur, String priorite, String lieu, String equipement) {
         this.id = id;
         this.nom_maintenance = nom_maintenance;
         this.type = type;
         this.dateDeclaration = dateDeclaration;
         this.description = description;
         this.statut = statut;
-        this.idTechnicien = idTechnicien;
+        this.idAgriculteur = idAgriculteur;
         this.priorite = priorite;
         this.lieu = lieu;
         this.equipement = equipement;
     }
 
     // Constructeur sans ID (pour l'insertion dans la BD)
-    public Maintenance(String nom_maintenance, String type, LocalDate dateDeclaration, String description, String statut, int idTechnicien, String priorite, String lieu, String equipement) {
+    public Maintenance(String nom_maintenance, String type, LocalDate dateDeclaration, String description, String statut, int idAgriculteur, String priorite, String lieu, String equipement) {
         this.nom_maintenance = nom_maintenance;
         this.dateDeclaration = dateDeclaration;
         this.type = type;
         this.description = description;
         this.statut = statut;
-        this.idTechnicien = idTechnicien;
+        this.idAgriculteur = idAgriculteur;
         this.priorite = priorite;
         this.lieu = lieu;
         this.equipement = equipement;
@@ -95,12 +94,12 @@ public class Maintenance {
         this.statut = statut;
     }
 
-    public int getIdTechnicien() {
-        return idTechnicien;
+    public int getIdAgriculteur() {
+        return idAgriculteur;
     }
 
-    public void setIdTechnicien(int idTechnicien) {
-        this.idTechnicien = idTechnicien;
+    public void setIdAgriculteur(int idAgriculteur) {
+        this.idAgriculteur = idAgriculteur;
     }
 
     public String getPriorite() {
@@ -136,7 +135,7 @@ public class Maintenance {
                 ", dateDeclaration=" + dateDeclaration +
                 ", description='" + description + '\'' +
                 ", statut='" + statut + '\'' +
-                ", idTechnicien=" + idTechnicien +
+                ", idAgriculteur=" + idAgriculteur +
                 ", priorite='" + priorite + '\'' +
                 ", lieu='" + lieu + '\'' +
                 ", equipement='" + equipement + '\'' +

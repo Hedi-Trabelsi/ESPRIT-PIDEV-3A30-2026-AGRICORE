@@ -18,7 +18,7 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
     public void ajouter(Maintenance maintenance) throws SQLException {
         maintenance.setStatut("En attente");
         // Ajout de nom_maintenance dans la requête
-        String sql = "INSERT INTO maintenance(nom_maintenance, type, date_declaration, description, statut, id_technicien, priorite, lieu, equipement) VALUES (?, ?, ?, ?, ?, NULL, ?, ?, ?)";
+        String sql = "INSERT INTO maintenance(nom_maintenance, type, date_declaration, description, statut, id_agriculteur, priorite, lieu, equipement) VALUES (?, ?, ?, ?, ?, NULL, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, maintenance.getNom_maintenance());
@@ -75,7 +75,7 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
                     rs.getDate("date_declaration").toLocalDate(),
                     rs.getString("description"),
                     rs.getString("statut"),
-                    rs.getInt("id_technicien"),
+                    rs.getInt("id_agriculteur"),
                     rs.getString("priorite"),
                     rs.getString("lieu"),
                     rs.getString("equipement")
@@ -98,7 +98,7 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
                     rs.getDate("date_declaration").toLocalDate(),
                     rs.getString("description"),
                     rs.getString("statut"),
-                    rs.getInt("id_technicien"),
+                    rs.getInt("id_agriculteur"),
                     rs.getString("priorite"),
                     rs.getString("lieu"),
                     rs.getString("equipement")

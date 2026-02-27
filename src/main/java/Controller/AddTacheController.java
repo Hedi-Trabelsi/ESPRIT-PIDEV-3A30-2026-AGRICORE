@@ -96,11 +96,31 @@ public class AddTacheController {
     @FXML
     void saveTache(ActionEvent event) {
         try {
-            if (nomTacheTf.getText().trim().isEmpty() || datePrevueDp.getValue() == null ||
-                    descriptionTa.getText().trim().isEmpty() || coutTf.getText().trim().isEmpty()) {
+            String nom = nomTacheTf.getText();
+            String desc = descriptionTa.getText();
+            String coutStr = coutTf.getText().trim();
+
+            // 1. Validation : Champs vides
+            if (nom == null || nom.trim().isEmpty() ||
+                    desc == null || desc.trim().isEmpty() ||
+                    coutStr.isEmpty() || datePrevueDp.getValue() == null) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez remplir tous les champs.");
                 return;
             }
+
+            // 2. Validation du Titre : Pas uniquement des chiffres
+            if (isNumericOnly(nom.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Le titre ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
+
+            // 3. Validation de la Description : Pas uniquement des chiffres
+            if (isNumericOnly(desc.trim())) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "La description ne peut pas contenir uniquement des chiffres.");
+                return;
+            }
+
+            // --- Fin des validations, début du traitement ---
 
             Maintenance selectedMaintenance = this.maintenanceAutomatique;
             if (selectedMaintenance == null) {
@@ -108,13 +128,13 @@ public class AddTacheController {
                 return;
             }
 
-            int cout = Integer.parseInt(coutTf.getText().trim());
+            int cout = Integer.parseInt(coutStr);
             String nomFichierPdf = System.getProperty("user.home") + "/Documents/Rapport_Tache_" + selectedMaintenance.getId() + ".pdf";
 
             Tache tache = new Tache(
-                    nomTacheTf.getText(),
+                    nom.trim(),
                     datePrevueDp.getValue().toString(),
-                    descriptionTa.getText(),
+                    desc.trim(),
                     cout,
                     selectedMaintenance.getId()
             );
@@ -124,27 +144,57 @@ public class AddTacheController {
 
             new Thread(() -> {
                 try {
+                    // 1. Actions BDD
                     serviceTache.ajouter(tache);
-                    selectedMaintenance.setStatut("Planifie");
+                    selectedMaintenance.setStatut("planifier");
                     serviceMaintenance.modifier(selectedMaintenance);
-                    PdfService.genererRapportTache(descriptionTa.getText(), datePrevueDp.getValue().toString(), String.valueOf(cout), nomFichierPdf);
+
+                    // 2. Génération du PDF
+                    PdfService.genererRapportTache(desc.trim(), datePrevueDp.getValue().toString(), String.valueOf(cout), nomFichierPdf);
+
+                    // --- AJOUT : ENVOI EMAIL ---
+                    try {
+                        services.EmailService.envoyerEmailTache(
+                                "mrabetzeineb1@gmail.com",            // 1. Destinataire
+                                nom.trim(),                           // 2. NOM DE LA TACHE (L'argument manquant)
+                                selectedMaintenance.getDescription(), // 3. Description maintenance
+                                datePrevueDp.getValue().toString(),   // 4. Date
+                                String.valueOf(cout),                 // 5. Coût
+                                nomFichierPdf                         // 6. Chemin PDF
+                        );
+                    } catch (Exception e) {
+                        System.out.println("Erreur Email : " + e.getMessage());
+                    }
+
+                    // --- AJOUT : ENVOI SMS ---
+                    try {
+                        String messageSms = "🛠 Nouvelle tâche planifiée !\n" +
+                                "Équipement: " + selectedMaintenance.getEquipement() + "\n" +
+                                "Date: " + datePrevueDp.getValue().toString() + "\n" +
+                                "Lieu: " + selectedMaintenance.getLieu();
+                        services.SmsService.envoyerSms("+21651042268", messageSms);
+                    } catch (Exception e) {
+                        System.out.println("Erreur SMS : " + e.getMessage());
+                    }
 
                     javafx.application.Platform.runLater(() -> {
-                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche enregistrée !");
-                        PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                        pause.setOnFinished(ev -> {
-                            try {
-                                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
-                                Parent root = loader.load();
+                        // --- AJOUT : OUVERTURE AUTO DU PDF ---
+                        try {
+                            java.awt.Desktop.getDesktop().open(new java.io.File(nomFichierPdf));
+                        } catch (Exception e) {
+                            System.out.println("Erreur ouverture PDF : " + e.getMessage());
+                        }
 
-                                // --- RÉCUPÉRATION DU CONTROLLER ET REPASSE DE LA MAINTENANCE ---
-                                ShowMaintenanceDetailsController controller = loader.getController();
-                                controller.setMaintenance(this.maintenanceAutomatique);
+                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche enregistrée, Rapport généré et Notifications envoyées !");
 
-                                saveBtn.getScene().setRoot(root);
-                            } catch (Exception ex) { ex.printStackTrace(); }
-                        });
-                        pause.play();
+                        // Navigation vers ShowMaintenanceDetails
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
+                            Parent root = loader.load();
+                            ShowMaintenanceDetailsController controller = loader.getController();
+                            controller.setMaintenance(this.maintenanceAutomatique);
+                            saveBtn.getScene().setRoot(root);
+                        } catch (Exception ex) { ex.printStackTrace(); }
                     });
                 } catch (Exception e) {
                     javafx.application.Platform.runLater(() -> {
@@ -156,8 +206,13 @@ public class AddTacheController {
             }).start();
 
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût doit être un nombre.");
+            showAlert(Alert.AlertType.ERROR, "Erreur", "Le coût doit être un nombre entier.");
         }
+    }
+
+    // N'oublie pas d'ajouter cette méthode utilitaire dans ton contrôleur
+    private boolean isNumericOnly(String str) {
+        return str.matches("\\d+");
     }
 
     @FXML
