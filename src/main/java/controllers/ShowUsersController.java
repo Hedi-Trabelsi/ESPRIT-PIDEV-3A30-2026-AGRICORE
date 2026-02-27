@@ -120,13 +120,16 @@ public class ShowUsersController {
         Button open = new Button("Ouvrir");
         Button analyse = new Button("Analyse");
         Button details = new Button("Détails");
+        Button calendar = new Button("Calendrier");
         open.getStyleClass().add("accent-button");
         analyse.getStyleClass().add("ghost-button");
         details.getStyleClass().add("ghost-button");
+        calendar.getStyleClass().add("ghost-button");
         open.setOnAction(e -> openUserOperations(user));
         analyse.setOnAction(e -> openUserAnalytics(user));
         details.setOnAction(e -> openFinanceFor(user));
-        actions.getChildren().addAll(open, analyse, details);
+        calendar.setOnAction(e -> openUserCalendar(user));
+        actions.getChildren().addAll(open, analyse, details, calendar);
 
         box.getChildren().addAll(header, actions);
         root.getChildren().add(box);
@@ -187,6 +190,18 @@ public class ShowUsersController {
             cardsPane.getScene().setRoot((javafx.scene.Parent) root);
         } catch (Exception e) {
             showAlert("Navigation error", e.getMessage());
+        }
+    }
+
+    private void openUserCalendar(User user) {
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/UserCalendar.fxml"));
+            javafx.scene.Parent root = loader.load();
+            controllers.UserCalendarController controller = loader.getController();
+            controller.setUser(user);
+            cardsPane.getScene().setRoot(root);
+        } catch (Exception e) {
+            showAlert("Navigation calendrier", e.getMessage());
         }
     }
 

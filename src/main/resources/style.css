@@ -52,6 +52,21 @@ HBox, VBox {
     -fx-font-weight: normal;
 }
 
+.calendar-dep-label {
+    -fx-text-fill: #dc2626;
+}
+
+.calendar-ven-label {
+    -fx-text-fill: #16a34a;
+}
+
+.calendar-day-box {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d4ead9;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+}
+
 .card > .label:last-child {
     -fx-text-fill: #16a34a;
     -fx-font-size: 24px;

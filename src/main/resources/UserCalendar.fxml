@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="900.0" prefHeight="560.0"
+            xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.UserCalendarController"
+            styleClass="root-pane"
+            stylesheets="@calender.css">
+    <children>
+
+        <!-- Root HBox fills entire window -->
+        <HBox AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+              styleClass="main-container">
+            <children>
+
+                <!-- ══════════ SIDEBAR ══════════ -->
+                <VBox styleClass="sidebar" spacing="0.0" minWidth="150.0" prefWidth="150.0" maxWidth="150.0">
+                    <children>
+
+                        <!-- Brand -->
+                        <VBox styleClass="sidebar-brand" spacing="6.0">
+                            <children>
+                                <Label text="📅" styleClass="brand-icon"/>
+                                <Label text="Calendrier" styleClass="brand-title"/>
+                                <Label text="Gestionnaire" styleClass="brand-sub"/>
+                            </children>
+                        </VBox>
+
+                        <!-- Divider -->
+                        <Region styleClass="sidebar-divider"/>
+
+                        <!-- Today card -->
+                        <VBox styleClass="sidebar-card" spacing="6.0">
+                            <children>
+                                <Label fx:id="todayLabel"      styleClass="sidebar-today-num"   text="26"/>
+                                <Label fx:id="todayDayLabel"   styleClass="sidebar-today-day"   text="Jeudi"/>
+                                <Label fx:id="todayMonthLabel" styleClass="sidebar-today-month" text="Février 2026"/>
+                            </children>
+                        </VBox>
+
+                        <Region VBox.vgrow="ALWAYS"/>
+
+                        <!-- Back -->
+                        <Button text="← Retour" onAction="#goBack" styleClass="btn-back-sidebar"/>
+
+                    </children>
+                </VBox>
+
+                <!-- ══════════ MAIN ══════════ -->
+                <VBox HBox.hgrow="ALWAYS" styleClass="content-area" spacing="0.0">
+                    <children>
+
+                        <!-- TOP BAR -->
+                        <HBox styleClass="topbar" alignment="CENTER_LEFT" spacing="16.0">
+                            <children>
+                                <VBox spacing="3.0">
+                                    <children>
+                                        <Label fx:id="titleLabel"    text="Vue Mensuelle"                         styleClass="page-title"/>
+                                        <Label fx:id="subtitleLabel" text="Planifiez et organisez vos événements" styleClass="page-subtitle"/>
+                                    </children>
+                                </VBox>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <HBox alignment="CENTER" spacing="12.0" styleClass="month-nav">
+                                    <children>
+                                        <Button text="‹" onAction="#prevMonth" styleClass="btn-nav"/>
+                                        <Label fx:id="monthLabel" text="Février 2026" styleClass="month-label"/>
+                                        <Button text="›" onAction="#nextMonth" styleClass="btn-nav"/>
+                                    </children>
+                                </HBox>
+                                <Button text="+ Événement" styleClass="btn-add"/>
+                            </children>
+                        </HBox>
+
+                        <!-- DAY-OF-WEEK HEADERS
+                             GridPane ensures perfect column alignment with the grid below -->
+                        <GridPane styleClass="day-header-row"
+                                  minHeight="34.0" prefHeight="34.0" maxHeight="34.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857" halignment="CENTER"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857" halignment="CENTER"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857" halignment="CENTER"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857" halignment="CENTER"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857" halignment="CENTER"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857" halignment="CENTER"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2858" halignment="CENTER"/>
+                            </columnConstraints>
+                            <children>
+                                <Label text="LUNDI"    GridPane.columnIndex="0" styleClass="day-header"                    GridPane.halignment="CENTER" GridPane.fillWidth="true" maxWidth="Infinity"/>
+                                <Label text="MARDI"    GridPane.columnIndex="1" styleClass="day-header"                    GridPane.halignment="CENTER" GridPane.fillWidth="true" maxWidth="Infinity"/>
+                                <Label text="MERCREDI" GridPane.columnIndex="2" styleClass="day-header"                    GridPane.halignment="CENTER" GridPane.fillWidth="true" maxWidth="Infinity"/>
+                                <Label text="JEUDI"    GridPane.columnIndex="3" styleClass="day-header"                    GridPane.halignment="CENTER" GridPane.fillWidth="true" maxWidth="Infinity"/>
+                                <Label text="VENDREDI" GridPane.columnIndex="4" styleClass="day-header"                    GridPane.halignment="CENTER" GridPane.fillWidth="true" maxWidth="Infinity"/>
+                                <Label text="SAMEDI"   GridPane.columnIndex="5" styleClass="day-header day-header-weekend" GridPane.halignment="CENTER" GridPane.fillWidth="true" maxWidth="Infinity"/>
+                                <Label text="DIMANCHE" GridPane.columnIndex="6" styleClass="day-header day-header-weekend" GridPane.halignment="CENTER" GridPane.fillWidth="true" maxWidth="Infinity"/>
+                            </children>
+                        </GridPane>
+
+                        <!-- CALENDAR GRID
+                             ColumnConstraints (7) + RowConstraints (6) declared here
+                             so JavaFX stretches every cell to fill the available space.
+                             The controller only needs to add VBox children into each cell. -->
+                        <GridPane fx:id="calendarGrid"
+                                  VBox.vgrow="ALWAYS"
+                                  hgap="1.0" vgap="1.0"
+                                  styleClass="calendar-grid"
+                                  maxWidth="Infinity" maxHeight="Infinity">
+
+                            <!-- 7 equal columns -->
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2857"/>
+                                <ColumnConstraints hgrow="ALWAYS" percentWidth="14.2858"/>
+                            </columnConstraints>
+
+                            <!-- 6 equal rows -->
+                            <rowConstraints>
+                                <RowConstraints vgrow="ALWAYS" percentHeight="16.6667"/>
+                                <RowConstraints vgrow="ALWAYS" percentHeight="16.6667"/>
+                                <RowConstraints vgrow="ALWAYS" percentHeight="16.6667"/>
+                                <RowConstraints vgrow="ALWAYS" percentHeight="16.6667"/>
+                                <RowConstraints vgrow="ALWAYS" percentHeight="16.6667"/>
+                                <RowConstraints vgrow="ALWAYS" percentHeight="16.6665"/>
+                            </rowConstraints>
+
+                        </GridPane>
+
+                    </children>
+                </VBox>
+
+            </children>
+        </HBox>
+
+    </children>
+</AnchorPane>

@@ -21,6 +21,7 @@ public class FinanceTablesController {
     @FXML private Label titleLabel;
     @FXML private VBox depenseFeed;
     @FXML private VBox venteFeed;
+    @FXML private AnchorPane calendarHost;
 
     private final DepenseService depenseService = new DepenseService();
     private final VenteService venteService = new VenteService();
@@ -33,6 +34,7 @@ public class FinanceTablesController {
             titleLabel.setText("Finances: " + user.getFirstName() + " " + user.getLastName());
         }
         loadData();
+        loadCalendar();
     }
 
     private void loadData() {
@@ -43,6 +45,23 @@ public class FinanceTablesController {
             renderVenteFeed(vs);
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+        }
+    }
+
+    private void loadCalendar() {
+        if (calendarHost == null) return;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserCalendar.fxml"));
+            Parent root = loader.load();
+            controllers.UserCalendarController controller = loader.getController();
+            controller.setUser(user);
+            calendarHost.getChildren().setAll(root);
+            AnchorPane.setTopAnchor(root, 0.0);
+            AnchorPane.setBottomAnchor(root, 0.0);
+            AnchorPane.setLeftAnchor(root, 0.0);
+            AnchorPane.setRightAnchor(root, 0.0);
+        } catch (Exception e) {
+            // ignore
         }
     }
 

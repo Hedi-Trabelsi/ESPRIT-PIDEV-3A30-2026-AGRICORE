@@ -3,19 +3,37 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefWidth="1000.0" prefHeight="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane prefWidth="1000.0" prefHeight="600.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.FinanceTablesController"
             stylesheets="@tables.css">
     <children>
-        <HBox spacing="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <children>
-                <VBox spacing="16.0" AnchorPane.topAnchor="16.0" AnchorPane.leftAnchor="16.0"
-                      AnchorPane.rightAnchor="16.0" AnchorPane.bottomAnchor="16.0"
-                      prefWidth="784.0" HBox.hgrow="ALWAYS" style="-fx-padding: 16px;">
+
+        <ScrollPane
+                fitToWidth="true"
+                fitToHeight="false"
+                hbarPolicy="NEVER"
+                vbarPolicy="AS_NEEDED"
+                styleClass="root-scroll"
+                AnchorPane.topAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0">
+            <content>
+
+                <!--
+                    Total minHeight breakdown:
+                    padding-top(16) + topbar(40) + gap(16) + feeds(320) + gap(16) + calendar(420) + padding-bottom(16) = 844
+                -->
+                <VBox spacing="16.0"
+                      style="-fx-padding: 16px;"
+                      minHeight="844.0"
+                      prefHeight="844.0">
                     <children>
 
                         <!-- Top bar -->
-                        <HBox spacing="8.0" alignment="CENTER_LEFT">
+                        <HBox spacing="8.0" alignment="CENTER_LEFT" minHeight="40.0">
                             <children>
                                 <Label fx:id="titleLabel" styleClass="page-title" text="Finances"/>
                                 <Pane HBox.hgrow="ALWAYS"/>
@@ -24,11 +42,12 @@
                         </HBox>
 
                         <!-- Two-column feed layout -->
-                        <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+                        <HBox spacing="16.0"
+                              prefHeight="320.0" minHeight="320.0" maxHeight="320.0">
                             <children>
 
-                                <!-- LEFT: Dépenses feed -->
-                                <VBox styleClass="panel" HBox.hgrow="ALWAYS">
+                                <!-- LEFT: Dépenses -->
+                                <VBox styleClass="panel" HBox.hgrow="ALWAYS" maxHeight="320.0">
                                     <children>
                                         <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
                                             <children>
@@ -36,7 +55,8 @@
                                                 <Label text="Dépenses" styleClass="panel-title"/>
                                             </children>
                                         </HBox>
-                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                                    styleClass="card-scroll">
                                             <content>
                                                 <VBox fx:id="depenseFeed" styleClass="feed-list" spacing="0"/>
                                             </content>
@@ -44,8 +64,8 @@
                                     </children>
                                 </VBox>
 
-                                <!-- RIGHT: Ventes feed -->
-                                <VBox styleClass="panel" HBox.hgrow="ALWAYS">
+                                <!-- RIGHT: Ventes -->
+                                <VBox styleClass="panel" HBox.hgrow="ALWAYS" maxHeight="320.0">
                                     <children>
                                         <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
                                             <children>
@@ -53,7 +73,8 @@
                                                 <Label text="Ventes" styleClass="panel-title"/>
                                             </children>
                                         </HBox>
-                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                                                    styleClass="card-scroll">
                                             <content>
                                                 <VBox fx:id="venteFeed" styleClass="feed-list" spacing="0"/>
                                             </content>
@@ -64,9 +85,26 @@
                             </children>
                         </HBox>
 
+                        <!-- Calendar panel — bigger -->
+                        <VBox styleClass="panel"
+                              prefHeight="420.0" minHeight="420.0" maxHeight="420.0">
+                            <children>
+                                <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
+                                    <children>
+                                        <Label text="●" styleClass="feed-dot-vente"/>
+                                        <Label text="Calendrier" styleClass="panel-title"/>
+                                    </children>
+                                </HBox>
+                                <AnchorPane fx:id="calendarHost" VBox.vgrow="ALWAYS"
+                                            prefHeight="375.0" minHeight="375.0"/>
+                            </children>
+                        </VBox>
+
                     </children>
                 </VBox>
-            </children>
-        </HBox>
+
+            </content>
+        </ScrollPane>
+
     </children>
 </AnchorPane>

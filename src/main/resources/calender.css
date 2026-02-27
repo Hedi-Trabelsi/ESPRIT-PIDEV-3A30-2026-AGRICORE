@@ -1,0 +1,392 @@
+/* ═══════════════════════════════════════════════════════
+   calender.css  —  Green & White Calendar (JavaFX)
+   Mirrors the HTML preview exactly.
+   ═══════════════════════════════════════════════════════ */
+
+
+/* ══════════════════════
+   ROOT
+══════════════════════ */
+.root-pane {
+    -fx-background-color: #f5fdf7;
+}
+
+.main-container {
+    -fx-background-color: #f5fdf7;
+}
+
+
+/* ══════════════════════
+   SIDEBAR
+══════════════════════ */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom, #0b3320 0%, #165c34 55%, #1d7a44 100%);
+    -fx-min-width:  150px;
+    -fx-pref-width: 150px;
+    -fx-max-width:  150px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.40), 18, 0.2, 4, 0);
+}
+
+.sidebar-brand {
+    -fx-padding: 18px 12px 14px 12px;
+    -fx-alignment: CENTER;
+}
+
+.brand-icon {
+    -fx-font-size: 26px;
+    -fx-text-fill: #3ecf77;
+}
+
+.brand-title {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.brand-sub {
+    -fx-font-size: 9px;
+    -fx-text-fill: rgba(255,255,255,0.42);
+    -fx-letter-spacing: 1.8px;
+}
+
+.sidebar-divider {
+    -fx-background-color: rgba(255,255,255,0.12);
+    -fx-pref-height: 1px;
+    -fx-min-height:  1px;
+    -fx-max-height:  1px;
+}
+
+.sidebar-card {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 12px 10px;
+    -fx-alignment: CENTER;
+}
+
+.sidebar-today-num {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3ecf77;
+}
+
+.sidebar-today-day {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.sidebar-today-month {
+    -fx-font-size: 9px;
+    -fx-text-fill: rgba(255,255,255,0.50);
+}
+
+.btn-back-sidebar {
+    -fx-background-color: rgba(255,255,255,0.07);
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: rgba(255,255,255,0.60);
+    -fx-font-size: 11px;
+    -fx-padding: 12px 16px;
+    -fx-pref-width: 150px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+.btn-back-sidebar:hover {
+    -fx-background-color: rgba(255,255,255,0.13);
+    -fx-text-fill: #ffffff;
+}
+
+
+/* ══════════════════════
+   CONTENT AREA
+══════════════════════ */
+.content-area {
+    -fx-background-color: #f5fdf7;
+}
+
+
+/* ── TOP BAR ── */
+.topbar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10px 18px;
+    -fx-border-color: transparent transparent #d0eedd transparent;
+    -fx-border-width: 0 0 2px 0;
+    -fx-effect: dropshadow(gaussian, rgba(22,92,52,0.09), 10, 0, 0, 3);
+}
+
+.page-title {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0b3320;
+}
+
+.page-subtitle {
+    -fx-font-size: 10px;
+    -fx-text-fill: #7a9688;
+}
+
+.month-nav {
+    -fx-background-color: #edf9f2;
+    -fx-background-radius: 30px;
+    -fx-border-color: #b5dfc6;
+    -fx-border-radius: 30px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 4px 10px;
+}
+
+.month-label {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #165c34;
+    -fx-min-width: 130px;
+    -fx-alignment: CENTER;
+}
+
+.btn-nav {
+    -fx-background-color: #22a659;
+    -fx-background-radius: 50%;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-min-width:  26px;
+    -fx-min-height: 26px;
+    -fx-max-width:  26px;
+    -fx-max-height: 26px;
+    -fx-pref-width: 26px;
+    -fx-pref-height:26px;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-effect: dropshadow(gaussian, rgba(34,166,89,0.35), 7, 0.1, 0, 2);
+}
+.btn-nav:hover {
+    -fx-background-color: #3ecf77;
+    -fx-effect: dropshadow(gaussian, rgba(62,207,119,0.50), 12, 0.15, 0, 3);
+}
+.btn-nav:pressed {
+    -fx-background-color: #165c34;
+    -fx-scale-x: 0.93;
+    -fx-scale-y: 0.93;
+}
+
+.btn-add {
+    -fx-background-color: linear-gradient(to bottom, #3ecf77, #22a659);
+    -fx-background-radius: 8px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 7px 14px;
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+    -fx-effect: dropshadow(gaussian, rgba(34,166,89,0.40), 9, 0.1, 0, 2);
+}
+.btn-add:hover {
+    -fx-background-color: linear-gradient(to bottom, #52e08b, #2ebd6a);
+}
+.btn-add:pressed {
+    -fx-background-color: linear-gradient(to bottom, #22a659, #165c34);
+}
+
+
+/* ══════════════════════
+   DAY HEADER ROW
+══════════════════════ */
+.day-header-row {
+    -fx-background-color: #ffffff;
+    -fx-border-color: transparent transparent #d0eedd transparent;
+    -fx-border-width: 0 0 1.5px 0;
+    -fx-padding: 0;
+}
+
+.day-header {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7a9688;
+    -fx-letter-spacing: 1px;
+    -fx-alignment: CENTER;
+    -fx-padding: 7px 4px;
+    -fx-border-color: transparent #e8f5ee transparent transparent;
+    -fx-border-width: 0 1px 0 0;
+}
+
+.day-header-weekend {
+    -fx-text-fill: #22a659;
+}
+
+
+/* ══════════════════════
+   CALENDAR GRID
+   Gap colour = the green separator lines between cells
+══════════════════════ */
+.calendar-grid {
+    -fx-background-color: #c8e8d5;
+    -fx-padding: 0;
+}
+
+
+/* ══════════════════════
+   DAY CELLS
+   Controller adds these style classes to each Pane/VBox cell:
+     .day-cell            — normal cell
+     .day-cell-other      — previous/next month
+     .day-cell-weekend    — Saturday / Sunday
+     .day-cell-today      — today
+
+   Controller also sets:
+     GridPane.fillWidth="true"  GridPane.fillHeight="true"
+   on every child so cells stretch.
+══════════════════════ */
+
+.day-cell {
+    -fx-background-color: #ffffff;
+    -fx-padding: 5px 7px 4px 7px;
+    -fx-cursor: hand;
+}
+.day-cell:hover {
+    -fx-background-color: #f0fbf4;
+}
+
+.day-cell-other {
+    -fx-background-color: #f7fdf9;
+}
+.day-cell-other:hover {
+    -fx-background-color: #edf9f2;
+}
+
+.day-cell-weekend {
+    -fx-background-color: #fafffe;
+}
+.day-cell-weekend:hover {
+    -fx-background-color: #edfaf4;
+}
+
+.day-cell-today {
+    -fx-background-color: #eaf8f0;
+    -fx-border-color: #22a659;
+    -fx-border-width: 0 0 0 3px;
+    -fx-effect: dropshadow(gaussian, rgba(62,207,119,0.18), 8, 0, 0, 1);
+}
+.day-cell-today:hover {
+    -fx-background-color: #d6f5e6;
+}
+
+
+/* ── Day number labels ── */
+.cell-day-num {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3d28;
+}
+
+.cell-day-num-other {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b0c8ba;
+}
+
+.cell-day-num-weekend {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1d7a44;
+}
+
+/* TODAY — green circle badge */
+.cell-day-num-today {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #22a659;
+    -fx-background-radius: 50%;
+    -fx-min-width:  22px;
+    -fx-min-height: 22px;
+    -fx-max-width:  22px;
+    -fx-max-height: 22px;
+    -fx-pref-width: 22px;
+    -fx-pref-height:22px;
+    -fx-alignment: CENTER;
+    -fx-effect: dropshadow(gaussian, rgba(34,166,89,0.45), 7, 0.1, 0, 2);
+}
+
+
+/* ── Event pills ── */
+.event-pill {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 1px 5px;
+    -fx-background-radius: 3px;
+    -fx-min-height: 14px;
+    -fx-max-height: 14px;
+    -fx-text-overrun: ELLIPSIS;
+}
+
+/* Green tint — revenue / income */
+.event-pill-green {
+    -fx-background-color: #d0f0de;
+    -fx-text-fill: #0b3320;
+}
+
+/* Dark green — important */
+.event-pill-dark {
+    -fx-background-color: #165c34;
+    -fx-text-fill: #ffffff;
+}
+
+/* Outlined — neutral */
+.event-pill-outline {
+    -fx-background-color: #f0fbf4;
+    -fx-text-fill: #1d7a44;
+    -fx-border-color: #b5dfc6;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1px;
+}
+
+/* Solid — primary action */
+.event-pill-accent {
+    -fx-background-color: #22a659;
+    -fx-text-fill: #ffffff;
+}
+
+/* Red tint — expense / warning */
+.event-pill-red {
+    -fx-background-color: #fde8e8;
+    -fx-text-fill: #7a1a1a;
+}
+
+/* "+n autres" overflow label */
+.cell-more {
+    -fx-font-size: 9px;
+    -fx-text-fill: #7a9688;
+}
+
+
+/* ══════════════════════
+   SCROLLBAR (hidden)
+══════════════════════ */
+.scroll-bar:vertical {
+    -fx-pref-width: 6px;
+    -fx-background-color: transparent;
+}
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #b5dfc6;
+    -fx-background-radius: 3px;
+}
+.scroll-bar:vertical .track,
+.scroll-bar:vertical .track-background {
+    -fx-background-color: transparent;
+}
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}

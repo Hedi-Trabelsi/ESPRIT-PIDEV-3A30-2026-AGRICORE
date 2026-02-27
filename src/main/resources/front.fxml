@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="600.0" prefWidth="216.0" spacing="20.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #7ca76f;">
+<VBox prefHeight="600.0" prefWidth="216.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #7ca76f;">
     <children>
         <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
             <children>
