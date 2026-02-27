@@ -10,6 +10,23 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.Base64;
+import javafx.scene.image.Image;
+
+
+
+import java.net.HttpURLConnection; // Pour configurer le User-Agent
+import java.net.URL;               // Pour créer l'objet URL
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -17,13 +34,35 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.web.WebView;
 import models.ActionLog;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import models.EvennementAgricole;
 import models.Participant;
 import netscape.javascript.JSObject;
 import services.EvennementService;
 import services.LogService;
 import services.ParticipantService;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import javafx.scene.Cursor;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,6 +70,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 public class DashboardController {
 
@@ -55,7 +98,10 @@ public class DashboardController {
         showGestionEvenements();
     }
 
-
+    private Image base64ToImage(String base64) {
+        byte[] imageBytes = Base64.getDecoder().decode(base64);
+        return new Image(new java.io.ByteArrayInputStream(imageBytes));
+    }
 
     private void logAction(String type, int targetId, String desc) {
         try {
@@ -81,8 +127,9 @@ public class DashboardController {
     @FXML
     private void showGestionEvenements() {
         updateSelectedButton(btnGestionEvenements);
-
         resetMainView();
+
+        // --- ACTION BAR ---
         HBox actionBar = new HBox(15);
         actionBar.setAlignment(Pos.CENTER_LEFT);
         actionBar.setPadding(new Insets(20, 40, 10, 40));
@@ -103,6 +150,7 @@ public class DashboardController {
 
         actionBar.getChildren().addAll(header, spacer, btnLogs, btnAdd);
 
+        // --- SEARCH BAR ---
         HBox searchContainer = new HBox();
         searchContainer.setAlignment(Pos.CENTER);
         searchContainer.setPadding(new Insets(0, 40, 10, 40));
@@ -113,6 +161,7 @@ public class DashboardController {
         searchField.setStyle("-fx-background-radius: 15; -fx-padding: 10 20; -fx-border-color: #ddd; -fx-border-radius: 15; -fx-font-size: 14px;");
         searchContainer.getChildren().add(searchField);
 
+        // --- FILTER BAR ---
         HBox filterBar = new HBox(15);
         filterBar.setAlignment(Pos.CENTER);
         filterBar.setPadding(new Insets(10, 40, 20, 40));
@@ -123,36 +172,66 @@ public class DashboardController {
         filterBar.getChildren().addAll(btnAll, btnOngoing, btnComing, btnHistory);
 
         mainContentVBox.getChildren().addAll(actionBar, searchContainer, filterBar);
+
+        // Conteneur pour les cartes
         FlowPane flowPane = new FlowPane(20, 25);
         flowPane.setAlignment(Pos.CENTER);
         flowPane.setPadding(new Insets(10, 0, 30, 0));
 
         try {
+            // CHARGEMENT DEPUIS LA DB (Vérifie que read() utilise bien le nouveau constructeur)
             List<EvennementAgricole> allEvents = evennementService.read();
+
             Runnable refreshList = () -> {
                 flowPane.getChildren().clear();
                 String searchText = searchField.getText().toLowerCase();
+                LocalDateTime now = LocalDateTime.now();
                 LocalDate today = LocalDate.now();
+
                 allEvents.stream()
                         .filter(ev -> ev.getTitre().toLowerCase().contains(searchText) || ev.getLieu().toLowerCase().contains(searchText))
                         .filter(ev -> {
+                            // Sécurité pour les dates nulles
+                            if (ev.getDateDebut() == null || ev.getDateFin() == null) return false;
+
                             LocalDate start = ev.getDateDebut().toLocalDate();
                             LocalDate end = ev.getDateFin().toLocalDate();
+
                             if (currentFilter.equals("HISTORIQUE")) return end.isBefore(today);
                             if (currentFilter.equals("EN_COURS")) return (start.isBefore(today) || start.isEqual(today)) && (end.isAfter(today) || end.isEqual(today));
                             if (currentFilter.equals("COMING")) return start.isAfter(today);
                             return true;
                         })
+                        .sorted((ev1, ev2) -> {
+                            boolean isPast1 = ev1.getDateFin().isBefore(now);
+                            boolean isPast2 = ev2.getDateFin().isBefore(now);
+                            if (isPast1 != isPast2) return isPast1 ? 1 : -1;
+                            return ev1.getDateDebut().compareTo(ev2.getDateDebut());
+                        })
                         .forEach(ev -> flowPane.getChildren().add(createEventCard(ev)));
             };
+
+            // Listeners
             searchField.textProperty().addListener((obs, old, newVal) -> refreshList.run());
             btnAll.setOnAction(e -> { currentFilter = "TOUT"; refreshList.run(); updateTabStyles(filterBar); });
             btnOngoing.setOnAction(e -> { currentFilter = "EN_COURS"; refreshList.run(); updateTabStyles(filterBar); });
             btnComing.setOnAction(e -> { currentFilter = "COMING"; refreshList.run(); updateTabStyles(filterBar); });
             btnHistory.setOnAction(e -> { currentFilter = "HISTORIQUE"; refreshList.run(); updateTabStyles(filterBar); });
+
             refreshList.run();
-        } catch (SQLException e) { e.printStackTrace(); }
-        mainContentVBox.getChildren().add(flowPane);
+
+            // On ajoute le flowPane dans un ScrollPane pour pouvoir scroller s'il y a beaucoup d'événements
+            ScrollPane scroll = new ScrollPane(flowPane);
+            scroll.setFitToWidth(true);
+            scroll.setStyle("-fx-background-color:transparent; -fx-background:transparent;");
+            mainContentVBox.getChildren().add(scroll);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Optionnel : Afficher un message si la table est vide ou erreur SQL
+            Label errorLabel = new Label("Erreur de chargement ou base de données vide.");
+            flowPane.getChildren().add(errorLabel);
+        }
     }
 
     private Button createFilterButton(String text, String filterValue) {
@@ -263,10 +342,14 @@ public class DashboardController {
         return card;
     }
 
-    // ===================== 2. FORM VIEW WITH VALIDATION =====================
     private void renderForm(EvennementAgricole targetEv) {
         resetMainView();
         boolean isEdit = (targetEv != null);
+
+        VBox rootContainer = new VBox();
+        rootContainer.setAlignment(Pos.CENTER);
+        rootContainer.setPadding(new Insets(20));
+        rootContainer.setSpacing(20);
 
         VBox formCard = new VBox(15);
         formCard.setPadding(new Insets(30));
@@ -274,40 +357,79 @@ public class DashboardController {
         formCard.setStyle("-fx-background-color: white; -fx-background-radius: 20;");
         formCard.setEffect(new DropShadow(20, Color.rgb(0,0,0,0.15)));
 
+        // --- HEADER ---
         Label head = new Label(isEdit ? "Mise à jour" : "Nouvel Événement");
-        head.setFont(Font.font("System", FontWeight.BOLD, 24));
+        head.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
+        head.setTextFill(Color.web("#2d5a27"));
 
+        // --- TITRE ---
         VBox tBox = createValidatedField("Titre", isEdit ? targetEv.getTitre() : "", "TEXT");
+        TextField titreField = (TextField) tBox.getChildren().get(1);
+
+        // --- LOCALISATION ---
         VBox lBox = createValidatedField("Lieu (Cliquez sur la terre)", isEdit ? targetEv.getLieu() : "", "TEXT");
         TextField lieuField = (TextField) lBox.getChildren().get(1);
 
-        HBox mapCenterer = new HBox(); mapCenterer.setAlignment(Pos.CENTER);
-        StackPane mapStack = new StackPane(); mapStack.setPrefSize(200, 200); mapStack.setMaxSize(200, 200);
-        WebView mapWebView = new WebView(); mapWebView.setPrefSize(200, 200); mapWebView.setClip(new Circle(100, 100, 100));
+        HBox mapCenterer = new HBox();
+        mapCenterer.setAlignment(Pos.CENTER);
+        StackPane mapStack = new StackPane();
+        mapStack.setPrefSize(200, 200); mapStack.setMaxSize(200, 200);
+        WebView mapWebView = new WebView();
+        mapWebView.setPrefSize(200, 200);
+        mapWebView.setClip(new Circle(100, 100, 100));
         loadCircularSyncedMap(mapWebView, lieuField);
-        mapStack.getChildren().add(mapWebView); mapCenterer.getChildren().add(mapStack);
+        mapStack.getChildren().add(mapWebView);
+        mapCenterer.getChildren().add(mapStack);
 
-        VBox descBox = createValidatedField("Description", isEdit ? targetEv.getDescription() : "", "AREA");
+        // --- DESCRIPTION SECTION (FIXED) ---
+        VBox descContainer = new VBox(8); // Nouveau conteneur propre
 
-        // --- DATE ET HEURE SECTION (FIXED FOR AM/PM) ---
+        // 1. Récupération des éléments originaux
+        VBox tempDescBox = createValidatedField("Description", isEdit ? targetEv.getDescription() : "", "AREA");
+        Label descLabel = (Label) tempDescBox.getChildren().get(0);
+        TextArea descArea = (TextArea) tempDescBox.getChildren().get(1);
+        descArea.setPrefRowCount(5);
+
+        // 2. Création du bouton IA
+        Button btnAiDesc = new Button("Rédiger avec IA ✨");
+        btnAiDesc.setCursor(Cursor.HAND);
+        btnAiDesc.setStyle("-fx-background-color: linear-gradient(to right, #a5d6a7, #66bb6a); -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 5 12; -fx-font-weight: bold; -fx-font-size: 11;");
+        btnAiDesc.setOnAction(a -> generateDescriptionAI(titreField, descArea, btnAiDesc));
+
+        // 3. Assemblage du header (Label + Bouton)
+        HBox descHeader = new HBox();
+        descHeader.setAlignment(Pos.CENTER_LEFT);
+        Region spacerIA = new Region();
+        HBox.setHgrow(spacerIA, Priority.ALWAYS);
+        descHeader.getChildren().addAll(descLabel, spacerIA, btnAiDesc);
+
+        // 4. On ajoute tout dans le descContainer final
+        descContainer.getChildren().addAll(descHeader, descArea);
+
+        // --- DATE ET HEURE SECTION ---
         HBox startRow = createDateTimePickerBox("Début", isEdit ? targetEv.getDateDebut() : LocalDateTime.now().withMinute(0));
         HBox endRow = createDateTimePickerBox("Fin", isEdit ? targetEv.getDateFin() : LocalDateTime.now().plusDays(1).withMinute(0));
 
+        // --- CAPACITÉ & FRAIS ---
         HBox numRow = new HBox(15);
         VBox capBox = createValidatedField("Capacité", isEdit ? String.valueOf(targetEv.getCapaciteMax()) : "", "INT");
         VBox fraisBox = createValidatedField("Frais (DT)", isEdit ? String.valueOf(targetEv.getFraisInscription()) : "", "NUMBER");
-        HBox.setHgrow(capBox, Priority.ALWAYS); HBox.setHgrow(fraisBox, Priority.ALWAYS);
+        HBox.setHgrow(capBox, Priority.ALWAYS);
+        HBox.setHgrow(fraisBox, Priority.ALWAYS);
         numRow.getChildren().addAll(capBox, fraisBox);
 
+        // --- BOUTONS D'ACTION ---
         Button btnSave = new Button(isEdit ? "Enregistrer les modifications" : "Créer l'Événement");
         btnSave.setMaxWidth(Double.MAX_VALUE);
-        btnSave.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 15; -fx-background-radius: 12; -fx-font-weight: bold; -fx-cursor: hand;");
+        btnSave.setCursor(Cursor.HAND);
+        btnSave.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 15; -fx-background-radius: 12; -fx-font-weight: bold;");
+
         btnSave.setOnAction(e -> {
             try {
                 EvennementAgricole ev = isEdit ? targetEv : new EvennementAgricole();
-                ev.setTitre(((TextField)tBox.getChildren().get(1)).getText());
+                ev.setTitre(titreField.getText());
                 ev.setLieu(lieuField.getText());
-                ev.setDescription(((TextArea)descBox.getChildren().get(1)).getText());
+                ev.setDescription(descArea.getText()); // On lit bien le TextArea ici
 
                 ev.setDateDebut(getDateTimeFromRow(startRow));
                 ev.setDateFin(getDateTimeFromRow(endRow));
@@ -318,21 +440,106 @@ public class DashboardController {
 
                 if (isEdit) {
                     evennementService.update(ev);
-                    logAction("UPDATE", ev.getIdEvennement(), "Modification de: " + ev.getTitre());
                 } else {
                     evennementService.create(ev);
-                    logAction("CREATE", 0, "Nouvel événement créé: " + ev.getTitre());
                 }
                 showGestionEvenements();
-            } catch (Exception ex) { showAlert("Erreur", "Vérifiez vos données."); }
+            } catch (Exception ex) {
+                showAlert("Erreur", "Vérifiez vos données numériques.");
+            }
         });
 
         Button btnBack = new Button("Annuler");
-        btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-cursor: hand;");
+        btnBack.setCursor(Cursor.HAND);
+        btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-weight: bold;");
         btnBack.setOnAction(a -> showGestionEvenements());
 
-        formCard.getChildren().addAll(head, tBox, lBox, mapCenterer, descBox, startRow, endRow, numRow, btnSave, btnBack);
-        mainContentVBox.getChildren().add(formCard);
+        // --- ASSEMBLAGE FINAL ---
+        formCard.getChildren().addAll(head, tBox, lBox, mapCenterer, descContainer, startRow, endRow, numRow, btnSave, btnBack);
+
+        rootContainer.getChildren().add(formCard);
+
+        ScrollPane scroll = new ScrollPane(rootContainer);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color:transparent; -fx-background:transparent; -fx-border-color:transparent;");
+
+        mainContentVBox.getChildren().clear();
+        mainContentVBox.getChildren().add(scroll);
+    }
+
+
+
+
+
+
+
+    // --- LOGIQUE IA : GÉNÉRATION DE TEXTE (MISTRAL/GPT) ---
+    private String callTextAI(String titre) {
+        try {
+            String prompt = "Rédige une courte description accrocheuse pour un événement agricole : " + titre;
+            String urlStr = "https://text.pollinations.ai/" + java.net.URLEncoder.encode(prompt, "UTF-8");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(urlStr).openConnection();
+            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) response.append(line);
+            in.close();
+            return response.toString().trim();
+        } catch (Exception e) {
+            return "Rejoignez-nous pour cet événement exceptionnel sur " + titre;
+        }
+    }
+    private void generateDescriptionAI(TextField titreField, TextArea descArea, Button btnAiDesc) {
+        String titre = titreField.getText().trim();
+        if (titre.length() < 3) {
+            showAlert("IA", "Saisissez un titre plus long.");
+            return;
+        }
+
+        btnAiDesc.setText("L'IA réfléchit... ✨");
+        btnAiDesc.setDisable(true);
+
+        new Thread(() -> {
+            try {
+                String description = generateDescription(titre); // <-- ta fonction ici
+                Platform.runLater(() -> {
+                    descArea.setText(description);
+                    btnAiDesc.setText("Rédiger avec IA ✨");
+                    btnAiDesc.setDisable(false);
+                });
+            } catch (Exception ex) {
+                Platform.runLater(() -> {
+                    showAlert("Erreur IA", "Impossible de générer la description.");
+                    btnAiDesc.setText("Rédiger avec IA ✨");
+                    btnAiDesc.setDisable(false);
+                });
+            }
+        }).start();
+    }
+
+
+    private String generateDescription(String titre) {
+        try {
+            // On utilise un modèle léger et gratuit (Mistral ou GPT-2 via Pollinations)
+            String prompt = "Rédige une description professionnelle et attractive en français pour un événement agricole nommé : " + titre;
+            String encodedPrompt = java.net.URLEncoder.encode(prompt, "UTF-8");
+
+            // URL de l'API de génération de texte (sans clé API nécessaire)
+            java.net.URL url = new java.net.URL("https://text.pollinations.ai/" + encodedPrompt);
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            java.io.BufferedReader rd = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) { result.append(line); }
+            rd.close();
+
+            return result.toString().trim();
+        } catch (Exception e) {
+            // Fallback si l'IA est hors ligne
+            return "Rejoignez-nous pour " + titre + ", un événement incontournable pour les passionnés d'agriculture.";
+        }
     }
 
     private HBox createDateTimePickerBox(String label, LocalDateTime current) {
@@ -557,44 +764,116 @@ public class DashboardController {
     private void showParticipantsForEvent(EvennementAgricole ev) {
         resetMainView();
         mainContentVBox.setPadding(new Insets(30));
-        mainContentVBox.setStyle("-fx-background-color: #f4f7f4;");
+        mainContentVBox.setStyle("-fx-background-color: transparent;");
+
+        // --- 1. HEADER ---
+        VBox topSection = new VBox(20);
+        topSection.setPadding(new Insets(0, 0, 20, 0));
+        topSection.setAlignment(Pos.CENTER);
+
+        HBox navBar = new HBox(15);
+        navBar.setAlignment(Pos.CENTER_LEFT);
 
         Button btnBack = new Button("←");
-        btnBack.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-weight: bold; -fx-cursor: hand;");
+        btnBack.setCursor(Cursor.HAND);
+        btnBack.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-weight: bold; -fx-font-size: 16px;");
         btnBack.setOnAction(a -> showGestionEvenements());
 
-        Label t = new Label("Participants - " + ev.getTitre());
-        t.setFont(Font.font("System", FontWeight.BOLD, 24));
-        t.setStyle("-fx-text-fill: #1a3c1a; -fx-padding: 10 0;");
+        Label titleLabel = new Label("Participants - " + ev.getTitre());
+        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 24));
+        titleLabel.setStyle("-fx-text-fill: #1a3c1a;");
+        navBar.getChildren().addAll(btnBack, titleLabel);
 
+        TextField searchField = new TextField();
+        searchField.setPromptText("🔍 Rechercher par code ou nom...");
+        searchField.setPrefWidth(450);
+        searchField.setStyle("-fx-background-radius: 25; -fx-padding: 12 20; -fx-border-color: #2d5a27; -fx-background-color: white; -fx-text-fill: #333;");
+
+        topSection.getChildren().addAll(navBar, searchField);
+
+        // --- 2. GRID ---
         FlowPane pFlow = new FlowPane(25, 25);
-        pFlow.setPadding(new Insets(30)); pFlow.setAlignment(Pos.CENTER);
+        pFlow.setPadding(new Insets(20));
+        pFlow.setAlignment(Pos.CENTER);
+
+        ScrollPane scroll = new ScrollPane(pFlow);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
 
         try {
-            List<Participant> list = participantService.read().stream().filter(p -> p.getIdEvennement() == ev.getIdEvennement()).collect(Collectors.toList());
-            for (Participant p : list) {
-                VBox bubble = new VBox(12); bubble.setAlignment(Pos.CENTER); bubble.setPadding(new Insets(20)); bubble.setPrefSize(180, 220);
-                bubble.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 8);");
-                bubble.setOnMouseEntered(e -> bubble.setScaleX(1.05)); bubble.setOnMouseExited(e -> bubble.setScaleX(1.0));
+            List<Participant> allParticipants = participantService.read().stream()
+                    .filter(p -> p.getIdEvennement() == ev.getIdEvennement())
+                    .collect(Collectors.toList());
 
-                String iconType = (p.getNbrPlaces() > 1) ? "👥" : "👤";
-                Label avatar = new Label(iconType); avatar.setFont(Font.font(45)); avatar.setStyle("-fx-text-fill: #2d5a27;");
+            Runnable renderCards = () -> {
+                pFlow.getChildren().clear();
+                String filter = searchField.getText().trim().toLowerCase();
 
-                Label name = new Label(participantService.getUserRealName(p.getIdUtilisateur()));
-                name.setFont(Font.font("System", FontWeight.BOLD, 15)); name.setStyle("-fx-text-fill: #000000;"); name.setWrapText(true); name.setAlignment(Pos.CENTER);
+                for (Participant p : allParticipants) {
+                    // Search by EntryCode OR Name
+                    String name = p.getNomParticipant() != null ? p.getNomParticipant() : "";
+                    if (!filter.isEmpty() &&
+                            !p.getEntryCode().toLowerCase().contains(filter) &&
+                            !name.toLowerCase().contains(filter)) continue;
 
-                Label places = new Label(p.getNbrPlaces() + (p.getNbrPlaces() > 1 ? " Places" : " Place"));
-                places.setStyle("-fx-background-color: #e8f5e9; -fx-text-fill: #2d5a27; -fx-font-size: 11; -fx-font-weight: bold; -fx-padding: 4 12; -fx-background-radius: 15;");
+                    // --- BUBBLE ---
+                    VBox bubble = new VBox(12);
+                    bubble.setAlignment(Pos.CENTER);
+                    bubble.setPadding(new Insets(20));
+                    bubble.setPrefSize(200, 280);
+                    bubble.setStyle("-fx-background-color: white; -fx-background-radius: 25;");
+                    bubble.setEffect(new DropShadow(15, Color.rgb(0,0,0,0.1)));
 
-                bubble.getChildren().addAll(avatar, name, places);
-                pFlow.getChildren().add(bubble);
-            }
-            if(list.isEmpty()){ Label emptyLabel = new Label("Aucun inscrit."); emptyLabel.setStyle("-fx-text-fill: #000000;"); pFlow.getChildren().add(emptyLabel); }
-        } catch (Exception e) { e.printStackTrace(); }
+                    // Icon
+                    StackPane iconStack = new StackPane();
+                    iconStack.getChildren().addAll(new Circle(32, Color.web("#e8f5e9")), new Label("👤"));
+                    ((Label)iconStack.getChildren().get(1)).setStyle("-fx-font-size: 30px;");
 
-        mainContentVBox.getChildren().addAll(btnBack, t, pFlow);
+                    // NAME DISPLAY
+                    Label nameLabel = new Label(name.isEmpty() ? "Sans Nom" : name);
+                    nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+                    nameLabel.setStyle("-fx-text-fill: #1a3c1a;"); // DARK TEXT
+                    nameLabel.setWrapText(true);
+                    nameLabel.setAlignment(Pos.CENTER);
+
+                    // Info
+                    Label placesLabel = new Label(p.getNbrPlaces() + (p.getNbrPlaces() > 1 ? " Places" : " Place"));
+                    placesLabel.setStyle("-fx-background-color: #f1f1f1; -fx-text-fill: #555; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 12; -fx-background-radius: 15;");
+
+                    Label codeBadge = new Label("CODE: " + p.getEntryCode());
+                    codeBadge.setStyle("-fx-text-fill: #27ae60; -fx-font-size: 10px; -fx-font-weight: bold;");
+
+                    // Confirm Button
+                    boolean isConfirmed = "Confirmee".equalsIgnoreCase(p.getStatutParticipation());
+                    Button btnConfirm = new Button(isConfirmed ? "Confirmé ✅" : "Confirmer");
+                    btnConfirm.setDisable(isConfirmed);
+                    btnConfirm.setPrefWidth(150);
+                    btnConfirm.setStyle(isConfirmed ?
+                            "-fx-background-color: #a5d6a7; -fx-text-fill: white; -fx-background-radius: 20;" :
+                            "-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold; -fx-cursor: hand;");
+
+                    btnConfirm.setOnAction(e -> {
+                        try {
+                            p.setStatutParticipation("Confirmee");
+                            participantService.update(p);
+                            logAction("CONFIRMATION", p.getIdParticipant(), "Validé: " + p.getNomParticipant());
+                            showParticipantsForEvent(ev);
+                        } catch (SQLException ex) { ex.printStackTrace(); }
+                    });
+
+                    bubble.getChildren().addAll(iconStack, nameLabel, placesLabel, codeBadge, btnConfirm);
+                    pFlow.getChildren().add(bubble);
+                }
+            };
+
+            searchField.textProperty().addListener((obs, old, newVal) -> renderCards.run());
+            renderCards.run();
+
+        } catch (SQLException e) { e.printStackTrace(); }
+
+        mainContentVBox.getChildren().addAll(topSection, scroll);
     }
-
     // ===================== 5. AUDIT LOGS VIEW =====================
     private void showAuditLogs() {
         resetMainView();
