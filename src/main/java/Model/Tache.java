@@ -2,32 +2,35 @@ package Model;
 
 public class Tache {
     private int id_tache;
-    private String nomTache; // Nouveau champ
+    private String nomTache;
     private String date_prevue;
-    private String desciption; // Gardé tel quel selon ton code
+    private String desciption;
     private int cout_estimee;
     private int id_maintenace;
+    private int evaluation; // Nouveau champ : 0 (neutre), 1 (like), -1 (dislike)
 
     public Tache() {
     }
 
-    // Constructeur complet (pour la lecture depuis la DB)
-    public Tache(int id_tache, String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace) {
+    // Constructeur complet (pour la lecture depuis la DB avec évaluation)
+    public Tache(int id_tache, String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace, int evaluation) {
         this.id_tache = id_tache;
         this.nomTache = nomTache;
         this.date_prevue = date_prevue;
         this.desciption = desciption;
         this.cout_estimee = cout_estimee;
         this.id_maintenace = id_maintenace;
+        this.evaluation = evaluation;
     }
 
-    // Constructeur sans ID (pour l'ajout)
+    // Constructeur sans ID (pour l'ajout initial, l'évaluation sera à 0 par défaut en DB)
     public Tache(String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace) {
         this.nomTache = nomTache;
         this.date_prevue = date_prevue;
         this.desciption = desciption;
         this.cout_estimee = cout_estimee;
         this.id_maintenace = id_maintenace;
+        this.evaluation = 0;
     }
 
     // --- GETTERS & SETTERS ---
@@ -80,14 +83,21 @@ public class Tache {
         this.id_maintenace = id_maintenace;
     }
 
+    public int getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(int evaluation) {
+        this.evaluation = evaluation;
+    }
+
     @Override
     public String toString() {
         return "Tache{" +
                 "id_tache=" + id_tache +
                 ", nomTache='" + nomTache + '\'' +
                 ", date_prevue='" + date_prevue + '\'' +
-                ", desciption='" + desciption + '\'' +
-                ", cout_estimee=" + cout_estimee +
+                ", evaluation=" + evaluation +
                 ", id_maintenace=" + id_maintenace +
                 '}';
     }

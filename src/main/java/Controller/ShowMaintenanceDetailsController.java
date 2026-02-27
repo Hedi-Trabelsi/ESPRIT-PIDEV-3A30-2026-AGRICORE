@@ -88,22 +88,18 @@ public class ShowMaintenanceDetailsController {
         }
     }
     private VBox createMiniTacheCard(Tache t) {
+        // 1. Création de la carte principale
         VBox card = new VBox();
-        card.setStyle("-fx-background-color: white; " +
-                "-fx-padding: 15; " +
-                "-fx-background-radius: 20; " +
-                "-fx-spacing: 10; " +
+        card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 20; -fx-spacing: 10; " +
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 5); " +
-                "-fx-border-color: #f1f5f9; -fx-border-radius: 20;");
-
+                "-fx-border-color: #f1f5f9; -fx-border-width: 2; -fx-border-radius: 20;");
         card.setMinWidth(400);
         card.setMaxWidth(800);
         card.setCursor(javafx.scene.Cursor.HAND);
 
-        // --- HEADER (Nom + Boutons) ---
+        // 2. HEADER (Nom + Actions)
         HBox header = new HBox();
         header.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
         Label nomTache = new Label(t.getNomTache() != null ? t.getNomTache().toUpperCase() : "TÂCHE SANS NOM");
         nomTache.setStyle("-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #1e293b;");
 
@@ -114,51 +110,92 @@ public class ShowMaintenanceDetailsController {
         editIcon.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 18px; -fx-cursor: hand; -fx-padding: 0 10 0 0;");
         Label deleteIcon = new Label("🗑");
         deleteIcon.setStyle("-fx-text-fill: #fca5a5; -fx-font-size: 18px; -fx-cursor: hand;");
-
         header.getChildren().addAll(nomTache, spacer, editIcon, deleteIcon);
 
-        // --- LIGNE INFOS (Date + Budget) ---
+        // 3. LIGNE INFOS (Date + Budget)
         HBox infoRow = new HBox();
         infoRow.setSpacing(15);
         infoRow.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
         Label dateTache = new Label("📅 " + t.getDate_prevue());
         dateTache.setStyle("-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-weight: bold;");
-
         Label coutTache = new Label(t.getCout_estimee() + " DT");
-        coutTache.setStyle("-fx-background-color: #f0fdf4; -fx-text-fill: #166534; " +
-                "-fx-padding: 2 8; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 11px;");
-
+        coutTache.setStyle("-fx-background-color: #f0fdf4; -fx-text-fill: #2e7d32; -fx-padding: 2 8; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 11px;");
         infoRow.getChildren().addAll(dateTache, coutTache);
 
-        // --- DESCRIPTION (Cachée par défaut) ---
+        // 4. DESCRIPTION (Cachée par défaut)
         Label descLabel = new Label(t.getDesciption());
         descLabel.setWrapText(true);
         descLabel.setStyle("-fx-text-fill: #475569; -fx-font-size: 13px; -fx-padding: 10 5 5 5; -fx-border-color: #f1f5f9; -fx-border-width: 1 0 0 0;");
-
-        // Astuce pour cacher et ne pas prendre de place
         descLabel.setVisible(false);
         descLabel.setManaged(false);
 
-        // --- LOGIQUE DE CLIC POUR DÉPLIER ---
+        // 5. VOTE BAR (Uniquement si Maintenance résolue)
+        HBox voteBar = new HBox(15);
+        voteBar.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+        voteBar.setStyle("-fx-padding: 5 0 0 0;");
+
+        if ("Resolu".equalsIgnoreCase(maintenance.getStatut())) {
+            Label labelEval = new Label("Évaluer :");
+            labelEval.setStyle("-fx-text-fill: #64748b; -fx-font-size: 12px;");
+
+            Label likeBtn = new Label("👍");
+            Label dislikeBtn = new Label("👎");
+
+            // Styles
+            String styleNeutre = "-fx-cursor: hand; -fx-font-size: 18px; -fx-padding: 5; -fx-text-fill: #94a3b8; -fx-background-color: transparent;";
+            String styleLikeActive = "-fx-background-color: #dcfce7; -fx-background-radius: 50; -fx-font-size: 18px; -fx-padding: 5; -fx-text-fill: #2e7d32; -fx-cursor: hand;";
+            String styleDislikeActive = "-fx-background-color: #fee2e2; -fx-background-radius: 50; -fx-font-size: 18px; -fx-padding: 5; -fx-text-fill: #e11d48; -fx-cursor: hand;";
+
+            // Initialisation selon DB
+            likeBtn.setStyle(t.getEvaluation() == 1 ? styleLikeActive : styleNeutre);
+            dislikeBtn.setStyle(t.getEvaluation() == -1 ? styleDislikeActive : styleNeutre);
+
+            // Logique Toggle Like
+            likeBtn.setOnMouseClicked(e -> {
+                e.consume();
+                try {
+                    int nouveauVote = (t.getEvaluation() == 1) ? 0 : 1;
+                    serviceTache.voterTache(t.getId_tache(), nouveauVote);
+                    t.setEvaluation(nouveauVote);
+                    likeBtn.setStyle(nouveauVote == 1 ? styleLikeActive : styleNeutre);
+                    dislikeBtn.setStyle(styleNeutre);
+                } catch (SQLException ex) { ex.printStackTrace(); }
+            });
+
+            // Logique Toggle Dislike
+            dislikeBtn.setOnMouseClicked(e -> {
+                e.consume();
+                try {
+                    int nouveauVote = (t.getEvaluation() == -1) ? 0 : -1;
+                    serviceTache.voterTache(t.getId_tache(), nouveauVote);
+                    t.setEvaluation(nouveauVote);
+                    dislikeBtn.setStyle(nouveauVote == -1 ? styleDislikeActive : styleNeutre);
+                    likeBtn.setStyle(styleNeutre);
+                } catch (SQLException ex) { ex.printStackTrace(); }
+            });
+
+            voteBar.getChildren().addAll(labelEval, likeBtn, dislikeBtn);
+        }
+
+        // 6. ASSEMBLAGE
+        card.getChildren().addAll(header, infoRow, descLabel);
+        if ("Resolu".equalsIgnoreCase(maintenance.getStatut())) {
+            card.getChildren().add(voteBar);
+        }
+
+        // 7. EVENTS
         card.setOnMouseClicked(event -> {
-            // On vérifie qu'on ne clique pas sur les boutons d'édition/suppression
             if (!(event.getTarget() instanceof Label && ((Label)event.getTarget()).getCursor() == javafx.scene.Cursor.HAND)) {
                 boolean isVisible = descLabel.isVisible();
                 descLabel.setVisible(!isVisible);
                 descLabel.setManaged(!isVisible);
-
-                if (!isVisible) {
-                    card.setStyle(card.getStyle() + "-fx-border-color: #7ca76f;"); // Bordure verte quand c'est ouvert
-                } else {
-                    card.setStyle(card.getStyle().replace("-fx-border-color: #7ca76f;", "-fx-border-color: #f1f5f9;"));
-                }
+                if (!isVisible) card.setStyle(card.getStyle() + "-fx-border-color: #2e7d32;");
+                else card.setStyle(card.getStyle().replace("-fx-border-color: #2e7d32;", "-fx-border-color: #f1f5f9;"));
             }
         });
 
-        // --- LOGIQUE ACTIONS ---
         editIcon.setOnMouseClicked(e -> {
-            e.consume(); // Empêche de déclencher le clic de la carte
+            e.consume();
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateTache.fxml"));
                 Parent root = loader.load();
@@ -169,22 +206,15 @@ public class ShowMaintenanceDetailsController {
         });
 
         deleteIcon.setOnMouseClicked(e -> {
-            e.consume(); // Empêche de déclencher le clic de la carte
+            e.consume();
             try {
                 serviceTache.supprimer(t.getId_tache());
                 loadTachesAssociees();
             } catch (SQLException ex) { ex.printStackTrace(); }
         });
 
-        card.getChildren().addAll(header, infoRow, descLabel);
-
-        // --- EFFETS DE SURVOL ---
-        card.setOnMouseEntered(e -> {
-            if (!descLabel.isVisible()) card.setStyle(card.getStyle() + "-fx-background-color: #f8fafc;");
-        });
-        card.setOnMouseExited(e -> {
-            card.setStyle(card.getStyle().replace("-fx-background-color: #f8fafc;", "-fx-background-color: white;"));
-        });
+        card.setOnMouseEntered(e -> { if (!descLabel.isVisible()) card.setStyle(card.getStyle() + "-fx-background-color: #f8fafc;"); });
+        card.setOnMouseExited(e -> { card.setStyle(card.getStyle().replace("-fx-background-color: #f8fafc;", "-fx-background-color: white;")); });
 
         return card;
     }
