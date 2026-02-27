@@ -18,25 +18,40 @@ import java.util.List;
 
 public class FinanceTablesController {
 
-    @FXML private Label titleLabel;
-    @FXML private VBox depenseFeed;
-    @FXML private VBox venteFeed;
+    // ── FXML injections ──────────────────────────────────────────
+    @FXML private Label      titleLabel;
+    @FXML private VBox       depenseFeed;
+    @FXML private VBox       venteFeed;
     @FXML private AnchorPane calendarHost;
+    @FXML private GridPane   agriGrid;          // Agriculture panel grid
 
-    private final DepenseService depenseService = new DepenseService();
-    private final VenteService venteService = new VenteService();
-    private final DateTimeFormatter fmt = DateTimeFormatter.ISO_DATE;
+    // ── Services ─────────────────────────────────────────────────
+    private final DepenseService            depenseService  = new DepenseService();
+    private final VenteService              venteService    = new VenteService();
+    private final AgriculturePanelController agriController = new AgriculturePanelController();
+    private final DateTimeFormatter         fmt             = DateTimeFormatter.ISO_DATE;
+
     private User user;
 
+    // ────────────────────────────────────────────────────────────
+    //  Entry point
+    // ────────────────────────────────────────────────────────────
     public void setUser(User user) {
         this.user = user;
+
         if (titleLabel != null && user != null) {
-            titleLabel.setText("Finances: " + user.getFirstName() + " " + user.getLastName());
+            titleLabel.setText("Finances: "
+                    + user.getFirstName() + " " + user.getLastName());
         }
+
         loadData();
         loadCalendar();
+        loadAgriPanel();   // ← new: starts async World Bank fetch
     }
 
+    // ────────────────────────────────────────────────────────────
+    //  Load depenses + ventes feeds
+    // ────────────────────────────────────────────────────────────
     private void loadData() {
         try {
             List<Depense> ds = depenseService.readByUser(user.getId());
@@ -48,25 +63,40 @@ public class FinanceTablesController {
         }
     }
 
+    // ────────────────────────────────────────────────────────────
+    //  Load embedded calendar
+    // ────────────────────────────────────────────────────────────
     private void loadCalendar() {
         if (calendarHost == null) return;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/UserCalendar.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/UserCalendar.fxml"));
             Parent root = loader.load();
-            controllers.UserCalendarController controller = loader.getController();
+
+            UserCalendarController controller = loader.getController();
             controller.setUser(user);
+
             calendarHost.getChildren().setAll(root);
-            AnchorPane.setTopAnchor(root, 0.0);
+            AnchorPane.setTopAnchor(root,    0.0);
             AnchorPane.setBottomAnchor(root, 0.0);
-            AnchorPane.setLeftAnchor(root, 0.0);
-            AnchorPane.setRightAnchor(root, 0.0);
+            AnchorPane.setLeftAnchor(root,   0.0);
+            AnchorPane.setRightAnchor(root,  0.0);
         } catch (Exception e) {
-            // ignore
+            // silently skip if calendar FXML is unavailable
         }
     }
 
-    // ── Feed renderers ───────────────────────────────────────────────────────
+    // ────────────────────────────────────────────────────────────
+    //  Load agriculture panel (async World Bank API fetch)
+    // ────────────────────────────────────────────────────────────
+    private void loadAgriPanel() {
+        if (agriGrid == null) return;
+        agriController.attach(agriGrid);
+    }
 
+    // ────────────────────────────────────────────────────────────
+    //  Feed renderers
+    // ────────────────────────────────────────────────────────────
     private void renderDepenseFeed(List<Depense> depenses) {
         depenseFeed.getChildren().clear();
         if (depenses == null || depenses.isEmpty()) {
@@ -76,7 +106,8 @@ public class FinanceTablesController {
             return;
         }
         for (int i = 0; i < depenses.size(); i++) {
-            depenseFeed.getChildren().add(buildDepenseRow(depenses.get(i), i % 2 != 0));
+            depenseFeed.getChildren().add(
+                    buildDepenseRow(depenses.get(i), i % 2 != 0));
         }
     }
 
@@ -89,22 +120,22 @@ public class FinanceTablesController {
             return;
         }
         for (int i = 0; i < ventes.size(); i++) {
-            venteFeed.getChildren().add(buildVenteRow(ventes.get(i), i % 2 != 0));
+            venteFeed.getChildren().add(
+                    buildVenteRow(ventes.get(i), i % 2 != 0));
         }
     }
 
-    // ── Row builders ─────────────────────────────────────────────────────────
-
+    // ────────────────────────────────────────────────────────────
+    //  Row builders
+    // ────────────────────────────────────────────────────────────
     private HBox buildDepenseRow(Depense d, boolean alt) {
         HBox row = new HBox();
         row.getStyleClass().add(alt ? "feed-row-alt" : "feed-row");
         row.setAlignment(Pos.CENTER_LEFT);
 
-        // Left accent spine
         Region spine = new Region();
         spine.getStyleClass().add("feed-spine-depense");
 
-        // Content: badge + date
         VBox content = new VBox(3);
         content.getStyleClass().add("feed-row-content");
         HBox.setHgrow(content, Priority.ALWAYS);
@@ -118,7 +149,6 @@ public class FinanceTablesController {
 
         content.getChildren().addAll(badge, date);
 
-        // Amount pushed right
         Label amount = new Label(String.format("− %.2f DT", d.getMontant()));
         amount.getStyleClass().add("feed-row-amount-depense");
 
@@ -131,11 +161,9 @@ public class FinanceTablesController {
         row.getStyleClass().add(alt ? "feed-row-alt" : "feed-row");
         row.setAlignment(Pos.CENTER_LEFT);
 
-        // Left accent spine
         Region spine = new Region();
         spine.getStyleClass().add("feed-spine-vente");
 
-        // Content: product badge + qty meta + date
         VBox content = new VBox(3);
         content.getStyleClass().add("feed-row-content");
         HBox.setHgrow(content, Priority.ALWAYS);
@@ -146,7 +174,8 @@ public class FinanceTablesController {
         Label badge = new Label(v.getProduit() != null ? v.getProduit() : "Produit");
         badge.getStyleClass().add("feed-badge-vente");
 
-        Label meta = new Label(String.format("%.2f × %.0f u.", v.getPrixUnitaire(), v.getQuantite()));
+        Label meta = new Label(String.format("%.2f × %.0f u.",
+                v.getPrixUnitaire(), v.getQuantite()));
         meta.getStyleClass().add("feed-row-date");
 
         topRow.getChildren().addAll(badge, meta);
@@ -157,7 +186,6 @@ public class FinanceTablesController {
 
         content.getChildren().addAll(topRow, date);
 
-        // CA pushed right
         Label amount = new Label(String.format("+ %.2f DT", v.getChiffreAffaires()));
         amount.getStyleClass().add("feed-row-amount-vente");
 
@@ -165,12 +193,14 @@ public class FinanceTablesController {
         return row;
     }
 
-    // ── Navigation ───────────────────────────────────────────────────────────
-
+    // ────────────────────────────────────────────────────────────
+    //  Navigation
+    // ────────────────────────────────────────────────────────────
     @FXML
     void goBack() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ShowUsers.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/ShowUsers.fxml"));
             Parent root = loader.load();
             titleLabel.getScene().setRoot(root);
         } catch (Exception e) {

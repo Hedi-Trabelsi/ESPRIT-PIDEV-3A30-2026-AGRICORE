@@ -23,13 +23,13 @@
             <content>
 
                 <!--
-                    Total minHeight breakdown:
-                    padding-top(16) + topbar(40) + gap(16) + feeds(320) + gap(16) + calendar(420) + padding-bottom(16) = 844
+                    minHeight breakdown:
+                    16 (pad) + 40 (topbar) + 10 + 240 (agri) + 10 + 320 (feeds) + 10 + 420 (calendar) + 16 (pad) = 1082
                 -->
-                <VBox spacing="16.0"
+                <VBox spacing="10.0"
                       style="-fx-padding: 16px;"
-                      minHeight="844.0"
-                      prefHeight="844.0">
+                      minHeight="1082.0"
+                      prefHeight="1082.0">
                     <children>
 
                         <!-- Top bar -->
@@ -40,6 +40,40 @@
                                 <Button text="← Retour" onAction="#goBack" styleClass="secondary"/>
                             </children>
                         </HBox>
+
+                        <!-- ══ AGRICULTURE PANEL — first ══ -->
+                        <VBox styleClass="agri-panel"
+                              prefHeight="240.0" minHeight="240.0" maxHeight="240.0">
+                            <children>
+                                <HBox styleClass="agri-header" alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                        <Label text="🌍" styleClass="agri-globe"/>
+                                        <VBox spacing="1.0">
+                                            <children>
+                                                <Label text="Matériels Agricoles en Tunisie" styleClass="agri-title"/>
+                                                <Label text="Indicateurs officiels — Source : World Bank API" styleClass="agri-subtitle"/>
+                                            </children>
+                                        </VBox>
+                                        <Pane HBox.hgrow="ALWAYS"/>
+                                        <Label text="World Bank API" styleClass="agri-badge"/>
+                                    </children>
+                                </HBox>
+                                <GridPane fx:id="agriGrid"
+                                          hgap="8.0" vgap="8.0"
+                                          styleClass="agri-grid"
+                                          style="-fx-padding: 8px 12px 10px 12px;">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33"/>
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33"/>
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="33.34"/>
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints vgrow="ALWAYS" minHeight="80.0" prefHeight="80.0"/>
+                                        <RowConstraints vgrow="ALWAYS" minHeight="80.0" prefHeight="80.0"/>
+                                    </rowConstraints>
+                                </GridPane>
+                            </children>
+                        </VBox>
 
                         <!-- Two-column feed layout -->
                         <HBox spacing="16.0"
@@ -55,8 +89,7 @@
                                                 <Label text="Dépenses" styleClass="panel-title"/>
                                             </children>
                                         </HBox>
-                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                                                    styleClass="card-scroll">
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
                                             <content>
                                                 <VBox fx:id="depenseFeed" styleClass="feed-list" spacing="0"/>
                                             </content>
@@ -73,8 +106,7 @@
                                                 <Label text="Ventes" styleClass="panel-title"/>
                                             </children>
                                         </HBox>
-                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                                                    styleClass="card-scroll">
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
                                             <content>
                                                 <VBox fx:id="venteFeed" styleClass="feed-list" spacing="0"/>
                                             </content>
@@ -85,7 +117,7 @@
                             </children>
                         </HBox>
 
-                        <!-- Calendar panel — bigger -->
+                        <!-- Calendar panel -->
                         <VBox styleClass="panel"
                               prefHeight="420.0" minHeight="420.0" maxHeight="420.0">
                             <children>
