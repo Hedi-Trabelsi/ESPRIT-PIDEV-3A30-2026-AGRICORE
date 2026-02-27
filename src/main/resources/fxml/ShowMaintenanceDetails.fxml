@@ -107,7 +107,11 @@
             </HBox>
 
             <Separator />
-
+            <VBox spacing="5" style="-fx-padding: 0 0 10 0;">
+                <Label text="TITRE DE LA MAINTENANCE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                <Label fx:id="nomMaintenanceLabel" text="Nom de l'intervention"
+                       style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
+            </VBox>
             <GridPane hgap="40" vgap="20">
                 <columnConstraints>
                     <ColumnConstraints minWidth="280" prefWidth="300" />

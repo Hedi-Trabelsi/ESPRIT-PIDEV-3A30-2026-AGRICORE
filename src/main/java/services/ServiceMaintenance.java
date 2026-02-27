@@ -17,33 +17,36 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
     @Override
     public void ajouter(Maintenance maintenance) throws SQLException {
         maintenance.setStatut("En attente");
-        String sql = "INSERT INTO maintenance(type,date_declaration, description, statut,id_technicien,priorite,lieu,equipement) VALUES ('"
-                + maintenance.getType() + "', '"
-                + maintenance.getDateDeclaration() + "', '"
-                + maintenance.getDescription() + "', '"
-                + maintenance.getStatut() + "', NULL, '"
-                + maintenance.getPriorite() + "', '"
-                + maintenance.getLieu() + "', '"
-                + maintenance.getEquipement() + "')";
+        // Ajout de nom_maintenance dans la requête
+        String sql = "INSERT INTO maintenance(nom_maintenance, type, date_declaration, description, statut, id_technicien, priorite, lieu, equipement) VALUES (?, ?, ?, ?, ?, NULL, ?, ?, ?)";
 
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(sql);
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, maintenance.getNom_maintenance());
+        ps.setString(2, maintenance.getType());
+        ps.setDate(3, Date.valueOf(maintenance.getDateDeclaration()));
+        ps.setString(4, maintenance.getDescription());
+        ps.setString(5, maintenance.getStatut());
+        ps.setString(6, maintenance.getPriorite());
+        ps.setString(7, maintenance.getLieu());
+        ps.setString(8, maintenance.getEquipement());
+
+        ps.executeUpdate();
     }
-
 
     @Override
     public void modifier(Maintenance maintenance) throws SQLException {
-        String sql = "UPDATE maintenance SET type=?, date_declaration=?, description=?,statut=?, priorite=?,lieu=?, equipement=? WHERE id_maintenance=?";
+        // Ajout de nom_maintenance=? dans le SET
+        String sql = "UPDATE maintenance SET nom_maintenance=?, type=?, date_declaration=?, description=?, statut=?, priorite=?, lieu=?, equipement=? WHERE id_maintenance=?";
         PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, maintenance.getType());
-        ps.setDate(2, Date.valueOf(maintenance.getDateDeclaration()));
-        ps.setString(3, maintenance.getDescription());
-        ps.setString(4, maintenance.getStatut());
-
-        ps.setString(5, maintenance.getPriorite());
-        ps.setString(6, maintenance.getLieu());
-        ps.setString(7, maintenance.getEquipement());
-        ps.setInt(8, maintenance.getId());
+        ps.setString(1, maintenance.getNom_maintenance());
+        ps.setString(2, maintenance.getType());
+        ps.setDate(3, Date.valueOf(maintenance.getDateDeclaration()));
+        ps.setString(4, maintenance.getDescription());
+        ps.setString(5, maintenance.getStatut());
+        ps.setString(6, maintenance.getPriorite());
+        ps.setString(7, maintenance.getLieu());
+        ps.setString(8, maintenance.getEquipement());
+        ps.setInt(9, maintenance.getId());
 
         ps.executeUpdate();
     }
@@ -64,9 +67,10 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
         ResultSet rs = statement.executeQuery(sql);
 
         while (rs.next()) {
-            // On utilise le constructeur complet comme pour ServicePersonne
+            // Utilisation du nouveau constructeur incluant nom_maintenance
             Maintenance m = new Maintenance(
                     rs.getInt("id_maintenance"),
+                    rs.getString("nom_maintenance"), // Nouveau champ
                     rs.getString("type"),
                     rs.getDate("date_declaration").toLocalDate(),
                     rs.getString("description"),
@@ -75,14 +79,12 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
                     rs.getString("priorite"),
                     rs.getString("lieu"),
                     rs.getString("equipement")
-
             );
             maintenances.add(m);
         }
-
-
         return maintenances;
     }
+
     public Maintenance getMaintenanceById(int id) throws SQLException {
         String sql = "SELECT * FROM maintenance WHERE id_maintenance=?";
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -91,6 +93,7 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
         if (rs.next()) {
             return new Maintenance(
                     rs.getInt("id_maintenance"),
+                    rs.getString("nom_maintenance"), // Nouveau champ
                     rs.getString("type"),
                     rs.getDate("date_declaration").toLocalDate(),
                     rs.getString("description"),
@@ -103,5 +106,4 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
         }
         return null;
     }
-
 }

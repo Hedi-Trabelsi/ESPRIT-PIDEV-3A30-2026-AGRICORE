@@ -169,3 +169,20 @@
 .badge-normal {
     -fx-font-size: 10;
 }
+.maintenance-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.maintenance-list .list-cell {
+    -fx-background-color: transparent;
+}
+
+/* Enlever la couleur de sélection bleue par défaut */
+.maintenance-list .list-cell:selected {
+    -fx-background-color: transparent;
+}
+
+.maintenance-list .list-cell:filled:hover {
+    -fx-background-color: transparent;
+}

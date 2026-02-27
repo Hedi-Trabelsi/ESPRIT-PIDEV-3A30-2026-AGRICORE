@@ -86,37 +86,59 @@
             </children>
         </VBox>
 
-        <VBox layoutX="217.0" layoutY="10.0" prefHeight="680.0" prefWidth="975.0"
-              style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 30;" spacing="20.0">
+        <VBox layoutX="217.0" layoutY="10.0" prefHeight="700.0" prefWidth="1010.0" spacing="20.0"
+              style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-padding: 30;">
             <children>
-                <HBox alignment="CENTER_LEFT" spacing="20">
-                    <Button text="← Retour" onAction="#closeWindow" styleClass="sidebar-button" style="-fx-background-color: #7ca76f; -fx-text-fill: white;"/>
-                    <Label text="Demandes en Attente" styleClass="main-title"/>
-                    <Region HBox.hgrow="ALWAYS"/>
+                <VBox spacing="10" alignment="TOP_LEFT">
+                    <Button onAction="#closeWindow" text="← Retour"
+                            style="-fx-background-color: transparent; -fx-text-fill: #7ca76f; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 0;"/>
 
-                    <TextField fx:id="searchField" promptText="Rechercher..." prefWidth="180" styleClass="search-field"/>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Demandes en Attente"
+                               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                    </HBox>
+                </VBox>
 
-                    <ChoiceBox fx:id="priorityFilter" prefWidth="100">
+                <Separator style="-fx-opacity: 0.5;" />
+
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #f1f5f9; -fx-padding: 10 15; -fx-background-radius: 12;" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="searchField" promptText="Rechercher une demande..."
+                                   style="-fx-background-color: transparent; -fx-font-size: 14px;" HBox.hgrow="ALWAYS" />
+                    </HBox>
+
+                    <ChoiceBox fx:id="priorityFilter" prefHeight="42.0" prefWidth="160.0"
+                               style="-fx-background-color: #f1f5f9; -fx-background-radius: 12; -fx-border-color: transparent; -fx-font-size: 14px;">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Toutes"/><String fx:value="Faible"/><String fx:value="Normale"/><String fx:value="Urgente"/>
+                                <String fx:value="Toutes les priorités" />
+                                <String fx:value="Faible" />
+                                <String fx:value="Normale" />
+                                <String fx:value="Urgente" />
                             </FXCollections>
                         </items>
+                        <value>
+                            <String fx:value="Toutes les priorités" />
+                        </value>
                     </ChoiceBox>
 
-                    <ChoiceBox fx:id="dateSortPicker" prefWidth="120">
+                    <ChoiceBox fx:id="dateSortPicker" prefHeight="42.0" prefWidth="140.0"
+                               style="-fx-background-color: #f1f5f9; -fx-background-radius: 12; -fx-border-color: transparent; -fx-font-size: 14px;">
                         <items>
                             <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Plus recent"/>
-                                <String fx:value="Plus ancien"/>
+                                <String fx:value="Plus recent" />
+                                <String fx:value="Plus ancien" />
                             </FXCollections>
                         </items>
+                        <value>
+                            <String fx:value="Plus recent" />
+                        </value>
                     </ChoiceBox>
                 </HBox>
 
-                <Region prefHeight="1" styleClass="separator"/>
-
-                <ListView fx:id="notifList" VBox.vgrow="ALWAYS" styleClass="maintenance-list"/>
+                <ListView fx:id="notifList" VBox.vgrow="ALWAYS"
+                          style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0; -fx-border-color: transparent;"/>
             </children>
         </VBox>
     </children>

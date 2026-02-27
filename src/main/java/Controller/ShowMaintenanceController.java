@@ -132,8 +132,10 @@ public class ShowMaintenanceController {
         deleteBtn.setStyle("-fx-text-fill: #fca5a5; -fx-font-size: 18px; -fx-cursor: hand;");
         header.getChildren().addAll(editBtn, deleteBtn);
 
-        Label titleLabel = new Label(m.getType());
+
+        Label titleLabel = new Label(m.getNom_maintenance());
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
+
         Label descLabel = new Label(m.getDescription());
         descLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #64748b;");
         descLabel.setWrapText(true);

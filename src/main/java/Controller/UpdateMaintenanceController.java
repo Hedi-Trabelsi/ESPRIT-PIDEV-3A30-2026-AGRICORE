@@ -26,7 +26,7 @@ public class UpdateMaintenanceController {
     @FXML private TextField lieuTf;
     @FXML private TextField equipementTf;
     @FXML private Button updateBtn;
-
+    @FXML private TextField nomMaintenanceTf; // Nouveau champ
     @FXML
     void initialize() {
         type.getItems().addAll("Preventive", "Corrective", "Predictive");
@@ -36,6 +36,7 @@ public class UpdateMaintenanceController {
     public void setMaintenance(Maintenance m) {
         this.maintenance = m;
         if (m != null) {
+            nomMaintenanceTf.setText(m.getNom_maintenance());
             type.setValue(m.getType());
             priorite.setValue(m.getPriorite());
 
@@ -51,12 +52,16 @@ public class UpdateMaintenanceController {
     @FXML
     void updateMaintenance(ActionEvent event) {
         try {
+            if (nomMaintenanceTf.getText().trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Le titre de la maintenance est obligatoire.");
+                return;
+            }
             if (type.getValue() == null || priorite.getValue() == null ||
                     lieuTf.getText().isEmpty() || equipementTf.getText().isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez remplir tous les champs.");
                 return;
             }
-
+            maintenance.setNom_maintenance(nomMaintenanceTf.getText());
             maintenance.setType(type.getValue());
             maintenance.setPriorite(priorite.getValue());
             maintenance.setDescription(descriptionTf.getText());

@@ -1,4 +1,5 @@
 package Controller;
+
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -21,7 +22,7 @@ public class NotificationController {
     @FXML private ListView<Maintenance> notifList;
     @FXML private TextField searchField;
     @FXML private ChoiceBox<String> priorityFilter;
-    @FXML private ChoiceBox<String> dateSortPicker; // Ajoute ceci dans ton fichier FXML aussi
+    @FXML private ChoiceBox<String> dateSortPicker;
 
     private final ServiceMaintenance service = new ServiceMaintenance();
     private DashboardController parentController;
@@ -32,19 +33,18 @@ public class NotificationController {
 
     @FXML
     public void initialize() {
-
+        // Initialisation des filtres
         if (dateSortPicker != null) {
-            // Ajoute les options manuellement si ce n'est pas fait dans SceneBuilder
             dateSortPicker.getItems().setAll("Plus récent", "Plus ancien");
             dateSortPicker.setValue("Plus récent");
-            dateSortPicker.valueProperty().addListener((obs, oldVal, newVal) -> filterList(searchField.getText()));
+            dateSortPicker.valueProperty().addListener((obs, oldVal, newVal) -> filterList());
         }
 
         loadPendingData();
         setupCustomCells();
 
-        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterList(newVal));
-        priorityFilter.valueProperty().addListener((obs, oldVal, newVal) -> filterList(searchField.getText()));
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> filterList());
+        priorityFilter.valueProperty().addListener((obs, oldVal, newVal) -> filterList());
     }
 
     private void loadPendingData() {
@@ -52,59 +52,35 @@ public class NotificationController {
             List<Maintenance> pending = service.afficher().stream()
                     .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
                     .collect(Collectors.toList());
-
             notifList.getItems().setAll(pending);
-
-            // --- AJOUT : Vérification de l'alerte à chaque chargement ---
             checkCriticalAlerts(pending);
-
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    private void filterList(String keyword) {
+    // --- CORRECTION DU FILTRE ET TRI ---
+    private void filterList() {
         try {
-            // On récupère la base
-            List<Maintenance> all = service.afficher();
+            String keyword = (searchField.getText() == null) ? "" : searchField.getText().toLowerCase().trim();
+            String priority = (priorityFilter.getValue() != null) ? priorityFilter.getValue() : "Toutes les priorités";
+            String sortOrder = (dateSortPicker.getValue() != null) ? dateSortPicker.getValue() : "Plus récent";
 
-            final String priority = (priorityFilter.getValue() != null) ? priorityFilter.getValue() : "Toutes";
-            final String sortOrder = (dateSortPicker != null && dateSortPicker.getValue() != null) ? dateSortPicker.getValue() : "Plus récent";
-
-            List<Maintenance> filtered = all.stream()
-                    // 1. CONDITION STRICTE : Uniquement les "en attente"
+            List<Maintenance> filtered = service.afficher().stream()
                     .filter(m -> "en attente".equalsIgnoreCase(m.getStatut()))
-
-                    // 2. RECHERCHE MULTI-CRITÈRES (Comme le Dashboard)
-                    .filter(m -> (keyword == null || keyword.isEmpty() ||
-                            m.getType().toLowerCase().contains(keyword.toLowerCase()) ||
-                            m.getDescription().toLowerCase().contains(keyword.toLowerCase()) ||
-                            m.getLieu().toLowerCase().contains(keyword.toLowerCase()) ||
-                            m.getEquipement().toLowerCase().contains(keyword.toLowerCase()) ||
-                            m.getPriorite().toLowerCase().contains(keyword.toLowerCase())
-                    ))
-
-                    // 3. FILTRE DE PRIORITÉ (ChoiceBox)
-                    .filter(m -> priority.equals("Toutes") || m.getPriorite().equalsIgnoreCase(priority))
-
-                    // 4. TRI PAR DATE (Correction du comparateur)
+                    .filter(m -> keyword.isEmpty() ||
+                            m.getEquipement().toLowerCase().contains(keyword) ||
+                            m.getType().toLowerCase().contains(keyword) ||
+                            m.getDescription().toLowerCase().contains(keyword) ||
+                            m.getLieu().toLowerCase().contains(keyword))
+                    .filter(m -> priority.equals("Toutes les priorités") || priority.equals("Toutes") || m.getPriorite().equalsIgnoreCase(priority))
                     .sorted((m1, m2) -> {
-                        LocalDate d1 = m1.getDateDeclaration();
-                        LocalDate d2 = m2.getDateDeclaration();
-
-                        if (d1 == null || d2 == null) return 0;
-
-                        if ("Plus récent".equals(sortOrder)) {
-                            return d2.compareTo(d1); // Plus récent en haut (Date la plus grande)
-                        } else {
-                            return d1.compareTo(d2); // Plus ancien en haut
-                        }
+                        if (m1.getDateDeclaration() == null || m2.getDateDeclaration() == null) return 0;
+                        return sortOrder.equals("Plus récent") ? m2.getDateDeclaration().compareTo(m1.getDateDeclaration())
+                                : m1.getDateDeclaration().compareTo(m2.getDateDeclaration());
                     })
                     .collect(Collectors.toList());
 
             notifList.getItems().setAll(filtered);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
     }
 
     private void setupCustomCells() {
@@ -115,57 +91,56 @@ public class NotificationController {
 
                 if (empty || m == null) {
                     setGraphic(null);
+                    setStyle("-fx-background-color: transparent;");
                 } else {
-
-
-                /*    long joursAttente = java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), LocalDate.now());
-                    boolean isCritical = m.getPriorite().equalsIgnoreCase("Urgente") && joursAttente >= 2;*/
-                    // Remplace le 2 par 0 pour que ça s'affiche ROUGE dès aujourd'hui
-                    long joursAttente = java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), LocalDate.now());
+                    // 1. Logique de calcul du retard
+                    long joursAttente = java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), java.time.LocalDate.now());
                     boolean isCritical = m.getPriorite().equalsIgnoreCase("Urgente") && joursAttente >= 0;
 
-                    Label typeLabel = new Label(m.getType());
-                    typeLabel.getStyleClass().add("title-label");
+                    // 2. Création des Labels (Style Dashboard)
+                    Label equipLabel = new Label(m.getEquipement().toUpperCase());
+                    equipLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1e293b;");
 
-                    VBox leftInfoBox = new VBox(
-                            typeLabel,
-                            new Label(m.getDescription()),
-                            new Label("Equipement: " + m.getEquipement()),
-                            new Label("lieu: " + m.getLieu())
-                    );
-                    leftInfoBox.setSpacing(5);
+                    Label descLabel = new Label(m.getDescription());
+                    descLabel.setStyle("-fx-text-fill: #64748b; -fx-font-size: 13px;");
 
+                    Label detailsLabel = new Label("📍 " + m.getLieu() + " | 🛠 " + m.getType());
+                    detailsLabel.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 12px;");
+
+                    VBox leftBox = new VBox(equipLabel, descLabel, detailsLabel);
+                    leftBox.setSpacing(5);
+
+                    // 3. Badges et Temps
                     Label timeLabel = new Label(calculateTimeAgo(m.getDateDeclaration()));
                     timeLabel.setStyle("-fx-font-size: 11px; -fx-text-fill: #b2bec3; -fx-font-style: italic;");
 
-                    Label pLabel = new Label(m.getPriorite());
-                    pLabel.getStyleClass().addAll("priority", "priority-" + m.getPriorite().toLowerCase());
+                    Label pLabel = new Label(m.getPriorite().toUpperCase());
+                    pLabel.setStyle(getPriorityStyle(m.getPriorite()));
 
-                    Label sLabel = new Label(m.getStatut());
-                    sLabel.getStyleClass().addAll("status", "status-en-attente");
+                    Label sLabel = new Label(m.getStatut().toUpperCase());
+                    sLabel.setStyle("-fx-background-color:#fff3cd; -fx-text-fill:#856404; -fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;");
 
                     HBox badges = new HBox(sLabel, pLabel);
                     badges.setSpacing(8);
-                    badges.setAlignment(Pos.CENTER_RIGHT);
+                    badges.setAlignment(Pos.TOP_RIGHT);
 
-                    VBox rightMetaBox = new VBox(timeLabel, badges);
-                    rightMetaBox.setSpacing(5);
-                    rightMetaBox.setAlignment(Pos.TOP_RIGHT);
-
-                    // --- AJOUT : Icône Warning si critique ---
-                    Label alertIcon = new Label();
-                    if (isCritical) {
-                        alertIcon.setText("\u26A0 RETARD");
-                        alertIcon.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
-                    }
+                    VBox rightBox = new VBox(timeLabel, badges);
+                    rightBox.setSpacing(10);
+                    rightBox.setAlignment(Pos.TOP_RIGHT);
 
                     Region spacer = new Region();
                     HBox.setHgrow(spacer, Priority.ALWAYS);
 
-                    HBox topRow = new HBox(leftInfoBox, spacer, alertIcon, rightMetaBox);
-                    topRow.setAlignment(Pos.TOP_LEFT);
-                    topRow.setSpacing(10);
+                    Label alertIcon = new Label();
+                    if (isCritical) {
+                        alertIcon.setText("⚠ RETARD");
+                        alertIcon.setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+                    }
 
+                    HBox topRow = new HBox(leftBox, spacer, alertIcon, rightBox);
+                    topRow.setAlignment(Pos.TOP_LEFT);
+
+                    // 4. Boutons Accepter/Refuser (Position Centrale)
                     Button accBtn = new Button("Accepter");
                     accBtn.getStyleClass().add("action-button-accept");
                     accBtn.setOnAction(e -> handleAction(m, "en cours"));
@@ -179,21 +154,38 @@ public class NotificationController {
                     buttonRow.setAlignment(Pos.CENTER);
                     buttonRow.setPadding(new javafx.geometry.Insets(15, 0, 0, 0));
 
+                    // 5. Assemblage et Style de la Card
                     VBox cardLayout = new VBox(topRow, buttonRow);
                     cardLayout.setSpacing(10);
-                    cardLayout.getStyleClass().add("card");
 
-                    // --- STYLE DYNAMIQUE ---
+                    String baseStyle = "-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 20; " +
+                            "-fx-border-color: #f1f5f9; -fx-border-radius: 20; -fx-border-width: 2; " +
+                            "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);";
+
                     if (isCritical) {
-                        cardLayout.setStyle("-fx-padding: 15; -fx-border-color: #e74c3c; -fx-border-width: 2; -fx-background-color: #fff5f5; -fx-border-radius: 10; -fx-background-radius: 10;");
+                        cardLayout.setStyle(baseStyle + "-fx-border-color: #e74c3c; -fx-background-color: #fff5f5;");
                     } else {
-                        cardLayout.setStyle("-fx-padding: 15;");
+                        cardLayout.setStyle(baseStyle);
+                        cardLayout.setOnMouseEntered(e -> cardLayout.setStyle(baseStyle + "-fx-background-color: #f8fafc; -fx-border-color: #cbd5e1;"));
+                        cardLayout.setOnMouseExited(e -> cardLayout.setStyle(baseStyle));
                     }
 
                     setGraphic(cardLayout);
-                }
-            }
-        });
+                    setStyle("-fx-background-color: transparent; -fx-padding: 10 20;");
+                } // Fin du else (m != null)
+            } // Fin de updateItem
+        }); // Fin de setCellFactory
+    }
+
+    private String getPriorityStyle(String priorite) {
+        String base = "-fx-padding:5 10; -fx-background-radius:20; -fx-font-weight:bold; -fx-font-size:10px;";
+        if (priorite == null) return "-fx-background-color:#b0b0b0; -fx-text-fill:white; " + base;
+        switch (priorite.toLowerCase()) {
+            case "urgente": return "-fx-background-color:#f5c6cb; -fx-text-fill:#721c24; " + base;
+            case "normale": return "-fx-background-color:#ffeeba; -fx-text-fill:#856404; " + base;
+            case "faible": return "-fx-background-color:#c3e6cb; -fx-text-fill:#155724; " + base;
+            default: return "-fx-background-color:#e2e3e5; -fx-text-fill:#383d41; " + base;
+        }
     }
 
     private void handleAction(Maintenance m, String status) {
@@ -215,42 +207,22 @@ public class NotificationController {
 
     private String calculateTimeAgo(LocalDate date) {
         if (date == null) return "Date inconnue";
-
         long days = java.time.temporal.ChronoUnit.DAYS.between(date, LocalDate.now());
-
         if (days == 0) return "Aujourd'hui";
         if (days == 1) return "Hier";
-
-        // Moins d'une semaine
         if (days < 7) return "Il y a " + days + " jours";
-
-        // Entre 1 semaine et 4 semaines (Affichage par semaine)
-        if (days < 30) {
-            long weeks = days / 7;
-            return (weeks == 1) ? "Il y a 1 semaine" : "Il y a " + weeks + " semaines";
-        }
-
-        // Plus de 30 jours (Affichage par mois)
+        if (days < 30) return "Il y a " + (days / 7) + " semaines";
         long months = days / 30;
-        if (months < 12) {
-            return (months == 1) ? "Il y a 1 mois" : "Il y a " + months + " mois";
-        }
-
-        // Plus d'un an
-        long years = days / 365;
-        return (years == 1) ? "Il y a 1 an" : "Il y a " + years + " ans";
+        return (months < 12) ? "Il y a " + months + " mois" : "Il y a " + (days / 365) + " ans";
     }
 
-    // --- LA NOUVELLE MÉTHODE D'ALERTE POPUP ---
     public void checkCriticalAlerts(List<Maintenance> maliste) {
         if (maliste == null) return;
-
         long count = maliste.stream()
                 .filter(m -> "Urgente".equalsIgnoreCase(m.getPriorite()))
                 .filter(m -> m.getDateDeclaration() != null &&
                         java.time.temporal.ChronoUnit.DAYS.between(m.getDateDeclaration(), LocalDate.now()) >= 2)
                 .count();
-
         if (count > 0) {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.WARNING);

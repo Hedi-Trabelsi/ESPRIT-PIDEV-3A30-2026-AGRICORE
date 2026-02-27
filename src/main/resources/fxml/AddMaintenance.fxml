@@ -114,10 +114,10 @@
                             <children>
                                 <VBox spacing="8" GridPane.columnIndex="0">
                                     <HBox spacing="5">
-                                        <Label text="TYPE D'INTERVENTION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-                                        <Label fx:id="typeStar" text="*" style="-fx-text-fill: red;"/>
+                                        <Label text="TITRE DE LA MAINTENANCE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                        <Label fx:id="nomMaintenanceStar" text="*" style="-fx-text-fill: red;"/>
                                     </HBox>
-                                    <ChoiceBox fx:id="type" prefWidth="1000.0" styleClass="form-input" />
+                                    <TextField fx:id="nomMaintenanceTf" promptText="Ex: Réparation moteur..." styleClass="form-input" />
                                 </VBox>
                                 <VBox spacing="8" GridPane.columnIndex="1">
                                     <HBox spacing="5">
@@ -137,11 +137,10 @@
                             <children>
                                 <VBox spacing="8" GridPane.columnIndex="0">
                                     <HBox spacing="5">
-                                        <Label text="LIEU" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-                                        <Label fx:id="lieuStar" text="*" style="-fx-text-fill: red;"/>
+                                        <Label text="TYPE D'INTERVENTION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                        <Label fx:id="typeStar" text="*" style="-fx-text-fill: red;"/>
                                     </HBox>
-                                    <TextField fx:id="lieuTf" promptText="Ex: Secteur Nord..." styleClass="form-input" />
-                                    <Label fx:id="lieuError" style="-fx-text-fill: red; -fx-font-size: 11px;"/>
+                                    <ChoiceBox fx:id="type" prefWidth="1000.0" styleClass="form-input" />
                                 </VBox>
                                 <VBox spacing="8" GridPane.columnIndex="1">
                                     <HBox spacing="5">
@@ -154,10 +153,26 @@
                             </children>
                         </GridPane>
 
-                        <VBox spacing="8">
-                            <Label text="DATE DE DÉCLARATION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-                            <TextField fx:id="dateDeclarationTf" editable="false" prefWidth="450.0" styleClass="form-input" style="-fx-background-color: #e2e8f0; -fx-text-fill: #64748b;"/>
-                        </VBox>
+                        <GridPane hgap="40" vgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50" />
+                                <ColumnConstraints percentWidth="50" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="8" GridPane.columnIndex="0">
+                                    <HBox spacing="5">
+                                        <Label text="LIEU" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                        <Label fx:id="lieuStar" text="*" style="-fx-text-fill: red;"/>
+                                    </HBox>
+                                    <TextField fx:id="lieuTf" promptText="Ex: Secteur Nord..." styleClass="form-input" />
+                                    <Label fx:id="lieuError" style="-fx-text-fill: red; -fx-font-size: 11px;"/>
+                                </VBox>
+                                <VBox spacing="8" GridPane.columnIndex="1">
+                                    <Label text="DATE DE DÉCLARATION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <TextField fx:id="dateDeclarationTf" editable="false" prefWidth="1000.0" styleClass="form-input" style="-fx-background-color: #e2e8f0; -fx-text-fill: #64748b;"/>
+                                </VBox>
+                            </children>
+                        </GridPane>
 
                         <VBox spacing="10">
                             <HBox spacing="5">

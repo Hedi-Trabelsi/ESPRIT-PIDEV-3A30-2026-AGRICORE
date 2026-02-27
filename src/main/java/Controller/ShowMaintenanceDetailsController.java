@@ -23,7 +23,7 @@ public class ShowMaintenanceDetailsController {
     private Maintenance maintenance;
     private final ServiceTache serviceTache = new ServiceTache();
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
-
+    @FXML private Label nomMaintenanceLabel;
     @FXML private Button btnTerminer;
     @FXML private Label typeLabel, statutLabel, dateLabel, descriptionLabel, prioriteLabel, lieuLabel, equipementLabel;
     @FXML private VBox tachesContainer;
@@ -174,6 +174,7 @@ public class ShowMaintenanceDetailsController {
 
     private void showMaintenanceDetails() {
         if (maintenance != null) {
+            nomMaintenanceLabel.setText(maintenance.getNom_maintenance().toUpperCase());
             typeLabel.setText(maintenance.getType());
             dateLabel.setText(String.valueOf(maintenance.getDateDeclaration()));
             descriptionLabel.setText(maintenance.getDescription());

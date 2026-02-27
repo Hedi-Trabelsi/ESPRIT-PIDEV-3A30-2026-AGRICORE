@@ -113,8 +113,8 @@
                             </columnConstraints>
                             <children>
                                 <VBox spacing="8" GridPane.columnIndex="0">
-                                    <Label text="TYPE D'INTERVENTION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-                                    <ChoiceBox fx:id="type" prefWidth="1000.0" styleClass="form-input" />
+                                    <Label text="TITRE DE LA MAINTENANCE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <TextField fx:id="nomMaintenanceTf" promptText="Entrez le titre..." styleClass="form-input" />
                                 </VBox>
                                 <VBox spacing="8" GridPane.columnIndex="1">
                                     <Label text="PRIORITÉ" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
@@ -130,8 +130,8 @@
                             </columnConstraints>
                             <children>
                                 <VBox spacing="8" GridPane.columnIndex="0">
-                                    <Label text="LIEU" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-                                    <TextField fx:id="lieuTf" styleClass="form-input" />
+                                    <Label text="TYPE D'INTERVENTION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <ChoiceBox fx:id="type" prefWidth="1000.0" styleClass="form-input" />
                                 </VBox>
                                 <VBox spacing="8" GridPane.columnIndex="1">
                                     <Label text="ÉQUIPEMENT" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
@@ -140,14 +140,26 @@
                             </children>
                         </GridPane>
 
-                        <VBox spacing="8">
-                            <Label text="DATE DE DÉCLARATION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
-                            <TextField fx:id="dateDeclarationTf"
-                                       editable="false"
-                                       prefWidth="450.0"
-                                       styleClass="form-input"
-                                       style="-fx-background-color: #e2e8f0; -fx-text-fill: #64748b;"/>
-                        </VBox>
+                        <GridPane hgap="40" vgap="20">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50" />
+                                <ColumnConstraints percentWidth="50" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="8" GridPane.columnIndex="0">
+                                    <Label text="LIEU" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <TextField fx:id="lieuTf" styleClass="form-input" />
+                                </VBox>
+                                <VBox spacing="8" GridPane.columnIndex="1">
+                                    <Label text="DATE DE DÉCLARATION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <TextField fx:id="dateDeclarationTf"
+                                               editable="false"
+                                               prefWidth="1000.0"
+                                               styleClass="form-input"
+                                               style="-fx-background-color: #e2e8f0; -fx-text-fill: #64748b;"/>
+                                </VBox>
+                            </children>
+                        </GridPane>
 
                         <VBox spacing="10">
                             <Label text="DESCRIPTION DU PROBLÈME" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>

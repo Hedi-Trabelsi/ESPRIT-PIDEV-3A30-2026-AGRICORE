@@ -18,29 +18,19 @@ import javafx.scene.input.MouseEvent;
 public class AddMaintenanceController {
     ServiceMaintenance ms = new ServiceMaintenance();
 
-    @FXML
-    private ChoiceBox<String> type;
-
-    @FXML
-    private ChoiceBox<String> priorite;
-
-    @FXML
-    private TextField dateDeclarationTf;
-
-    @FXML
-    private TextArea descriptionTf;
-
-    @FXML
-    private TextField lieuTf;
-
-    @FXML
-    private TextField equipementTf;
+    @FXML  private ChoiceBox<String> type;
+    @FXML  private ChoiceBox<String> priorite;
+    @FXML  private TextField dateDeclarationTf;
+    @FXML private TextArea descriptionTf;
+    @FXML private TextField lieuTf;
+    @FXML private TextField equipementTf;
     @FXML private javafx.scene.control.Label typeStar;
     @FXML private javafx.scene.control.Label lieuStar;
     @FXML private javafx.scene.control.Label equipementStar;
     @FXML private javafx.scene.control.Label prioriteStar;
     @FXML private javafx.scene.control.Label descriptionStar;
-
+    @FXML private TextField nomMaintenanceTf; // Nouveau
+    @FXML private Label nomMaintenanceStar;
 
     @FXML
     private javafx.scene.control.Button Save;
@@ -63,6 +53,10 @@ public class AddMaintenanceController {
     @FXML
     void saveMaintenance(ActionEvent event) {
         try {
+            if (nomMaintenanceTf.getText() == null || nomMaintenanceTf.getText().trim().isEmpty()) {
+                showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez entrer un titre  pour la maintenance");
+                return;
+            }
             if (type.getValue() == null || type.getValue().isEmpty()) {
                 showAlert(Alert.AlertType.WARNING, "Validation", "Veuillez selectionner un type");
                 return;
@@ -88,8 +82,9 @@ public class AddMaintenanceController {
 
             // Creer l'objet Maintenance avec les nouveaux champs
             Maintenance maintenance = new Maintenance(
-                    LocalDate.parse(dateDeclarationTf.getText()),
+                    nomMaintenanceTf.getText(),
                     type.getValue(),
+                    LocalDate.parse(dateDeclarationTf.getText()),
                     descriptionTf.getText(),
                     "En attente",
                     0,
@@ -187,7 +182,13 @@ public class AddMaintenanceController {
                 prioriteStar.setStyle("-fx-text-fill: green;");
             }
         });
-
+        nomMaintenanceTf.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null || newVal.trim().isEmpty()) {
+                nomMaintenanceStar.setStyle("-fx-text-fill: red;");
+            } else {
+                nomMaintenanceStar.setStyle("-fx-text-fill: green;");
+            }
+        });
 
     }
 
