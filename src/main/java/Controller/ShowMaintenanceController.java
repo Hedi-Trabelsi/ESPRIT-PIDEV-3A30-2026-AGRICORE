@@ -144,7 +144,7 @@ public class ShowMaintenanceController {
         Label statutLabel = new Label(m.getStatut().toUpperCase());
         statutLabel.setStyle(getStatusStyle(m.getStatut()));
 
-        Button actionBtn = new Button("Gérer Maintenance");
+        Button actionBtn = new Button("Voir Détails");
         actionBtn.setMaxWidth(Double.MAX_VALUE);
         actionBtn.setStyle("-fx-background-color: #f8fafc; -fx-text-fill: #475569; " +
                 "-fx-font-weight: bold; -fx-background-radius: 12; -fx-padding: 10; " +
@@ -163,7 +163,7 @@ public class ShowMaintenanceController {
             } catch (Exception ex) { ex.printStackTrace(); }
         });
 
-        actionBtn.setOnAction(e -> navigatePlanifier(m));
+        actionBtn.setOnAction(e -> openMaintenanceDetails(m));
 
         card.getChildren().addAll(header, titleLabel, descLabel, statutLabel, actionBtn);
         return card;
@@ -179,15 +179,7 @@ public class ShowMaintenanceController {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    private void navigatePlanifier(Maintenance m) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddTache.fxml"));
-            Parent root = loader.load();
-            AddTacheController controller = loader.getController();
-            controller.setMaintenanceSelectionnee(m);
-            gridPane.getScene().setRoot(root);
-        } catch (Exception e) { e.printStackTrace(); }
-    }
+
 
     private void navigateUpdate(Maintenance m) {
         try {

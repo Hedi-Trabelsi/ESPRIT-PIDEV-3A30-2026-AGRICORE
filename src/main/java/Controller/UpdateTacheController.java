@@ -51,7 +51,7 @@ public class UpdateTacheController {
         try {
             Maintenance m = serviceMaintenance.getMaintenanceById(tache.getId_maintenace());
             if (m != null) {
-                maintenanceInfoLabel.setText(m.getType() + " - " + m.getEquipement());
+                maintenanceInfoLabel.setText(m.getNom_maintenance().toUpperCase());
                 maintenanceDateLabel.setText("📅 " + m.getDateDeclaration().toString());
                 maintenanceDetailsLabel.setText(m.getLieu());
             }
@@ -101,10 +101,28 @@ public class UpdateTacheController {
 
     private void returnToList() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
+            // 1. Charger le FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
+            Parent root = loader.load();
+
+            // 2. Récupérer le contrôleur de la page de détails
+            // Assure-toi que le nom de la classe est bien ShowMaintenanceDetailsController
+            ShowMaintenanceDetailsController controller = loader.getController();
+
+            // 3. Récupérer l'objet Maintenance complet via le service
+            Maintenance m = serviceMaintenance.getMaintenanceById(tache.getId_maintenace());
+
+            // 4. Envoyer la maintenance au contrôleur pour qu'il affiche les bonnes infos
+            if (m != null) {
+                controller.setMaintenance(m);
+            }
+
+            // 5. Changer la scène
             saveBtn.getScene().setRoot(root);
+
         } catch (Exception ex) {
             ex.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Erreur de navigation", "Impossible de charger les détails.");
         }
     }
 

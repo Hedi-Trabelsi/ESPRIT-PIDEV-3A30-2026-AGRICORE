@@ -23,12 +23,13 @@ public class ShowMaintenanceDetailsController {
     private Maintenance maintenance;
     private final ServiceTache serviceTache = new ServiceTache();
     private final ServiceMaintenance serviceMaintenance = new ServiceMaintenance();
+    @FXML private Button btnPlanifier;
     @FXML private Label nomMaintenanceLabel;
     @FXML private Button btnTerminer;
     @FXML private Label typeLabel, statutLabel, dateLabel, descriptionLabel, prioriteLabel, lieuLabel, equipementLabel;
     @FXML private VBox tachesContainer;
     @FXML private Label retourLabel;
-    @FXML private Label totalPrixLabel; // À ajouter en haut avec les autres @FXML
+    @FXML private Label totalPrixLabel;
     public void setMaintenance(Maintenance maintenance) {
         this.maintenance = maintenance;
         showMaintenanceDetails();
@@ -69,7 +70,23 @@ public class ShowMaintenanceDetailsController {
             e.printStackTrace();
         }
     }
+    @FXML
+    void navigatePlanifier() { // On garde ton nom habituel
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddTache.fxml"));
+            Parent root = loader.load();
 
+            // On passe la maintenance actuelle au contrôleur suivant
+            AddTacheController controller = loader.getController();
+            controller.setMaintenanceSelectionnee(this.maintenance);
+
+            // On utilise un bouton existant pour récupérer la scene
+            btnTerminer.getScene().setRoot(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible d'ouvrir la planification.");
+        }
+    }
     private VBox createMiniTacheCard(Tache t) {
         VBox card = new VBox();
         card.setStyle("-fx-background-color: white; " +

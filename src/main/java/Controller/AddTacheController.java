@@ -28,7 +28,7 @@ public class AddTacheController {
     @FXML private TextField coutTf;
     @FXML private TextField nomTacheTf;
 
-    // --- MODIFICATION : Remplacement du ComboBox par les Labels de l'Info-Box ---
+
     @FXML private Label maintenanceInfoLabel;
     @FXML private Label maintenanceDetailsLabel;
 
@@ -42,10 +42,9 @@ public class AddTacheController {
 
     public void setMaintenanceSelectionnee(Maintenance m) {
         this.maintenanceAutomatique = m;
-        if (m != null) {// Le nom de la maintenance
-            maintenanceInfoLabel.setText(m.getType() + " - " + m.getEquipement());
-
-            // La date (au même niveau que le nom, mais à droite)
+        if (m != null) {
+            maintenanceInfoLabel.setText(m.getNom_maintenance().toUpperCase());
+            //maintenanceInfoLabel.setText(m.getType() + " - " + m.getEquipement());
             maintenanceDateLabel.setText("📅 " + m.getDateDeclaration().toString());
 
             // Le lieu (en dessous du nom)
@@ -135,9 +134,13 @@ public class AddTacheController {
                         PauseTransition pause = new PauseTransition(Duration.seconds(1));
                         pause.setOnFinished(ev -> {
                             try {
-                                // --- MODIFICATION : Redirection vers ShowTache ou ShowMaintenance ---
                                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
                                 Parent root = loader.load();
+
+                                // --- RÉCUPÉRATION DU CONTROLLER ET REPASSE DE LA MAINTENANCE ---
+                                ShowMaintenanceDetailsController controller = loader.getController();
+                                controller.setMaintenance(this.maintenanceAutomatique);
+
                                 saveBtn.getScene().setRoot(root);
                             } catch (Exception ex) { ex.printStackTrace(); }
                         });
@@ -159,7 +162,7 @@ public class AddTacheController {
 
     @FXML
     void helpMeWithAI(ActionEvent event) {
-        // --- MODIFICATION : On utilise maintenanceAutomatique au lieu du ComboBox ---
+
         if (maintenanceAutomatique == null) {
             showAlert(Alert.AlertType.WARNING, "Assistant IA", "Aucune maintenance détectée.");
             return;
