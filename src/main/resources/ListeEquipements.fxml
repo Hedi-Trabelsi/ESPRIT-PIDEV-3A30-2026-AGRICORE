@@ -13,95 +13,119 @@
             fx:controller="controllers.ListeEquipementsController">
     <children>
 
-        <!-- ===== SIDEBAR ===== -->
-        <VBox prefHeight="760.0" prefWidth="230.0"
-              style="-fx-background-color: linear-gradient(to bottom, #1e3a1a, #3a6b2e, #4a7c40);"
-              spacing="0.0">
+        <!-- ===== SIDEBAR (identique Fournisseur) ===== -->
+        <VBox prefHeight="760.0" prefWidth="220.0"
+              style="-fx-background-color: linear-gradient(to bottom, #3a6b2e, #5a8f4e);"
+              spacing="8.0">
+            <padding><Insets top="0" right="0" bottom="20" left="0"/></padding>
             <children>
 
-                <!-- Logo / Brand -->
-                <VBox alignment="CENTER" prefHeight="130.0"
-                      style="-fx-background-color: rgba(0,0,0,0.25); -fx-border-color: rgba(255,255,255,0.08); -fx-border-width: 0 0 1 0;">
-                    <padding><Insets top="20" bottom="20"/></padding>
-                    <ImageView fitHeight="52.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                <!-- Logo -->
+                <VBox alignment="CENTER" prefHeight="120.0" prefWidth="220.0"
+                      style="-fx-background-color: rgba(0,0,0,0.15);">
+                    <padding><Insets top="15" bottom="15"/></padding>
+                    <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                         <image><Image url="@/images/logo.png" /></image>
                     </ImageView>
-                    <Label text="AgroManager" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white; -fx-padding: 6 0 2 0;" />
-                    <Label text="Espace Fournisseur" style="-fx-font-size: 10px; -fx-text-fill: rgba(255,255,255,0.55); -fx-font-weight: bold; -fx-letter-spacing: 1;" />
+                    <Label text="AgriCore" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                    <Label text="Espace Fournisseur" style="-fx-font-size: 10px; -fx-text-fill: rgba(255,255,255,0.7);" />
                 </VBox>
 
-                <!-- Profile mini card -->
-                <HBox alignment="CENTER_LEFT" spacing="10.0"
-                      style="-fx-background-color: rgba(255,255,255,0.07); -fx-padding: 14 18; -fx-border-color: rgba(255,255,255,0.06); -fx-border-width: 0 0 1 0;">
-                    <Label text="👤" style="-fx-font-size: 22px;" />
-                    <VBox spacing="2.0">
-                        <Label text="Fournisseur" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white;" />
-                        <Label text="Compte actif" style="-fx-font-size: 10px; -fx-text-fill: #7ddc6e;" />
-                    </VBox>
-                </HBox>
-
-                <!-- Navigation section -->
-                <VBox spacing="2.0">
-                    <padding><Insets top="18" left="14" right="14" bottom="10"/></padding>
+                <VBox spacing="4.0">
+                    <padding><Insets top="20" left="12" right="12"/></padding>
                     <children>
-                        <Label text="NAVIGATION" style="-fx-font-size: 9px; -fx-text-fill: rgba(255,255,255,0.4); -fx-font-weight: bold; -fx-padding: 0 0 8 6; -fx-letter-spacing: 1;" />
+                        <Label text="NAVIGATION"
+                               style="-fx-font-size: 10px; -fx-text-fill: rgba(255,255,255,0.5);
+                                      -fx-font-weight: bold; -fx-padding: 0 0 5 8;" />
 
-                        <!-- Liste Equipements (ACTIVE) -->
-                        <HBox spacing="12.0" alignment="CENTER_LEFT"
-                              style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 6, 0, 0, 2);">
-                            <Label text="🚜" style="-fx-font-size: 16px;" />
-                            <Label text="Liste Équipements" style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3a6b2e;" />
+                        <!-- Gestion Équipements (ACTIF) -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: white; -fx-background-radius: 12;
+                                     -fx-padding: 10 15; -fx-cursor: hand;">
+                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <image><Image url="@/images/tracktor.png" /></image>
+                            </ImageView>
+                            <Label text="Gestion Équipements"
+                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #4a7c40;" />
                         </HBox>
 
-                        <!-- Ajouter -->
-                        <HBox spacing="12.0" alignment="CENTER_LEFT"
-                              style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand;"
-                              onMouseClicked="#goToAjout">
-                            <Label text="➕" style="-fx-font-size: 16px;" />
-                            <Label text="Ajouter Équipement" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.9);" />
+                        <!-- Gestion Utilisateurs -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: transparent; -fx-background-radius: 12;
+                                     -fx-padding: 10 15; -fx-cursor: hand; -fx-opacity: 0.6;"
+                              onMouseClicked="#goToLogin">
+                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <image><Image url="@/images/group.png" /></image>
+                            </ImageView>
+                            <Label text="Gestion Utilisateurs" style="-fx-font-size: 13px; -fx-text-fill: white;" />
                         </HBox>
 
-                        <HBox spacing="12.0" alignment="CENTER_LEFT"
-                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand; -fx-opacity: 0.65;">
-                            <Label text="👥" style="-fx-font-size: 16px;" />
-                            <Label text="Gestion Utilisateurs" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        <!-- Gestion Maintenance -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: transparent; -fx-background-radius: 12;
+                                     -fx-padding: 10 15; -fx-cursor: hand; -fx-opacity: 0.6;">
+                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <image><Image url="@/images/electricity.png" /></image>
+                            </ImageView>
+                            <Label text="Gestion Maintenance" style="-fx-font-size: 13px; -fx-text-fill: white;" />
                         </HBox>
 
-                        <HBox spacing="12.0" alignment="CENTER_LEFT"
-                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand; -fx-opacity: 0.65;">
-                            <Label text="⚙️" style="-fx-font-size: 16px;" />
-                            <Label text="Gestion Maintenance" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        <!-- Gestion Événements -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: transparent; -fx-background-radius: 12;
+                                     -fx-padding: 10 15; -fx-cursor: hand; -fx-opacity: 0.6;">
+                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <image><Image url="@/images/booking.png" /></image>
+                            </ImageView>
+                            <Label text="Gestion Événements" style="-fx-font-size: 13px; -fx-text-fill: white;" />
                         </HBox>
 
-                        <HBox spacing="12.0" alignment="CENTER_LEFT"
-                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand; -fx-opacity: 0.65;">
-                            <Label text="📅" style="-fx-font-size: 16px;" />
-                            <Label text="Gestion Événements" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        <!-- Gestion Animaux -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: transparent; -fx-background-radius: 12;
+                                     -fx-padding: 10 15; -fx-cursor: hand; -fx-opacity: 0.6;">
+                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <image><Image url="@/images/paw.png" /></image>
+                            </ImageView>
+                            <Label text="Gestion Animaux" style="-fx-font-size: 13px; -fx-text-fill: white;" />
                         </HBox>
 
-                        <HBox spacing="12.0" alignment="CENTER_LEFT"
-                              style="-fx-background-color: rgba(255,255,255,0.06); -fx-background-radius: 10; -fx-padding: 11 15; -fx-cursor: hand; -fx-opacity: 0.65;">
-                            <Label text="🐄" style="-fx-font-size: 16px;" />
-                            <Label text="Gestion Animaux" style="-fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.85);" />
+                        <!-- Gestion Financière -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT"
+                              style="-fx-background-color: transparent; -fx-background-radius: 12;
+                                     -fx-padding: 10 15; -fx-cursor: hand; -fx-opacity: 0.6;">
+                            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                <image><Image url="@/images/money-bag.png" /></image>
+                            </ImageView>
+                            <Label text="Gestion Financière" style="-fx-font-size: 13px; -fx-text-fill: white;" />
                         </HBox>
                     </children>
                 </VBox>
 
+                <!-- Spacer -->
                 <Region VBox.vgrow="ALWAYS" />
 
-                <!-- Bottom stats -->
-                <VBox style="-fx-background-color: rgba(0,0,0,0.2); -fx-padding: 14 18; -fx-border-color: rgba(255,255,255,0.08); -fx-border-width: 1 0 0 0;" spacing="8.0">
-                    <Label fx:id="labelEquipCount"
-                           style="-fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.8); -fx-font-weight: bold;" />
-                    <Button text="← Changer de rôle" onAction="#goToLogin"
-                            style="-fx-background-color: rgba(255,255,255,0.12); -fx-text-fill: white; -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 9 16; -fx-border-color: rgba(255,255,255,0.25); -fx-border-radius: 10;"
-                            maxWidth="Infinity" />
-                </VBox>
+                <!-- Compteur + Logout -->
+                <HBox alignment="CENTER">
+                    <padding><Insets left="12" right="12" bottom="10"/></padding>
+                    <VBox spacing="6.0" HBox.hgrow="ALWAYS">
+                        <Label fx:id="labelEquipCount"
+                               style="-fx-font-size: 11px; -fx-text-fill: rgba(255,255,255,0.65);
+                                      -fx-font-weight: bold;" />
+                        <Button text="⬅  Changer de rôle" onAction="#goToLogin"
+                                style="-fx-background-color: rgba(255,255,255,0.15); -fx-text-fill: white;
+                                       -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand;
+                                       -fx-padding: 8 20; -fx-border-color: rgba(255,255,255,0.3);
+                                       -fx-border-radius: 10;"
+                                maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+                    </VBox>
+                </HBox>
+
             </children>
         </VBox>
 
         <!-- ===== MAIN CONTENT ===== -->
-        <VBox layoutX="230.0" layoutY="0.0" prefHeight="760.0" prefWidth="1020.0"
+        <VBox layoutX="220.0" layoutY="0.0" prefHeight="760.0" prefWidth="1030.0"
               style="-fx-background-color: #f0f7ee;" spacing="0.0">
             <children>
 
@@ -114,8 +138,6 @@
                         <Label text="Gérez, modifiez et suivez vos équipements agricoles"
                                style="-fx-font-size: 12px; -fx-text-fill: #7a9c70;" />
                     </VBox>
-
-                    <!-- Taux de change inline (compact) -->
                     <HBox spacing="8.0" alignment="CENTER"
                           style="-fx-background-color: #f5f9f4; -fx-background-radius: 10; -fx-padding: 8 14; -fx-border-color: #c8ddc5; -fx-border-radius: 10;">
                         <Label text="💱" style="-fx-font-size: 13px;" />
@@ -126,7 +148,6 @@
                                style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" />
                         <Label fx:id="labelMajTaux" text="" style="-fx-font-size: 9px; -fx-text-fill: #aaa;" />
                     </HBox>
-
                     <Button text="📊 Stats" onAction="#afficherStats"
                             style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 9 16;" />
                     <Button text="📄 PDF" onAction="#exporterPDF"
@@ -135,24 +156,28 @@
                             style="-fx-background-color: #4a7c40; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 9 20;" />
                 </HBox>
 
-                <!-- Stats Panel (hidden by default) -->
+                <!-- ============================================================
+                     PANEL STATS AMELIORE
+                     Tout le contenu est injecte dynamiquement depuis Java :
+                     - 4 cartes KPI (total, valeur, stock faible, ruptures)
+                     - BarChart quantite par type
+                     - PieChart repartition valeur
+                     - Tableau recap par type
+                     La VBox panelStats est le conteneur vide,
+                     le controller la remplit lors du clic "Stats".
+                     ============================================================ -->
                 <VBox fx:id="panelStats" visible="false" managed="false"
-                      style="-fx-background-color: white; -fx-border-color: #ddeedd; -fx-border-width: 0 0 1 0;"
-                      spacing="6.0">
-                    <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
-                    <children>
-                        <HBox alignment="CENTER_LEFT">
-                            <Label text="Statistiques par type d'équipement"
-                                   style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #3a6b2e;" HBox.hgrow="ALWAYS" />
-                            <Button text="✕ Fermer" onAction="#fermerStats"
-                                    style="-fx-background-color: #ecf0f1; -fx-text-fill: #7f8c8d; -fx-background-radius: 8; -fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 4 10;" />
-                        </HBox>
-                        <BarChart fx:id="barChart" prefHeight="180.0"
-                                  style="-fx-background-color: transparent;">
-                            <xAxis><CategoryAxis label="Type" /></xAxis>
-                            <yAxis><NumberAxis label="Quantité totale" /></yAxis>
-                        </BarChart>
-                    </children>
+                      style="-fx-background-color: #f8fdf6; -fx-border-color: #c8ddc5; -fx-border-width: 0 0 2 0;"
+                      spacing="12.0">
+                    <padding><Insets top="14" right="20" bottom="16" left="20"/></padding>
+                    <!-- Le contenu est genere dynamiquement dans afficherStats() -->
+                    <!-- Pas besoin de BarChart fixe ici, on le cree en Java -->
+                    <BarChart fx:id="barChart" prefHeight="1" prefWidth="1"
+                              visible="false" managed="false"
+                              style="-fx-background-color: transparent;">
+                        <xAxis><CategoryAxis label="Type" /></xAxis>
+                        <yAxis><NumberAxis label="Quantité totale" /></yAxis>
+                    </BarChart>
                 </VBox>
 
                 <!-- Search / Filter Bar -->
@@ -174,16 +199,10 @@
                         <VBox style="-fx-background-color: #f0f7ee;">
                             <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
                             <children>
-                                <!-- FlowPane for grid cards -->
-                                <FlowPane fx:id="gridEquipements"
-                                          hgap="16.0" vgap="16.0"
-                                          prefWrapLength="950.0"
-                                          style="-fx-background-color: transparent;" />
-
-                                <!-- Empty placeholder -->
+                                <FlowPane fx:id="gridEquipements" hgap="16.0" vgap="16.0"
+                                          prefWrapLength="950.0" style="-fx-background-color: transparent;" />
                                 <VBox fx:id="emptyPlaceholder" alignment="CENTER" spacing="12.0"
-                                      visible="false" managed="false"
-                                      style="-fx-padding: 80 0;">
+                                      visible="false" managed="false" style="-fx-padding: 80 0;">
                                     <Label text="🚜" style="-fx-font-size: 60px;" />
                                     <Label text="Aucun équipement trouvé"
                                            style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #9ab890;" />
