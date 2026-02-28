@@ -17,8 +17,8 @@ public class UserCardController {
     public void setUser(User user) {
         this.user = user;
         if (nameLabel != null && ageLabel != null && user != null) {
-            nameLabel.setText(user.getFirstName() + " " + user.getLastName());
-            ageLabel.setText("Âge: " + user.getAge());
+            nameLabel.setText((user.getPrenom() != null ? user.getPrenom() : "") + " " + (user.getNom() != null ? user.getNom() : ""));
+            ageLabel.setText(user.getEmail() != null ? user.getEmail() : "");
         }
     }
 

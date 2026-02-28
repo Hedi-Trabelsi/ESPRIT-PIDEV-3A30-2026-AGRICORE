@@ -30,7 +30,7 @@ public class UserServiceTest {
     @Test
     @Order(1)
     public void testCreateUser() {
-        User u = new User(22, "foulen", "ben foulen");
+        User u = new User("foulen", "ben foulen");
         try {
             int id = us.create(u);
             this.idUser = id;
@@ -38,7 +38,7 @@ public class UserServiceTest {
             assertTrue(id > 0, "User ID should be greater than -1");
             List<User> users = us.read();
             assertFalse(users.isEmpty());
-            boolean found = users.stream().anyMatch(pers -> pers.getId() == id && pers.getFirstName().equals("foulen"));
+            boolean found = users.stream().anyMatch(pers -> pers.getId() == id && "foulen".equals(pers.getPrenom()));
             if (found) {
                 System.out.println("[DEBUG_LOG] Verified: User with the generated ID and name 'Ali' exists.");
             }
@@ -53,20 +53,19 @@ public class UserServiceTest {
     @Test
     @Order(2)
     public void testUpdate() throws SQLException {
-        User u = new User(22, "foulen", "ben foulen");
+        User u = new User("foulen", "ben foulen");
         int id = us.create(u);
         this.idUser = id;
         System.out.println("[DEBUG_LOG] Created User with ID: " + id);
         User updateInfo = new User();
         updateInfo.setId(id);
-        updateInfo.setAge(21);
-        updateInfo.setFirstName("after clean");
-        updateInfo.setLastName("ben foulen");
+        updateInfo.setPrenom("after clean");
+        updateInfo.setNom("ben foulen");
         us.update(updateInfo);
         System.out.println("[DEBUG_LOG] Updated User ID " + id + " to name 'flen'");
         List<User> users = us.read();
         assertFalse(users.isEmpty());
-        boolean found = users.stream().anyMatch(pers -> pers.getId() == id && pers.getFirstName().equals("after clean"));
+        boolean found = users.stream().anyMatch(pers -> pers.getId() == id && "after clean".equals(pers.getPrenom()));
         if (found) {
             System.out.println("[DEBUG_LOG] Verified: User with ID " + id + " has updated name 'mehdi'");
         }

@@ -40,7 +40,7 @@ public class DepenseServiceTest {
     @Test
     @Order(1)
     public void testCreateDepense() throws SQLException {
-        idUser = us.create(new User(22, "test_dep", "user"));
+        idUser = us.create(new User("test_dep", "user"));
         Depense d = new Depense();
         d.setUserId(idUser);
         d.setType(TypeDepense.AUTRE);
@@ -63,7 +63,7 @@ public class DepenseServiceTest {
     @Test
     @Order(2)
     public void testUpdateDepense() throws SQLException {
-        idUser = us.create(new User(22, "test_dep_upd", "user"));
+        idUser = us.create(new User("test_dep_upd", "user"));
         Depense d = new Depense();
         d.setUserId(idUser);
         d.setType(TypeDepense.CARBURANT);

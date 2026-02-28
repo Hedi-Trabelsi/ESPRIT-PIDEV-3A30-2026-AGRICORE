@@ -81,7 +81,7 @@ public class UserAnalyticsController {
     public void setUser(User user) {
         this.user = user;
         if (userTitle != null && user != null) {
-            userTitle.setText("Analyse financière: " + user.getFirstName() + " " + user.getLastName());
+            userTitle.setText("Analyse financière: " + user.getPrenom() + " " + user.getNom());
         }
         loadData();
         refreshAnalytics();

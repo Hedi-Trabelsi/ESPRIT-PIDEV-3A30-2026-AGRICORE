@@ -93,7 +93,7 @@ public class UserOperationsController {
     public void setUser(User user) {
         this.user = user;
         if (userTitle != null && user != null) {
-            userTitle.setText("Utilisateur: " + user.getFirstName() + " " + user.getLastName());
+            userTitle.setText("Utilisateur: " + user.getPrenom() + " " + user.getNom());
         }
         wireFinanceNav();
         if (depenseType != null && depenseType.getItems().isEmpty()) {

@@ -7,22 +7,22 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@ child app?shadcn.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddUserController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@shadcn.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AddUserController">
    <children>
       <HBox layoutX="40.0" layoutY="27.0" prefHeight="273.0" prefWidth="405.0">
          <children>
             <VBox alignment="CENTER" prefHeight="273.0" prefWidth="211.0" spacing="40.0">
                <children>
-                  <Label text="age :" />
-                  <Label text="first name :" />
-                  <Label text="last name :" />
+                  <Label text="Prénom :" />
+                  <Label text="Nom :" />
+                  <Label text="Email :" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="273.0" prefWidth="193.0" spacing="17.0">
                <children>
-                  <TextField fx:id="ageTf" />
                   <TextField fx:id="firstNameTf" />
                   <TextField fx:id="lastNameTf" />
+                  <TextField fx:id="emailTf" />
                </children>
             </VBox>
          </children>

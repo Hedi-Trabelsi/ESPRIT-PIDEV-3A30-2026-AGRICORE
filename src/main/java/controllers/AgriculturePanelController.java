@@ -31,7 +31,7 @@ public class AgriculturePanelController {
 
     // ── Show a loading indicator while waiting for the API ───────
     private void showLoading() {
-        Label lbl = new Label("⏳  Chargement des données World Bank…");
+        Label lbl = new Label("⏳  Chargement des données FAOSTAT (FAO)…");
         lbl.getStyleClass().add("agri-loading");
         grid.getChildren().clear();
         grid.add(lbl, 0, 0, 2, 1); // span 2 columns

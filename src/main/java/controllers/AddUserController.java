@@ -15,17 +15,16 @@ import java.sql.SQLException;
 public class AddUserController {
     UserService us = new UserService();
     @FXML
-    private TextField ageTf;
-
-    @FXML
     private TextField firstNameTf;
-
     @FXML
     private TextField lastNameTf;
+    @FXML
+    private TextField emailTf;
 
     @FXML
     void saveUser(ActionEvent event) {
-        User u = new User(Integer.parseInt(this.ageTf.getText()), this.firstNameTf.getText(), this.lastNameTf.getText());
+        User u = new User(this.firstNameTf.getText(), this.lastNameTf.getText());
+        u.setEmail(emailTf != null ? emailTf.getText() : null);
         try {
             us.create(u);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -46,7 +45,7 @@ public class AddUserController {
     void navigateShowUsers(ActionEvent event) {
         try {
             Parent root = new FXMLLoader(getClass().getResource("/ShowUsers.fxml")).load();
-            ageTf.getScene().setRoot(root);
+            firstNameTf.getScene().setRoot(root);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

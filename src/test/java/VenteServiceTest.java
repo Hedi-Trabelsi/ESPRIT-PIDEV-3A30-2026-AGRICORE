@@ -39,7 +39,7 @@ public class VenteServiceTest {
     @Test
     @Order(1)
     public void testCreateVente() throws SQLException {
-        idUser = us.create(new User(22, "test_vente", "user"));
+        idUser = us.create(new User("test_vente", "user"));
         Vente v = new Vente();
         v.setUserId(idUser);
         v.setPrixUnitaire(10.0);
@@ -64,7 +64,7 @@ public class VenteServiceTest {
     @Test
     @Order(2)
     public void testUpdateVente() throws SQLException {
-        idUser = us.create(new User(22, "test_vente_upd", "user"));
+        idUser = us.create(new User("test_vente_upd", "user"));
         Vente v = new Vente();
         v.setUserId(idUser);
         v.setPrixUnitaire(20.0);

@@ -43,7 +43,7 @@ public class AnomalyPageController {
     public void setUser(User user) {
         this.user = user;
         if (titleLabel != null && user != null)
-            titleLabel.setText("Anomalies dépenses: " + user.getFirstName() + " " + user.getLastName());
+            titleLabel.setText("Anomalies dépenses: " + user.getPrenom() + " " + user.getNom());
         refresh();
     }
 

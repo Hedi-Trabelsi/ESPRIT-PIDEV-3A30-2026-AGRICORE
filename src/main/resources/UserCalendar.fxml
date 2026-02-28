@@ -45,7 +45,6 @@
                         <Region VBox.vgrow="ALWAYS"/>
 
                         <!-- Back -->
-                        <Button text="← Retour" onAction="#goBack" styleClass="btn-back-sidebar"/>
 
                     </children>
                 </VBox>
@@ -71,7 +70,6 @@
                                         <Button text="›" onAction="#nextMonth" styleClass="btn-nav"/>
                                     </children>
                                 </HBox>
-                                <Button text="+ Événement" styleClass="btn-add"/>
                             </children>
                         </HBox>
 

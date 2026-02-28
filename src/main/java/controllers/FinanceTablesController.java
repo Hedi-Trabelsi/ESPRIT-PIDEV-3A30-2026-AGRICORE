@@ -40,8 +40,7 @@ public class FinanceTablesController {
         this.user = user;
 
         if (titleLabel != null && user != null) {
-            titleLabel.setText("Finances: "
-                    + user.getFirstName() + " " + user.getLastName());
+            titleLabel.setText("Finances: " + user.getPrenom() + " " + user.getNom());
         }
 
         loadData();
