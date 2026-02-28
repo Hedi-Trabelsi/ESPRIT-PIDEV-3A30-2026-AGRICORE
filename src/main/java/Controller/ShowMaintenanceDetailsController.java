@@ -34,6 +34,21 @@ public class ShowMaintenanceDetailsController {
     public ShowMaintenanceDetailsController() throws SQLException {
     }
 
+    @FXML
+    void initialize() {
+        // Early role check: hide buttons immediately for restricted roles
+        int role = UserSession.getRole();
+        System.out.println("[DEBUG] ShowMaintenanceDetails - UserSession role: " + role);
+
+        if (role == 1) {
+            // Agriculteur: hide Clôturer and Planifier
+            btnTerminer.setVisible(false);
+            btnTerminer.setManaged(false);
+            btnPlanifier.setVisible(false);
+            btnPlanifier.setManaged(false);
+        }
+    }
+
     public void setMaintenance(Maintenance maintenance) {
         this.maintenance = maintenance;
         showMaintenanceDetails();
@@ -363,7 +378,7 @@ public class ShowMaintenanceDetailsController {
     @FXML
     void navigateRetour() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
             Parent root = loader.load();
             NavigationUtil.loadInContentArea(retourLabel, root);
         } catch (Exception e) {

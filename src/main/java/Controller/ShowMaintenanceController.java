@@ -37,7 +37,9 @@ public class ShowMaintenanceController {
         applyProfessionalButtonStyle(addBtn);
 
         // Role-based visibility: Technicien (role 2) cannot create maintenance
-        if (UserSession.getRole() == 2) {
+        int role = UserSession.getRole();
+        System.out.println("[DEBUG] ShowMaintenance - UserSession role: " + role);
+        if (role == 2) {
             addBtn.setVisible(false);
             addBtn.setManaged(false);
         }

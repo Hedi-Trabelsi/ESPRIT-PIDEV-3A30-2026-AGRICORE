@@ -118,7 +118,7 @@ public class AddMaintenanceController {
             javafx.animation.PauseTransition pause = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(1));
             pause.setOnFinished(e -> {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
                     javafx.scene.Parent root = loader.load();
                     NavigationUtil.loadInContentArea((javafx.scene.Node) event.getSource(), root);
                 } catch (Exception ex) {
@@ -136,7 +136,7 @@ public class AddMaintenanceController {
     @FXML
     void cancel(ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ShowMaintenance.fxml"));
             NavigationUtil.loadInContentArea((javafx.scene.Node) event.getSource(), root);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de navigation", e.getMessage());
@@ -235,7 +235,7 @@ public class AddMaintenanceController {
     void navigateShowMaintenance(ActionEvent event) {
         try {
             Parent root = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml")).load();
-            Save.getScene().setRoot(root);
+            NavigationUtil.loadInContentArea(Save, root);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur de navigation", e.getMessage());
         }

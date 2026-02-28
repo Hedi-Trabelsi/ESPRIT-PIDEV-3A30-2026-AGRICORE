@@ -98,7 +98,7 @@ public class UserHomeController {
         if (maintenanceButton != null) {
             maintenanceButton.setOnAction(e -> {
                 setActiveButton(maintenanceButton);
-                loadPage("/fxml/Dashboard.fxml", "Maintenance");
+                loadPage("/fxml/ShowMaintenance.fxml", "Maintenance");
             });
         }
 
@@ -261,6 +261,7 @@ public class UserHomeController {
     public void setLoggedInUser(Utilisateur user) {
         this.loggedInUser = user;
         UserSession.setCurrentUser(user);
+        System.out.println("[DEBUG] UserHome - Logged in user: " + user.getEmail() + " | Role: " + user.getRole());
 
         updateSidebarProfile();
         checkForMissingInformation();

@@ -3,7 +3,6 @@ package Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -11,7 +10,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import Model.Maintenance;
-import javafx.stage.Stage;
 import services.ServiceMaintenance;
 
 import java.io.IOException;
@@ -188,21 +186,13 @@ public class NotificationController {
 
     private void openTacheWindow(Maintenance m) {
         try {
-            java.net.URL fxmlLocation = getClass().getResource("/fxml/ShowMaintenanceDetails.fxml");
-
-            if (fxmlLocation == null) {
-                System.err.println("ERREUR : Le fichier FXML n'a pas été trouvé au chemin indiqué !");
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(fxmlLocation);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
             Parent root = loader.load();
 
-            Stage stage = new Stage();
-            stage.setTitle("Détails : " + m.getNom_maintenance());
-            stage.setScene(new Scene(root));
-            stage.show();
+            ShowMaintenanceDetailsController controller = loader.getController();
+            controller.setMaintenance(m);
 
+            NavigationUtil.loadInContentArea(notifList, root);
         } catch (IOException e) {
             e.printStackTrace();
         }

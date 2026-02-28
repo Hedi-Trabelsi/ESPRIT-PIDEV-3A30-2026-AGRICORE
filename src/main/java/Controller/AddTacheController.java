@@ -57,8 +57,12 @@ public class AddTacheController {
     @FXML
     void cancel(MouseEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
             Parent root = loader.load();
+            if (maintenanceAutomatique != null) {
+                ShowMaintenanceDetailsController controller = loader.getController();
+                controller.setMaintenance(maintenanceAutomatique);
+            }
             NavigationUtil.loadInContentArea((javafx.scene.Node) event.getSource(), root);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner : " + e.getMessage());

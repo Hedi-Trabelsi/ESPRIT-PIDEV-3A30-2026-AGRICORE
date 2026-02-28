@@ -246,6 +246,7 @@ public class HomeController {
 
     public void updateLoggedInUser(Utilisateur updatedUser) {
         this.loggedInUser = updatedUser;
+        UserSession.setCurrentUser(updatedUser);
 
         // Update profile info
         if (nameLabel != null) {

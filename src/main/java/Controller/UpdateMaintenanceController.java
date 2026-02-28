@@ -115,7 +115,7 @@ public class UpdateMaintenanceController {
 
     private void returnToList() {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ShowMaintenance.fxml"));
             NavigationUtil.loadInContentArea(updateBtn, root);
         } catch (Exception e) {
             showAlert(Alert.AlertType.ERROR, "Erreur", "Impossible de retourner : " + e.getMessage());
