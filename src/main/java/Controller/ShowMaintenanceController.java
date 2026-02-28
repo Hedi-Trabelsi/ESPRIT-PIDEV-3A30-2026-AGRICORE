@@ -36,6 +36,12 @@ public class ShowMaintenanceController {
     void initialize() {
         applyProfessionalButtonStyle(addBtn);
 
+        // Role-based visibility: Technicien (role 2) cannot create maintenance
+        if (UserSession.getRole() == 2) {
+            addBtn.setVisible(false);
+            addBtn.setManaged(false);
+        }
+
         // --- INITIALISATION DU FILTRE STATUT ---
         if (statusFilter != null) {
             statusFilter.setItems(FXCollections.observableArrayList(
@@ -127,7 +133,7 @@ public class ShowMaintenanceController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddMaintenance.fxml"));
             Parent root = loader.load();
-            addBtn.getScene().setRoot(root);
+            NavigationUtil.loadInContentArea(addBtn, root);
         } catch (Exception e) {
             showAlert("Erreur", "Impossible d'ouvrir l'ajout : " + e.getMessage());
         }
@@ -287,7 +293,7 @@ public class ShowMaintenanceController {
             Parent root = loader.load();
             ShowMaintenanceDetailsController controller = loader.getController();
             controller.setMaintenance(m);
-            gridPane.getScene().setRoot(root);
+            NavigationUtil.loadInContentArea(gridPane, root);
         } catch (Exception e) { e.printStackTrace(); }
     }
 
@@ -299,7 +305,7 @@ public class ShowMaintenanceController {
             Parent root = loader.load();
             UpdateMaintenanceController controller = loader.getController();
             controller.setMaintenance(m);
-            gridPane.getScene().setRoot(root);
+            NavigationUtil.loadInContentArea(gridPane, root);
         } catch (Exception ex) { ex.printStackTrace(); }
     }
 

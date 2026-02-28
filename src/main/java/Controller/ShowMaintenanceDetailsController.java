@@ -287,6 +287,11 @@ public class ShowMaintenanceDetailsController {
             String statutActuel = maintenance.getStatut();
             boolean afficherBoutons = "Accepter".equalsIgnoreCase(statutActuel) || "Planifier".equalsIgnoreCase(statutActuel);
 
+            // Role-based: Agriculteur (role 1) cannot see Clôturer/Planifier buttons
+            if (UserSession.getRole() == 1) {
+                afficherBoutons = false;
+            }
+
             btnTerminer.setVisible(afficherBoutons);
             btnTerminer.setManaged(afficherBoutons);
             btnPlanifier.setVisible(afficherBoutons);

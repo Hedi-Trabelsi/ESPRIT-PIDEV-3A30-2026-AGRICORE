@@ -260,6 +260,7 @@ public class UserHomeController {
 
     public void setLoggedInUser(Utilisateur user) {
         this.loggedInUser = user;
+        UserSession.setCurrentUser(user);
 
         updateSidebarProfile();
         checkForMissingInformation();

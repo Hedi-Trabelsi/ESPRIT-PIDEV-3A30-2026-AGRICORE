@@ -6,72 +6,60 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<AnchorPane prefHeight="720" prefWidth="1250" style="-fx-background-color: #f8fafc;"
-            stylesheets="@/styles/styleM.css, @/styles/dashboard.css"
-            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Controller.DashboardController">
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      spacing="20" style="-fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.DashboardController">
 
-    <children>
-
-
-        <VBox layoutX="217.0" layoutY="10.0" prefHeight="700.0" prefWidth="1010.0" spacing="20.0"
-              style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-padding: 30;">
-
-            <children>
-                <HBox alignment="CENTER_LEFT" spacing="20">
-                    <VBox HBox.hgrow="ALWAYS">
-
-                        <Label text="Maintenance Dashboard" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
-                    </VBox>
-
-                    <HBox spacing="15" alignment="CENTER">
-                        <AnchorPane onMouseClicked="#openStatsWindow" style="-fx-cursor: hand;" >
-                            <ImageView fx:id="statsIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                <image><Image url="@/images/stat.png" /></image>
-                            </ImageView>
-                        </AnchorPane>
-                        <AnchorPane onMouseClicked="#showNotifications" style="-fx-cursor: hand;">
-                            <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                <image><Image url="@/images/notif.png" /></image>
-                            </ImageView>
-                            <Label fx:id="notificationBadge" layoutX="15.0" layoutY="-8.0" prefHeight="18.0" prefWidth="18.0" alignment="CENTER"
-                                   style="-fx-background-color: #ef4444; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-size: 10; -fx-font-weight: bold;" text="0" />
-                        </AnchorPane>
-                    </HBox>
-                </HBox>
-
-                <Separator />
-
-                <HBox spacing="15" alignment="CENTER_LEFT">
-                    <HBox spacing="10" style="-fx-background-color: #f1f5f9; -fx-padding: 12; -fx-background-radius: 12;" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
-                        <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                            <image><Image url="@/images/chercher.png" /></image>
-                        </ImageView>
-                        <TextField fx:id="searchField" promptText="Rechercher une maintenance..." HBox.hgrow="ALWAYS"
-                                   style="-fx-background-color: transparent; -fx-font-size: 14px;"/>
-                    </HBox>
-
-                    <ChoiceBox fx:id="priorityFilter" prefHeight="42.0" prefWidth="160.0"
-                               style="-fx-background-color: #f1f5f9; -fx-background-radius: 12; -fx-border-color: transparent; -fx-font-size: 14px;">
-                        <items>
-                            <FXCollections fx:factory="observableArrayList">
-                                <String fx:value="Toutes les priorités"/>
-                                <String fx:value="Faible"/>
-                                <String fx:value="Normale"/>
-                                <String fx:value="Urgente"/>
-                            </FXCollections>
-                        </items>
-                        <value>
-                            <String fx:value="Toutes les priorités"/>
-                        </value>
-                    </ChoiceBox>
-                </HBox>
-
-                <VBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-padding: 5 0 0 0;">
-                    <ListView fx:id="mainList" VBox.vgrow="ALWAYS"
-                              style="-fx-background-color: transparent; -fx-background-insets: 0; -fx-padding: 0; -fx-border-color: transparent;"/>
-                </VBox>
-            </children>
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Maintenance Dashboard" styleClass="page-title"/>
         </VBox>
-    </children>
-</AnchorPane>
+
+        <HBox spacing="15" alignment="CENTER">
+            <AnchorPane onMouseClicked="#openStatsWindow" style="-fx-cursor: hand;">
+                <ImageView fx:id="statsIcon" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@/images/stat.png" /></image>
+                </ImageView>
+            </AnchorPane>
+            <AnchorPane onMouseClicked="#showNotifications" style="-fx-cursor: hand;">
+                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                    <image><Image url="@/images/notif.png" /></image>
+                </ImageView>
+                <Label fx:id="notificationBadge" layoutX="15.0" layoutY="-8.0"
+                       prefHeight="18.0" prefWidth="18.0" alignment="CENTER"
+                       styleClass="maint-notif-badge" text="0" />
+            </AnchorPane>
+        </HBox>
+    </HBox>
+
+    <Separator style="-fx-opacity: 0.3;" />
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <HBox spacing="10" styleClass="search-container" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                <image><Image url="@/images/chercher.png" /></image>
+            </ImageView>
+            <TextField fx:id="searchField" promptText="Rechercher une maintenance..."
+                       HBox.hgrow="ALWAYS" styleClass="search-field"/>
+        </HBox>
+
+        <ChoiceBox fx:id="priorityFilter" prefHeight="42.0" prefWidth="160.0" styleClass="filter-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Toutes les priorités"/>
+                    <String fx:value="Faible"/>
+                    <String fx:value="Normale"/>
+                    <String fx:value="Urgente"/>
+                </FXCollections>
+            </items>
+            <value>
+                <String fx:value="Toutes les priorités"/>
+            </value>
+        </ChoiceBox>
+    </HBox>
+
+    <VBox spacing="10" VBox.vgrow="ALWAYS" style="-fx-padding: 5 0 0 0;">
+        <ListView fx:id="mainList" VBox.vgrow="ALWAYS" styleClass="maint-transparent-list"/>
+    </VBox>
+</VBox>
