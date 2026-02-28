@@ -1,61 +1,30 @@
-/* ═══════════════════════════════════════════════════
-   Paste at the bottom of your shadcn.css
-═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   Paste at the bottom of shadcn.css
+   Light palette — 5 tones, all matched
+═══════════════════════════════════════ */
 
-/* ── Page background ── */
-.root {
-    -fx-background-color: #eef5f0;
-}
+.root { -fx-background-color: #F4F7F5; }
 
-/* ── Refresh button ── */
-.btn-refresh-main {
-    -fx-background-color: linear-gradient(to bottom, #2d8a56, #1d6b3e);
-    -fx-text-fill: #ffffff;
-    -fx-font-weight: 700;
-    -fx-font-size: 12px;
-    -fx-background-radius: 9px;
-    -fx-border-radius: 9px;
-    -fx-padding: 8px 18px;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(11,51,32,0.18), 7, 0, 0, 2);
-}
-.btn-refresh-main:hover {
-    -fx-background-color: linear-gradient(to bottom, #3aaa6a, #22854e);
-    -fx-effect: dropshadow(gaussian, rgba(22,166,89,0.28), 10, 0, 0, 3);
-}
-.btn-refresh-main:pressed {
-    -fx-translate-y: 1px;
-    -fx-effect: dropshadow(gaussian, rgba(11,51,32,0.10), 5, 0, 0, 1);
-}
-
-/* ── ScrollPane ── */
+/* ScrollPane — transparent */
 .scroll-pane {
     -fx-background-color: transparent;
     -fx-background: transparent;
     -fx-border-color: transparent;
+    -fx-padding: 0;
 }
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-.scroll-pane > .scroll-bar:vertical {
-    -fx-pref-width: 5px;
-    -fx-background-color: transparent;
-}
+.scroll-pane > .viewport           { -fx-background-color: transparent; }
+.scroll-pane > .scroll-bar:vertical { -fx-pref-width: 5; -fx-background-color: transparent; }
 .scroll-pane > .scroll-bar:vertical .thumb {
-    -fx-background-color: #a8ccb8;
-    -fx-background-radius: 3px;
+    -fx-background-color: #C9DDD2; -fx-background-radius: 3;
 }
 .scroll-pane > .scroll-bar:vertical .track,
-.scroll-pane > .scroll-bar:vertical .track-background {
-    -fx-background-color: transparent;
-}
+.scroll-pane > .scroll-bar:vertical .track-background { -fx-background-color: transparent; }
 .scroll-pane > .scroll-bar .increment-button,
-.scroll-pane > .scroll-bar .decrement-button {
-    -fx-pref-height: 0; -fx-opacity: 0;
-}
+.scroll-pane > .scroll-bar .decrement-button { -fx-pref-height: 0; -fx-opacity: 0; }
 
-/* ── Search field focus ── */
+/* TextField focus ring */
 .text-field:focused {
-    -fx-border-color: #22a659;
-    -fx-effect: dropshadow(gaussian, rgba(22,166,89,0.12), 6, 0, 0, 0);
+    -fx-border-color: #2E8B57;
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(46,139,87,0.14), 6, 0, 0, 0);
 }
