@@ -6,33 +6,21 @@
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
 <AnchorPane prefHeight="600" prefWidth="450" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.GoogleSignInController">
     <children>
-        <VBox spacing="20" alignment="TOP_CENTER" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20" />
-            </padding>
+        <VBox spacing="20" alignment="TOP_CENTER" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
 
-            <!-- Header -->
-            <VBox spacing="10" alignment="CENTER">
-                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1b5e20;" text="Connexion avec Google" />
-                <Label style="-fx-font-size: 14px; -fx-text-fill: #558b2f;" text="Connectez-vous avec votre compte Google" />
-            </VBox>
+            <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1b5e20;" text="Connexion Google" />
 
-            <!-- Status Label -->
-            <Label fx:id="statusLabel" text="Chargement..." style="-fx-text-fill: #666;" />
+            <WebView fx:id="webView" VBox.vgrow="ALWAYS" prefHeight="400" />
 
-            <!-- WebView for Google Sign-In -->
-            <StackPane VBox.vgrow="ALWAYS" prefHeight="400">
-                <WebView fx:id="webView" prefHeight="400" />
-                <ProgressIndicator fx:id="progressIndicator" visible="false" />
-            </StackPane>
+            <ProgressIndicator fx:id="progressIndicator" visible="false" />
 
-            <!-- Close Button -->
+            <Label fx:id="statusLabel" style="-fx-text-fill: #666;" />
+
             <HBox alignment="CENTER" spacing="10">
                 <Button text="Annuler" style="-fx-background-color: #f5f5f5; -fx-text-fill: #666; -fx-padding: 10 25; -fx-background-radius: 25; -fx-cursor: hand;" onAction="#handleClose" />
                 <Button text="Réessayer" style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-padding: 10 25; -fx-background-radius: 25; -fx-cursor: hand;" onAction="#handleRetry" />

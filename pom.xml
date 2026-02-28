@@ -145,20 +145,6 @@
             <version>3.14.0</version>
         </dependency>
 
-        <!-- For generating random codes -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
-        </dependency>
-
-        <!-- Additional utilities for Java 21 compatibility -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
-        </dependency>
-
         <!-- Google API Client -->
         <dependency>
             <groupId>com.google.api-client</groupId>
@@ -177,6 +163,8 @@
             <artifactId>google-oauth-client-jetty</artifactId>
             <version>1.34.1</version>
         </dependency>
+
+
 
     </dependencies>
 

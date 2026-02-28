@@ -2286,3 +2286,62 @@
 .auth-google-button:pressed {
     -fx-background-color: #f1f3f4;
 }
+
+/* Notification Button */
+/* Notification Popup Styles */
+.notification-popup {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5);
+    -fx-padding: 15;
+    -fx-min-width: 300;
+    -fx-max-width: 350;
+}
+
+.notification-popup-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #1b5e20;
+    -fx-padding: 0 0 5 0;
+}
+
+.notification-popup-item {
+    -fx-padding: 8;
+    -fx-background-color: #f9f9f9;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.notification-popup-item:hover {
+    -fx-background-color: #e8f5e9;
+}
+
+.notification-popup-item-icon {
+    -fx-text-fill: #c62828;
+    -fx-font-size: 16px;
+}
+
+.notification-popup-item-text {
+    -fx-font-size: 13px;
+}
+
+.notification-popup-item-arrow {
+    -fx-text-fill: #1b5e20;
+    -fx-font-size: 14px;
+}
+
+.notification-popup-button {
+    -fx-background-color: #1b5e20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+    -fx-min-width: 280;
+}
+
+.notification-popup-button:hover {
+    -fx-background-color: #2e7d32;
+}
+
+

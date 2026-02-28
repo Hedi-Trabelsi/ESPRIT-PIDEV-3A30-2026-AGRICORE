@@ -4,6 +4,7 @@ import Model.Utilisateur;
 import utils.MyDatabase;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,6 @@ public class UserService implements IService<Utilisateur> {
 
     @Override
     public int create(Utilisateur u) throws SQLException {
-        // Updated query to match the exact column order from your table
         String query = "INSERT INTO `user` (nom, prenom, date, adresse, role, numeroT, email, image, password, genre) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -25,7 +25,15 @@ public class UserService implements IService<Utilisateur> {
 
             ps.setString(1, u.getNom());           // nom
             ps.setString(2, u.getPrenom());        // prenom
-            ps.setDate(3, Date.valueOf(u.getDateNaissance())); // date
+
+            // FIX: Handle null date
+            LocalDate dateNaissance = u.getDateNaissance();
+            if (dateNaissance != null) {
+                ps.setDate(3, Date.valueOf(dateNaissance));
+            } else {
+                ps.setNull(3, Types.DATE); // Set NULL for date column
+            }
+
             ps.setString(4, u.getAdresse());       // adresse
             ps.setInt(5, u.getRole());              // role
             ps.setInt(6, u.getPhone());             // numeroT
@@ -55,14 +63,21 @@ public class UserService implements IService<Utilisateur> {
 
     @Override
     public void update(Utilisateur u) throws SQLException {
-        // Updated query to match the exact column order
         String query = "UPDATE `user` SET nom=?, prenom=?, date=?, adresse=?, role=?, numeroT=?, email=?, image=?, password=?, genre=? WHERE id=?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, u.getNom());            // nom
             ps.setString(2, u.getPrenom());         // prenom
-            ps.setDate(3, Date.valueOf(u.getDateNaissance()));  // date
+
+            // FIX: Handle null date in update too
+            LocalDate dateNaissance = u.getDateNaissance();
+            if (dateNaissance != null) {
+                ps.setDate(3, Date.valueOf(dateNaissance));
+            } else {
+                ps.setNull(3, Types.DATE);
+            }
+
             ps.setString(4, u.getAdresse());        // adresse
             ps.setInt(5, u.getRole());               // role
             ps.setInt(6, u.getPhone());              // numeroT
@@ -102,10 +117,14 @@ public class UserService implements IService<Utilisateur> {
              ResultSet rs = st.executeQuery(query)) {
 
             while (rs.next()) {
+                // FIX: Handle null date when reading from database
+                Date sqlDate = rs.getDate("date");
+                LocalDate dateNaissance = sqlDate != null ? sqlDate.toLocalDate() : null;
+
                 Utilisateur u = new Utilisateur(
                         rs.getString("nom"),
                         rs.getString("prenom"),
-                        rs.getDate("date").toLocalDate(),
+                        dateNaissance,
                         rs.getString("genre"),
                         rs.getString("adresse"),
                         rs.getInt("numeroT"),
@@ -122,7 +141,6 @@ public class UserService implements IService<Utilisateur> {
         return list;
     }
 
-    // Optional: Add a method to find user by email
     @Override
     public Utilisateur findByEmail(String email) throws SQLException {
         String query = "SELECT * FROM `user` WHERE email = ?";
@@ -130,10 +148,13 @@ public class UserService implements IService<Utilisateur> {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    Date sqlDate = rs.getDate("date");
+                    LocalDate dateNaissance = sqlDate != null ? sqlDate.toLocalDate() : null;
+
                     Utilisateur u = new Utilisateur(
                             rs.getString("nom"),
                             rs.getString("prenom"),
-                            rs.getDate("date").toLocalDate(),
+                            dateNaissance,
                             rs.getString("genre"),
                             rs.getString("adresse"),
                             rs.getInt("numeroT"),

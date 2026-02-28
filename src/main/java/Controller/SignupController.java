@@ -18,7 +18,6 @@ import services.UserService;
 
 import java.io.*;
 import java.net.URL;
-import java.sql.Connection;
 import java.time.LocalDate;
 
 public class SignupController {
@@ -63,9 +62,7 @@ public class SignupController {
                 profileImageBytes = fis.readAllBytes();
                 Image image = new Image(file.toURI().toString());
                 profileImageView.setImage(image);
-
                 showSuccess("Image uploaded successfully!");
-
             } catch (Exception e) {
                 e.printStackTrace();
                 showError("Failed to load image.");
@@ -78,7 +75,6 @@ public class SignupController {
         errorLabel.setVisible(false);
 
         try {
-            // Check terms agreement
             if (!termsCheckBox.isSelected()) {
                 showError("Please accept the Terms of Service and Privacy Policy");
                 return;
@@ -121,7 +117,6 @@ public class SignupController {
 
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-            // ✅ Create user
             Utilisateur user = new Utilisateur(nom, prenom, dateNaissance, genre, adresse, phone, role, email, hashedPassword, profileImageBytes);
 
             UserService userService = new UserService();
@@ -145,7 +140,7 @@ public class SignupController {
         errorLabel.setVisible(true);
     }
 
-    private void showSuccess(String message) {
+    public void showSuccess(String message) {
         errorLabel.getStyleClass().removeAll("error-label");
         if (!errorLabel.getStyleClass().contains("success-label")) errorLabel.getStyleClass().add("success-label");
         errorLabel.setText(message);
@@ -172,8 +167,6 @@ public class SignupController {
             Parent root = loader.load();
 
             GoogleSignInController controller = loader.getController();
-
-            // Pass the signup controller reference
             controller.setSignupController(this);
 
             Stage stage = new Stage();
@@ -187,34 +180,25 @@ public class SignupController {
         }
     }
 
-    // Add this method to be called from GoogleSignInController after successful Google auth
+    // ========== GOOGLE SIGN-UP METHODS ==========
+
     public void handleGoogleSignUpSuccess(GoogleSignInService.GoogleUserInfo userInfo) {
         try {
-            // Pre-fill the form with Google data
             nomField.setText(userInfo.getFirstName());
             prenomField.setText(userInfo.getLastName());
             emailField.setText(userInfo.getEmail());
-            emailField.setDisable(true); // Email comes from Google, cannot change
+            emailField.setDisable(true);
 
-            // Try to load profile picture from Google
             if (userInfo.getPictureUrl() != null && !userInfo.getPictureUrl().isEmpty()) {
                 new Thread(() -> {
                     try {
-                        URL url = new URL(userInfo.getPictureUrl());
-                        Image image = new Image(url.toString());
-                        javafx.application.Platform.runLater(() -> {
-                            profileImageView.setImage(image);
-                        });
-
-                        // Download image bytes for later storage
-                        try (InputStream in = url.openStream()) {
-                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            byte[] buffer = new byte[1024];
-                            int bytesRead;
-                            while ((bytesRead = in.read(buffer)) != -1) {
-                                baos.write(buffer, 0, bytesRead);
-                            }
-                            profileImageBytes = baos.toByteArray();
+                        byte[] imageBytes = downloadImageFromUrl(userInfo.getPictureUrl());
+                        if (imageBytes != null) {
+                            profileImageBytes = imageBytes;
+                            Image image = new Image(new ByteArrayInputStream(imageBytes));
+                            javafx.application.Platform.runLater(() -> {
+                                profileImageView.setImage(image);
+                            });
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -222,7 +206,6 @@ public class SignupController {
                 }).start();
             }
 
-            // Disable password fields (will use Google login)
             passwordField.setDisable(true);
             passwordField.setPromptText("Google account");
             confirmPasswordField.setDisable(true);
@@ -235,4 +218,147 @@ public class SignupController {
             showError("Error loading Google profile: " + e.getMessage());
         }
     }
+
+    public void handleGoogleSignUpAndGoHome(GoogleSignInService.GoogleUserInfo userInfo) {
+        try {
+            System.out.println("=== Creating Google user account ===");
+            System.out.println("First Name: " + userInfo.getFirstName());
+            System.out.println("Last Name: " + userInfo.getLastName());
+            System.out.println("Email: " + userInfo.getEmail());
+
+            String randomPassword = BCrypt.hashpw(userInfo.getId() + System.currentTimeMillis(), BCrypt.gensalt());
+
+            byte[] imageBytes = downloadImageFromUrl(userInfo.getPictureUrl());
+
+            if (imageBytes == null) {
+                imageBytes = createDefaultAvatar(userInfo.getFirstName());
+            }
+
+            // FIX: Use default values instead of null
+            LocalDate defaultDate = LocalDate.of(2000, 1, 1); // Default date
+            String defaultGenre = "Non spécifié"; // Default genre
+            String defaultAdresse = ""; // Empty address
+            int defaultPhone = 0; // Default phone
+
+            Utilisateur user = new Utilisateur(
+                    userInfo.getFirstName(),
+                    userInfo.getLastName(),
+                    defaultDate,
+                    defaultGenre, // Use default genre instead of null
+                    defaultAdresse,
+                    defaultPhone,
+                    1, // Default role (Agriculteur)
+                    userInfo.getEmail(),
+                    randomPassword,
+                    imageBytes
+            );
+
+            UserService userService = new UserService();
+            int userId = userService.create(user);
+            user.setId(userId);
+
+            System.out.println("User created successfully with ID: " + userId);
+            System.out.println("Email: " + user.getEmail());
+
+            openUserHomePageWithNotification(user);
+
+        } catch (Exception e) {
+            System.err.println("ERROR creating account: " + e.getMessage());
+            e.printStackTrace();
+            showError("Error creating account: " + e.getMessage());
+        }
+    }
+
+    private void openUserHomePageWithNotification(Utilisateur user) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UserHomePage.fxml"));
+            Parent root = loader.load();
+
+            UserHomeController controller = loader.getController();
+            controller.setLoggedInUser(user);
+
+            // La notification s'affichera automatiquement grâce à checkForMissingInformation()
+
+            Stage stage = (Stage) signInLink.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("My Farm - " + user.getNom());
+            stage.show();
+
+            System.out.println("User home page opened successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Cannot load User Home Page: " + e.getMessage());
+        }
+    }
+
+    private byte[] downloadImageFromUrl(String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return null;
+        }
+
+        try {
+            URL url = new URL(imageUrl);
+            try (InputStream in = url.openStream();
+                 ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = in.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+                return out.toByteArray();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private byte[] createDefaultAvatar(String name) {
+        try {
+            int size = 100;
+            java.awt.image.BufferedImage bufferedImage = new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_RGB);
+            java.awt.Graphics2D g2d = bufferedImage.createGraphics();
+
+            g2d.setColor(new java.awt.Color(46, 125, 50));
+            g2d.fillRect(0, 0, size, size);
+
+            g2d.setColor(java.awt.Color.WHITE);
+            g2d.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 50));
+            java.awt.FontMetrics fm = g2d.getFontMetrics();
+            String firstLetter = name != null && !name.isEmpty() ? name.substring(0, 1).toUpperCase() : "?";
+            int x = (size - fm.stringWidth(firstLetter)) / 2;
+            int y = (size - fm.getHeight()) / 2 + fm.getAscent();
+            g2d.drawString(firstLetter, x, y);
+
+            g2d.dispose();
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            javax.imageio.ImageIO.write(bufferedImage, "png", baos);
+            return baos.toByteArray();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new byte[]{0};
+        }
+    }
+
+    public void openSignInPageWithEmail(String email) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/signin.fxml"));
+            Parent root = loader.load();
+
+            SigninController controller = loader.getController();
+            controller.prefillEmail(email);
+
+            Stage stage = (Stage) signInLink.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sign In");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

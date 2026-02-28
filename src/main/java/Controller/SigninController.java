@@ -256,4 +256,9 @@ public class SigninController {
         errorLabel.setText(message);
         errorLabel.setVisible(true);
     }
+
+    public void prefillEmail(String email) {
+        emailField.setText(email);
+        showSuccess("Compte Google trouvé! Veuillez vous connecter avec votre mot de passe.");
+    }
 }

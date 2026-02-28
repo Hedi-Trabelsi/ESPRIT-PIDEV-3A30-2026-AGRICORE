@@ -1,24 +1,31 @@
 package Controller;
 
 import Model.Utilisateur;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
+import javafx.scene.layout.*;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.ByteArrayInputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserHomeController {
 
     @FXML private StackPane contentArea;
+    @FXML private Button notificationsButton;  // Le bouton de notification
+    @FXML private Label count;                  // Le label pour le nombre de notifications
 
     // Navigation Buttons - 6 main sections
     @FXML private Button profileButton;
@@ -41,23 +48,25 @@ public class UserHomeController {
     @FXML private Button quickProfileButton;
     @FXML private Button quickSettingsButton;
     @FXML private Button quickHelpButton;
-    @FXML private Button notificationsButton;
 
     private Utilisateur loggedInUser;
+    private boolean profileCompletionNotificationShown = false;
+    private List<String> missingFields = new ArrayList<>();
+    private Popup notificationPopup;
 
     @FXML
     public void initialize() {
         System.out.println("UserHomeController initialized");
+        notificationPopup = new Popup();
+        notificationPopup.setAutoHide(true);
         setupNavigation();
-        // Load profile page by default
+        setupNotificationHandler();
         showProfilePage();
     }
 
     private void setupNavigation() {
-        // Set active button for Profile by default
         setActiveButton(profileButton);
 
-        // Profile button
         if (profileButton != null) {
             profileButton.setOnAction(e -> {
                 setActiveButton(profileButton);
@@ -65,7 +74,6 @@ public class UserHomeController {
             });
         }
 
-        // Event button
         if (eventButton != null) {
             eventButton.setOnAction(e -> {
                 setActiveButton(eventButton);
@@ -73,7 +81,6 @@ public class UserHomeController {
             });
         }
 
-        // Financial button
         if (financialButton != null) {
             financialButton.setOnAction(e -> {
                 setActiveButton(financialButton);
@@ -81,7 +88,6 @@ public class UserHomeController {
             });
         }
 
-        // Equipment button
         if (equipmentButton != null) {
             equipmentButton.setOnAction(e -> {
                 setActiveButton(equipmentButton);
@@ -89,7 +95,6 @@ public class UserHomeController {
             });
         }
 
-        // Maintenance button
         if (maintenanceButton != null) {
             maintenanceButton.setOnAction(e -> {
                 setActiveButton(maintenanceButton);
@@ -97,7 +102,6 @@ public class UserHomeController {
             });
         }
 
-        // Animal button
         if (animalButton != null) {
             animalButton.setOnAction(e -> {
                 setActiveButton(animalButton);
@@ -105,17 +109,14 @@ public class UserHomeController {
             });
         }
 
-        // Settings button
         if (settingsButton != null) {
             settingsButton.setOnAction(e -> showComingSoon("Settings"));
         }
 
-        // Logout button
         if (logoutButton != null) {
             logoutButton.setOnAction(e -> handleLogout());
         }
 
-        // Quick action buttons
         if (quickProfileButton != null) {
             quickProfileButton.setOnAction(e -> {
                 setActiveButton(profileButton);
@@ -130,10 +131,85 @@ public class UserHomeController {
         if (quickHelpButton != null) {
             quickHelpButton.setOnAction(e -> showComingSoon("Help"));
         }
+    }
 
+    private void setupNotificationHandler() {
         if (notificationsButton != null) {
-            notificationsButton.setOnAction(e -> showComingSoon("Notifications"));
+            notificationsButton.setOnAction(e -> {
+                if (profileCompletionNotificationShown) {
+                    showNotificationPopup();
+                } else {
+                    showComingSoon("Notifications");
+                }
+            });
         }
+    }
+
+    private void showNotificationPopup() {
+        if (notificationPopup.isShowing()) {
+            notificationPopup.hide();
+            return;
+        }
+
+        VBox popupContent = new VBox(10);
+        popupContent.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 0, 5); -fx-padding: 15; -fx-min-width: 300; -fx-max-width: 350;");
+
+        Label title = new Label("📋 Profil incomplet");
+        title.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #1b5e20; -fx-padding: 0 0 5 0;");
+
+        popupContent.getChildren().add(title);
+
+        if (missingFields != null && !missingFields.isEmpty()) {
+            for (String field : missingFields) {
+                HBox item = new HBox(10);
+                item.setAlignment(Pos.CENTER_LEFT);
+                item.setStyle("-fx-padding: 8; -fx-background-color: #f9f9f9; -fx-background-radius: 5; -fx-cursor: hand;");
+
+                Label icon = new Label("•");
+                icon.setStyle("-fx-text-fill: #c62828; -fx-font-size: 16px;");
+
+                Label text = new Label(field);
+                text.setStyle("-fx-font-size: 13px;");
+
+                Label arrow = new Label("→");
+                arrow.setStyle("-fx-text-fill: #1b5e20; -fx-font-size: 14px;");
+
+                Region spacer = new Region();
+                HBox.setHgrow(spacer, Priority.ALWAYS);
+
+                item.getChildren().addAll(icon, text, spacer, arrow);
+
+                item.setOnMouseEntered(ev -> item.setStyle("-fx-background-color: #e8f5e9; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;"));
+                item.setOnMouseExited(ev -> item.setStyle("-fx-background-color: #f9f9f9; -fx-padding: 8; -fx-background-radius: 5; -fx-cursor: hand;"));
+
+                item.setOnMouseClicked(ev -> {
+                    notificationPopup.hide();
+                    setActiveButton(profileButton);
+                    showProfilePage();
+                });
+
+                popupContent.getChildren().add(item);
+            }
+
+            Button completeButton = new Button("Compléter le profil");
+            completeButton.setStyle("-fx-background-color: #1b5e20; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10; -fx-background-radius: 20; -fx-cursor: hand; -fx-min-width: 280;");
+            completeButton.setOnAction(e -> {
+                notificationPopup.hide();
+                setActiveButton(profileButton);
+                showProfilePage();
+            });
+
+            popupContent.getChildren().add(completeButton);
+        }
+
+        notificationPopup.getContent().clear();
+        notificationPopup.getContent().add(popupContent);
+
+        // Position the popup under the notification button
+        double x = notificationsButton.localToScreen(notificationsButton.getBoundsInLocal()).getMinX() - 150;
+        double y = notificationsButton.localToScreen(notificationsButton.getBoundsInLocal()).getMaxY() + 5;
+
+        notificationPopup.show(notificationsButton.getScene().getWindow(), x, y);
     }
 
     private void setActiveButton(Button activeButton) {
@@ -155,15 +231,11 @@ public class UserHomeController {
 
     private void showProfilePage() {
         try {
-            System.out.println("Loading profile page with user: " +
-                    (loggedInUser != null ? loggedInUser.getEmail() : "NULL"));
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProfilePage.fxml"));
             Parent page = loader.load();
 
-            // Get the controller and pass the user data
             ProfilePageController controller = loader.getController();
-            controller.setUserData(loggedInUser);  // Make sure loggedInUser is not null
+            controller.setUserData(loggedInUser);
             controller.setUserHomeController(this);
 
             contentArea.getChildren().setAll(page);
@@ -187,32 +259,35 @@ public class UserHomeController {
     }
 
     public void setLoggedInUser(Utilisateur user) {
-        System.out.println("UserHomeController.setLoggedInUser called with: " +
-                (user != null ? user.getEmail() : "NULL"));
-
         this.loggedInUser = user;
 
-        if (user == null) {
-            System.out.println("ERROR: User is null in setLoggedInUser!");
-            return;
-        }
+        updateSidebarProfile();
+        checkForMissingInformation();
+    }
 
-        // Update sidebar profile
+    public void refreshSidebarProfile(Utilisateur updatedUser) {
+        this.loggedInUser = updatedUser;
+        updateSidebarProfile();
+        checkForMissingInformation();
+    }
+
+    private void updateSidebarProfile() {
+        if (loggedInUser == null) return;
+
         if (sidebarNameLabel != null) {
-            sidebarNameLabel.setText(user.getNom() + " " + user.getPrenom());
+            sidebarNameLabel.setText(loggedInUser.getNom() + " " + loggedInUser.getPrenom());
         }
 
         if (userMenuLabel != null) {
-            userMenuLabel.setText(user.getNom());
+            userMenuLabel.setText(loggedInUser.getNom());
         }
 
         if (welcomeLabel != null) {
-            welcomeLabel.setText("Welcome back, " + user.getNom() + "!");
+            welcomeLabel.setText("Welcome back, " + loggedInUser.getNom() + "!");
         }
 
-        // Set role based on user role
         String roleText;
-        switch (user.getRole()) {
+        switch (loggedInUser.getRole()) {
             case 1: roleText = "Agriculteur"; break;
             case 2: roleText = "Technicien"; break;
             case 3: roleText = "Fournisseur"; break;
@@ -223,10 +298,9 @@ public class UserHomeController {
             sidebarRoleLabel.setText(roleText);
         }
 
-        // Set profile image
-        if (user.getImage() != null && user.getImage().length > 0) {
+        if (loggedInUser.getImage() != null && loggedInUser.getImage().length > 0) {
             try {
-                Image img = new Image(new ByteArrayInputStream(user.getImage()));
+                Image img = new Image(new ByteArrayInputStream(loggedInUser.getImage()));
                 if (profileImageView != null) {
                     profileImageView.setImage(img);
                 }
@@ -234,46 +308,86 @@ public class UserHomeController {
                 e.printStackTrace();
             }
         }
-
-        // Now show profile page with the user data
-        showProfilePage();
     }
 
-    // ========== NEW METHOD FOR REFRESHING SIDEBAR ==========
-    public void refreshSidebarProfile(Utilisateur updatedUser) {
-        this.loggedInUser = updatedUser;
+    private void checkForMissingInformation() {
+        if (loggedInUser == null) return;
 
-        if (sidebarNameLabel != null) {
-            sidebarNameLabel.setText(updatedUser.getNom() + " " + updatedUser.getPrenom());
+        missingFields.clear();
+
+        if (loggedInUser.getDateNaissance() == null ||
+                loggedInUser.getDateNaissance().equals(LocalDate.of(2000, 1, 1))) {
+            missingFields.add("Date de naissance");
         }
 
-        if (userMenuLabel != null) {
-            userMenuLabel.setText(updatedUser.getNom());
+        if (loggedInUser.getGenre() == null ||
+                loggedInUser.getGenre().equals("Non spécifié") ||
+                loggedInUser.getGenre().isEmpty()) {
+            missingFields.add("Genre");
         }
 
-        // Set role based on user role
-        String roleText;
-        switch (updatedUser.getRole()) {
-            case 1: roleText = "Agriculteur"; break;
-            case 2: roleText = "Technicien"; break;
-            case 3: roleText = "Fournisseur"; break;
-            default: roleText = "Farmer";
+        if (loggedInUser.getAdresse() == null || loggedInUser.getAdresse().isEmpty()) {
+            missingFields.add("Adresse");
         }
 
-        if (sidebarRoleLabel != null) {
-            sidebarRoleLabel.setText(roleText);
+        if (loggedInUser.getPhone() == 0) {
+            missingFields.add("Numéro de téléphone");
         }
 
-        // Update profile image
-        if (updatedUser.getImage() != null && updatedUser.getImage().length > 0) {
-            try {
-                Image img = new Image(new ByteArrayInputStream(updatedUser.getImage()));
-                if (profileImageView != null) {
-                    profileImageView.setImage(img);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (!missingFields.isEmpty()) {
+            showProfileCompletionNotificationWithDetails(missingFields);
+        } else {
+            hideProfileCompletionNotification();
+        }
+    }
+
+    public void showProfileCompletionNotification() {
+        profileCompletionNotificationShown = true;
+        if (count != null) {
+            count.setText("1");
+            count.setVisible(true);
+        }
+
+        if (notificationsButton != null) {
+            ScaleTransition st = new ScaleTransition(Duration.millis(500), notificationsButton);
+            st.setFromX(1.0);
+            st.setFromY(1.0);
+            st.setToX(1.2);
+            st.setToY(1.2);
+            st.setCycleCount(3);
+            st.setAutoReverse(true);
+            st.play();
+        }
+    }
+
+    public void showProfileCompletionNotificationWithDetails(List<String> missingFields) {
+        this.missingFields = missingFields;
+        profileCompletionNotificationShown = true;
+
+        if (count != null) {
+            count.setText(String.valueOf(missingFields.size()));
+            count.setVisible(true);
+        }
+
+        if (notificationsButton != null) {
+            ScaleTransition st = new ScaleTransition(Duration.millis(500), notificationsButton);
+            st.setFromX(1.0);
+            st.setFromY(1.0);
+            st.setToX(1.2);
+            st.setToY(1.2);
+            st.setCycleCount(3);
+            st.setAutoReverse(true);
+            st.play();
+        }
+    }
+
+    public void hideProfileCompletionNotification() {
+        profileCompletionNotificationShown = false;
+        if (count != null) {
+            count.setVisible(false);
+        }
+        if (notificationPopup != null && notificationPopup.isShowing()) {
+            notificationPopup.hide();
         }
     }
 

@@ -126,12 +126,16 @@
 
             <!-- Notifications -->
             <StackPane>
-                <Button fx:id="notificationsButton" styleClass="user-notification-button">
+                <!-- Notifications Button with Counter -->
+                <Button fx:id="notificationsButton" styleClass="notification-button">
                     <graphic>
-                        <Label style="-fx-font-size: 20px;" text="🔔" />
+                        <StackPane>
+                            <Label text="🔔" style="-fx-font-size: 20px;" />
+                            <Label fx:id="count" styleClass="notification-count" text="0" visible="false" />
+                        </StackPane>
                     </graphic>
                 </Button>
-                <Label styleClass="user-notification-badge" text="3" />
+                <Label fx:id="count" styleClass="user-notification-badge" text="3" />
             </StackPane>
 
             <!-- User Menu -->

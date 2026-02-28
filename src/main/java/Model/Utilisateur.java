@@ -14,6 +14,7 @@ public class Utilisateur {
     private int role;
     private String email;
     private String password;
+    private boolean profileComplete = true;
 
     // ✅ NEW
     private byte[] image;
@@ -71,4 +72,7 @@ public class Utilisateur {
     // ✅ NEW
     public byte[] getImage() { return image; }
     public void setImage(byte[] image) { this.image = image; }
+
+    public boolean isProfileComplete() { return profileComplete; }
+    public void setProfileComplete(boolean profileComplete) { this.profileComplete = profileComplete; }
 }

@@ -10,15 +10,16 @@ public class Participant {
     private String statutParticipation;
     private String montantPayee;
     private String confirmation;
-    // New Fields
     private int nbrPlaces;
     private String nomParticipant;
+    private String entryCode; // New field for the 5-digit code
 
-    public Participant() {}
+    public Participant(int idParticipant, int idUtilisateur, int idEv, LocalDate dateInscription, String statutParticipation, String montantPayee, String confirmation, int nbrPlaces, String nomParticipant) {}
 
+    // Constructor for Creation (including entryCode)
     public Participant(int idUtilisateur, int idEvennement, LocalDate dateInscription,
                        String statutParticipation, String montantPayee, String confirmation,
-                       int nbrPlaces, String nomParticipant) {
+                       int nbrPlaces, String nomParticipant, String entryCode) {
         this.idUtilisateur = idUtilisateur;
         this.idEvennement = idEvennement;
         this.dateInscription = dateInscription;
@@ -27,12 +28,14 @@ public class Participant {
         this.confirmation = confirmation;
         this.nbrPlaces = nbrPlaces;
         this.nomParticipant = nomParticipant;
+        this.entryCode = entryCode;
     }
 
     // Constructor for Reading from DB
     public Participant(int idParticipant, int idUtilisateur, int idEvennement,
                        LocalDate dateInscription, String statutParticipation,
-                       String montantPayee, String confirmation, int nbrPlaces, String nomParticipant) {
+                       String montantPayee, String confirmation, int nbrPlaces,
+                       String nomParticipant, String entryCode) {
         this.idParticipant = idParticipant;
         this.idUtilisateur = idUtilisateur;
         this.idEvennement = idEvennement;
@@ -42,6 +45,7 @@ public class Participant {
         this.confirmation = confirmation;
         this.nbrPlaces = nbrPlaces;
         this.nomParticipant = nomParticipant;
+        this.entryCode = entryCode;
     }
 
     // Getters and Setters
@@ -63,4 +67,6 @@ public class Participant {
     public void setNbrPlaces(int nbrPlaces) { this.nbrPlaces = nbrPlaces; }
     public String getNomParticipant() { return nomParticipant; }
     public void setNomParticipant(String nomParticipant) { this.nomParticipant = nomParticipant; }
+    public String getEntryCode() { return entryCode; }
+    public void setEntryCode(String entryCode) { this.entryCode = entryCode; }
 }
