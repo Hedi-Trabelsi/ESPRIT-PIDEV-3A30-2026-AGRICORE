@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox style="-fx-background-color: #f0f7ee;"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.AjoutEquipementController">
+
+    <!-- Top Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="14.0"
+          style="-fx-background-color: white; -fx-padding: 16 24; -fx-border-color: #ddeedd; -fx-border-width: 0 0 1 0; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);">
+        <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+            <Label fx:id="labelTitre" text="Ajouter un Équipement"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1e3a1a;" />
+            <Label fx:id="labelSousTitre" text="Remplissez le formulaire pour enregistrer un nouvel équipement agricole"
+                   style="-fx-font-size: 12px; -fx-text-fill: #7a9c70;" />
+        </VBox>
+        <Button text="Retour à la liste" onAction="#goToListe"
+                style="-fx-background-color: #ecf0f1; -fx-text-fill: #555; -fx-background-radius: 10; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 9 18;" />
+    </HBox>
+
+    <!-- Scrollable content -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background: #f0f7ee;">
+        <content>
+            <VBox spacing="18.0" style="-fx-background-color: #f0f7ee;">
+                <padding><Insets top="24" right="28" bottom="28" left="28"/></padding>
+                <children>
+
+                    <!-- ===== LIGNE HAUTE : News + Conversion ===== -->
+                    <HBox spacing="16.0">
+
+                        <!-- CARTE ACTUALITÉS (Google News RSS) -->
+                        <VBox HBox.hgrow="ALWAYS" spacing="0.0"
+                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 3);">
+
+                            <!-- Header carte news -->
+                            <HBox alignment="CENTER_LEFT" spacing="10.0"
+                                  style="-fx-background-color: #b71c1c; -fx-background-radius: 14 14 0 0; -fx-padding: 12 18;">
+                                <VBox spacing="1.0">
+                                    <Label text="Actualités de l'équipement"
+                                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                                    <Label fx:id="labelNewsStatus" text="Saisissez un nom pour voir les news..."
+                                           style="-fx-font-size: 10px; -fx-text-fill: rgba(255,255,255,0.65);" />
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="via Google News RSS"
+                                       style="-fx-font-size: 9px; -fx-text-fill: rgba(255,255,255,0.55); -fx-background-color: rgba(0,0,0,0.2); -fx-background-radius: 6; -fx-padding: 2 7;" />
+                            </HBox>
+
+                            <!-- Corps carte news : 3 articles cliquables -->
+                            <VBox spacing="0.0" style="-fx-padding: 10 14;">
+
+                                <!-- Article 1 -->
+                                <VBox fx:id="cardNews1" spacing="3.0" onMouseClicked="#ouvrirDetailNews1"
+                                      style="-fx-background-color: #fff8f8; -fx-background-radius: 9; -fx-padding: 10 12; -fx-border-color: #ffd7d7; -fx-border-radius: 9; -fx-border-width: 1; -fx-cursor: hand;">
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                        <Label text="1" style="-fx-background-color: #b71c1c; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 2 7;" />
+                                        <Label fx:id="labelNews1Titre" text="—"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;" wrapText="true" HBox.hgrow="ALWAYS" maxWidth="430" />
+                                    </HBox>
+                                    <HBox spacing="12.0" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 28;">
+                                        <Label fx:id="labelNews1Source" text="—"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #b71c1c; -fx-font-weight: bold;" />
+                                        <Label text="•" style="-fx-font-size: 10px; -fx-text-fill: #bbb;" />
+                                        <Label fx:id="labelNews1Date" text="—"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #999;" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label text="Voir détails"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #b71c1c; -fx-font-style: italic;" />
+                                    </HBox>
+                                </VBox>
+
+                                <Region prefHeight="8.0" />
+
+                                <!-- Article 2 -->
+                                <VBox fx:id="cardNews2" spacing="3.0" onMouseClicked="#ouvrirDetailNews2"
+                                      style="-fx-background-color: #fff8f8; -fx-background-radius: 9; -fx-padding: 10 12; -fx-border-color: #ffd7d7; -fx-border-radius: 9; -fx-border-width: 1; -fx-cursor: hand;">
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                        <Label text="2" style="-fx-background-color: #c62828; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 2 7;" />
+                                        <Label fx:id="labelNews2Titre" text="—"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;" wrapText="true" HBox.hgrow="ALWAYS" maxWidth="430" />
+                                    </HBox>
+                                    <HBox spacing="12.0" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 28;">
+                                        <Label fx:id="labelNews2Source" text="—"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #c62828; -fx-font-weight: bold;" />
+                                        <Label text="•" style="-fx-font-size: 10px; -fx-text-fill: #bbb;" />
+                                        <Label fx:id="labelNews2Date" text="—"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #999;" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label text="Voir détails"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #c62828; -fx-font-style: italic;" />
+                                    </HBox>
+                                </VBox>
+
+                                <Region prefHeight="8.0" />
+
+                                <!-- Article 3 -->
+                                <VBox fx:id="cardNews3" spacing="3.0" onMouseClicked="#ouvrirDetailNews3"
+                                      style="-fx-background-color: #fff8f8; -fx-background-radius: 9; -fx-padding: 10 12; -fx-border-color: #ffd7d7; -fx-border-radius: 9; -fx-border-width: 1; -fx-cursor: hand;">
+                                    <HBox spacing="8.0" alignment="CENTER_LEFT">
+                                        <Label text="3" style="-fx-background-color: #d32f2f; -fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 2 7;" />
+                                        <Label fx:id="labelNews3Titre" text="—"
+                                               style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1a1a1a;" wrapText="true" HBox.hgrow="ALWAYS" maxWidth="430" />
+                                    </HBox>
+                                    <HBox spacing="12.0" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 28;">
+                                        <Label fx:id="labelNews3Source" text="—"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #d32f2f; -fx-font-weight: bold;" />
+                                        <Label text="•" style="-fx-font-size: 10px; -fx-text-fill: #bbb;" />
+                                        <Label fx:id="labelNews3Date" text="—"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #999;" />
+                                        <Region HBox.hgrow="ALWAYS" />
+                                        <Label text="Voir détails"
+                                               style="-fx-font-size: 10px; -fx-text-fill: #d32f2f; -fx-font-style: italic;" />
+                                    </HBox>
+                                </VBox>
+
+                                <Region prefHeight="10.0" />
+                            </VBox>
+                        </VBox>
+
+                        <!-- CARTE CONVERSION (API 2) -->
+                        <VBox prefWidth="310.0" spacing="0.0"
+                              style="-fx-background-color: white; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 12, 0, 0, 3);">
+
+                            <!-- Header carte conversion -->
+                            <HBox alignment="CENTER_LEFT" spacing="10.0"
+                                  style="-fx-background-color: #1565c0; -fx-background-radius: 14 14 0 0; -fx-padding: 12 18;">
+                                <Label text="Conversion en temps réel"
+                                       style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: white;" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="via ExchangeRate API"
+                                       style="-fx-font-size: 9px; -fx-text-fill: rgba(255,255,255,0.55); -fx-background-color: rgba(0,0,0,0.2); -fx-background-radius: 6; -fx-padding: 2 7;" />
+                            </HBox>
+
+                            <!-- Corps conversion -->
+                            <VBox spacing="12.0" style="-fx-padding: 16 18;">
+
+                                <Label text="Saisissez un prix pour voir la conversion automatique"
+                                       style="-fx-font-size: 11px; -fx-text-fill: #999;" wrapText="true" />
+
+                                <HBox spacing="10.0" alignment="CENTER_LEFT"
+                                      style="-fx-background-color: #e8f5e4; -fx-background-radius: 8; -fx-padding: 10 14;">
+                                    <Label text="TND" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="labelPrixEUR" text="Saisir un prix..."
+                                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                                </HBox>
+
+                                <HBox spacing="10.0" alignment="CENTER_LEFT"
+                                      style="-fx-background-color: #e3f2fd; -fx-background-radius: 8; -fx-padding: 10 14;">
+                                    <Label text="USD" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label fx:id="labelPrixUSD" text=""
+                                           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" />
+                                </HBox>
+
+                            </VBox>
+                        </VBox>
+
+                    </HBox>
+
+                    <!-- ===== FORMULAIRE ===== -->
+                    <VBox style="-fx-background-color: white; -fx-background-radius: 16; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 15, 0, 0, 4);"
+                          spacing="0.0">
+
+                        <!-- Card Header -->
+                        <HBox style="-fx-background-color: #f5fbf3; -fx-padding: 16 24; -fx-background-radius: 16 16 0 0; -fx-border-color: #e8f5e4; -fx-border-width: 0 0 1 0;"
+                              spacing="10.0" alignment="CENTER_LEFT">
+                            <Label text="Informations de l'équipement"
+                                   style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                        </HBox>
+
+                        <!-- Champs -->
+                        <VBox spacing="20.0">
+                            <padding><Insets top="26" right="30" bottom="26" left="30"/></padding>
+                            <children>
+
+                                <HBox spacing="20.0">
+                                    <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                        <Label text="Nom de l'équipement"
+                                               style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                        <TextField fx:id="fieldNom" promptText="Ex: Tracteur John Deere 6120M"
+                                                   style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;" />
+                                    </VBox>
+                                    <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                        <Label text="Type d'équipement"
+                                               style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                        <TextField fx:id="fieldType" promptText="Ex: Machinerie, Outil, Véhicule..."
+                                                   style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;" />
+                                    </VBox>
+                                </HBox>
+
+                                <HBox spacing="20.0">
+                                    <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                        <Label text="Prix unitaire (TND)"
+                                               style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                        <TextField fx:id="fieldPrix" promptText="Ex: 2500.00"
+                                                   style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;"
+                                                   onKeyReleased="#mettreAJourConversion" />
+                                    </VBox>
+                                    <VBox spacing="7.0" HBox.hgrow="ALWAYS">
+                                        <Label text="Quantité en stock"
+                                               style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                        <TextField fx:id="fieldQuantite" promptText="Ex: 10"
+                                                   style="-fx-background-color: #f8fdf7; -fx-border-color: #c8ddc5; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 12 14; -fx-font-size: 13px;" />
+                                    </VBox>
+                                </HBox>
+
+                                <!-- ===== SECTION IMAGE ===== -->
+                                <VBox spacing="6.0">
+                                    <Label text="Photo de l'équipement"
+                                           style="-fx-font-size: 12px; -fx-text-fill: #5a7a50; -fx-font-weight: bold;" />
+                                    <VBox fx:id="panneauImage"
+                                          maxWidth="Infinity" minHeight="80"
+                                          alignment="CENTER" spacing="8"
+                                          style="-fx-background-color: #f5f9f4; -fx-background-radius: 12;
+                                                 -fx-border-color: #c8ddc5; -fx-border-radius: 12;
+                                                 -fx-border-style: dashed; -fx-padding: 12;" />
+                                </VBox>
+
+                                <Label fx:id="labelMessage" text=""
+                                       style="-fx-font-size: 13px; -fx-text-fill: #e74c3c;" />
+
+                                <HBox spacing="12.0" alignment="CENTER_RIGHT">
+                                    <Button text="Vider" onAction="#clearForm"
+                                            style="-fx-background-color: #ecf0f1; -fx-text-fill: #666; -fx-background-radius: 10; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 11 22;" />
+                                    <Button fx:id="btnAction" text="Ajouter l'équipement" onAction="#sauvegarder"
+                                            style="-fx-background-color: #4a7c40; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 12 30;" />
+                                </HBox>
+                            </children>
+                        </VBox>
+                    </VBox>
+
+                    <!-- ===== CONSEILS ===== -->
+                    <HBox spacing="14.0" alignment="CENTER_LEFT"
+                          style="-fx-background-color: #e8f5e4; -fx-background-radius: 12; -fx-padding: 14 20;">
+                        <VBox spacing="3.0">
+                            <Label text="Conseils de saisie"
+                                   style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+                            <Label text="Entrez un nom descriptif (marque + modèle) pour faciliter les recherches."
+                                   style="-fx-font-size: 11px; -fx-text-fill: #5a8a50;" />
+                            <Label text="Types disponibles : Machinerie, Outil, Véhicule, Irrigation, Semence, Engrais."
+                                   style="-fx-font-size: 11px; -fx-text-fill: #5a8a50;" />
+                            <Label text="Le prix doit être en TND — la conversion EUR/USD s'affiche automatiquement."
+                                   style="-fx-font-size: 11px; -fx-text-fill: #5a8a50;" />
+                        </VBox>
+                    </HBox>
+
+                </children>
+            </VBox>
+        </content>
+    </ScrollPane>
+
+</VBox>

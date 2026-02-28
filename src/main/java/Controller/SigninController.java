@@ -79,11 +79,12 @@ public class SigninController {
             }
 
             if (matchedUser != null) {
-                if (matchedUser.getRole() == 0) {
-                    // Admin user - open admin home
+                int role = matchedUser.getRole();
+                if (role == 0 || role == 3) {
+                    // Admin or Fournisseur - open backend
                     openHomePage(matchedUser);
                 } else {
-                    // Normal user - open user home
+                    // Agriculteur or Technicien - open frontend
                     openUserHomePage(matchedUser);
                 }
             } else {
@@ -133,14 +134,15 @@ public class SigninController {
                         if (matchedUser != null) {
                             final Utilisateur finalUser = matchedUser;
                             Platform.runLater(() -> {
-                                // Check if user is admin (role == 0)
-                                if (finalUser.getRole() == 0) {
-                                    errorLabel.setStyle("-fx-text-fill: green;");
-                                    errorLabel.setText("Face recognized! Welcome " + finalUser.getNom());
+                                int role = finalUser.getRole();
+                                errorLabel.setStyle("-fx-text-fill: green;");
+                                errorLabel.setText("Face recognized! Welcome " + finalUser.getNom());
+                                if (role == 0 || role == 3) {
+                                    // Admin or Fournisseur - open backend
                                     openHomePage(finalUser);
                                 } else {
-                                    errorLabel.setStyle("-fx-text-fill: red;");
-                                    errorLabel.setText("Access denied! Only administrators can access this application.");
+                                    // Agriculteur or Technicien - open frontend
+                                    openUserHomePage(finalUser);
                                 }
                             });
                         } else {

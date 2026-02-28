@@ -162,7 +162,7 @@ public class HomeController {
 
     private void loadEquipmentManagement() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EquipmentManagement.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ListeEquipements.fxml"));
             Parent equipmentView = loader.load();
             mainBorderPane.setCenter(equipmentView);
         } catch (Exception e) {
@@ -240,8 +240,24 @@ public class HomeController {
             }
         }
 
-        // Load User Management by default
-        loadUserManagement();
+        // Role-based default view
+        if (user.getRole() == 3) {
+            // Fournisseur: disable all sidebar buttons except Equipment
+            Button[] restrictedButtons = {dashboardButton, manageUsersButton, financialButton,
+                    animalButton, eventButton, maintenanceButton};
+            for (Button btn : restrictedButtons) {
+                if (btn != null) {
+                    btn.setDisable(true);
+                    btn.setOpacity(0.5);
+                }
+            }
+            // Auto-load equipment page
+            setActiveButton(equipmentButton);
+            loadEquipmentManagement();
+        } else {
+            // Admin: load User Management by default
+            loadUserManagement();
+        }
     }
 
     public void updateLoggedInUser(Utilisateur updatedUser) {

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Utilisateur {
 
-    private int id;
+    private static int id;
     private String nom;
     private String prenom;
     private LocalDate dateNaissance;
@@ -39,7 +39,7 @@ public class Utilisateur {
 
     // Getters & Setters
 
-    public int getId() { return id; }
+    public static int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
     public String getNom() { return nom; }

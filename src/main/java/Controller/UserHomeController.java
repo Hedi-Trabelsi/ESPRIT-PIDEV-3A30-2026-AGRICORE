@@ -91,7 +91,7 @@ public class UserHomeController {
         if (equipmentButton != null) {
             equipmentButton.setOnAction(e -> {
                 setActiveButton(equipmentButton);
-                loadPage("/fxml/EquipmentPage.fxml", "Equipment Management");
+                loadPage("/fxml/Agriculteur.fxml", "Equipment");
             });
         }
 
@@ -265,6 +265,7 @@ public class UserHomeController {
 
         updateSidebarProfile();
         checkForMissingInformation();
+        showProfilePage(); // Reload profile with actual user data
     }
 
     public void refreshSidebarProfile(Utilisateur updatedUser) {
