@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="720.0" prefWidth="1210.0" style="-fx-background-color: #f8fafc;"
+            xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.AddTacheController" stylesheets="@/styles/styleM.css">
+
+    <children>
+        <VBox prefHeight="720.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
+            <children>
+                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
+                    <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/logo.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </VBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/group.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Mon Profil" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/tracktor.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Équipements" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/electricity.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Maintenance" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/booking.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Événements" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/paw.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Mes Animaux" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/money-bag.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Financière" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <VBox layoutX="220.0" layoutY="10.0" prefHeight="700.0" prefWidth="975.0"
+              spacing="20" style="-fx-background-color: #f8fafc; -fx-background-radius: 15; -fx-padding: 30;">
+
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label text="← Annuler et retourner" onMouseClicked="#cancel"
+                           style="-fx-text-fill: #2e7d32; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 0 5 0; -fx-underline: true;"/>
+                    <Label text="Planification d'une Tâche" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                </VBox>
+                <Button fx:id="saveBtn" text=" Enregistrer la tâche" onAction="#saveTache"
+                        style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 12; -fx-cursor: hand;"/>
+            </HBox>
+
+            <VBox spacing="5" style="-fx-background-color: #f1f5f9; -fx-padding: 15; -fx-background-radius: 12; -fx-border-color: #e2e8f0; -fx-border-width: 1;">
+                <children>
+                    <HBox alignment="CENTER_LEFT">
+                        <children>
+                            <Label fx:id="maintenanceInfoLabel" text="CHARGEMENT MAINTENANCE..."
+                                   style="-fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-font-size: 14px;"/>
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="maintenanceDateLabel" text="📅 --/--/----"
+                                   style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                        </children>
+                    </HBox>
+
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <children>
+                            <ImageView fitHeight="30" fitWidth="30">
+                                <image><Image url="@/images/localisation.gif" /></image>
+                            </ImageView>
+                            <Label fx:id="maintenanceDetailsLabel" text="Lieu de l'intervention"
+                                   style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+
+            <Separator />
+
+            <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                <content>
+                    <VBox spacing="25" style="-fx-background-color: transparent;">
+
+                        <GridPane hgap="40">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50" />
+                                <ColumnConstraints percentWidth="50" />
+                            </columnConstraints>
+                            <children>
+                                <VBox spacing="8" GridPane.columnIndex="0">
+                                    <HBox spacing="5">
+                                        <Label text="NOM DE LA TÂCHE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                        <Label fx:id="nomStar" text="*" style="-fx-text-fill: red;"/>
+                                    </HBox>
+                                    <TextField fx:id="nomTacheTf" promptText="Ex: Remplacement du filtre..." styleClass="form-input" />
+                                    <Label fx:id="nomError" style="-fx-text-fill: red; -fx-font-size: 11px;"/>
+                                </VBox>
+
+                                <VBox spacing="8" GridPane.columnIndex="1">
+                                    <HBox spacing="5">
+                                        <Label text="DATE PRÉVUE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                        <Label fx:id="dateStar" text="*" style="-fx-text-fill: red;"/>
+                                    </HBox>
+                                    <DatePicker fx:id="datePrevueDp" prefWidth="1000.0" styleClass="form-input"/>
+                                    <Label fx:id="dateError" style="-fx-text-fill: red; -fx-font-size: 11px;"/>
+                                </VBox>
+                            </children>
+                        </GridPane>
+
+                        <VBox spacing="8" maxWidth="450.0">
+                            <HBox spacing="5">
+                                <Label text="COÛT ESTIMÉ (DT)" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                <Label fx:id="coutStar" text="*" style="-fx-text-fill: red;"/>
+                            </HBox>
+                            <TextField fx:id="coutTf" promptText="0.00" styleClass="form-input" />
+                            <Label fx:id="coutError" style="-fx-text-fill: red; -fx-font-size: 11px;"/>
+                        </VBox>
+
+                        <VBox spacing="10">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="DESCRIPTION ET DIAGNOSTIC" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                <Label fx:id="descriptionStar" text="*" style="-fx-text-fill: red;"/>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button fx:id="aiAssistantBtn" onAction="#helpMeWithAI"
+                                        text="✨ Aide Diagnostic IA"
+                                        style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 5 15; -fx-cursor: hand;"/>
+                            </HBox>
+                            <TextArea fx:id="descriptionTa"
+                                      prefHeight="180.0"
+                                      wrapText="true"
+                                      styleClass="form-input"
+                                      promptText="Décrivez les étapes techniques..."
+                                      style="-fx-background-radius: 12; -fx-border-radius: 12; -fx-border-color: #e2e8f0;"/>
+                        </VBox>
+
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </VBox>
+    </children>
+</AnchorPane>

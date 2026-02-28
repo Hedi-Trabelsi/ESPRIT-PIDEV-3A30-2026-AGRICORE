@@ -187,14 +187,19 @@ public class HomeController {
         }
     }
 
+    // Add this method to your existing HomeController.java
     private void loadMaintenanceManagement() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MaintenanceManagement.fxml"));
+            System.out.println("Loading maintenance management...");
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
             Parent maintenanceView = loader.load();
             mainBorderPane.setCenter(maintenanceView);
+
         } catch (Exception e) {
+            System.err.println("Error loading maintenance page: " + e.getMessage());
             e.printStackTrace();
-            showAlert("Error", "Cannot load Maintenance page!", Alert.AlertType.ERROR);
+            showAlert("Error", "Cannot load Maintenance page: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 

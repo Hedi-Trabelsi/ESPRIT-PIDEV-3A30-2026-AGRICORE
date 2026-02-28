@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.example</groupId>
-    <artifactId>Utilisateur</artifactId>
+    <artifactId>Projet-JAVA</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -18,7 +18,7 @@
     </properties>
 
     <dependencies>
-        <!-- JavaFX Dependencies -->
+        <!-- ==================== JAVAFX DEPENDENCIES ==================== -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -49,7 +49,20 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- OpenCV Dependencies -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <!-- ==================== DATABASE DEPENDENCIES ==================== -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.3.0</version>
+        </dependency>
+
+        <!-- ==================== OPENCV & FACE RECOGNITION ==================== -->
         <dependency>
             <groupId>org.bytedeco</groupId>
             <artifactId>opencv-platform</artifactId>
@@ -62,14 +75,14 @@
             <version>4.9.0-0</version>
         </dependency>
 
-        <!-- Password Hashing -->
+        <!-- ==================== SECURITY & PASSWORD HASHING ==================== -->
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
 
-        <!-- Testing -->
+        <!-- ==================== TESTING ==================== -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -77,55 +90,42 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JFoenix UI Components -->
+        <!-- ==================== UI COMPONENTS ==================== -->
         <dependency>
             <groupId>com.jfoenix</groupId>
             <artifactId>jfoenix</artifactId>
             <version>9.0.10</version>
         </dependency>
 
-        <!-- HTTP Client for Face++ API -->
+        <!-- ==================== HTTP CLIENT (Face++ API) ==================== -->
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
             <version>5.3.1</version>
         </dependency>
 
-        <!-- JSON Processing -->
+        <!-- ==================== JSON PROCESSING ==================== -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
 
-        <!-- Webcam Capture -->
+        <!-- ==================== WEBCAM CAPTURE ==================== -->
         <dependency>
             <groupId>com.github.sarxos</groupId>
             <artifactId>webcam-capture</artifactId>
             <version>0.3.12</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-web</artifactId>
-            <version>${javafx.version}</version>
-        </dependency>
-
-        <!-- MySQL Connector -->
-        <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-            <version>8.3.0</version>
-        </dependency>
-
-        <!-- Logging -->
+        <!-- ==================== LOGGING ==================== -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.13</version>
         </dependency>
 
-        <!-- Jakarta Mail API for sending emails -->
+        <!-- ==================== EMAIL SERVICES (Jakarta) ==================== -->
         <dependency>
             <groupId>jakarta.mail</groupId>
             <artifactId>jakarta.mail-api</artifactId>
@@ -138,14 +138,28 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- For generating random codes -->
+        <!-- Alternative mail dependency from friend's project -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.14.0</version>
+            <groupId>org.eclipse.angus</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.3</version>
         </dependency>
 
-        <!-- Google API Client -->
+        <!-- ==================== PDF GENERATION ==================== -->
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>1.3.30</version>
+        </dependency>
+
+        <!-- ==================== SMS SERVICES ==================== -->
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio</artifactId>
+            <version>9.16.0</version>
+        </dependency>
+
+        <!-- ==================== GOOGLE API & OAUTH ==================== -->
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client</artifactId>
@@ -164,12 +178,18 @@
             <version>1.34.1</version>
         </dependency>
 
-
+        <!-- ==================== UTILITIES ==================== -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
 
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -183,6 +203,7 @@
                 </configuration>
             </plugin>
 
+            <!-- JavaFX Run Plugin -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -195,6 +216,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Surefire Plugin for tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -204,6 +226,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Jar Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -219,7 +242,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin to copy dependencies -->
+            <!-- Dependency Plugin to copy dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>

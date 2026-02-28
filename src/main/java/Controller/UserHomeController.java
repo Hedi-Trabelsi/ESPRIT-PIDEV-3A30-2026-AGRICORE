@@ -98,7 +98,7 @@ public class UserHomeController {
         if (maintenanceButton != null) {
             maintenanceButton.setOnAction(e -> {
                 setActiveButton(maintenanceButton);
-                loadPage("/fxml/MaintenancePage.fxml", "Maintenance");
+                loadPage("/fxml/Dashboard.fxml", "Maintenance");
             });
         }
 

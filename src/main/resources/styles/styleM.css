@@ -1,0 +1,366 @@
+/* ==================== Global ==================== */
+/*
+* {
+    -fx-font-family: "Segoe UI";
+}
+
+
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-size: 13;
+    -fx-padding: 8 15 8 15;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+.form-title {
+    -fx-font-size: 28;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.form-label {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7ca76f;
+}
+
+
+.form-input.text-field {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13;
+    -fx-control-inner-background: #f8f8f8;
+}
+
+.form-input.text-field:hover {
+    -fx-border-color: #5a8a52;
+    -fx-background-color: #ffffff;
+    -fx-control-inner-background: #ffffff;
+}
+
+.form-input.text-field:focused {
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-background-color: #ffffff;
+    -fx-control-inner-background: #ffffff;
+}
+
+
+
+
+.form-input.choice-box {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13;
+}
+
+.form-input.choice-box:hover {
+    -fx-border-color: #5a8a52;
+    -fx-background-color: #ffffff;
+}
+
+.form-input.choice-box:focused {
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-background-color: #ffffff;
+}
+
+.form-input.choice-box .context-menu {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 1;
+}
+
+.form-input.choice-box .context-menu .menu-item:hover {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+}
+
+.form-input.date-picker {
+    -fx-background-color: #f8f8f8;
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13;
+}
+
+.form-input.date-picker:hover {
+    -fx-border-color: #5a8a52;
+    -fx-background-color: #ffffff;
+}
+
+.form-input.date-picker:focused {
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-background-color: #ffffff;
+}
+
+
+.btn-primary {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 30 12 30;
+    -fx-border-radius: 8;
+    -fx-border-color: transparent;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #5a8a52;
+    -fx-cursor: hand;
+}
+
+.btn-primary:pressed {
+    -fx-background-color: #468540;
+}
+
+
+.btn-primary:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #666666;
+    -fx-cursor: default;
+}
+
+
+.btn-secondary {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 12 30 12 30;
+    -fx-border-radius: 8;
+    -fx-border-color: transparent;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #5a8a52;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:pressed {
+    -fx-background-color: #468540;
+}
+
+.btn-secondary:disabled {
+    -fx-background-color: #cccccc;
+    -fx-text-fill: #666666;
+    -fx-cursor: default;
+}
+.form-input {
+    -fx-pref-width: 450px;
+}
+
+*/
+
+/* ==================== Global ==================== */
+* {
+    -fx-font-family: "Segoe UI";
+}
+
+/* ==================== Sidebar Button ==================== */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-font-size: 13;
+    -fx-padding: 6 12 6 12;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-button:pressed {
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* ==================== Form Styling ==================== */
+.form-title {
+    -fx-font-size: 26;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.form-label {
+    -fx-font-size: 13;
+    -fx-font-weight: bold;
+    -fx-text-fill: #7ca76f;
+}
+
+/* ==================== TextField / ChoiceBox / DatePicker ==================== */
+.form-input {
+    -fx-pref-width: 400px; /* tous les champs mêmes largeur */
+    -fx-background-color: #ffffff;
+    -fx-border-color: #7ca76f;
+    -fx-border-radius: 5;
+    -fx-border-width: 1.5;
+    -fx-padding: 8 10;
+    -fx-text-fill: #333333;
+    -fx-font-size: 13;
+}
+
+.form-input:hover {
+    -fx-border-color: #5a8a52;
+    -fx-background-color: #ffffff;
+}
+
+.form-input:focused {
+    -fx-border-color: #7ca76f;
+    -fx-border-width: 2;
+    -fx-background-color: #ffffff;
+}
+
+/* Context menu style pour ChoiceBox */
+.form-input.choice-box .context-menu {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #7ca76f;
+}
+
+.form-input.choice-box .context-menu .menu-item:hover {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+}
+
+/* ==================== Buttons ==================== */
+.btn-primary {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 10 20;
+}
+
+.btn-primary:hover {
+    -fx-background-color: #5a8a52;
+    -fx-cursor: hand;
+}
+
+.btn-primary:pressed {
+    -fx-background-color: #468540;
+}
+
+.btn-secondary {
+    -fx-background-color: #7ca76f;
+    -fx-text-fill: white;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 10 20;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #5a8a52;
+    -fx-cursor: hand;
+}
+
+.btn-secondary:pressed {
+    -fx-background-color: #468540;
+}.form-input {
+     -fx-pref-width: 400px;   /* largeur identique */
+     -fx-max-width: 400px;    /* empêche de dépasser */
+     -fx-min-width: 400px;    /* empêche d’être plus petit */
+     -fx-background-color: #ffffff;
+     -fx-border-color: #7ca76f;
+     -fx-border-radius: 5;
+     -fx-border-width: 1.5;
+     -fx-padding: 8 10;
+     -fx-text-fill: #333333;
+     -fx-font-size: 13;
+ }
+/* Supprime survol, sélection et clic sur tous les ListView */
+.list-view .list-cell:filled,
+.list-view .list-cell:filled:selected,
+.list-view .list-cell:filled:selected:hover,
+.list-view .list-cell:hover,
+.list-view .list-cell:filled:focused {
+    -fx-background-color: transparent; /* Pas de couleur de fond */
+    -fx-background-insets: 0;          /* Supprime les bordures internes */
+    -fx-text-fill: black;               /* Texte normal */
+}
+#mainList .list-cell,
+#taskList .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: black;
+}
+
+#mainList .list-cell:hover,
+#mainList .list-cell:selected,
+#mainList .list-cell:focused,
+#taskList .list-cell:hover,
+#taskList .list-cell:selected,
+#taskList .list-cell:focused {
+    -fx-background-color: transparent;
+}
+/* Supprime tout effet de survol et de sélection pour ListView */
+.list-view .list-cell {
+    -fx-background-color: transparent; /* fond transparent */
+    -fx-background-insets: 0;          /* supprime marges internes */
+    -fx-text-fill: black;               /* texte normal */
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: transparent; /* aucun survol */
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: transparent; /* aucune sélection */
+}
+
+.list-view .list-cell:focused {
+    -fx-background-color: transparent; /* pas d'effet quand cliqué */
+}
+.form-input-disabled {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 5 10;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-text-fill: #555;
+}
+.text-area {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+}
+/* Réduit la taille globale du menu déroulant */
+.menu-button .context-menu {
+    -fx-padding: 2px;
+    -fx-min-width: 80px; /* Force une largeur petite */
+    -fx-background-radius: 5px;
+}
+
+/* Réduit l'espace entre les choix */
+.menu-button .menu-item {
+    -fx-padding: 4px 8px;
+}
+
+/* Supprime la flèche moche */
+.menu-button .arrow-button {
+    -fx-padding: 0;
+}
+.menu-button .arrow {
+    -fx-shape: "";
+}

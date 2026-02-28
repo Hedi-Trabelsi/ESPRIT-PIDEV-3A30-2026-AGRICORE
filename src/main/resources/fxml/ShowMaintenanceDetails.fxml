@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.ShowMaintenanceDetailsController"
+            prefWidth="1250.0" prefHeight="720.0" style="-fx-background-color: #f8fafc;"
+            stylesheets="@/styles/styleM.css">
+
+    <children>
+        <VBox prefHeight="720.0" prefWidth="216.0" spacing="20.0" style="-fx-padding: 20;">
+            <children>
+                <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
+                    <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/logo.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </VBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/group.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Mon Profil" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/tracktor.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Équipements" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/electricity.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Maintenance" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/booking.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Événements" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/paw.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Mes Animaux" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0" spacing="10.0">
+                    <children>
+                        <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/images/money-bag.png" />
+                            </image>
+                        </ImageView>
+                        <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="160.0" text="Financière" styleClass="sidebar-button" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+
+        <VBox layoutX="217.0" layoutY="10.0" prefHeight="700.0" prefWidth="1010.0" style="-fx-background-color: #f8fafc; -fx-background-radius: 15;">
+            <children>
+                <ScrollPane fitToWidth="true" vbarPolicy="AS_NEEDED"
+                            style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent; -fx-padding: 0;">
+                    <content>
+                        <VBox spacing="20" style="-fx-background-color: #f8fafc; -fx-padding: 30;">
+                            <children>
+                                <HBox alignment="CENTER_LEFT" spacing="20">
+                                    <VBox HBox.hgrow="ALWAYS">
+                                        <Label fx:id="retourLabel" text="← Retour à la liste" onMouseClicked="#navigateRetour"
+                                               style="-fx-text-fill: #2e7d32; -fx-font-size: 14px; -fx-cursor: hand; -fx-padding: 0 0 5 0; -fx-underline: true;"/>
+                                        <Label text="Fiche d'intervention détaillée" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                                    </VBox>
+                                    <Button fx:id="btnTerminer" text="✓ Clôturer l'intervention" onAction="#handleTerminerIntervention"
+                                            style="-fx-background-color: #2e7d32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12 25; -fx-background-radius: 12; -fx-cursor: hand;"/>
+                                </HBox>
+
+                                <HBox spacing="10" alignment="CENTER_LEFT">
+                                    <Label text="Tâches planifiées" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label text="Total Budget :" style="-fx-text-fill: #64748b;"/>
+                                    <Label fx:id="totalPrixLabel" text="0.00 DT" style="-fx-text-fill: #1e293b; -fx-font-weight: bold;" />
+                                </HBox>
+
+                                <Separator style="-fx-opacity: 0.3;" />
+
+                                <VBox spacing="5" style="-fx-padding: 0 0 10 0;">
+                                    <Label text="TITRE DE LA MAINTENANCE" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="nomMaintenanceLabel" text="Nom de l'intervention"
+                                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
+                                </VBox>
+
+                                <GridPane hgap="40" vgap="20">
+                                    <columnConstraints>
+                                        <ColumnConstraints minWidth="280" prefWidth="300" />
+                                        <ColumnConstraints minWidth="280" prefWidth="300" />
+                                        <ColumnConstraints minWidth="280" prefWidth="300" />
+                                    </columnConstraints>
+                                    <children>
+                                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5">
+                                            <Label text="TYPE D'INTERVENTION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                            <Label fx:id="typeLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                                        </VBox>
+                                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5">
+                                            <Label text="STATUT ACTUEL" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                            <Label fx:id="statutLabel" />
+                                        </VBox>
+                                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5">
+                                            <Label text="PRIORITÉ" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                            <Label fx:id="prioriteLabel" style="-fx-font-size: 16px;"/>
+                                        </VBox>
+                                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="5">
+                                            <Label text="ÉQUIPEMENT" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                            <Label fx:id="equipementLabel" style="-fx-font-size: 16px; -fx-text-fill: #1e293b;"/>
+                                        </VBox>
+                                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="5">
+                                            <Label text="LIEU" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                            <Label fx:id="lieuLabel" style="-fx-font-size: 16px; -fx-text-fill: #1e293b;"/>
+                                        </VBox>
+                                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" spacing="5">
+                                            <Label text="DATE DÉCLARATION" style="-fx-text-fill: #94a3b8; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                            <Label fx:id="dateLabel" style="-fx-font-size: 16px; -fx-text-fill: #1e293b;"/>
+                                        </VBox>
+                                    </children>
+                                </GridPane>
+
+                                <VBox spacing="8" style="-fx-background-color: #f1f5f9; -fx-padding: 20; -fx-background-radius: 12;">
+                                    <Label text="DESCRIPTION DU PROBLÈME" style="-fx-text-fill: #64748b; -fx-font-size: 11px; -fx-font-weight: bold;"/>
+                                    <Label fx:id="descriptionLabel" wrapText="true" style="-fx-font-size: 14px; -fx-text-fill: #334155; -fx-line-spacing: 1.5;"/>
+                                </VBox>
+
+                                <Separator style="-fx-opacity: 0.3;" />
+
+                                <VBox spacing="15">
+                                    <children>
+                                        <HBox alignment="CENTER_LEFT" spacing="15">
+                                            <children>
+                                                <Label text="Journal des tâches associées" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                                                <Region HBox.hgrow="ALWAYS" />
+                                                <Button fx:id="btnPlanifier" text="+ Planifier une tâche" onAction="#navigatePlanifier"
+                                                        style="-fx-background-color: #f1f5f9; -fx-text-fill: #2e7d32; -fx-font-weight: bold; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                                            </children>
+                                        </HBox>
+                                        <VBox fx:id="tachesContainer" spacing="12" style="-fx-background-color: transparent;">
+                                            <padding>
+                                                <Insets bottom="10" left="5" right="10" top="5" />
+                                            </padding>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
