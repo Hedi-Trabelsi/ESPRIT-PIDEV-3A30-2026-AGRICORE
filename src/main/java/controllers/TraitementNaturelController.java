@@ -41,7 +41,7 @@ public class TraitementNaturelController {
     private final AnimalService      animalService = new AnimalService();
     private final SuiviAnimalService suiviService  = new SuiviAnimalService();
 
-    private static final String GROQ_API_KEY = "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";
+    private static final String GROQ_API_KEY = "";
     private static final String GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions";
     private static final String GROQ_MODEL   = "llama3-70b-8192";
 
