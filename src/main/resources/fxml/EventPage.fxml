@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Circle?>
 
 <ScrollPane fitToWidth="true" styleClass="event-scroll-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.EventPageController">
-    <VBox spacing="20" alignment="TOP_CENTER" styleClass="event-container">
+    <VBox fx:id="mainContentVBox" spacing="20" alignment="TOP_CENTER" styleClass="event-container">
         <padding>
             <Insets top="30" right="40" bottom="40" left="40" />
         </padding>

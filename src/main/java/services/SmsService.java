@@ -6,8 +6,8 @@ import com.twilio.type.PhoneNumber;
 
 public class SmsService {
 
-    public static final String ACCOUNT_SID = "";
-    public static final String AUTH_TOKEN = "";
+    public static final String ACCOUNT_SID = "AC6da5e9269f4ce2d91dd5904d26b4d75d";
+    public static final String AUTH_TOKEN = "1ef9bcbf8e7de7d223e6ac6b6068bc85";
 
 
     public static final String TWILIO_NUMBER = "+18382406798";

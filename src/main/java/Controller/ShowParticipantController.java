@@ -29,12 +29,8 @@ public class ShowParticipantController {
     private ParticipantService service;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public ShowParticipantController() {
-        try {
-            this.service = new ParticipantService();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public ShowParticipantController() throws SQLException {
+        this.service = new ParticipantService();
     }
 
     @FXML

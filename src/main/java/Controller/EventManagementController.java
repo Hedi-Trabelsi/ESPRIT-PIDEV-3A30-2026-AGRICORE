@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -47,6 +48,7 @@ public class EventManagementController {
 
     private String currentFilter = "TOUT";
     private final DateTimeFormatter dtfDisplay = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
+    @FXML private Button btnUsers, btnGestionEvenements, btnAnimals, btnFinance;
 
     // Map bridge for JavaScript communication
     private MapBridge permanentBridge;
@@ -78,8 +80,7 @@ public class EventManagementController {
 
     private void logAction(String type, int targetId, String desc) {
         try {
-            ActionLog log = new ActionLog(type, "evennement_agricole", targetId, desc);
-            logService.create(log);
+            logService.create(new ActionLog(type, "evennement_agricole", targetId, desc));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -93,30 +94,25 @@ public class EventManagementController {
                     .sum();
             return Math.max(0, ev.getCapaciteMax() - booked);
         } catch (SQLException e) {
-            e.printStackTrace();
             return ev.getCapaciteMax();
         }
     }
 
+    // ===================== 1. LIST VIEW WITH TAB FILTERING =====================
     @FXML
     private void showGestionEvenements() {
-        System.out.println("showGestionEvenements() called");
         resetMainView();
 
-        // Create a wrapper VBox to hold everything
-        VBox contentWrapper = new VBox(20);
-        contentWrapper.setPadding(new Insets(20));
-        contentWrapper.setAlignment(Pos.TOP_CENTER);
-
-        // Header
-        Label header = new Label("Gestion des Événements");
-        header.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a;");
-        header.setPadding(new Insets(0, 0, 10, 0));
-
-        // Action buttons
+        // --- ACTION BAR ---
         HBox actionBar = new HBox(15);
-        actionBar.setAlignment(Pos.CENTER_RIGHT);
-        actionBar.setPadding(new Insets(0, 0, 10, 0));
+        actionBar.setAlignment(Pos.CENTER_LEFT);
+        actionBar.setPadding(new Insets(20, 40, 10, 40));
+        Label header = new Label("AgriCore Management");
+        header.setFont(Font.font("System", FontWeight.BOLD, 30));
+        header.setStyle("-fx-text-fill: #1a3c1a;");
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         Button btnLogs = new Button("📜 Logs");
         btnLogs.setStyle("-fx-background-color: #555; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 20; -fx-cursor: hand;");
@@ -126,95 +122,71 @@ public class EventManagementController {
         btnAdd.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 20; -fx-padding: 10 25; -fx-cursor: hand;");
         btnAdd.setOnAction(e -> renderForm(null));
 
-        Button btnShowAll = new Button("📋 Tous les événements");
-        btnShowAll.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 20; -fx-cursor: hand; -fx-margin-right: 10;");
-        btnShowAll.setOnAction(e -> showAllEvenements());
+        actionBar.getChildren().addAll(header, spacer, btnLogs, btnAdd);
 
-        Button btnShowParticipants = new Button("👥 Tous les participants");
-        btnShowParticipants.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 20; -fx-cursor: hand;");
-        btnShowParticipants.setOnAction(e -> showAllParticipants());
-
-        actionBar.getChildren().addAll(btnShowAll, btnShowParticipants, btnLogs, btnAdd);
-
-        // Search field
+        // --- SEARCH BAR ---
+        HBox searchContainer = new HBox();
+        searchContainer.setAlignment(Pos.CENTER);
+        searchContainer.setPadding(new Insets(0, 40, 10, 40));
         TextField searchField = new TextField();
         searchField.setPromptText("🔍 Rechercher un événement...");
-        searchField.setStyle("-fx-background-radius: 15; -fx-padding: 10 20; -fx-border-color: #ddd; -fx-border-radius: 15; -fx-font-size: 14px;");
         searchField.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(searchField, Priority.ALWAYS);
+        searchField.setStyle("-fx-background-radius: 15; -fx-padding: 10 20; -fx-border-color: #ddd; -fx-border-radius: 15; -fx-font-size: 14px;");
+        searchContainer.getChildren().add(searchField);
 
-        // Filter buttons
+        // --- FILTER BAR ---
         HBox filterBar = new HBox(15);
-        filterBar.setAlignment(Pos.CENTER_LEFT);
-        filterBar.setPadding(new Insets(10, 0, 20, 0));
-
+        filterBar.setAlignment(Pos.CENTER);
+        filterBar.setPadding(new Insets(10, 40, 20, 40));
         Button btnAll = createFilterButton("Tout", "TOUT");
         Button btnOngoing = createFilterButton("En cours", "EN_COURS");
         Button btnComing = createFilterButton("À venir", "COMING");
         Button btnHistory = createFilterButton("Historique", "HISTORIQUE");
         filterBar.getChildren().addAll(btnAll, btnOngoing, btnComing, btnHistory);
 
-        // Events grid
+        mainContentVBox.getChildren().addAll(actionBar, searchContainer, filterBar);
+
+        // Conteneur pour les cartes
         FlowPane flowPane = new FlowPane(20, 25);
-        flowPane.setAlignment(Pos.TOP_CENTER);
+        flowPane.setAlignment(Pos.CENTER);
         flowPane.setPadding(new Insets(10, 0, 30, 0));
-        flowPane.setPrefWrapLength(900);
 
-        // Add all to content wrapper
-        contentWrapper.getChildren().addAll(header, actionBar, searchField, filterBar, flowPane);
-
-        // Add content wrapper to main VBox
-        mainContentVBox.getChildren().add(contentWrapper);
-
-        // Load events
-        loadEventsToGrid(flowPane, searchField, btnAll, btnOngoing, btnComing, btnHistory, filterBar);
-    }
-
-    private void loadEventsToGrid(FlowPane flowPane, TextField searchField, Button btnAll, Button btnOngoing,
-                                  Button btnComing, Button btnHistory, HBox filterBar) {
         try {
+            // CHARGEMENT DEPUIS LA DB (Vérifie que read() utilise bien le nouveau constructeur)
             List<EvennementAgricole> allEvents = evennementService.read();
-            System.out.println("Loaded " + allEvents.size() + " events from database");
-
-            if (allEvents.isEmpty()) {
-                Label emptyLabel = new Label("Aucun événement dans la base de données");
-                emptyLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #666; -fx-padding: 50;");
-                flowPane.getChildren().add(emptyLabel);
-                return;
-            }
 
             Runnable refreshList = () -> {
                 flowPane.getChildren().clear();
                 String searchText = searchField.getText().toLowerCase();
+                LocalDateTime now = LocalDateTime.now();
                 LocalDate today = LocalDate.now();
 
-                List<EvennementAgricole> filteredEvents = allEvents.stream()
-                        .filter(ev -> ev.getTitre().toLowerCase().contains(searchText) ||
-                                (ev.getLieu() != null && ev.getLieu().toLowerCase().contains(searchText)))
+                allEvents.stream()
+                        .filter(ev -> ev.getTitre().toLowerCase().contains(searchText) || ev.getLieu().toLowerCase().contains(searchText))
                         .filter(ev -> {
+                            // Sécurité pour les dates nulles
+                            if (ev.getDateDebut() == null || ev.getDateFin() == null) return false;
+
                             LocalDate start = ev.getDateDebut().toLocalDate();
                             LocalDate end = ev.getDateFin().toLocalDate();
+
                             if (currentFilter.equals("HISTORIQUE")) return end.isBefore(today);
-                            if (currentFilter.equals("EN_COURS")) return (start.isBefore(today) || start.isEqual(today)) && (end.isAfter(today) || end.isEqual(today));
+                            if (currentFilter.equals("EN_COURS"))
+                                return (start.isBefore(today) || start.isEqual(today)) && (end.isAfter(today) || end.isEqual(today));
                             if (currentFilter.equals("COMING")) return start.isAfter(today);
                             return true;
                         })
-                        .collect(Collectors.toList());
-
-                System.out.println("Showing " + filteredEvents.size() + " events after filtering");
-
-                if (filteredEvents.isEmpty()) {
-                    Label emptyLabel = new Label("Aucun événement trouvé");
-                    emptyLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: #666; -fx-padding: 50;");
-                    flowPane.getChildren().add(emptyLabel);
-                } else {
-                    for (EvennementAgricole ev : filteredEvents) {
-                        VBox card = createEventCard(ev);
-                        flowPane.getChildren().add(card);
-                    }
-                }
+                        .sorted((ev1, ev2) -> {
+                            boolean isPast1 = ev1.getDateFin().isBefore(now);
+                            boolean isPast2 = ev2.getDateFin().isBefore(now);
+                            if (isPast1 != isPast2) return isPast1 ? 1 : -1;
+                            return ev1.getDateDebut().compareTo(ev2.getDateDebut());
+                        })
+                        .forEach(ev -> flowPane.getChildren().add(createEventCard(ev)));
             };
 
+            // Listeners
             searchField.textProperty().addListener((obs, old, newVal) -> refreshList.run());
             btnAll.setOnAction(e -> {
                 currentFilter = "TOUT";
@@ -239,46 +211,17 @@ public class EventManagementController {
 
             refreshList.run();
 
+            // On ajoute le flowPane dans un ScrollPane pour pouvoir scroller s'il y a beaucoup d'événements
+            ScrollPane scroll = new ScrollPane(flowPane);
+            scroll.setFitToWidth(true);
+            scroll.setStyle("-fx-background-color:transparent; -fx-background:transparent;");
+            mainContentVBox.getChildren().add(scroll);
+
         } catch (SQLException e) {
-            System.err.println("SQL Error loading events: " + e.getMessage());
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger les événements: " + e.getMessage());
-
-            Label errorLabel = new Label("Erreur de chargement: " + e.getMessage());
-            errorLabel.setStyle("-fx-text-fill: red; -fx-padding: 20;");
+            // Optionnel : Afficher un message si la table est vide ou erreur SQL
+            Label errorLabel = new Label("Erreur de chargement ou base de données vide.");
             flowPane.getChildren().add(errorLabel);
-        }
-    }
-
-    private void showAllEvenements() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowEvennement.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Tous les événements");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir la liste des événements: " + e.getMessage());
-        }
-    }
-
-    private void showAllParticipants() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowParticipant.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Tous les participants");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir la liste des participants: " + e.getMessage());
         }
     }
 
@@ -286,20 +229,19 @@ public class EventManagementController {
         Button b = new Button(text);
         b.setUserData(filterValue);
         b.setCursor(javafx.scene.Cursor.HAND);
-        b.setStyle("-fx-background-color: #eee; -fx-text-fill: #555; -fx-background-radius: 20; -fx-padding: 8 20;");
+        updateSingleTabStyle(b);
         return b;
     }
 
     private void updateTabStyles(HBox filterBar) {
-        filterBar.getChildren().forEach(node -> {
-            Button b = (Button) node;
-            boolean isActive = b.getUserData().equals(currentFilter);
-            if (isActive) {
-                b.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 8 20; -fx-font-weight: bold;");
-            } else {
-                b.setStyle("-fx-background-color: #eee; -fx-text-fill: #555; -fx-background-radius: 20; -fx-padding: 8 20;");
-            }
-        });
+        filterBar.getChildren().forEach(node -> updateSingleTabStyle((Button) node));
+    }
+
+    private void updateSingleTabStyle(Button b) {
+        boolean isActive = b.getUserData().equals(currentFilter);
+        b.setStyle(isActive ?
+                "-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 8 20; -fx-font-weight: bold;" :
+                "-fx-background-color: #eee; -fx-text-fill: #555; -fx-background-radius: 20; -fx-padding: 8 20;");
     }
 
     private VBox createEventCard(EvennementAgricole ev) {
@@ -320,14 +262,12 @@ public class EventManagementController {
         if (left == 0) {
             statusText = "● COMPLET";
             statusColor = "#f39c12";
-        }
-        else if (isHistory) {
+        } else if (isHistory) {
             statusText = "● TERMINÉ";
             statusColor = "#e74c3c";
             bgColor = "#fff5f5";
             borderColor = "#ffcdd2";
-        }
-        else if (start.isBefore(today) || start.isEqual(today)) {
+        } else if (start.isBefore(today) || start.isEqual(today)) {
             statusText = "● EN COURS";
             statusColor = "#27ae60";
             bgColor = "#f0fff4";
@@ -335,8 +275,7 @@ public class EventManagementController {
         }
 
         card.setStyle("-fx-background-color: " + bgColor + "; -fx-background-radius: 15; -fx-border-color: " + borderColor + "; -fx-border-width: 1.5; -fx-border-radius: 15;");
-
-        DropShadow shadow = new DropShadow(10, Color.rgb(0,0,0,0.08));
+        DropShadow shadow = new DropShadow(10, Color.rgb(0, 0, 0, 0.08));
         card.setEffect(shadow);
 
         card.setOnMouseEntered(e -> {
@@ -344,7 +283,6 @@ public class EventManagementController {
             card.setScaleY(1.03);
             shadow.setRadius(20);
         });
-
         card.setOnMouseExited(e -> {
             card.setScaleX(1.0);
             card.setScaleY(1.0);
@@ -358,7 +296,6 @@ public class EventManagementController {
 
         HBox icons = new HBox(15);
         icons.setAlignment(Pos.CENTER_RIGHT);
-
         Label peopleIcon = createIconLabel("👥", "#3498db", () -> showParticipantsForEvent(ev));
         icons.getChildren().add(peopleIcon);
 
@@ -370,15 +307,10 @@ public class EventManagementController {
                 y.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
                 y.setOnAction(a -> {
                     try {
-                        boolean deleted = evennementService.delete(ev.getIdEvennement());
-                        if (deleted) {
-                            logAction("DELETE", ev.getIdEvennement(), "Événement supprimé: " + ev.getTitre());
-                            showGestionEvenements();
-                        } else {
-                            showAlert("Erreur", "Impossible de supprimer l'événement");
-                        }
+                        evennementService.delete(ev.getIdEvennement());
+                        logAction("DELETE", ev.getIdEvennement(), "Événement supprimé: " + ev.getTitre());
+                        showGestionEvenements();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
                 });
                 Button n = new Button("✖");
@@ -395,10 +327,13 @@ public class EventManagementController {
         clickArea.setOnMouseClicked(e -> showEventDetails(ev));
 
         Label titleLabel = new Label(ev.getTitre());
-        titleLabel.setStyle("-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a; -fx-wrap-text: true; -fx-alignment: center;");
+        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 17));
+        titleLabel.setStyle("-fx-text-fill: #1a3c1a;");
+        titleLabel.setWrapText(true);
         titleLabel.setMinHeight(45);
+        titleLabel.setAlignment(Pos.CENTER);
 
-        Label locLabel = new Label("📍 " + (ev.getLieu() != null ? ev.getLieu() : "Lieu non spécifié"));
+        Label locLabel = new Label("📍 " + ev.getLieu());
         locLabel.setStyle("-fx-text-fill: #555;");
 
         Label capacityLeft = new Label(left + " places restantes");
@@ -409,8 +344,9 @@ public class EventManagementController {
 
         if (!isHistory) {
             Button btnEdit = new Button("Modifier");
-            btnEdit.setStyle("-fx-background-color: transparent; -fx-border-color: #2d5a27; -fx-text-fill: #2d5a27; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand; -fx-max-width: infinity;");
-            btnEdit.setOnAction(e -> openUpdateForm(ev));
+            btnEdit.setStyle("-fx-background-color: transparent; -fx-border-color: #2d5a27; -fx-text-fill: #2d5a27; -fx-border-radius: 8; -fx-font-weight: bold; -fx-cursor: hand;");
+            btnEdit.setMaxWidth(Double.MAX_VALUE);
+            btnEdit.setOnAction(e -> renderForm(ev));
             card.getChildren().add(btnEdit);
         } else {
             Label lockedLabel = new Label("Consultation Uniquement");
@@ -422,42 +358,32 @@ public class EventManagementController {
         return card;
     }
 
-    private void openUpdateForm(EvennementAgricole ev) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/UpdateEvenement.fxml"));
-            Parent root = loader.load();
-
-            UpdateEvenementController controller = loader.getController();
-
-            Stage stage = new Stage();
-            controller.setEvenement(ev, stage, null);
-            controller.setOnUpdateCallback(this::showGestionEvenements);
-
-            stage.setTitle("Modifier l'événement");
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible d'ouvrir le formulaire de modification: " + e.getMessage());
-        }
-    }
-
     private void renderForm(EvennementAgricole targetEv) {
         resetMainView();
         boolean isEdit = (targetEv != null);
+
+        VBox rootContainer = new VBox();
+        rootContainer.setAlignment(Pos.CENTER);
+        rootContainer.setPadding(new Insets(20));
+        rootContainer.setSpacing(20);
 
         VBox formCard = new VBox(15);
         formCard.setPadding(new Insets(30));
         formCard.setMaxWidth(600);
         formCard.setStyle("-fx-background-color: white; -fx-background-radius: 20;");
-        formCard.setEffect(new DropShadow(20, Color.rgb(0,0,0,0.15)));
+        formCard.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.15)));
 
+        // --- HEADER ---
         Label head = new Label(isEdit ? "Mise à jour" : "Nouvel Événement");
-        head.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a;");
+        head.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
+        head.setTextFill(Color.web("#2d5a27"));
 
+        // --- TITRE ---
         VBox tBox = createValidatedField("Titre", isEdit ? targetEv.getTitre() : "", "TEXT");
-        VBox lBox = createValidatedField("Lieu (Cliquez sur la carte)", isEdit ? targetEv.getLieu() : "", "TEXT");
+        TextField titreField = (TextField) tBox.getChildren().get(1);
+
+        // --- LOCALISATION ---
+        VBox lBox = createValidatedField("Lieu (Cliquez sur la terre)", isEdit ? targetEv.getLieu() : "", "TEXT");
         TextField lieuField = (TextField) lBox.getChildren().get(1);
 
         HBox mapCenterer = new HBox();
@@ -472,63 +398,180 @@ public class EventManagementController {
         mapStack.getChildren().add(mapWebView);
         mapCenterer.getChildren().add(mapStack);
 
-        VBox descBox = createValidatedField("Description", isEdit ? targetEv.getDescription() : "", "AREA");
+        // --- DESCRIPTION SECTION ---
+        VBox descContainer = new VBox(8);
+        VBox tempDescBox = createValidatedField("Description", isEdit ? targetEv.getDescription() : "", "AREA");
+        Label descLabel = (Label) tempDescBox.getChildren().get(0);
+        TextArea descArea = (TextArea) tempDescBox.getChildren().get(1);
+        descArea.setPrefRowCount(5);
 
-        // Date and time pickers with AM/PM
+        Button btnAiDesc = new Button("Rédiger avec IA ✨");
+        btnAiDesc.setCursor(Cursor.HAND);
+        btnAiDesc.setStyle("-fx-background-color: linear-gradient(to right, #a5d6a7, #66bb6a); -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 5 12; -fx-font-weight: bold; -fx-font-size: 11;");
+        btnAiDesc.setOnAction(a -> generateDescriptionAI(titreField, descArea, btnAiDesc));
+
+        HBox descHeader = new HBox();
+        descHeader.setAlignment(Pos.CENTER_LEFT);
+        Region spacerIA = new Region();
+        HBox.setHgrow(spacerIA, Priority.ALWAYS);
+        descHeader.getChildren().addAll(descLabel, spacerIA, btnAiDesc);
+        descContainer.getChildren().addAll(descHeader, descArea);
+
+        // --- DATE ET HEURE SECTION ---
         HBox startRow = createDateTimePickerBox("Début", isEdit ? targetEv.getDateDebut() : LocalDateTime.now().withMinute(0));
         HBox endRow = createDateTimePickerBox("Fin", isEdit ? targetEv.getDateFin() : LocalDateTime.now().plusDays(1).withMinute(0));
 
+        // --- CAPACITÉ & FRAIS (AVEC CONTRÔLE NUMÉRIQUE) ---
         HBox numRow = new HBox(15);
         VBox capBox = createValidatedField("Capacité", isEdit ? String.valueOf(targetEv.getCapaciteMax()) : "", "INT");
         VBox fraisBox = createValidatedField("Frais (DT)", isEdit ? String.valueOf(targetEv.getFraisInscription()) : "", "NUMBER");
+
+        // --- AJOUT DU FILTRE NUMÉRIQUE SUR FRAIS ---
+        TextField fraisField = (TextField) fraisBox.getChildren().get(1);
+        fraisField.setTextFormatter(new TextFormatter<>(change -> {
+            // Regex autorisant les chiffres et un seul point décimal
+            if (change.getControlNewText().matches("\\d*(\\.\\d*)?")) {
+                return change;
+            }
+            return null;
+        }));
+
         HBox.setHgrow(capBox, Priority.ALWAYS);
         HBox.setHgrow(fraisBox, Priority.ALWAYS);
         numRow.getChildren().addAll(capBox, fraisBox);
 
+        // --- BOUTONS D'ACTION ---
         Button btnSave = new Button(isEdit ? "Enregistrer les modifications" : "Créer l'Événement");
         btnSave.setMaxWidth(Double.MAX_VALUE);
-        btnSave.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 15; -fx-background-radius: 12; -fx-font-weight: bold; -fx-cursor: hand;");
+        btnSave.setCursor(Cursor.HAND);
+        btnSave.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 15; -fx-background-radius: 12; -fx-font-weight: bold;");
+
         btnSave.setOnAction(e -> {
             try {
                 EvennementAgricole ev = isEdit ? targetEv : new EvennementAgricole();
-                ev.setTitre(((TextField)tBox.getChildren().get(1)).getText());
+                ev.setTitre(titreField.getText());
                 ev.setLieu(lieuField.getText());
-                ev.setDescription(((TextArea)descBox.getChildren().get(1)).getText());
+                ev.setDescription(descArea.getText());
+
                 ev.setDateDebut(getDateTimeFromRow(startRow));
                 ev.setDateFin(getDateTimeFromRow(endRow));
-                ev.setCapaciteMax(Integer.parseInt(((TextField)capBox.getChildren().get(1)).getText()));
-                ev.setFraisInscription((int) Double.parseDouble(((TextField)fraisBox.getChildren().get(1)).getText()));
+
+                // Conversion sécurisée
+                ev.setCapaciteMax(Integer.parseInt(((TextField) capBox.getChildren().get(1)).getText()));
+
+                // On récupère le texte du fraisField contrôlé
+                String fraisStr = fraisField.getText();
+                double doubleFrais = (fraisStr == null || fraisStr.isEmpty()) ? 0.0 : Double.parseDouble(fraisStr);
+                ev.setFraisInscription((int) doubleFrais); // Cast en int si votre modèle attend un int, sinon laissez en double
+
                 ev.setStatut("Actif");
 
                 if (isEdit) {
                     evennementService.update(ev);
-                    logAction("UPDATE", ev.getIdEvennement(), "Modification de: " + ev.getTitre());
                 } else {
-                    int newId = evennementService.create(ev);
-                    if (newId > 0) {
-                        ev.setIdEvennement(newId);
-                        logAction("CREATE", newId, "Nouvel événement créé: " + ev.getTitre());
-                    }
+                    evennementService.create(ev);
                 }
                 showGestionEvenements();
+            } catch (NumberFormatException ex) {
+                showAlert("Erreur de saisie", "Veuillez entrer des nombres valides pour la capacité et les frais.");
             } catch (Exception ex) {
-                ex.printStackTrace();
-                showAlert("Erreur", "Vérifiez vos données: " + ex.getMessage());
+                showAlert("Erreur", "Une erreur est survenue lors de l'enregistrement.");
             }
         });
 
         Button btnBack = new Button("Annuler");
-        btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-cursor: hand;");
+        btnBack.setCursor(Cursor.HAND);
+        btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-weight: bold;");
         btnBack.setOnAction(a -> showGestionEvenements());
 
-        formCard.getChildren().addAll(head, tBox, lBox, mapCenterer, descBox, startRow, endRow, numRow, btnSave, btnBack);
-        mainContentVBox.getChildren().add(formCard);
+        // --- ASSEMBLAGE FINAL ---
+        formCard.getChildren().addAll(head, tBox, lBox, mapCenterer, descContainer, startRow, endRow, numRow, btnSave, btnBack);
+        rootContainer.getChildren().add(formCard);
+
+        ScrollPane scroll = new ScrollPane(rootContainer);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color:transparent; -fx-background:transparent; -fx-border-color:transparent;");
+
+        mainContentVBox.getChildren().clear();
+        mainContentVBox.getChildren().add(scroll);
+    }
+
+
+    // --- LOGIQUE IA : GÉNÉRATION DE TEXTE (MISTRAL/GPT) ---
+    private String callTextAI(String titre) {
+        try {
+            String prompt = "Rédige une courte description accrocheuse pour un événement agricole : " + titre;
+            String urlStr = "https://text.pollinations.ai/" + java.net.URLEncoder.encode(prompt, "UTF-8");
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(urlStr).openConnection();
+            java.io.BufferedReader in = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) response.append(line);
+            in.close();
+            return response.toString().trim();
+        } catch (Exception e) {
+            return "Rejoignez-nous pour cet événement exceptionnel sur " + titre;
+        }
+    }
+
+    private void generateDescriptionAI(TextField titreField, TextArea descArea, Button btnAiDesc) {
+        String titre = titreField.getText().trim();
+        if (titre.length() < 3) {
+            showAlert("IA", "Saisissez un titre plus long.");
+            return;
+        }
+
+        btnAiDesc.setText("L'IA réfléchit... ✨");
+        btnAiDesc.setDisable(true);
+
+        new Thread(() -> {
+            try {
+                String description = generateDescription(titre); // <-- ta fonction ici
+                Platform.runLater(() -> {
+                    descArea.setText(description);
+                    btnAiDesc.setText("Rédiger avec IA ✨");
+                    btnAiDesc.setDisable(false);
+                });
+            } catch (Exception ex) {
+                Platform.runLater(() -> {
+                    showAlert("Erreur IA", "Impossible de générer la description.");
+                    btnAiDesc.setText("Rédiger avec IA ✨");
+                    btnAiDesc.setDisable(false);
+                });
+            }
+        }).start();
+    }
+
+
+    private String generateDescription(String titre) {
+        try {
+            // On utilise un modèle léger et gratuit (Mistral ou GPT-2 via Pollinations)
+            String prompt = "Rédige une description professionnelle et attractive en français pour un événement agricole nommé : " + titre;
+            String encodedPrompt = java.net.URLEncoder.encode(prompt, "UTF-8");
+
+            // URL de l'API de génération de texte (sans clé API nécessaire)
+            java.net.URL url = new java.net.URL("https://text.pollinations.ai/" + encodedPrompt);
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            java.io.BufferedReader rd = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
+            rd.close();
+
+            return result.toString().trim();
+        } catch (Exception e) {
+            // Fallback si l'IA est hors ligne
+            return "Rejoignez-nous pour " + titre + ", un événement incontournable pour les passionnés d'agriculture.";
+        }
     }
 
     private HBox createDateTimePickerBox(String label, LocalDateTime current) {
         HBox row = new HBox(10);
         row.setAlignment(Pos.CENTER_LEFT);
-
         Label lbl = new Label(label);
         lbl.setPrefWidth(50);
         lbl.setStyle("-fx-font-weight: bold;");
@@ -537,11 +580,11 @@ public class EventManagementController {
         dp.setPrefWidth(120);
 
         // AM/PM Logic: Convert 24h to 12h for the ComboBoxes
-        ComboBox<Integer> hours = new ComboBox<>(FXCollections.observableArrayList(1,2,3,4,5,6,7,8,9,10,11,12));
+        ComboBox<Integer> hours = new ComboBox<>(FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
         int hour24 = current.getHour();
         hours.setValue(hour24 == 0 ? 12 : (hour24 > 12 ? hour24 - 12 : hour24));
 
-        ComboBox<Integer> mins = new ComboBox<>(FXCollections.observableArrayList(0,15,30,45));
+        ComboBox<Integer> mins = new ComboBox<>(FXCollections.observableArrayList(0, 15, 30, 45));
         mins.setValue((current.getMinute() / 15) * 15);
 
         ComboBox<String> amPm = new ComboBox<>(FXCollections.observableArrayList("AM", "PM"));
@@ -568,7 +611,7 @@ public class EventManagementController {
     private void loadCircularSyncedMap(WebView webView, TextField targetField) {
         this.permanentBridge = new MapBridge(targetField);
 
-        // HTML with Leaflet map and spinning earth animation
+        // Added 'searchAddress' function to JS
         String html = "<!DOCTYPE html><html><head>" +
                 "<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" />" +
                 "<script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\"></script>" +
@@ -582,7 +625,7 @@ public class EventManagementController {
                 "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);" +
                 "var marker;" +
 
-                // Search function for address lookup
+                // --- NEW: SEARCH FUNCTION ---
                 "function searchAddress(address) {" +
                 "  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + address)" +
                 "    .then(response => response.json())" +
@@ -608,7 +651,8 @@ public class EventManagementController {
                 JSObject win = (JSObject) webView.getEngine().executeScript("window");
                 win.setMember("javaApp", permanentBridge);
 
-                // Sync textfield to map
+                // --- SYNC TEXTFIELD TO MAP ---
+                // When user types an address in the field and clicks away or presses enter
                 targetField.focusedProperty().addListener((o, oldV, newV) -> {
                     if (!newV) { // On blur
                         String text = targetField.getText();
@@ -629,10 +673,13 @@ public class EventManagementController {
         webView.getEngine().loadContent(html);
     }
 
-    // Bridge class for Java-JavaScript communication
+    // Bridge Class MUST BE PUBLIC and method MUST be public
     public class MapBridge {
         private final TextField target;
-        public MapBridge(TextField t) { this.target = t; }
+
+        public MapBridge(TextField t) {
+            this.target = t;
+        }
 
         public void updateCoords(String coords) {
             Platform.runLater(() -> {
@@ -646,35 +693,28 @@ public class EventManagementController {
 
     private VBox createValidatedField(String label, String val, String type) {
         VBox v = new VBox(5);
-
         Label lbl = new Label(label);
         lbl.setStyle("-fx-font-weight: bold; -fx-text-fill: #555;");
-
         TextInputControl input = type.equals("AREA") ? new TextArea(val) : new TextField(val);
         input.setPromptText("Saisissez " + label.toLowerCase());
         input.setStyle("-fx-background-radius: 10; -fx-border-color: #ddd; -fx-padding: 10;");
-
         Label err = new Label();
         err.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 11px;");
         err.setVisible(false);
-
         input.textProperty().addListener((obs, o, n) -> {
             if (n.trim().isEmpty()) {
-                input.setStyle("-fx-background-radius: 10; -fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-padding: 10;");
+                input.setStyle("-fx-background-radius: 10; -fx-border-color: #e74c3c; -fx-border-width: 1.5;");
                 err.setText("Obligatoire");
                 err.setVisible(true);
-            }
-            else if (type.equals("INT") && !n.matches("\\d*")) {
-                input.setStyle("-fx-background-radius: 10; -fx-border-color: #e74c3c; -fx-border-width: 1.5; -fx-padding: 10;");
+            } else if (type.equals("INT") && !n.matches("\\d*")) {
+                input.setStyle("-fx-background-radius: 10; -fx-border-color: #e74c3c; -fx-border-width: 1.5;");
                 err.setText("Entier requis");
                 err.setVisible(true);
-            }
-            else {
-                input.setStyle("-fx-background-radius: 10; -fx-border-color: #2ecc71; -fx-border-width: 1.5; -fx-padding: 10;");
+            } else {
+                input.setStyle("-fx-background-radius: 10; -fx-border-color: #2ecc71; -fx-border-width: 1.5;");
                 err.setVisible(false);
             }
         });
-
         v.getChildren().addAll(lbl, input, err);
         return v;
     }
@@ -682,11 +722,19 @@ public class EventManagementController {
     private Label createIconLabel(String icon, String color, Runnable action) {
         Label l = new Label(icon);
         l.setStyle("-fx-text-fill: " + color + "; -fx-font-size: 18px; -fx-cursor: hand;");
-        l.setOnMouseEntered(e -> { l.setScaleX(1.3); l.setScaleY(1.3); });
-        l.setOnMouseExited(e -> { l.setScaleX(1.0); l.setScaleY(1.0); });
+        l.setOnMouseEntered(e -> {
+            l.setScaleX(1.3);
+            l.setScaleY(1.3);
+        });
+        l.setOnMouseExited(e -> {
+            l.setScaleX(1.0);
+            l.setScaleY(1.0);
+        });
         if (action != null) l.setOnMouseClicked(e -> action.run());
         return l;
     }
+
+
 
     private void resetMainView() {
         if (mainContentVBox != null) {
@@ -694,44 +742,43 @@ public class EventManagementController {
             mainContentVBox.setPadding(new Insets(20));
             mainContentVBox.setAlignment(Pos.TOP_CENTER);
             mainContentVBox.setSpacing(20);
+            // CRUCIAL: Keeps the white background from the parent AnchorPane
             mainContentVBox.setStyle("-fx-background-color: transparent;");
         }
     }
 
+
+
+    // ===================== 3. EVENT DETAILS =====================
     private void showEventDetails(EvennementAgricole ev) {
         resetMainView();
         mainContentVBox.setPadding(new Insets(30, 60, 30, 60));
         mainContentVBox.setAlignment(Pos.TOP_LEFT);
-
         Button btnBack = new Button("← Retour");
         btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #2d5a27; -fx-font-weight: bold; -fx-cursor: hand;");
         btnBack.setOnAction(e -> showGestionEvenements());
 
         HBox wrapper = new HBox(40);
         wrapper.setPadding(new Insets(20, 0, 0, 0));
-
         VBox left = new VBox(25);
         HBox.setHgrow(left, Priority.ALWAYS);
-
         Label title = new Label(ev.getTitre());
-        title.setStyle("-fx-font-size: 40px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a;");
+        title.setFont(Font.font("System", FontWeight.BOLD, 40));
+        title.setStyle("-fx-text-fill: #000000;");
         title.setWrapText(true);
 
         int remaining = getRemainingPlaces(ev);
         HBox metaRow = new HBox(20);
-
+        // Uses dtfDisplay (dd/MM/yyyy hh:mm a)
         Label dateLabel = new Label("📅 " + ev.getDateDebut().format(dtfDisplay) + " au " + ev.getDateFin().format(dtfDisplay));
-        dateLabel.setStyle("-fx-text-fill: #333;");
-
+        dateLabel.setStyle("-fx-text-fill: #000000;");
         Label capLabel = new Label("🎟 " + remaining + " Places");
-        capLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: " + (remaining < 5 ? "#e74c3c" : "#2d5a27") + ";");
-
+        capLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #000000;");
         metaRow.getChildren().addAll(dateLabel, capLabel);
 
-        Text desc = new Text(ev.getDescription() != null ? ev.getDescription() : "Aucune description");
+        Text desc = new Text(ev.getDescription());
         desc.setWrappingWidth(500);
-        desc.setStyle("-fx-font-size: 15px; -fx-fill: #555;");
-
+        desc.setStyle("-fx-font-size: 15; -fx-fill: #000000;");
         left.getChildren().addAll(title, metaRow, new Separator(), desc);
 
         VBox right = new VBox(20);
@@ -740,7 +787,6 @@ public class EventManagementController {
         right.setPadding(new Insets(25));
         right.setStyle("-fx-background-color: #f9f9f9; -fx-background-radius: 25;");
 
-        // Map for location display
         StackPane mapContainer = new StackPane();
         mapContainer.setPrefSize(220, 220);
         WebView staticMap = new WebView();
@@ -751,17 +797,15 @@ public class EventManagementController {
 
         Button btnManage = new Button("Participants");
         btnManage.setMaxWidth(Double.MAX_VALUE);
-        btnManage.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 10; -fx-font-weight: bold; -fx-cursor: hand;");
+        btnManage.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-padding: 12; -fx-background-radius: 10; -fx-font-weight: bold;");
         btnManage.setOnAction(a -> showParticipantsForEvent(ev));
 
         Label locHeader = new Label("Localisation");
-        locHeader.setStyle("-fx-font-weight: bold; -fx-text-fill: #333;");
-
-        Label locCoords = new Label(ev.getLieu() != null ? ev.getLieu() : "Non spécifié");
-        locCoords.setStyle("-fx-text-fill: #666; -fx-wrap-text: true;");
-
-        Label priceLabel = new Label("💰 " + ev.getFraisInscription() + " DT");
-        priceLabel.setStyle("-fx-text-fill: #2d5a27; -fx-font-weight: bold;");
+        locHeader.setStyle("-fx-text-fill: #000000;");
+        Label locCoords = new Label(ev.getLieu());
+        locCoords.setStyle("-fx-text-fill: #000000;");
+        Label priceLabel = new Label(ev.getFraisInscription() + " DT");
+        priceLabel.setStyle("-fx-text-fill: #000000; -fx-font-weight: bold;");
 
         right.getChildren().addAll(mapContainer, locHeader, locCoords, new Separator(), priceLabel, btnManage);
         wrapper.getChildren().addAll(left, right);
@@ -776,148 +820,192 @@ public class EventManagementController {
                 lat = p[0].trim();
                 lng = p[1].trim();
             }
-        } catch (Exception e) {}
-
-        String html = "<!DOCTYPE html><html><head>" +
-                "<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" />" +
-                "<script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\" ></script>" +
-                "<style>body,html,#map{height:100%;margin:0;padding:0;background:#eee;}.leaflet-control-container{display:none;}</style>" +
-                "</head><body><div id=\"map\"></div>" +
-                "<script>var map = L.map('map',{dragging:false,zoomControl:false,scrollWheelZoom:false,doubleClickZoom:false}).setView([" + lat + "," + lng + "],13);" +
-                "L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);" +
-                "L.marker([" + lat + "," + lng + "]).addTo(map);</script></body></html>";
-
-        webView.getEngine().loadContent(html);
+        } catch (Exception e) {
+        }
+        String h = "<!DOCTYPE html><html><head><link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.css\" /><script src=\"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js\" ></script><style>body,html,#map{height:100%;margin:0;padding:0;background:#eee;}.leaflet-control-container{display:none;}</style></head><body><div id=\"map\"></div><script>var map = L.map('map',{dragging:false,zoomControl:false,scrollWheelZoom:false,doubleClickZoom:false}).setView([" + lat + "," + lng + "],13);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);L.marker([" + lat + "," + lng + "]).addTo(map);</script></body></html>";
+        webView.getEngine().loadContent(h);
     }
 
+    // ===================== 4. PARTICIPANTS VIEW =====================
     private void showParticipantsForEvent(EvennementAgricole ev) {
         resetMainView();
         mainContentVBox.setPadding(new Insets(30));
-        mainContentVBox.setStyle("-fx-background-color: #f4f7f4;");
+        mainContentVBox.setStyle("-fx-background-color: transparent;");
+
+        // --- 1. HEADER ---
+        VBox topSection = new VBox(20);
+        topSection.setPadding(new Insets(0, 0, 20, 0));
+        topSection.setAlignment(Pos.CENTER);
+
+        HBox navBar = new HBox(15);
+        navBar.setAlignment(Pos.CENTER_LEFT);
 
         Button btnBack = new Button("←");
-        btnBack.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-weight: bold; -fx-cursor: hand; -fx-min-width: 40; -fx-min-height: 40;");
+        btnBack.setCursor(Cursor.HAND);
+        btnBack.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-weight: bold; -fx-font-size: 16px;");
         btnBack.setOnAction(a -> showGestionEvenements());
 
-        Label t = new Label("Participants - " + ev.getTitre());
-        t.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a; -fx-padding: 10 0;");
+        Label titleLabel = new Label("Participants - " + ev.getTitre());
+        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 24));
+        titleLabel.setStyle("-fx-text-fill: #1a3c1a;");
+        navBar.getChildren().addAll(btnBack, titleLabel);
 
+        TextField searchField = new TextField();
+        searchField.setPromptText("🔍 Rechercher par code ou nom...");
+        searchField.setPrefWidth(450);
+        searchField.setStyle("-fx-background-radius: 25; -fx-padding: 12 20; -fx-border-color: #2d5a27; -fx-background-color: white; -fx-text-fill: #333;");
+
+        topSection.getChildren().addAll(navBar, searchField);
+
+        // --- 2. GRID ---
         FlowPane pFlow = new FlowPane(25, 25);
-        pFlow.setPadding(new Insets(30));
+        pFlow.setPadding(new Insets(20));
         pFlow.setAlignment(Pos.CENTER);
 
+        ScrollPane scroll = new ScrollPane(pFlow);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;");
+        VBox.setVgrow(scroll, Priority.ALWAYS);
+
         try {
-            List<Participant> list = participantService.read().stream()
+            List<Participant> allParticipants = participantService.read().stream()
                     .filter(p -> p.getIdEvennement() == ev.getIdEvennement())
                     .collect(Collectors.toList());
 
-            if (list.isEmpty()) {
-                Label emptyLabel = new Label("Aucun participant");
-                emptyLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 16px; -fx-padding: 50;");
-                pFlow.getChildren().add(emptyLabel);
-            } else {
-                for (Participant p : list) {
+            Runnable renderCards = () -> {
+                pFlow.getChildren().clear();
+                String filter = searchField.getText().trim().toLowerCase();
+
+                for (Participant p : allParticipants) {
+                    // Search by EntryCode OR Name
+                    String name = p.getNomParticipant() != null ? p.getNomParticipant() : "";
+                    if (!filter.isEmpty() &&
+                            !p.getEntryCode().toLowerCase().contains(filter) &&
+                            !name.toLowerCase().contains(filter)) continue;
+
+                    // --- BUBBLE ---
                     VBox bubble = new VBox(12);
                     bubble.setAlignment(Pos.CENTER);
                     bubble.setPadding(new Insets(20));
-                    bubble.setPrefSize(180, 220);
-                    bubble.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, 8);");
-                    bubble.setOnMouseEntered(e -> bubble.setScaleX(1.05));
-                    bubble.setOnMouseExited(e -> bubble.setScaleX(1.0));
+                    bubble.setPrefSize(200, 280);
+                    bubble.setStyle("-fx-background-color: white; -fx-background-radius: 25;");
+                    bubble.setEffect(new DropShadow(15, Color.rgb(0, 0, 0, 0.1)));
 
-                    String iconType = (p.getNbrPlaces() > 1) ? "👥" : "👤";
-                    Label avatar = new Label(iconType);
-                    avatar.setStyle("-fx-font-size: 45px; -fx-text-fill: #2d5a27;");
+                    // Icon
+                    StackPane iconStack = new StackPane();
+                    iconStack.getChildren().addAll(new Circle(32, Color.web("#e8f5e9")), new Label("👤"));
+                    ((Label) iconStack.getChildren().get(1)).setStyle("-fx-font-size: 30px;");
 
-                    String participantName = p.getNomParticipant();
-                    if (participantName == null || participantName.isEmpty()) {
-                        participantName = "Participant";
-                    }
+                    // NAME DISPLAY
+                    Label nameLabel = new Label(name.isEmpty() ? "Sans Nom" : name);
+                    nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
+                    nameLabel.setStyle("-fx-text-fill: #1a3c1a;"); // DARK TEXT
+                    nameLabel.setWrapText(true);
+                    nameLabel.setAlignment(Pos.CENTER);
 
-                    Label name = new Label(participantName);
-                    name.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333; -fx-wrap-text: true; -fx-alignment: center;");
+                    // Info
+                    Label placesLabel = new Label(p.getNbrPlaces() + (p.getNbrPlaces() > 1 ? " Places" : " Place"));
+                    placesLabel.setStyle("-fx-background-color: #f1f1f1; -fx-text-fill: #555; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 12; -fx-background-radius: 15;");
 
-                    Label places = new Label(p.getNbrPlaces() + (p.getNbrPlaces() > 1 ? " Places" : " Place"));
-                    places.setStyle("-fx-background-color: #e8f5e9; -fx-text-fill: #2d5a27; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 12; -fx-background-radius: 15;");
+                    Label codeBadge = new Label("CODE: " + p.getEntryCode());
+                    codeBadge.setStyle("-fx-text-fill: #27ae60; -fx-font-size: 10px; -fx-font-weight: bold;");
 
-                    bubble.getChildren().addAll(avatar, name, places);
+                    // Confirm Button
+                    boolean isConfirmed = "Confirmee".equalsIgnoreCase(p.getStatutParticipation());
+                    Button btnConfirm = new Button(isConfirmed ? "Confirmé ✅" : "Confirmer");
+                    btnConfirm.setDisable(isConfirmed);
+                    btnConfirm.setPrefWidth(150);
+                    btnConfirm.setStyle(isConfirmed ?
+                            "-fx-background-color: #a5d6a7; -fx-text-fill: white; -fx-background-radius: 20;" :
+                            "-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold; -fx-cursor: hand;");
+
+                    btnConfirm.setOnAction(e -> {
+                        try {
+                            p.setStatutParticipation("Confirmee");
+                            participantService.update(p);
+                            logAction("CONFIRMATION", p.getIdParticipant(), "Validé: " + p.getNomParticipant());
+                            showParticipantsForEvent(ev);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                    });
+
+                    bubble.getChildren().addAll(iconStack, nameLabel, placesLabel, codeBadge, btnConfirm);
                     pFlow.getChildren().add(bubble);
                 }
-            }
+            };
+
+            searchField.textProperty().addListener((obs, old, newVal) -> renderCards.run());
+            renderCards.run();
+
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger les participants: " + e.getMessage());
         }
 
-        mainContentVBox.getChildren().addAll(btnBack, t, pFlow);
+        mainContentVBox.getChildren().addAll(topSection, scroll);
     }
 
+    // ===================== 5. AUDIT LOGS VIEW =====================
     private void showAuditLogs() {
         resetMainView();
         mainContentVBox.setPadding(new Insets(30, 80, 30, 80));
-        mainContentVBox.setStyle("-fx-background-color: #f8faf8;");
+        mainContentVBox.setStyle("-fx-background-color: transparent;");
 
         Button btnBack = new Button("← Retour");
         btnBack.setStyle("-fx-background-color: transparent; -fx-text-fill: #2d5a27; -fx-font-weight: bold; -fx-cursor: hand;");
         btnBack.setOnAction(e -> showGestionEvenements());
 
-        Label head = new Label("Journal d'activités");
-        head.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a; -fx-padding: 10 0 20 0;");
+        Label head = new Label("Journal d'activités (Audit Logs)");
+        head.setFont(Font.font("System", FontWeight.BOLD, 28));
+        head.setStyle("-fx-text-fill: #000000; -fx-padding: 10 0 20 0;");
 
         VBox logList = new VBox(10);
-
         try {
             List<ActionLog> logs = logService.readAll();
+            for (ActionLog log : logs) {
+                HBox row = new HBox(20);
+                row.setAlignment(Pos.CENTER_LEFT);
+                row.setPadding(new Insets(15, 25, 15, 25));
+                row.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);");
 
+                Label typeBadge = new Label(log.getActionType());
+                String color = log.getActionType().equals("DELETE") ? "#e74c3c" : (log.getActionType().equals("CREATE") ? "#27ae60" : "#3498db");
+                typeBadge.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 12; -fx-background-radius: 8; -fx-min-width: 80; -fx-alignment: center;");
+
+                Label desc = new Label(log.getDescription());
+                desc.setFont(Font.font("System", 14));
+                desc.setStyle("-fx-text-fill: #000000;");
+
+                Region s = new Region();
+                HBox.setHgrow(s, Priority.ALWAYS);
+
+                Label time = new Label(log.getCreatedAt());
+                time.setStyle("-fx-text-fill: #000000; -fx-font-size: 12;");
+
+                row.getChildren().addAll(typeBadge, desc, s, time);
+                logList.getChildren().add(row);
+            }
             if (logs.isEmpty()) {
-                Label emptyLogs = new Label("Aucun log trouvé");
-                emptyLogs.setStyle("-fx-text-fill: #666; -fx-font-size: 16px; -fx-padding: 50;");
+                Label emptyLogs = new Label("Aucun log trouvé.");
+                emptyLogs.setStyle("-fx-text-fill: #000000;");
                 logList.getChildren().add(emptyLogs);
-            } else {
-                for (ActionLog log : logs) {
-                    HBox row = new HBox(20);
-                    row.setAlignment(Pos.CENTER_LEFT);
-                    row.setPadding(new Insets(15, 25, 15, 25));
-                    row.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 2);");
-
-                    Label typeBadge = new Label(log.getActionType());
-                    String color = log.getActionType().equals("DELETE") ? "#e74c3c" :
-                            (log.getActionType().equals("CREATE") ? "#27ae60" : "#3498db");
-                    typeBadge.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 5 12; -fx-background-radius: 8; -fx-min-width: 80; -fx-alignment: center;");
-
-                    Label desc = new Label(log.getDescription());
-                    desc.setStyle("-fx-font-size: 14px; -fx-text-fill: #333;");
-
-                    Region spacer = new Region();
-                    HBox.setHgrow(spacer, Priority.ALWAYS);
-
-                    Label time = new Label(log.getCreatedAt() != null ? log.getCreatedAt() : "");
-                    time.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
-
-                    row.getChildren().addAll(typeBadge, desc, spacer, time);
-                    logList.getChildren().add(row);
-                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger les logs: " + e.getMessage());
         }
 
-        ScrollPane scrollPane = new ScrollPane(logList);
-        scrollPane.setFitToWidth(true);
-        scrollPane.setStyle("-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;");
-        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+        ScrollPane scroll = new ScrollPane(logList);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
-        mainContentVBox.getChildren().addAll(btnBack, head, scrollPane);
+        mainContentVBox.getChildren().addAll(btnBack, head, scroll);
     }
 
     private void showAlert(String title, String content) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(content);
-            alert.showAndWait();
-        });
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setTitle(title);
+        a.setContentText(content);
+        a.show();
     }
 }
+

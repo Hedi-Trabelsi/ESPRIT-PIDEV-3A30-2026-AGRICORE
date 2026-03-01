@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 
 public class OpenAIService {
 
-    private static final String API_KEY = "";
+    private static final String API_KEY = "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";
     private static final String URL = "https://api.groq.com/openai/v1/chat/completions";
 
     public static String getAICompletion(String type, String priorite, String equipement, String descAgriculteur) throws Exception {
