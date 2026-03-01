@@ -37,7 +37,7 @@
                             <children>
                                 <Label fx:id="titleLabel" styleClass="page-title" text="Finances"/>
                                 <Pane HBox.hgrow="ALWAYS"/>
-                                <Button text="← Retour" onAction="#goBack" styleClass="secondary"/>
+                                <Button fx:id="backBtn" text="← Retour" onAction="#goBack" styleClass="secondary"/>
                             </children>
                         </HBox>
 
@@ -118,7 +118,7 @@
                         </HBox>
 
                         <!-- Calendar panel -->
-                        <VBox styleClass="panel"
+                        <VBox fx:id="calendarPanel" styleClass="panel"
                               prefHeight="420.0" minHeight="420.0" maxHeight="420.0">
                             <children>
                                 <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane
+        prefWidth="1280.0"
+        prefHeight="740.0"
+        style="-fx-background-color: #F0F4F1;"
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="controllers.CombinedDashboardController">
+
+    <children>
+        <VBox
+                AnchorPane.topAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0">
+
+            <!-- ══════════════════════════════════════
+                 NAV BAR  44 px  — 3 view-switch buttons
+                 This is now the ONLY top bar
+            ══════════════════════════════════════ -->
+            <HBox
+                    alignment="CENTER_LEFT"
+                    prefHeight="44.0"
+                    minHeight="44.0"
+                    maxHeight="44.0"
+                    spacing="6.0"
+                    style="-fx-background-color: #FFFFFF; -fx-padding: 0 24 0 24; -fx-border-color: transparent transparent #D3E4DA transparent; -fx-border-width: 0 0 1 0; -fx-effect: dropshadow(gaussian, rgba(22,80,58,0.06), 8, 0, 0, 3);">
+
+                <Button
+                        fx:id="btnDetails"
+                        text="📋  Détails"
+                        onAction="#showDetails"
+                        style="-fx-background-color: #16503A; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-padding: 8 20 8 20; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(22,80,58,0.28), 8, 0, 0, 2);"/>
+
+                <Button
+                        fx:id="btnAnalyse"
+                        text="📊  Analyse"
+                        onAction="#showAnalyse"
+                        style="-fx-background-color: white; -fx-text-fill: #16503A; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D3E4DA; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-cursor: hand; -fx-effect: none;"/>
+
+                <Button
+                        fx:id="btnCalendrier"
+                        text="📅  Calendrier"
+                        onAction="#showCalendrier"
+                        style="-fx-background-color: white; -fx-text-fill: #16503A; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D3E4DA; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-cursor: hand; -fx-effect: none;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label
+                        fx:id="periodBadge"
+                        text="30 derniers jours"
+                        style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #257A52; -fx-background-color: #EAF2EE; -fx-background-radius: 999; -fx-border-color: #D3E4DA; -fx-border-radius: 999; -fx-border-width: 1; -fx-padding: 4 12 4 12;"/>
+
+            </HBox>
+
+            <!-- ══════════════════════════════════════
+                 MAIN CONTENT AREA
+                 Each host fills the full width
+            ══════════════════════════════════════ -->
+
+            <!-- Détails host — full width, visible by default -->
+            <AnchorPane
+                    fx:id="financeHost"
+                    VBox.vgrow="ALWAYS"
+                    style="-fx-background-color: #F0F4F1;"/>
+
+            <!-- Analyse host — full width, hidden by default -->
+            <AnchorPane
+                    fx:id="analyticsHost"
+                    VBox.vgrow="ALWAYS"
+                    visible="false"
+                    managed="false"
+                    style="-fx-background-color: #F0F4F1;"/>
+
+            <!-- Calendrier host — full width, hidden by default -->
+            <AnchorPane
+                    fx:id="calendarHost"
+                    VBox.vgrow="ALWAYS"
+                    visible="false"
+                    managed="false"
+                    style="-fx-background-color: #F0F4F1;"/>
+
+            <!-- ══════════════════════════════════════
+                 STATUS BAR  28 px
+            ══════════════════════════════════════ -->
+            <HBox
+                    alignment="CENTER_LEFT"
+                    prefHeight="28.0"
+                    minHeight="28.0"
+                    maxHeight="28.0"
+                    spacing="12.0"
+                    style="-fx-background-color: #FFFFFF; -fx-padding: 0 24 0 24; -fx-border-color: #D3E4DA transparent transparent transparent; -fx-border-width: 1 0 0 0;">
+
+                <Region prefWidth="6.0" prefHeight="6.0" style="-fx-background-color: #257A52; -fx-background-radius: 999;"/>
+                <Label text="Données synchronisées" style="-fx-font-size: 9px; -fx-text-fill: #7AA892;"/>
+
+                <Region
+                        prefWidth="1.0"
+                        minWidth="1.0"
+                        maxWidth="1.0"
+                        minHeight="12.0"
+                        maxHeight="12.0"
+                        style="-fx-background-color: #D3E4DA;"/>
+
+                <Label fx:id="statusLabel" text="AgriDash · Tableau de bord combiné" style="-fx-font-size: 9px; -fx-text-fill: #A8C4B8;"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <!-- Hidden compat labels -->
+                <Label fx:id="titleLabel"    text="" style="-fx-font-size: 0; -fx-opacity: 0;" maxWidth="0.0"/>
+                <Label fx:id="avatarInitials" text="" style="-fx-font-size: 0; -fx-opacity: 0;" maxWidth="0.0"/>
+                <Label fx:id="userNameLabel"  text="" style="-fx-font-size: 0; -fx-opacity: 0;" maxWidth="0.0"/>
+
+                <Label fx:id="dateLabel" text="" style="-fx-font-size: 9px; -fx-text-fill: #A8C4B8;"/>
+
+            </HBox>
+
+        </VBox>
+    </children>
+</AnchorPane>

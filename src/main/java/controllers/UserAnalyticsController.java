@@ -6,6 +6,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.Node;
@@ -77,11 +78,26 @@ public class UserAnalyticsController {
     private User user;
     private List<Depense> depenses = new ArrayList<>();
     private List<Vente> ventes = new ArrayList<>();
+    @FXML
+    private Button backBtn;
+    private boolean embedded = false;
+
+    public void setEmbedded(boolean embedded) {
+        this.embedded = embedded;
+        if (embedded && backBtn != null) {
+            backBtn.setVisible(false);
+            backBtn.setManaged(false);
+        }
+    }
 
     public void setUser(User user) {
         this.user = user;
         if (userTitle != null && user != null) {
             userTitle.setText("Analyse financière: " + user.getPrenom() + " " + user.getNom());
+        }
+        if (embedded && backBtn != null) {
+            backBtn.setVisible(false);
+            backBtn.setManaged(false);
         }
         loadData();
         refreshAnalytics();

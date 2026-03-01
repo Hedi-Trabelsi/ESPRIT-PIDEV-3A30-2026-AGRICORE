@@ -32,7 +32,7 @@
                                 </VBox>
                                 <Pane HBox.hgrow="ALWAYS"/>
                                 <Button text="↻  Actualiser" onAction="#refreshAnalytics" styleClass="secondary"/>
-                                <Button text="← Retour" onAction="#goBack" styleClass="secondary"/>
+                                <Button fx:id="backBtn" text="← Retour" onAction="#goBack" styleClass="secondary"/>
                             </children>
                         </HBox>
 

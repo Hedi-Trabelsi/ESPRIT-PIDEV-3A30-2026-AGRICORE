@@ -90,4 +90,43 @@ public class UserService implements IService<User>{
         }
         return people;
     }
+
+    public User authenticate(String email, String password) throws SQLException {
+        String sql = "SELECT * FROM user WHERE email = ? AND password = ? LIMIT 1";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    User p = new User();
+                    p.setId(rs.getInt("id"));
+                    try { p.setNom(rs.getString("nom")); } catch (SQLException ignored) {}
+                    try { p.setPrenom(rs.getString("prenom")); } catch (SQLException ignored) {}
+                    try {
+                        Date d = rs.getDate("date");
+                        if (d != null) p.setDate(d.toLocalDate());
+                    } catch (SQLException ignored) {}
+                    try { p.setAdresse(rs.getString("adresse")); } catch (SQLException ignored) {}
+                    try { p.setRole(rs.getString("role")); } catch (SQLException ignored) {}
+                    try { p.setNumeroT(rs.getString("numeroT")); } catch (SQLException ignored) {}
+                    try { p.setEmail(rs.getString("email")); } catch (SQLException ignored) {}
+                    try { p.setImage(rs.getString("image")); } catch (SQLException ignored) {}
+                    try { p.setPassword(rs.getString("password")); } catch (SQLException ignored) {}
+                    try { p.setGenre(rs.getString("genre")); } catch (SQLException ignored) {}
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean existsByEmail(String email) throws SQLException {
+        String sql = "SELECT 1 FROM user WHERE email = ? LIMIT 1";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
 }

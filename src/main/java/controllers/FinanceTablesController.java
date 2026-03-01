@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import models.Depense;
@@ -24,6 +25,8 @@ public class FinanceTablesController {
     @FXML private VBox       venteFeed;
     @FXML private AnchorPane calendarHost;
     @FXML private GridPane   agriGrid;          // Agriculture panel grid
+    @FXML private Button     backBtn;
+    @FXML private VBox       calendarPanel;
 
     // ── Services ─────────────────────────────────────────────────
     private final DepenseService            depenseService  = new DepenseService();
@@ -32,6 +35,21 @@ public class FinanceTablesController {
     private final DateTimeFormatter         fmt             = DateTimeFormatter.ISO_DATE;
 
     private User user;
+    private boolean embedded = false;
+
+    public void setEmbedded(boolean embedded) {
+        this.embedded = embedded;
+        if (embedded) {
+            if (backBtn != null) {
+                backBtn.setVisible(false);
+                backBtn.setManaged(false);
+            }
+            if (calendarPanel != null) {
+                calendarPanel.setVisible(false);
+                calendarPanel.setManaged(false);
+            }
+        }
+    }
 
     // ────────────────────────────────────────────────────────────
     //  Entry point
@@ -44,7 +62,9 @@ public class FinanceTablesController {
         }
 
         loadData();
-        loadCalendar();
+        if (!embedded) {
+            loadCalendar();
+        }
         loadAgriPanel();   // ← new: starts async World Bank fetch
     }
 
