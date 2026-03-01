@@ -205,12 +205,7 @@ public class ShowAnimalsController {
             animalListView.getScene().setRoot(root);
         } catch (Exception e) { showAlert(e.getMessage()); }
     }
-    @FXML void navigateTraitement() {
-        try {
-            Parent root = FXMLLoader.load(getClass().getResource("/TraitementNaturel.fxml"));
-            animalListView.getScene().setRoot(root);
-        } catch (Exception e) { showAlert(e.getMessage()); }
-    }
+
     @FXML void navigateAdmin() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/admin/AdminDashboard.fxml"));
