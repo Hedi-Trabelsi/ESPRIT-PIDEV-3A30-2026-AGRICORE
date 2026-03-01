@@ -59,6 +59,7 @@
                         style="-fx-background-color:#7ca76f; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
                 <Button text="📊 Stats" onAction="#navigateStatistiques"
                         style="-fx-background-color:#6c5ce7; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+
                 <Button text="Retour" onAction="#navigateBack"
                         style="-fx-background-color:#fab1a0; -fx-text-fill:#d63031; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
             </HBox>
