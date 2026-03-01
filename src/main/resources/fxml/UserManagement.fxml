@@ -60,7 +60,7 @@
     </HBox>
 
     <!-- User Management Section with Grid -->
-    <VBox spacing="15" styleClass="table-container">
+    <VBox spacing="15" styleClass="table-container" VBox.vgrow="ALWAYS">
         <!-- Header with Search and Filter -->
         <HBox alignment="CENTER_LEFT" spacing="15">
             <Label styleClass="section-title" text="All Users" />
@@ -84,7 +84,8 @@
         </HBox>
 
         <!-- Users Grid -->
-        <ScrollPane fitToWidth="true" styleClass="grid-scroll-pane" VBox.vgrow="ALWAYS">
+        <ScrollPane fitToWidth="true" styleClass="grid-scroll-pane" VBox.vgrow="ALWAYS"
+                    prefHeight="500" minHeight="300">
             <FlowPane fx:id="usersGrid"
                       hgap="20"
                       vgap="20"

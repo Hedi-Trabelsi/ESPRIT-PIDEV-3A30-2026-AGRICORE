@@ -112,6 +112,7 @@ public class SignupController {
                 case "Agriculteur" -> role = 1;
                 case "Technicien" -> role = 2;
                 case "Fournisseur" -> role = 3;
+                case "Financier" -> role = 4;
                 default -> role = 1;
             }
 
@@ -341,6 +342,26 @@ public class SignupController {
         } catch (Exception e) {
             e.printStackTrace();
             return new byte[]{0};
+        }
+    }
+
+    public void autoLoginExistingUser(Utilisateur user) {
+        int role = user.getRole();
+        if (role == 0 || role == 3 || role == 4) {
+            // Backend
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/HomePage.fxml"));
+                Parent root = loader.load();
+                HomeController ctrl = loader.getController();
+                ctrl.setLoggedInUser(user);
+                Stage stage = (Stage) signInLink.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.setTitle("Admin Dashboard - " + user.getNom());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            openUserHomePageWithNotification(user);
         }
     }
 

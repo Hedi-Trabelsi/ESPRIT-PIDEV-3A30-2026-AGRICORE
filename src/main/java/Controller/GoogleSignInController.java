@@ -138,27 +138,25 @@ public class GoogleSignInController {
                                 Utilisateur existingUser = userService.findByEmail(userInfo.getEmail());
 
                                 if (existingUser != null) {
-                                    // L'utilisateur existe déjà - rediriger vers la page de connexion
+                                    // Auto-login: skip password
                                     System.out.println("User already exists with email: " + userInfo.getEmail());
 
-                                    // Afficher un message de succès
-                                    if (signupController != null) {
-                                        signupController.showSuccess("Compte Google déjà existant! Connexion en cours...");
-                                    }
-
-                                    // Fermer la fenêtre Google
                                     if (redirectServer != null) {
                                         redirectServer.stopServer();
                                     }
                                     Stage stage = (Stage) webView.getScene().getWindow();
                                     stage.close();
 
-                                    // Rediriger vers la page de connexion avec l'email pré-rempli
-                                    if (signinController != null) {
-                                        signinController.prefillEmail(userInfo.getEmail());
-                                    } else if (signupController != null) {
-                                        // Si on vient de signup, aller vers signin
-                                        signupController.openSignInPageWithEmail(userInfo.getEmail());
+                                    if (signupController != null) {
+                                        signupController.autoLoginExistingUser(existingUser);
+                                    } else if (signinController != null) {
+                                        // Direct login from sign-in flow
+                                        int role = existingUser.getRole();
+                                        if (role == 0 || role == 3 || role == 4) {
+                                            signinController.openHomePage(existingUser);
+                                        } else {
+                                            signinController.openUserHomePage(existingUser);
+                                        }
                                     }
 
                                 } else {

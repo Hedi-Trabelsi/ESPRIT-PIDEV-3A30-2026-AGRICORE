@@ -50,7 +50,7 @@ public class EditUserController {
 
     private void setupComboBoxes() {
         genreBox.getItems().addAll("Male", "Female");
-        roleBox.getItems().addAll("Admin", "Agriculteur", "Technicien", "Fournisseur");
+        roleBox.getItems().addAll("Agriculteur", "Technicien", "Fournisseur");
     }
 
     private void setupButtonHandlers() {
@@ -87,6 +87,7 @@ public class EditUserController {
             case 1 -> "Agriculteur";
             case 2 -> "Technicien";
             case 3 -> "Fournisseur";
+            case 4 -> "Financier";
             default -> "Agriculteur";
         });
 
@@ -242,6 +243,7 @@ public class EditUserController {
             case "Agriculteur" -> 1;
             case "Technicien" -> 2;
             case "Fournisseur" -> 3;
+            case "Financier" -> 4;
             default -> 1;
         });
 

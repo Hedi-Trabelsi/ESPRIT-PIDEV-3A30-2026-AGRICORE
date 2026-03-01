@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
+
+<VBox spacing="20" style="-fx-background-color: #f8f9fa; -fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.ShowAnimalsController">
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher par code, espece..." prefWidth="380"
+                   onKeyReleased="#searchAnimals"
+                   style="-fx-background-radius: 12; -fx-padding: 10; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12;"/>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="Trier par :" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="triCombo" prefWidth="180"
+                  style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 10;"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <VBox>
+            <Label text="Liste des Animaux" style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill: #2d3436;"/>
+            <Label text="Gerez et suivez les membres de votre parc" style="-fx-text-fill: #a0a0a0; -fx-font-size: 12;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Suivi" onAction="#navigateShowSuiviAnimal"
+                style="-fx-background-color:#3498db; -fx-text-fill:white; -fx-background-radius:10; -fx-padding: 10 18; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        <Button text="+ Ajouter" onAction="#navigateAddAnimal"
+                style="-fx-background-color:#7ca76f; -fx-text-fill:white; -fx-background-radius:10; -fx-padding: 10 18; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        <Button text="Stats" onAction="#navigateStatistiques"
+                style="-fx-background-color:#6a1b9a; -fx-text-fill:white; -fx-background-radius:10; -fx-padding: 10 18; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        <Button text="Meteo" onAction="#navigateMeteo"
+                style="-fx-background-color:#0288d1; -fx-text-fill:white; -fx-background-radius:10; -fx-padding:8 14; -fx-font-weight:bold;"/>
+        <Button text="Nutrition IA" onAction="#navigateNutrition"
+                style="-fx-background-color:#2e7d32; -fx-text-fill:white; -fx-background-radius:10; -fx-padding:8 14; -fx-font-weight:bold;"/>
+    </HBox>
+
+    <ListView fx:id="animalListView" VBox.vgrow="ALWAYS"
+              style="-fx-background-radius: 15; -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 5;"/>
+</VBox>

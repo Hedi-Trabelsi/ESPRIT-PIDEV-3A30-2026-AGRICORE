@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -233,7 +235,7 @@ public class ShowMaintenanceDetailsController {
                 Parent root = loader.load();
                 UpdateTacheController controller = loader.getController();
                 controller.setTache(t);
-                NavigationUtil.loadInContentArea(editIcon, root);
+                NavigationUtil.loadInContentArea(tachesContainer, root);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 showAlert("Erreur", "Impossible d'ouvrir la modification.");
@@ -376,11 +378,11 @@ public class ShowMaintenanceDetailsController {
     }
 
     @FXML
-    void navigateRetour() {
+    void navigateRetour(MouseEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenance.fxml"));
             Parent root = loader.load();
-            NavigationUtil.loadInContentArea(retourLabel, root);
+            NavigationUtil.loadInContentArea((Node) event.getSource(), root);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible de retourner à la liste des maintenances.");

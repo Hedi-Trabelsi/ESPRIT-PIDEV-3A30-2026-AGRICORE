@@ -80,8 +80,8 @@ public class SigninController {
 
             if (matchedUser != null) {
                 int role = matchedUser.getRole();
-                if (role == 0 || role == 3) {
-                    // Admin or Fournisseur - open backend
+                if (role == 0 || role == 3 || role == 4) {
+                    // Admin, Fournisseur, or Financier - open backend
                     openHomePage(matchedUser);
                 } else {
                     // Agriculteur or Technicien - open frontend
@@ -137,8 +137,8 @@ public class SigninController {
                                 int role = finalUser.getRole();
                                 errorLabel.setStyle("-fx-text-fill: green;");
                                 errorLabel.setText("Face recognized! Welcome " + finalUser.getNom());
-                                if (role == 0 || role == 3) {
-                                    // Admin or Fournisseur - open backend
+                                if (role == 0 || role == 3 || role == 4) {
+                                    // Admin, Fournisseur, or Financier - open backend
                                     openHomePage(finalUser);
                                 } else {
                                     // Agriculteur or Technicien - open frontend
@@ -176,7 +176,7 @@ public class SigninController {
     @FXML
     private void openForgotPassword() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/forgotpassword.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ForgotPassword.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="1000.0" prefHeight="600.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.FinanceTablesController"
+            stylesheets="@tables.css">
+    <children>
+
+        <ScrollPane
+                fitToWidth="true"
+                fitToHeight="false"
+                hbarPolicy="NEVER"
+                vbarPolicy="AS_NEEDED"
+                styleClass="root-scroll"
+                AnchorPane.topAnchor="0.0"
+                AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0"
+                AnchorPane.rightAnchor="0.0">
+            <content>
+
+                <!-- minHeight: 16 (pad) + 40 (topbar) + 10 + 240 (agri) + 10 + 320 (feeds) + 16 (pad) = 652 -->
+                <VBox spacing="10.0"
+                      style="-fx-padding: 16px;"
+                      minHeight="652.0"
+                      prefHeight="652.0">
+                    <children>
+
+                        <!-- Top bar -->
+                        <HBox spacing="8.0" alignment="CENTER_LEFT" minHeight="40.0">
+                            <children>
+                                <Label fx:id="titleLabel" styleClass="page-title" text="Finances"/>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                            </children>
+                        </HBox>
+
+                        <!-- ══ AGRICULTURE PANEL — first ══ -->
+                        <VBox styleClass="agri-panel"
+                              prefHeight="240.0" minHeight="240.0" maxHeight="240.0">
+                            <children>
+                                <HBox styleClass="agri-header" alignment="CENTER_LEFT" spacing="10.0">
+                                    <children>
+                                        <Label text="🌍" styleClass="agri-globe"/>
+                                        <VBox spacing="1.0">
+                                            <children>
+                                                <Label text="Matériels Agricoles en Tunisie" styleClass="agri-title"/>
+                                                <Label text="Indicateurs officiels — Source : World Bank API" styleClass="agri-subtitle"/>
+                                            </children>
+                                        </VBox>
+                                        <Pane HBox.hgrow="ALWAYS"/>
+                                        <Label text="World Bank API" styleClass="agri-badge"/>
+                                    </children>
+                                </HBox>
+                                <GridPane fx:id="agriGrid"
+                                          hgap="8.0" vgap="8.0"
+                                          styleClass="agri-grid"
+                                          style="-fx-padding: 8px 12px 10px 12px;">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33"/>
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="33.33"/>
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="33.34"/>
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints vgrow="ALWAYS" minHeight="80.0" prefHeight="80.0"/>
+                                        <RowConstraints vgrow="ALWAYS" minHeight="80.0" prefHeight="80.0"/>
+                                    </rowConstraints>
+                                </GridPane>
+                            </children>
+                        </VBox>
+
+                        <!-- Two-column feed layout -->
+                        <HBox spacing="16.0"
+                              prefHeight="320.0" minHeight="320.0" maxHeight="320.0">
+                            <children>
+
+                                <!-- LEFT: Dépenses -->
+                                <VBox styleClass="panel" HBox.hgrow="ALWAYS" maxHeight="320.0">
+                                    <children>
+                                        <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
+                                            <children>
+                                                <Label text="●" styleClass="feed-dot-depense"/>
+                                                <Label text="Dépenses" styleClass="panel-title"/>
+                                            </children>
+                                        </HBox>
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
+                                            <content>
+                                                <VBox fx:id="depenseFeed" styleClass="feed-list" spacing="0"/>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+
+                                <!-- RIGHT: Ventes -->
+                                <VBox styleClass="panel" HBox.hgrow="ALWAYS" maxHeight="320.0">
+                                    <children>
+                                        <HBox styleClass="panel-header" alignment="CENTER_LEFT" spacing="8.0">
+                                            <children>
+                                                <Label text="●" styleClass="feed-dot-vente"/>
+                                                <Label text="Ventes" styleClass="panel-title"/>
+                                            </children>
+                                        </HBox>
+                                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="card-scroll">
+                                            <content>
+                                                <VBox fx:id="venteFeed" styleClass="feed-list" spacing="0"/>
+                                            </content>
+                                        </ScrollPane>
+                                    </children>
+                                </VBox>
+
+                            </children>
+                        </HBox>
+
+                    </children>
+                </VBox>
+
+            </content>
+        </ScrollPane>
+
+    </children>
+</AnchorPane>

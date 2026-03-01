@@ -1,0 +1,30 @@
+/* ═══════════════════════════════════════
+   Paste at the bottom of shadcn.css
+   Light palette — 5 tones, all matched
+═══════════════════════════════════════ */
+
+.root { -fx-background-color: #F4F7F5; }
+
+/* ScrollPane — transparent */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+.scroll-pane > .viewport           { -fx-background-color: transparent; }
+.scroll-pane > .scroll-bar:vertical { -fx-pref-width: 5; -fx-background-color: transparent; }
+.scroll-pane > .scroll-bar:vertical .thumb {
+    -fx-background-color: #C9DDD2; -fx-background-radius: 3;
+}
+.scroll-pane > .scroll-bar:vertical .track,
+.scroll-pane > .scroll-bar:vertical .track-background { -fx-background-color: transparent; }
+.scroll-pane > .scroll-bar .increment-button,
+.scroll-pane > .scroll-bar .decrement-button { -fx-pref-height: 0; -fx-opacity: 0; }
+
+/* TextField focus ring */
+.text-field:focused {
+    -fx-border-color: #2E8B57;
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(gaussian, rgba(46,139,87,0.14), 6, 0, 0, 0);
+}

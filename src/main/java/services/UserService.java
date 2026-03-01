@@ -100,6 +100,15 @@ public class UserService implements IService<Utilisateur> {
 
     @Override
     public boolean delete(int id) throws SQLException {
+        // Delete child records first to avoid FK constraint errors
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM vente WHERE userId=?")) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
+        try (PreparedStatement ps = connection.prepareStatement("DELETE FROM depense WHERE userId=?")) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        }
         String query = "DELETE FROM `user` WHERE id=?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, id);

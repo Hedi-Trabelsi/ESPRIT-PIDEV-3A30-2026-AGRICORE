@@ -46,18 +46,15 @@ public class ProfilePageController {
 
     @FXML
     public void initialize() {
-        System.out.println("ProfilePageController initialized");
         setupButtons();
     }
 
     private void setupButtons() {
         if (editProfileDetailButton != null) {
             editProfileDetailButton.setOnAction(e -> {
-                System.out.println("Edit Profile button clicked");
                 if (loggedInUser != null) {
                     openEditProfile();
                 } else {
-                    System.out.println("Error: loggedInUser is null!");
                     showAlert("Erreur", "Utilisateur non connecté");
                 }
             });
@@ -65,31 +62,16 @@ public class ProfilePageController {
     }
 
     public void setUserData(Utilisateur user) {
-        System.out.println("=== ProfilePageController.setUserData ===");
-        System.out.println("User received: " + (user != null ? user.getEmail() : "null"));
-
         this.loggedInUser = user;
 
         if (user != null) {
-            System.out.println("User details:");
-            System.out.println("  - Nom: " + user.getNom());
-            System.out.println("  - Prenom: " + user.getPrenom());
-            System.out.println("  - Email: " + user.getEmail());
-            System.out.println("  - DateNaissance: " + user.getDateNaissance());
-            System.out.println("  - Genre: " + user.getGenre());
-            System.out.println("  - Phone: " + user.getPhone());
-            System.out.println("  - Adresse: " + user.getAdresse());
-
             populateProfileData();
 
             // Check for missing information and notify if needed
             List<String> missingInfo = getMissingInformation();
-            System.out.println("Missing information: " + missingInfo.size() + " fields");
             if (!missingInfo.isEmpty() && userHomeController != null) {
                 userHomeController.showProfileCompletionNotificationWithDetails(missingInfo);
             }
-        } else {
-            System.out.println("ERROR: User is NULL in setUserData!");
         }
     }
 
@@ -98,134 +80,78 @@ public class ProfilePageController {
     }
 
     private void populateProfileData() {
-        System.out.println("=== populateProfileData called ===");
-
-        if (loggedInUser == null) {
-            System.out.println("ERROR: Cannot populate profile: user is null");
-            return;
-        }
-
-        System.out.println("Populating profile data for: " + loggedInUser.getEmail());
+        if (loggedInUser == null) return;
 
         try {
-            // Set full name
             if (profileFullNameLabel != null) {
-                String fullName = loggedInUser.getNom() + " " + loggedInUser.getPrenom();
-                profileFullNameLabel.setText(fullName);
-                System.out.println("Name set to: " + fullName);
+                profileFullNameLabel.setText(loggedInUser.getNom() + " " + loggedInUser.getPrenom());
             }
 
-            // Set role
             if (profileRoleLabel != null) {
                 String roleText;
                 switch (loggedInUser.getRole()) {
                     case 1: roleText = "Agriculteur"; break;
                     case 2: roleText = "Technicien"; break;
                     case 3: roleText = "Fournisseur"; break;
+                    case 4: roleText = "Financier"; break;
                     default: roleText = "Membre";
                 }
                 profileRoleLabel.setText(roleText);
-                System.out.println("Role set to: " + roleText);
             }
 
-            // Set email
             if (profileEmailDetailLabel != null) {
                 profileEmailDetailLabel.setText(loggedInUser.getEmail());
-                System.out.println("Email set to: " + loggedInUser.getEmail());
             }
 
-            // Set phone
             if (profilePhoneDetailLabel != null) {
-                if (loggedInUser.getPhone() != 0) {
-                    profilePhoneDetailLabel.setText(String.valueOf(loggedInUser.getPhone()));
-                    System.out.println("Phone set to: " + loggedInUser.getPhone());
-                } else {
-                    profilePhoneDetailLabel.setText("Non spécifié");
-                    System.out.println("Phone is 0, set to 'Non spécifié'");
-                }
+                profilePhoneDetailLabel.setText(
+                        loggedInUser.getPhone() != 0 ? String.valueOf(loggedInUser.getPhone()) : "Non spécifié");
             }
 
-            // Set address
             if (profileAddressDetailLabel != null) {
-                if (loggedInUser.getAdresse() != null && !loggedInUser.getAdresse().isEmpty()) {
-                    profileAddressDetailLabel.setText(loggedInUser.getAdresse());
-                    System.out.println("Address set to: " + loggedInUser.getAdresse());
-                } else {
-                    profileAddressDetailLabel.setText("Non spécifiée");
-                    System.out.println("Address is empty, set to 'Non spécifiée'");
-                }
+                profileAddressDetailLabel.setText(
+                        loggedInUser.getAdresse() != null && !loggedInUser.getAdresse().isEmpty()
+                                ? loggedInUser.getAdresse() : "Non spécifiée");
             }
 
-            // Set birth date - SAFE with null check
             if (profileBirthDateLabel != null) {
                 LocalDate birthDate = loggedInUser.getDateNaissance();
-                if (birthDate != null) {
-                    profileBirthDateLabel.setText(birthDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                    System.out.println("Birth date set to: " + birthDate);
-                } else {
-                    profileBirthDateLabel.setText("Non spécifiée");
-                    System.out.println("Birth date is null, set to 'Non spécifiée'");
-                }
+                profileBirthDateLabel.setText(
+                        birthDate != null ? birthDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "Non spécifiée");
             }
 
-            // Set member since - SAFE with null check
             if (profileMemberSinceDetailLabel != null) {
                 LocalDate birthDate = loggedInUser.getDateNaissance();
-                if (birthDate != null) {
-                    profileMemberSinceDetailLabel.setText("Membre depuis " + birthDate.getYear());
-                    System.out.println("Member since set to: " + birthDate.getYear());
-                } else {
-                    profileMemberSinceDetailLabel.setText("Membre depuis 2026");
-                    System.out.println("Birth date null, using default 'Membre depuis 2026'");
-                }
+                profileMemberSinceDetailLabel.setText(
+                        birthDate != null ? "Membre depuis " + birthDate.getYear() : "Membre depuis 2026");
             }
 
-            // Set genre
             if (profileGenreLabel != null) {
-                if (loggedInUser.getGenre() != null && !loggedInUser.getGenre().isEmpty()) {
-                    profileGenreLabel.setText(loggedInUser.getGenre());
-                    System.out.println("Genre set to: " + loggedInUser.getGenre());
-                } else {
-                    profileGenreLabel.setText("Non spécifié");
-                    System.out.println("Genre is null/empty, set to 'Non spécifié'");
-                }
+                profileGenreLabel.setText(
+                        loggedInUser.getGenre() != null && !loggedInUser.getGenre().isEmpty()
+                                ? loggedInUser.getGenre() : "Non spécifié");
             }
 
-            // Set profile image
             if (loggedInUser.getImage() != null && loggedInUser.getImage().length > 0) {
                 try {
                     Image img = new Image(new ByteArrayInputStream(loggedInUser.getImage()));
                     if (profileDetailImageView != null) {
                         profileDetailImageView.setImage(img);
                     }
-                    System.out.println("Profile image set successfully");
-                } catch (Exception e) {
-                    System.err.println("Error setting profile image: " + e.getMessage());
-                }
-            } else {
-                System.out.println("No profile image available");
+                } catch (Exception ignored) {}
             }
 
-            // Load statistics
             loadStatistics();
 
-            System.out.println("=== populateProfileData completed successfully ===");
-
         } catch (Exception e) {
-            System.err.println("ERROR in populateProfileData: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     private void loadStatistics() {
-        try {
-            if (profileEventsCount != null) profileEventsCount.setText("3");
-            if (profileAnimalsCount != null) profileAnimalsCount.setText("12");
-            if (profileEquipmentCount != null) profileEquipmentCount.setText("5");
-            System.out.println("Statistics loaded");
-        } catch (Exception e) {
-            System.err.println("Error loading statistics: " + e.getMessage());
-        }
+        if (profileEventsCount != null) profileEventsCount.setText("—");
+        if (profileAnimalsCount != null) profileAnimalsCount.setText("—");
+        if (profileEquipmentCount != null) profileEquipmentCount.setText("—");
     }
 
     /**
@@ -259,8 +185,6 @@ public class ProfilePageController {
 
     private void openEditProfile() {
         try {
-            System.out.println("Opening Edit Profile window for user: " + loggedInUser.getEmail());
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EditUser.fxml"));
             Parent root = loader.load();
 
@@ -271,14 +195,13 @@ public class ProfilePageController {
 
             // Set callback to refresh profile after update
             controller.setOnUserUpdated(() -> {
-                System.out.println("User updated, refreshing profile...");
-
                 // Recharger l'utilisateur depuis la base de données
                 try {
                     UserService userService = new UserService();
                     Utilisateur updatedUser = userService.findByEmail(loggedInUser.getEmail());
                     if (updatedUser != null) {
                         loggedInUser = updatedUser;
+                        UserSession.setCurrentUser(updatedUser);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -94,11 +94,6 @@
             <!-- Bottom Section -->
             <VBox spacing="10">
                 <Separator styleClass="sidebar-separator" />
-                <Button fx:id="settingsButton" styleClass="nav-button" text="Settings">
-                    <graphic>
-                        <Label styleClass="nav-icon" text="⚙️" />
-                    </graphic>
-                </Button>
                 <Button fx:id="logoutButton" styleClass="logout-button" text="Logout">
                     <graphic>
                         <Label styleClass="nav-icon" text="🚪" />
@@ -140,6 +135,6 @@
 
     <!-- CENTER CONTENT - WILL BE LOADED DYNAMICALLY -->
     <center>
-        <!-- This will be filled by the controllers -->
+        <!-- This will be filled by the Controller -->
     </center>
 </BorderPane>

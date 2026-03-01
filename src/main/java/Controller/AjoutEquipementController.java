@@ -80,7 +80,7 @@ public class AjoutEquipementController implements Initializable {
 
     // ── Services ─────────────────────────────────────────────────
     private EquipementService equipementService = new EquipementService();
-    private static final int ID_FOURNISSEUR = Utilisateur.getId();
+    private int ID_FOURNISSEUR;
     private Equipement equipementToModify = null;
 
     private double tauxEUR = 0.2981;
@@ -97,6 +97,9 @@ public class AjoutEquipementController implements Initializable {
     // ═══════════════════════════════════════════════════════════════
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Model.Utilisateur currentUser = UserSession.getCurrentUser();
+        ID_FOURNISSEUR = currentUser != null ? currentUser.getId() : 0;
+
         for (int i = 0; i < 3; i++)
             articles[i] = new String[]{"—", "—", "—", "—", "", "—"};
 

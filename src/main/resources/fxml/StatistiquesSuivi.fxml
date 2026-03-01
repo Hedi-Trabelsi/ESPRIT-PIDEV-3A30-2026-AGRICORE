@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.effect.*?>
+
+<AnchorPane prefHeight="750.0" prefWidth="1150.0"
+            style="-fx-background-color: transparent;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controller.StatistiquesSuiviController">
+
+    <ScrollPane fitToWidth="true" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+                AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0"
+                style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+
+        <VBox spacing="30" style="-fx-padding: 40; -fx-background-color: #f8f9fa;">
+
+            <HBox alignment="CENTER_LEFT" spacing="20"
+                  style="-fx-background-color: #4e5d4c; -fx-padding: 25; -fx-background-radius: 20; -fx-border-color: #ffffff33;">
+                <Label text="🌿" style="-fx-font-size: 35px;"/>
+                <VBox>
+                    <Label text="Statistiques de la Ferme"
+                           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #f1f8e9;"/>
+                    <Label text="Monitoring Sauge : Indicateurs de santé animale"
+                           style="-fx-font-size: 14px; -fx-text-fill: #c5e1a5;"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="← Retour" onAction="#navigateBack"
+                        style="-fx-background-color: #ffffff22; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 25; -fx-background-radius: 15; -fx-cursor: hand; -fx-border-color: white;"/>
+            </HBox>
+
+            <HBox spacing="25">
+                <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #f9fbf9; -fx-background-radius: 20; -fx-padding: 25; -fx-border-color: #4e5d4c;">
+                    <Label text="🌡️" style="-fx-font-size: 30px;"/>
+                    <Label text="Température Moy." style="-fx-text-fill: #4e5d4c; -fx-font-weight: bold;"/>
+                    <Label fx:id="lblMoyTemp" text="38.5°C" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #a67c00;"/>
+                    <effect><DropShadow color="#00000022" radius="10" offsetY="4"/></effect>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #f9fbf9; -fx-background-radius: 20; -fx-padding: 25; -fx-border-color: #4e5d4c;">
+                    <Label text="⚖️" style="-fx-font-size: 30px;"/>
+                    <Label text="Poids Moyen" style="-fx-text-fill: #4e5d4c; -fx-font-weight: bold;"/>
+                    <Label fx:id="lblMoyPoids" text="450 kg" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2d5a27;"/>
+                    <effect><DropShadow color="#00000022" radius="10" offsetY="4"/></effect>
+                </VBox>
+
+                <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS"
+                      style="-fx-background-color: #f9fbf9; -fx-background-radius: 20; -fx-padding: 25; -fx-border-color: #4e5d4c;">
+                    <Label text="💓" style="-fx-font-size: 30px;"/>
+                    <Label text="Rythme Cardiaque" style="-fx-text-fill: #4e5d4c; -fx-font-weight: bold;"/>
+                    <Label fx:id="lblMoyRythme" text="72 bpm" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #c0392b;"/>
+                    <effect><DropShadow color="#00000022" radius="10" offsetY="4"/></effect>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="30">
+                <VBox spacing="15" HBox.hgrow="SOMETIMES" minWidth="320"
+                      style="-fx-background-color: #f9fbf9; -fx-background-radius: 20; -fx-padding: 25; -fx-border-color: #4e5d4c;">
+                    <Label text="Santé du troupeau" style="-fx-font-weight: bold; -fx-font-size: 18px; -fx-text-fill: #4e5d4c;"/>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #e8f5e9; -fx-padding: 12; -fx-background-radius: 12;">
+                        <Label text="🟢" style="-fx-font-size: 18px;"/>
+                        <VBox>
+                            <Label text="Bonne santé" style="-fx-font-weight: bold; -fx-text-fill: #2d5a27;"/>
+                            <Label fx:id="lblBon" text="42 animaux" style="-fx-text-fill: #666;"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #fff9c4; -fx-padding: 12; -fx-background-radius: 12;">
+                        <Label text="🟡" style="-fx-font-size: 18px;"/>
+                        <VBox>
+                            <Label text="Surveillance" style="-fx-font-weight: bold; -fx-text-fill: #f57f17;"/>
+                            <Label fx:id="lblMalade" text="5 animaux" style="-fx-text-fill: #666;"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-background-color: #ffcdd2; -fx-padding: 12; -fx-background-radius: 12;">
+                        <Label text="🔴" style="-fx-font-size: 18px;"/>
+                        <VBox>
+                            <Label text="Urgence" style="-fx-font-weight: bold; -fx-text-fill: #c62828;"/>
+                            <Label fx:id="lblCritique" text="2 animaux" style="-fx-text-fill: #666;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <VBox HBox.hgrow="ALWAYS" style="-fx-background-color: #f9fbf9; -fx-background-radius: 20; -fx-padding: 15; -fx-border-color: #4e5d4c;">
+                    <PieChart fx:id="pieEtat" prefHeight="320" title="Répartition Sanitaire"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="15" style="-fx-background-color: #f9fbf9; -fx-background-radius: 20; -fx-padding: 25; -fx-border-color: #4e5d4c;">
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <Label text="📈 Évolution" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4e5d4c;"/>
+                    <ComboBox fx:id="comboGraphique" prefWidth="220"
+                              style="-fx-background-radius: 10; -fx-background-color: #e8f0e5; -fx-border-color: #4e5d4c;"/>
+                </HBox>
+                <LineChart fx:id="lineChart" prefHeight="300">
+                    <xAxis><CategoryAxis fx:id="xAxis" label="Date"/></xAxis>
+                    <yAxis><NumberAxis fx:id="yAxis" label="Mesure"/></yAxis>
+                </LineChart>
+            </VBox>
+
+            <VBox spacing="15">
+                <Label text="🚨 Alertes Prioritaires" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffccbc;"/>
+                <VBox fx:id="alertesBox" spacing="12"
+                      style="-fx-background-color: #ffffff; -fx-background-radius: 20; -fx-padding: 25; -fx-border-color: #ff8a65; -fx-border-width: 2;">
+                </VBox>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+</AnchorPane>

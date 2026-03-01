@@ -2,6 +2,7 @@ package Controller;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
@@ -22,8 +23,13 @@ public class NavigationUtil {
                 // UserHomePage flow: center is a StackPane (contentArea)
                 ((StackPane) center).getChildren().setAll(view);
             } else {
-                // Admin (HomeController) flow: center is set directly
-                shell.setCenter(view);
+                // Admin (HomeController) flow: wrap in ScrollPane for consistency
+                ScrollPane scroll = new ScrollPane(view);
+                scroll.setFitToWidth(true);
+                scroll.setFitToHeight(true);
+                scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                scroll.setStyle("-fx-background-color: transparent;");
+                shell.setCenter(scroll);
             }
         } else {
             // Search up the scene graph for a BorderPane shell
@@ -38,7 +44,6 @@ public class NavigationUtil {
                 }
                 current = current.getParent();
             }
-            // Last resort: try to find a BorderPane in the scene graph
             System.err.println("NavigationUtil: Could not find shell container. Navigation may not work correctly.");
         }
     }

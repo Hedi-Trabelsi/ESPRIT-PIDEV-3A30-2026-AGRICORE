@@ -242,11 +242,15 @@ public class ShowMaintenanceController {
 
         // --- 5. GESTION DES ÉVÉNEMENTS ---
 
-        // Clic sur la carte (hors boutons)
+        // Clic sur la carte (hors boutons d'action)
         card.setOnMouseClicked(event -> {
-            if (!(event.getTarget() instanceof Button || event.getTarget() instanceof Label)) {
-                openMaintenanceDetails(m);
+            javafx.scene.Node target = (javafx.scene.Node) event.getTarget();
+            while (target != null && target != card) {
+                if (target instanceof Button) return;
+                if (target == editBtn || target == deleteBtn) return;
+                target = target.getParent();
             }
+            openMaintenanceDetails(m);
         });
 
         // Bouton Modifier

@@ -34,7 +34,6 @@ public class UserHomeController {
     @FXML private Button equipmentButton;
     @FXML private Button maintenanceButton;
     @FXML private Button animalButton;
-    @FXML private Button settingsButton;
     @FXML private Button logoutButton;
 
     // Sidebar Profile Elements
@@ -46,7 +45,6 @@ public class UserHomeController {
 
     // Quick action buttons
     @FXML private Button quickProfileButton;
-    @FXML private Button quickSettingsButton;
     @FXML private Button quickHelpButton;
 
     private Utilisateur loggedInUser;
@@ -84,7 +82,7 @@ public class UserHomeController {
         if (financialButton != null) {
             financialButton.setOnAction(e -> {
                 setActiveButton(financialButton);
-                loadPage("/fxml/FinancialPage.fxml", "Financial Management");
+                loadFinancePage();
             });
         }
 
@@ -105,12 +103,8 @@ public class UserHomeController {
         if (animalButton != null) {
             animalButton.setOnAction(e -> {
                 setActiveButton(animalButton);
-                loadPage("/fxml/AnimalPage.fxml", "Animal Management");
+                loadPage("/fxml/ShowAnimals.fxml", "Animals");
             });
-        }
-
-        if (settingsButton != null) {
-            settingsButton.setOnAction(e -> showComingSoon("Settings"));
         }
 
         if (logoutButton != null) {
@@ -122,10 +116,6 @@ public class UserHomeController {
                 setActiveButton(profileButton);
                 showProfilePage();
             });
-        }
-
-        if (quickSettingsButton != null) {
-            quickSettingsButton.setOnAction(e -> showComingSoon("Settings"));
         }
 
         if (quickHelpButton != null) {
@@ -238,7 +228,12 @@ public class UserHomeController {
             controller.setUserData(loggedInUser);
             controller.setUserHomeController(this);
 
-            contentArea.getChildren().setAll(page);
+            ScrollPane scroll = new ScrollPane(page);
+            scroll.setFitToWidth(true);
+            scroll.setFitToHeight(true);
+            scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scroll.setStyle("-fx-background-color: transparent;");
+            contentArea.getChildren().setAll(scroll);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -250,11 +245,33 @@ public class UserHomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent page = loader.load();
-            contentArea.getChildren().setAll(page);
-            System.out.println("Loaded " + pageName + " page");
+            ScrollPane scroll = new ScrollPane(page);
+            scroll.setFitToWidth(true);
+            scroll.setFitToHeight(true);
+            scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scroll.setStyle("-fx-background-color: transparent;");
+            contentArea.getChildren().setAll(scroll);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load " + pageName + " page: " + e.getMessage());
+        }
+    }
+
+    private void loadFinancePage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CombinedDashboard.fxml"));
+            Parent page = loader.load();
+            CombinedDashboardController ctrl = loader.getController();
+            Model.User financeUser = new Model.User(loggedInUser.getId(), loggedInUser.getPrenom(), loggedInUser.getNom());
+            ctrl.setUser(financeUser);
+            ScrollPane scroll = new ScrollPane(page);
+            scroll.setFitToWidth(true);
+            scroll.setFitToHeight(true);
+            scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            scroll.setStyle("-fx-background-color: transparent;");
+            contentArea.getChildren().setAll(scroll);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -269,9 +286,14 @@ public class UserHomeController {
     }
 
     public void refreshSidebarProfile(Utilisateur updatedUser) {
+        int oldRole = this.loggedInUser != null ? this.loggedInUser.getRole() : -1;
         this.loggedInUser = updatedUser;
+        UserSession.setCurrentUser(updatedUser);
         updateSidebarProfile();
         checkForMissingInformation();
+        if (oldRole != updatedUser.getRole()) {
+            showProfilePage();
+        }
     }
 
     private void updateSidebarProfile() {
@@ -294,6 +316,7 @@ public class UserHomeController {
             case 1: roleText = "Agriculteur"; break;
             case 2: roleText = "Technicien"; break;
             case 3: roleText = "Fournisseur"; break;
+            case 4: roleText = "Financier"; break;
             default: roleText = "Farmer";
         }
 

@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import services.UserService;
 
@@ -27,7 +28,7 @@ public class HomeController {
     // Navigation Buttons
     @FXML private Button dashboardButton, manageUsersButton, financialButton,
             animalButton, equipmentButton, eventButton, maintenanceButton,
-            logoutButton, settingsButton;
+            logoutButton;
 
     // Main content area
     @FXML private BorderPane mainBorderPane;
@@ -89,7 +90,6 @@ public class HomeController {
         });
 
         logoutButton.setOnAction(e -> handleLogout());
-        settingsButton.setOnAction(e -> showComingSoon("Settings"));
     }
 
     private void setActiveButton(Button activeButton) {
@@ -111,11 +111,21 @@ public class HomeController {
         }
     }
 
+    private void setContent(Parent view) {
+        ScrollPane scroll = new ScrollPane(view);
+        scroll.setFitToWidth(true);
+        scroll.setFitToHeight(false);
+        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scroll.setStyle("-fx-background-color: transparent;");
+        mainBorderPane.setCenter(scroll);
+    }
+
     private void loadDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
             Parent dashboardView = loader.load();
-            mainBorderPane.setCenter(dashboardView);
+            setContent(dashboardView);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load Dashboard page!", Alert.AlertType.ERROR);
@@ -131,7 +141,7 @@ public class HomeController {
             controller.setLoggedInUser(loggedInUser);
             controller.setHomeController(this);
 
-            mainBorderPane.setCenter(userView);
+            setContent(userView);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load User Management page!", Alert.AlertType.ERROR);
@@ -140,9 +150,9 @@ public class HomeController {
 
     private void loadFinancialManagement() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FinancialManagement.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowUsers.fxml"));
             Parent financialView = loader.load();
-            mainBorderPane.setCenter(financialView);
+            setContent(financialView);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load Financial Management page!", Alert.AlertType.ERROR);
@@ -151,9 +161,9 @@ public class HomeController {
 
     private void loadAnimalManagement() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AnimalManagement.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminAnimaux.fxml"));
             Parent animalView = loader.load();
-            mainBorderPane.setCenter(animalView);
+            setContent(animalView);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load Animal Management page!", Alert.AlertType.ERROR);
@@ -164,7 +174,7 @@ public class HomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ListeEquipements.fxml"));
             Parent equipmentView = loader.load();
-            mainBorderPane.setCenter(equipmentView);
+            setContent(equipmentView);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load Equipment Management page!", Alert.AlertType.ERROR);
@@ -180,7 +190,7 @@ public class HomeController {
             // EventManagementController controller = loader.getController();
             // controller.setLoggedInUser(loggedInUser);
 
-            mainBorderPane.setCenter(eventView);
+            setContent(eventView);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Cannot load Event Management page!", Alert.AlertType.ERROR);
@@ -194,7 +204,7 @@ public class HomeController {
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
             Parent maintenanceView = loader.load();
-            mainBorderPane.setCenter(maintenanceView);
+            setContent(maintenanceView);
 
         } catch (Exception e) {
             System.err.println("Error loading maintenance page: " + e.getMessage());
@@ -254,6 +264,18 @@ public class HomeController {
             // Auto-load equipment page
             setActiveButton(equipmentButton);
             loadEquipmentManagement();
+        } else if (user.getRole() == 4) {
+            // Financier: disable all except Financial
+            Button[] restrictedButtons = {dashboardButton, manageUsersButton, animalButton,
+                    equipmentButton, eventButton, maintenanceButton};
+            for (Button btn : restrictedButtons) {
+                if (btn != null) {
+                    btn.setDisable(true);
+                    btn.setOpacity(0.5);
+                }
+            }
+            setActiveButton(financialButton);
+            loadFinancialManagement();
         } else {
             // Admin: load User Management by default
             loadUserManagement();
@@ -300,6 +322,7 @@ public class HomeController {
             case 1 -> "Agriculteur";
             case 2 -> "Technicien";
             case 3 -> "Fournisseur";
+            case 4 -> "Financier";
             default -> "Unknown";
         };
     }
@@ -324,11 +347,6 @@ public class HomeController {
                 showAlert("Error", "Failed to logout: " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
-    }
-
-    private void showComingSoon(String feature) {
-        showAlert(feature, "This feature is under development and will be available soon!",
-                Alert.AlertType.INFORMATION);
     }
 
     private void showAlert(String title, String message, Alert.AlertType type) {
