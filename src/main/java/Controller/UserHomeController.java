@@ -51,6 +51,7 @@ public class UserHomeController {
     private boolean profileCompletionNotificationShown = false;
     private List<String> missingFields = new ArrayList<>();
     private Popup notificationPopup;
+    private ChatBotController chatBotController;
 
     @FXML
     public void initialize() {
@@ -60,6 +61,7 @@ public class UserHomeController {
         setupNavigation();
         setupNotificationHandler();
         showProfilePage();
+        initChatBot();
     }
 
     private void setupNavigation() {
@@ -233,11 +235,11 @@ public class UserHomeController {
             scroll.setFitToHeight(true);
             scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scroll.setStyle("-fx-background-color: transparent;");
-            contentArea.getChildren().setAll(scroll);
+            setPageContent(scroll);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load profile page: " + e.getMessage());
+            showAlert("Erreur", "Impossible de charger la page de profil : " + e.getMessage());
         }
     }
 
@@ -250,10 +252,10 @@ public class UserHomeController {
             scroll.setFitToHeight(true);
             scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scroll.setStyle("-fx-background-color: transparent;");
-            contentArea.getChildren().setAll(scroll);
+            setPageContent(scroll);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load " + pageName + " page: " + e.getMessage());
+            showAlert("Erreur", "Impossible de charger la page " + pageName + " : " + e.getMessage());
         }
     }
 
@@ -269,7 +271,7 @@ public class UserHomeController {
             scroll.setFitToHeight(true);
             scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scroll.setStyle("-fx-background-color: transparent;");
-            contentArea.getChildren().setAll(scroll);
+            setPageContent(scroll);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -308,7 +310,7 @@ public class UserHomeController {
         }
 
         if (welcomeLabel != null) {
-            welcomeLabel.setText("Welcome back, " + loggedInUser.getNom() + "!");
+            welcomeLabel.setText("Bienvenue, " + loggedInUser.getNom() + " !");
         }
 
         String roleText;
@@ -317,7 +319,7 @@ public class UserHomeController {
             case 2: roleText = "Technicien"; break;
             case 3: roleText = "Fournisseur"; break;
             case 4: roleText = "Financier"; break;
-            default: roleText = "Farmer";
+            default: roleText = "Agriculteur";
         }
 
         if (sidebarRoleLabel != null) {
@@ -419,29 +421,45 @@ public class UserHomeController {
 
     private void showComingSoon(String feature) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Coming Soon");
+        alert.setTitle("Bientot disponible");
         alert.setHeaderText(feature);
-        alert.setContentText("This feature will be available soon!");
+        alert.setContentText("Cette fonctionnalite sera bientot disponible !");
         alert.showAndWait();
     }
 
     private void handleLogout() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Logout");
-        confirm.setHeaderText("Confirm Logout");
-        confirm.setContentText("Are you sure you want to logout?");
+        confirm.setTitle("Deconnexion");
+        confirm.setHeaderText("Confirmer la deconnexion");
+        confirm.setContentText("Etes-vous sur de vouloir vous deconnecter ?");
 
         if (confirm.showAndWait().filter(r -> r == ButtonType.OK).isPresent()) {
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/signin.fxml"));
                 Stage stage = (Stage) logoutButton.getScene().getWindow();
                 stage.setScene(new Scene(root));
-                stage.setTitle("Sign In");
+                stage.setTitle("Connexion");
                 stage.show();
             } catch (Exception e) {
                 e.printStackTrace();
-                showAlert("Error", "Failed to logout: " + e.getMessage());
+                showAlert("Erreur", "Echec de la deconnexion : " + e.getMessage());
             }
+        }
+    }
+
+    private void initChatBot() {
+        if (contentArea != null) {
+            chatBotController = new ChatBotController(contentArea);
+        }
+    }
+
+    /**
+     * Replaces the page content in contentArea, then re-adds the chatbot overlay on top.
+     */
+    private void setPageContent(ScrollPane scroll) {
+        contentArea.getChildren().setAll(scroll);
+        if (chatBotController != null) {
+            chatBotController.reattach();
         }
     }
 

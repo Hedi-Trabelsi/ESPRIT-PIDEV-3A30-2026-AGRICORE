@@ -145,8 +145,8 @@ public class AdminSuivisController {
 
         colActions.setPrefWidth(150);
         colActions.setCellFactory(col -> new TableCell<>() {
-            private final Button btnEdit   = new Button("Edit");
-            private final Button btnDelete = new Button("Delete");
+            private final Button btnEdit   = new Button("Modifier");
+            private final Button btnDelete = new Button("Supprimer");
             private final HBox   box       = new HBox(6, btnEdit, btnDelete);
             {
                 btnEdit.setStyle("-fx-background-color:#1565c0;-fx-text-fill:white;"

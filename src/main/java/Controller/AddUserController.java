@@ -36,13 +36,13 @@ public class AddUserController {
         try {
             us.create(u);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Success");
-            alert.setHeaderText("user saved successfully");
+            alert.setTitle("Succes");
+            alert.setHeaderText("Utilisateur enregistre avec succes");
             alert.showAndWait();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error saving user");
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Erreur lors de l'enregistrement");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
@@ -56,8 +56,8 @@ public class AddUserController {
             firstNameTf.getScene().setRoot(root);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Error navigating ");
+            alert.setTitle("Erreur");
+            alert.setHeaderText("Erreur de navigation");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
 

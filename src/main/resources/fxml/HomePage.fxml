@@ -48,37 +48,37 @@
             <VBox spacing="5" VBox.vgrow="ALWAYS">
                 <Label styleClass="menu-category" text="MAIN MENU" />
 
-                <Button fx:id="dashboardButton" styleClass="nav-button" text="Dashboard">
+                <Button fx:id="dashboardButton" styleClass="nav-button" text="Tableau de bord">
                     <graphic>
                         <Label styleClass="nav-icon" text="📊" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="manageUsersButton" styleClass="nav-button-active" text="User Management">
+                <Button fx:id="manageUsersButton" styleClass="nav-button-active" text="Gestion Utilisateurs">
                     <graphic>
                         <Label styleClass="nav-icon" text="👥" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="financialButton" styleClass="nav-button" text="Financial Management">
+                <Button fx:id="financialButton" styleClass="nav-button" text="Gestion Financiere">
                     <graphic>
                         <Label styleClass="nav-icon" text="💰" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="animalButton" styleClass="nav-button" text="Animal Management">
+                <Button fx:id="animalButton" styleClass="nav-button" text="Gestion Animaux">
                     <graphic>
                         <Label styleClass="nav-icon" text="🐄" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="equipmentButton" styleClass="nav-button" text="Equipment Management">
+                <Button fx:id="equipmentButton" styleClass="nav-button" text="Gestion Equipements">
                     <graphic>
                         <Label styleClass="nav-icon" text="🚜" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="eventButton" styleClass="nav-button" text="Event Management">
+                <Button fx:id="eventButton" styleClass="nav-button" text="Gestion Evenements">
                     <graphic>
                         <Label styleClass="nav-icon" text="📅" />
                     </graphic>
@@ -94,7 +94,7 @@
             <!-- Bottom Section -->
             <VBox spacing="10">
                 <Separator styleClass="sidebar-separator" />
-                <Button fx:id="logoutButton" styleClass="logout-button" text="Logout">
+                <Button fx:id="logoutButton" styleClass="logout-button" text="Deconnexion">
                     <graphic>
                         <Label styleClass="nav-icon" text="🚪" />
                     </graphic>
@@ -110,7 +110,7 @@
                 <Insets bottom="15" left="30" right="30" top="15" />
             </padding>
 
-            <Label fx:id="welcomeLabel" styleClass="welcome-label" text="Welcome back!" />
+            <Label fx:id="welcomeLabel" styleClass="welcome-label" text="Bienvenue !" />
 
             <Region HBox.hgrow="ALWAYS" />
 
@@ -123,11 +123,11 @@
                     </HBox>
                 </graphic>
                 <items>
-                    <MenuItem fx:id="profileMenuItem" text="My Profile" />
-                    <MenuItem fx:id="settingsMenuItem" text="Settings" />
-                    <MenuItem fx:id="helpMenuItem" text="Help" />
+                    <MenuItem fx:id="profileMenuItem" text="Mon Profil" />
+                    <MenuItem fx:id="settingsMenuItem" text="Parametres" />
+                    <MenuItem fx:id="helpMenuItem" text="Aide" />
                     <SeparatorMenuItem />
-                    <MenuItem fx:id="logoutMenuItem" text="Logout" />
+                    <MenuItem fx:id="logoutMenuItem" text="Deconnexion" />
                 </items>
             </MenuButton>
         </HBox>

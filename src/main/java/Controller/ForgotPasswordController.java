@@ -76,7 +76,7 @@ public class ForgotPasswordController {
 
             if (sent) {
                 currentEmail = email;
-                emailDisplayLabel.setText("Code sent to: " + maskEmail(email));
+                emailDisplayLabel.setText("Code envoye a : " + maskEmail(email));
 
                 // Show code verification step
                 emailStep.setVisible(false);
@@ -177,7 +177,7 @@ public class ForgotPasswordController {
             Parent root = loader.load();
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Sign In");
+            stage.setTitle("Connexion");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -193,7 +193,7 @@ public class ForgotPasswordController {
 
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Home Page - " + user.getNom());
+            stage.setTitle("Page d'accueil - " + user.getNom());
         } catch (Exception e) {
             e.printStackTrace();
             showError("Cannot load Home Page!");

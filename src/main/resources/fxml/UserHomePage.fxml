@@ -52,25 +52,25 @@
             <VBox spacing="8" VBox.vgrow="ALWAYS">
                 <Label styleClass="user-menu-category" text="MAIN MENU" />
 
-                <Button fx:id="profileButton" styleClass="user-nav-button-active" text="Profile">
+                <Button fx:id="profileButton" styleClass="user-nav-button-active" text="Profil">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="👤" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="eventButton" styleClass="user-nav-button" text="Event Management">
+                <Button fx:id="eventButton" styleClass="user-nav-button" text="Gestion Evenements">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="📅" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="financialButton" styleClass="user-nav-button" text="Financial Management">
+                <Button fx:id="financialButton" styleClass="user-nav-button" text="Gestion Financiere">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="💰" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="equipmentButton" styleClass="user-nav-button" text="Equipment Management">
+                <Button fx:id="equipmentButton" styleClass="user-nav-button" text="Gestion Equipements">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="🚜" />
                     </graphic>
@@ -82,7 +82,7 @@
                     </graphic>
                 </Button>
 
-                <Button fx:id="animalButton" styleClass="user-nav-button" text="Animal Management">
+                <Button fx:id="animalButton" styleClass="user-nav-button" text="Gestion Animaux">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="🐄" />
                     </graphic>
@@ -92,7 +92,7 @@
             <!-- Bottom Section -->
             <VBox spacing="10">
                 <Separator styleClass="user-sidebar-separator" />
-                <Button fx:id="logoutButton" styleClass="user-logout-button" text="Logout">
+                <Button fx:id="logoutButton" styleClass="user-logout-button" text="Deconnexion">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="🚪" />
                     </graphic>
@@ -108,14 +108,14 @@
                 <Insets bottom="15" left="30" right="30" top="15" />
             </padding>
 
-            <Label fx:id="welcomeLabel" styleClass="user-welcome-label" text="Welcome back, Farmer!" />
+            <Label fx:id="welcomeLabel" styleClass="user-welcome-label" text="Bienvenue, Agriculteur !" />
 
             <Region HBox.hgrow="ALWAYS" />
 
             <!-- Search Bar -->
             <HBox spacing="8" styleClass="user-search-container">
                 <Label styleClass="user-search-icon" text="🔍" />
-                <TextField promptText="Search..." styleClass="user-search-field" />
+                <TextField promptText="Rechercher..." styleClass="user-search-field" />
             </HBox>
 
             <!-- Notifications Button with Counter (CORRIGÉ) -->
@@ -137,11 +137,11 @@
                     </HBox>
                 </graphic>
                 <items>
-                    <MenuItem fx:id="profileMenuItem" text="My Profile" />
-                    <MenuItem fx:id="settingsMenuItem" text="Settings" />
-                    <MenuItem fx:id="helpMenuItem" text="Help Center" />
+                    <MenuItem fx:id="profileMenuItem" text="Mon Profil" />
+                    <MenuItem fx:id="settingsMenuItem" text="Parametres" />
+                    <MenuItem fx:id="helpMenuItem" text="Centre d'aide" />
                     <SeparatorMenuItem />
-                    <MenuItem fx:id="logoutMenuItem" text="Logout" />
+                    <MenuItem fx:id="logoutMenuItem" text="Deconnexion" />
                 </items>
             </MenuButton>
         </HBox>

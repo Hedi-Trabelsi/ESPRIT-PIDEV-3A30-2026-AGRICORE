@@ -27,7 +27,7 @@
             </VBox>
          </children>
       </HBox>
-      <Button layoutX="478.0" layoutY="311.0" mnemonicParsing="false" onAction="#saveUser" text="save" />
-      <Button layoutX="470.0" layoutY="27.0" mnemonicParsing="false" onAction="#navigateShowUsers" styleClass="secondary" text="show Users" />
+      <Button layoutX="478.0" layoutY="311.0" mnemonicParsing="false" onAction="#saveUser" text="Enregistrer" />
+      <Button layoutX="470.0" layoutY="27.0" mnemonicParsing="false" onAction="#navigateShowUsers" styleClass="secondary" text="Voir les utilisateurs" />
    </children>
 </AnchorPane>

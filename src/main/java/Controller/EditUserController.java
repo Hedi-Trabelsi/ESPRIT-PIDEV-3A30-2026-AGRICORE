@@ -105,7 +105,7 @@ public class EditUserController {
 
     private void handleImageUpload() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Profile Picture");
+        fileChooser.setTitle("Choisir une photo de profil");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );

@@ -42,7 +42,7 @@ public class HomeController {
             userService = new UserService();
             setupNavigation();
         } catch (SQLException e) {
-            showAlert("Database Error", "Failed to connect to database: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur de base de donnees", "Echec de connexion a la base de donnees : " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -128,7 +128,7 @@ public class HomeController {
             setContent(dashboardView);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load Dashboard page!", Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible de charger le tableau de bord !", Alert.AlertType.ERROR);
         }
     }
 
@@ -144,7 +144,7 @@ public class HomeController {
             setContent(userView);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load User Management page!", Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible de charger la gestion des utilisateurs !", Alert.AlertType.ERROR);
         }
     }
 
@@ -155,7 +155,7 @@ public class HomeController {
             setContent(financialView);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load Financial Management page!", Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible de charger la gestion financiere !", Alert.AlertType.ERROR);
         }
     }
 
@@ -166,7 +166,7 @@ public class HomeController {
             setContent(animalView);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load Animal Management page!", Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible de charger la gestion des animaux !", Alert.AlertType.ERROR);
         }
     }
 
@@ -177,7 +177,7 @@ public class HomeController {
             setContent(equipmentView);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load Equipment Management page!", Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible de charger la gestion des equipements !", Alert.AlertType.ERROR);
         }
     }
 
@@ -193,7 +193,7 @@ public class HomeController {
             setContent(eventView);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Cannot load Event Management page!", Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible de charger la gestion des evenements !", Alert.AlertType.ERROR);
         }
     }
 
@@ -209,7 +209,7 @@ public class HomeController {
         } catch (Exception e) {
             System.err.println("Error loading maintenance page: " + e.getMessage());
             e.printStackTrace();
-            showAlert("Error", "Cannot load Maintenance page: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible de charger la page de maintenance : " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -232,7 +232,7 @@ public class HomeController {
             userMenuLabel.setText(user.getNom());
         }
         if (welcomeLabel != null) {
-            welcomeLabel.setText("Welcome back, " + user.getNom() + "!");
+            welcomeLabel.setText("Bienvenue, " + user.getNom() + " !");
         }
         if (roleLabel != null) {
             roleLabel.setText("Role: " + getRoleText(user.getRole()));
@@ -297,7 +297,7 @@ public class HomeController {
             userMenuLabel.setText(updatedUser.getNom());
         }
         if (welcomeLabel != null) {
-            welcomeLabel.setText("Welcome back, " + updatedUser.getNom() + "!");
+            welcomeLabel.setText("Bienvenue, " + updatedUser.getNom() + " !");
         }
         if (roleLabel != null) {
             roleLabel.setText("Role: " + getRoleText(updatedUser.getRole()));
@@ -330,9 +330,9 @@ public class HomeController {
     @FXML
     private void handleLogout() {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Logout");
-        confirm.setHeaderText("Confirm Logout");
-        confirm.setContentText("Are you sure you want to logout?");
+        confirm.setTitle("Deconnexion");
+        confirm.setHeaderText("Confirmer la deconnexion");
+        confirm.setContentText("Etes-vous sur de vouloir vous deconnecter ?");
         confirm.initOwner(logoutButton.getScene().getWindow());
 
         if (confirm.showAndWait().filter(r -> r == ButtonType.OK).isPresent()) {
@@ -340,11 +340,11 @@ public class HomeController {
                 Parent root = FXMLLoader.load(getClass().getResource("/fxml/signin.fxml"));
                 Stage stage = (Stage) logoutButton.getScene().getWindow();
                 stage.setScene(new Scene(root));
-                stage.setTitle("Sign In");
+                stage.setTitle("Connexion");
                 stage.show();
             } catch (Exception e) {
                 e.printStackTrace();
-                showAlert("Error", "Failed to logout: " + e.getMessage(), Alert.AlertType.ERROR);
+                showAlert("Erreur", "Echec de la deconnexion : " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }

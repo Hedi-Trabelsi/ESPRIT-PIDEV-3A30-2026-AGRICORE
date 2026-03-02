@@ -51,7 +51,7 @@ public class SignupController {
     @FXML
     private void handleImageUpload() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Profile Picture");
+        fileChooser.setTitle("Choisir une photo de profil");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg")
         );
@@ -62,10 +62,10 @@ public class SignupController {
                 profileImageBytes = fis.readAllBytes();
                 Image image = new Image(file.toURI().toString());
                 profileImageView.setImage(image);
-                showSuccess("Image uploaded successfully!");
+                showSuccess("Image chargee avec succes !");
             } catch (Exception e) {
                 e.printStackTrace();
-                showError("Failed to load image.");
+                showError("Echec du chargement de l'image.");
             }
         }
     }
@@ -76,7 +76,7 @@ public class SignupController {
 
         try {
             if (!termsCheckBox.isSelected()) {
-                showError("Please accept the Terms of Service and Privacy Policy");
+                showError("Veuillez accepter les conditions d'utilisation");
                 return;
             }
 
@@ -123,7 +123,7 @@ public class SignupController {
             UserService userService = new UserService();
             userService.create(user);
 
-            showSuccess("Account created successfully! Please wait...");
+            showSuccess("Compte cree avec succes ! Veuillez patienter...");
             PauseTransition pause = new PauseTransition(Duration.seconds(2));
             pause.setOnFinished(event -> openSignInPage());
             pause.play();
@@ -155,7 +155,7 @@ public class SignupController {
             Parent root = loader.load();
             Stage stage = (Stage) signInLink.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Sign In");
+            stage.setTitle("Connexion");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,7 +171,7 @@ public class SignupController {
             controller.setSignupController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Google Sign-Up");
+            stage.setTitle("Inscription Google");
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -212,11 +212,11 @@ public class SignupController {
             confirmPasswordField.setDisable(true);
             confirmPasswordField.setPromptText("Google account");
 
-            showSuccess("Google account connected! Please complete your profile.");
+            showSuccess("Compte Google connecte ! Veuillez completer votre profil.");
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Error loading Google profile: " + e.getMessage());
+            showError("Erreur de chargement du profil Google : " + e.getMessage());
         }
     }
 
@@ -266,7 +266,7 @@ public class SignupController {
         } catch (Exception e) {
             System.err.println("ERROR creating account: " + e.getMessage());
             e.printStackTrace();
-            showError("Error creating account: " + e.getMessage());
+            showError("Erreur lors de la creation du compte : " + e.getMessage());
         }
     }
 
@@ -356,7 +356,7 @@ public class SignupController {
                 ctrl.setLoggedInUser(user);
                 Stage stage = (Stage) signInLink.getScene().getWindow();
                 stage.setScene(new Scene(root));
-                stage.setTitle("Admin Dashboard - " + user.getNom());
+                stage.setTitle("Tableau de bord Admin - " + user.getNom());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -375,7 +375,7 @@ public class SignupController {
 
             Stage stage = (Stage) signInLink.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Sign In");
+            stage.setTitle("Connexion");
         } catch (IOException e) {
             e.printStackTrace();
         }

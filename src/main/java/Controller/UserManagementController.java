@@ -64,8 +64,8 @@ public class UserManagementController {
 
             // Load filter options
             if (filterCombo != null) {
-                filterCombo.getItems().addAll("All Roles", "Admin", "Agriculteur", "Technicien", "Fournisseur");
-                filterCombo.setValue("All Roles");
+                filterCombo.getItems().addAll("Tous les roles", "Admin", "Agriculteur", "Technicien", "Fournisseur");
+                filterCombo.setValue("Tous les roles");
             }
 
         } catch (Exception e) {
@@ -114,7 +114,7 @@ public class UserManagementController {
             }
 
             // Role filter
-            if (roleFilter != null && !roleFilter.equals("All Roles")) {
+            if (roleFilter != null && !roleFilter.equals("Tous les roles")) {
                 if (!getRoleText(user.getRole()).equals(roleFilter)) {
                     return false;
                 }
@@ -139,7 +139,7 @@ public class UserManagementController {
 
         if (filteredData == null || filteredData.isEmpty()) {
             if (showingLabel != null) {
-                showingLabel.setText("Showing 0 users");
+                showingLabel.setText("Affichage de 0 utilisateurs");
             }
             return usersGrid;
         }
@@ -156,7 +156,7 @@ public class UserManagementController {
         }
 
         if (showingLabel != null) {
-            showingLabel.setText(String.format("Showing %d-%d of %d users",
+            showingLabel.setText(String.format("Affichage de %d-%d sur %d utilisateurs",
                     fromIndex + 1, toIndex, filteredData.size()));
         }
 
@@ -265,12 +265,12 @@ public class UserManagementController {
         actionBox.setAlignment(Pos.CENTER);
         actionBox.setPadding(new Insets(3, 0, 0, 0));
 
-        Button updateBtn = new Button("Update");
+        Button updateBtn = new Button("Modifier");
         updateBtn.getStyleClass().add("update-button");
         updateBtn.setPrefWidth(75);
         updateBtn.setOnAction(e -> handleUpdateUser(user));
 
-        Button deleteBtn = new Button("Delete");
+        Button deleteBtn = new Button("Supprimer");
         deleteBtn.getStyleClass().add("delete-button");
         deleteBtn.setPrefWidth(75);
         deleteBtn.setOnAction(e -> handleDeleteUser(user));
@@ -327,7 +327,7 @@ public class UserManagementController {
 
                 // Reset filters
                 if (searchField != null) searchField.clear();
-                if (filterCombo != null) filterCombo.setValue("All Roles");
+                if (filterCombo != null) filterCombo.setValue("Tous les roles");
 
                 updatePagination();
 
@@ -363,9 +363,9 @@ public class UserManagementController {
     private void loadRecentActivity() {
         if (activityList != null) {
             activityList.getItems().setAll(
-                    "System started at " + LocalDate.now(),
-                    "User management module loaded",
-                    "Database connection established"
+                    "Systeme demarre a " + LocalDate.now(),
+                    "Module de gestion des utilisateurs charge",
+                    "Connexion a la base de donnees etablie"
             );
         }
     }
@@ -381,25 +381,25 @@ public class UserManagementController {
             controller.setOnUserUpdated(() -> {
                 Platform.runLater(() -> {
                     loadAllUsers();
-                    showAlert("Success", "User updated successfully!", Alert.AlertType.INFORMATION);
+                    showAlert("Succes", "Utilisateur modifie avec succes !", Alert.AlertType.INFORMATION);
                 });
             });
 
             Stage stage = new Stage();
-            stage.setTitle("Edit User");
+            stage.setTitle("Modifier l'utilisateur");
             stage.setScene(new Scene(root));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Error", "Failed to open edit window: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Erreur", "Impossible d'ouvrir la fenetre de modification : " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
     private void handleDeleteUser(Utilisateur user) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setTitle("Confirm Delete");
-        confirm.setHeaderText("Delete User");
-        confirm.setContentText("Are you sure you want to delete " + user.getNom() + " " + user.getPrenom() + "?");
+        confirm.setTitle("Confirmer la suppression");
+        confirm.setHeaderText("Supprimer l'utilisateur");
+        confirm.setContentText("Etes-vous sur de vouloir supprimer " + user.getNom() + " " + user.getPrenom() + " ?");
 
         if (usersGrid != null && usersGrid.getScene() != null) {
             confirm.initOwner(usersGrid.getScene().getWindow());
@@ -411,11 +411,11 @@ public class UserManagementController {
                 userService.delete(user.getId());
                 Platform.runLater(() -> {
                     loadAllUsers();
-                    showAlert("Success", "User deleted successfully!", Alert.AlertType.INFORMATION);
+                    showAlert("Succes", "Utilisateur supprime avec succes !", Alert.AlertType.INFORMATION);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                showAlert("Error", "Failed to delete user: " + e.getMessage(), Alert.AlertType.ERROR);
+                showAlert("Erreur", "Echec de la suppression : " + e.getMessage(), Alert.AlertType.ERROR);
             }
         }
     }

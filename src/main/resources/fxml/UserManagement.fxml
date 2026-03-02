@@ -22,8 +22,8 @@
 
     <!-- Page Title with Breadcrumb -->
     <VBox spacing="5">
-        <Label styleClass="page-title" text="User Management" />
-        <Label styleClass="breadcrumb-label" text="Dashboard / Users" />
+        <Label styleClass="page-title" text="Gestion des Utilisateurs" />
+        <Label styleClass="breadcrumb-label" text="Tableau de bord / Utilisateurs" />
     </VBox>
 
     <!-- Statistics Cards -->
@@ -32,7 +32,7 @@
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Label styleClass="stat-icon" text="👥" />
                 <VBox>
-                    <Label styleClass="stat-label" text="Total Users" />
+                    <Label styleClass="stat-label" text="Total Utilisateurs" />
                     <Label fx:id="totalUsersLabel" styleClass="stat-value" text="0" />
                 </VBox>
             </HBox>
@@ -42,7 +42,7 @@
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Label styleClass="stat-icon" text="👑" />
                 <VBox>
-                    <Label styleClass="stat-label" text="Admins" />
+                    <Label styleClass="stat-label" text="Administrateurs" />
                     <Label fx:id="totalAdminsLabel" styleClass="stat-value" text="0" />
                 </VBox>
             </HBox>
@@ -52,7 +52,7 @@
             <HBox alignment="CENTER_LEFT" spacing="15">
                 <Label styleClass="stat-icon" text="🌾" />
                 <VBox>
-                    <Label styleClass="stat-label" text="Farmers" />
+                    <Label styleClass="stat-label" text="Agriculteurs" />
                     <Label fx:id="totalFarmersLabel" styleClass="stat-value" text="0" />
                 </VBox>
             </HBox>
@@ -63,17 +63,17 @@
     <VBox spacing="15" styleClass="table-container" VBox.vgrow="ALWAYS">
         <!-- Header with Search and Filter -->
         <HBox alignment="CENTER_LEFT" spacing="15">
-            <Label styleClass="section-title" text="All Users" />
+            <Label styleClass="section-title" text="Tous les Utilisateurs" />
             <Region HBox.hgrow="ALWAYS" />
 
             <!-- Search Field -->
-            <TextField fx:id="searchField" promptText="Search users..." styleClass="search-field" prefWidth="200" />
+            <TextField fx:id="searchField" promptText="Rechercher un utilisateur..." styleClass="search-field" prefWidth="200" />
 
             <!-- Filter Combo -->
-            <ComboBox fx:id="filterCombo" promptText="Filter by Role" styleClass="filter-combo" prefWidth="150">
+            <ComboBox fx:id="filterCombo" promptText="Filtrer par role" styleClass="filter-combo" prefWidth="150">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="All Roles" />
+                        <String fx:value="Tous les roles" />
                         <String fx:value="Admin" />
                         <String fx:value="Agriculteur" />
                         <String fx:value="Technicien" />
@@ -110,11 +110,11 @@
 
     <!-- Recent Activity Section -->
     <VBox spacing="15" styleClass="activity-section">
-        <Label styleClass="section-title" text="Recent Activity" />
+        <Label styleClass="section-title" text="Activite Recente" />
         <ListView fx:id="activityList" prefHeight="100" styleClass="activity-list">
             <items>
                 <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="System started at " />
+                    <String fx:value="Systeme demarre a " />
                 </FXCollections>
             </items>
         </ListView>

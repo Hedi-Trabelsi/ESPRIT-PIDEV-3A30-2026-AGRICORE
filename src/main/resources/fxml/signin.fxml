@@ -32,8 +32,8 @@
                 <Label text="🌱" styleClass="auth-logo-icon"/>
                 <Label text="AGRICOR" styleClass="auth-brand-label"/>
                 <VBox alignment="CENTER" spacing="5">
-                    <Label text="Welcome Back!" styleClass="auth-title-label"/>
-                    <Label text="Sign in to your Smart Agriculture account"
+                    <Label text="Bon Retour !" styleClass="auth-title-label"/>
+                    <Label text="Connectez-vous a votre compte AGRICOR"
                            styleClass="auth-subtitle-label"
                            wrapText="true"
                            alignment="CENTER"/>
@@ -52,37 +52,37 @@
 
                 <!-- Email Field with Icon -->
                 <VBox spacing="5">
-                    <Label text="Email" styleClass="auth-field-label"/>
+                    <Label text="Email" styleClass="auth-field-label" />
                     <HBox spacing="10" styleClass="auth-field-container">
                         <Label text="📧" styleClass="auth-field-icon"/>
                         <TextField fx:id="emailField"
-                                   promptText="Enter your email"
+                                   promptText="Entrez votre email"
                                    styleClass="auth-field"/>
                     </HBox>
                 </VBox>
 
                 <!-- Password Field with Icon -->
                 <VBox spacing="5">
-                    <Label text="Password" styleClass="auth-field-label"/>
+                    <Label text="Mot de passe" styleClass="auth-field-label"/>
                     <HBox spacing="10" styleClass="auth-field-container">
                         <Label text="🔒" styleClass="auth-field-icon"/>
                         <PasswordField fx:id="passwordField"
-                                       promptText="Enter your password"
+                                       promptText="Entrez votre mot de passe"
                                        styleClass="auth-field"/>
                     </HBox>
                 </VBox>
 
                 <!-- Remember Me & Forgot Password -->
                 <HBox alignment="CENTER_LEFT" spacing="10">
-                    <CheckBox text="Remember me" styleClass="auth-checkbox"/>
+                    <CheckBox text="Se souvenir de moi" styleClass="auth-checkbox"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Hyperlink text="Forgot Password?"
+                    <Hyperlink text="Mot de passe oublie ?"
                                styleClass="auth-forgot-link"
                                onAction="#openForgotPassword"/>
                 </HBox>
 
                 <!-- Sign In Button -->
-                <Button text="Sign In"
+                <Button text="Connexion"
                         maxWidth="Infinity"
                         prefHeight="45"
                         styleClass="auth-primary-button"
@@ -91,12 +91,12 @@
                 <!-- OR Divider -->
                 <HBox alignment="CENTER" spacing="10">
                     <Line startX="0" endX="80" styleClass="auth-or-line"/>
-                    <Label text="OR" styleClass="auth-or-label"/>
+                    <Label text="OU" styleClass="auth-or-label"/>
                     <Line startX="0" endX="80" styleClass="auth-or-line"/>
                 </HBox>
 
                 <!-- Face Recognition Button -->
-                <Button text="Sign in with Face Recognition"
+                <Button text="Connexion par reconnaissance faciale"
                         maxWidth="Infinity"
                         prefHeight="45"
                         styleClass="auth-face-button"
@@ -107,7 +107,7 @@
                 </Button>
 
                 <!-- Google Sign-In Button (NEW) -->
-                <Button text="Sign in with Google"
+                <Button text="Connexion avec Google"
                         maxWidth="Infinity"
                         prefHeight="45"
                         styleClass="auth-google-button"
@@ -130,16 +130,16 @@
 
             <!-- Sign Up Link -->
             <HBox alignment="CENTER" spacing="8">
-                <Label text="Don't have an account?" styleClass="auth-footer-label"/>
+                <Label text="Vous n'avez pas de compte ?" styleClass="auth-footer-label"/>
                 <Hyperlink fx:id="signupLink"
-                           text="Create Account"
+                           text="Creer un compte"
                            styleClass="auth-signup-link"
                            onAction="#openSignupPage"/>
             </HBox>
 
             <!-- Footer -->
             <VBox alignment="CENTER" spacing="5">
-                <Label text="© 2026 AGRICOR - Smart Agriculture" styleClass="auth-footer-copyright"/>
+                <Label text="© 2026 AGRICOR - Agriculture Intelligente" styleClass="auth-footer-copyright"/>
             </VBox>
         </VBox>
     </children>
