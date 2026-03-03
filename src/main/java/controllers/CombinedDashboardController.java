@@ -11,6 +11,10 @@ import models.User;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class CombinedDashboardController {
 
@@ -122,6 +126,28 @@ public class CombinedDashboardController {
         if (periodBadge != null) periodBadge.setText("Analyses");
         setStatus("Vue : Analyse");
     }
+
+    @FXML
+    public void openMarketPrices() {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                    CombinedDashboardController.class.getResource("/MarketPrices.fxml")
+            );
+
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Market Prices");
+            stage.setScene(new Scene(root));
+
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void showCalendrier() {

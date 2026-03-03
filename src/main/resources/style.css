@@ -673,3 +673,32 @@ Label {
     -fx-font-weight: bold;
     -fx-padding: 0 16px 0 0;
 }
+.modern-table {
+    -fx-border-color: transparent;
+}
+
+.modern-table .column-header-background {
+    -fx-background-color: #16503A;
+}
+
+.modern-table .column-header {
+    -fx-background-color: transparent;
+}
+
+.modern-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.modern-table .table-row-cell {
+    -fx-background-color: white;
+}
+
+.modern-table .table-row-cell:odd {
+    -fx-background-color: #F0F7F3;
+}
+
+.modern-table .table-row-cell:selected {
+    -fx-background-color: #2E8B57;
+    -fx-text-fill: white;
+}

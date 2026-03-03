@@ -23,10 +23,7 @@
                 AnchorPane.leftAnchor="0.0"
                 AnchorPane.rightAnchor="0.0">
 
-            <!-- ══════════════════════════════════════
-                 NAV BAR  44 px  — 3 view-switch buttons
-                 This is now the ONLY top bar
-            ══════════════════════════════════════ -->
+            <!-- NAV BAR -->
             <HBox
                     alignment="CENTER_LEFT"
                     prefHeight="44.0"
@@ -39,19 +36,26 @@
                         fx:id="btnDetails"
                         text="📋  Détails"
                         onAction="#showDetails"
-                        style="-fx-background-color: #16503A; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-padding: 8 20 8 20; -fx-cursor: hand; -fx-effect: dropshadow(gaussian, rgba(22,80,58,0.28), 8, 0, 0, 2);"/>
+                        style="-fx-background-color: #16503A; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-padding: 8 20 8 20; -fx-cursor: hand;"/>
 
                 <Button
                         fx:id="btnAnalyse"
                         text="📊  Analyse"
                         onAction="#showAnalyse"
-                        style="-fx-background-color: white; -fx-text-fill: #16503A; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D3E4DA; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-cursor: hand; -fx-effect: none;"/>
+                        style="-fx-background-color: white; -fx-text-fill: #16503A; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D3E4DA; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-cursor: hand;"/>
 
                 <Button
                         fx:id="btnCalendrier"
                         text="📅  Calendrier"
                         onAction="#showCalendrier"
-                        style="-fx-background-color: white; -fx-text-fill: #16503A; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D3E4DA; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-cursor: hand; -fx-effect: none;"/>
+                        style="-fx-background-color: white; -fx-text-fill: #16503A; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D3E4DA; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-cursor: hand;"/>
+
+                <!-- NEW BUTTON -->
+                <Button
+                        fx:id="btnMarketPrices"
+                        text="🌾  Market Prices"
+                        onAction="#openMarketPrices"
+                        style="-fx-background-color: white; -fx-text-fill: #16503A; -fx-font-size: 12px; -fx-font-weight: bold; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #D3E4DA; -fx-border-width: 1; -fx-padding: 8 20 8 20; -fx-cursor: hand;"/>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
@@ -62,18 +66,13 @@
 
             </HBox>
 
-            <!-- ══════════════════════════════════════
-                 MAIN CONTENT AREA
-                 Each host fills the full width
-            ══════════════════════════════════════ -->
+            <!-- CONTENT HOSTS -->
 
-            <!-- Détails host — full width, visible by default -->
             <AnchorPane
                     fx:id="financeHost"
                     VBox.vgrow="ALWAYS"
                     style="-fx-background-color: #F0F4F1;"/>
 
-            <!-- Analyse host — full width, hidden by default -->
             <AnchorPane
                     fx:id="analyticsHost"
                     VBox.vgrow="ALWAYS"
@@ -81,7 +80,6 @@
                     managed="false"
                     style="-fx-background-color: #F0F4F1;"/>
 
-            <!-- Calendrier host — full width, hidden by default -->
             <AnchorPane
                     fx:id="calendarHost"
                     VBox.vgrow="ALWAYS"
@@ -89,9 +87,8 @@
                     managed="false"
                     style="-fx-background-color: #F0F4F1;"/>
 
-            <!-- ══════════════════════════════════════
-                 STATUS BAR  28 px
-            ══════════════════════════════════════ -->
+            <!-- STATUS BAR -->
+
             <HBox
                     alignment="CENTER_LEFT"
                     prefHeight="28.0"
@@ -114,11 +111,6 @@
                 <Label fx:id="statusLabel" text="AgriDash · Tableau de bord combiné" style="-fx-font-size: 9px; -fx-text-fill: #A8C4B8;"/>
 
                 <Region HBox.hgrow="ALWAYS"/>
-
-                <!-- Hidden compat labels -->
-                <Label fx:id="titleLabel"    text="" style="-fx-font-size: 0; -fx-opacity: 0;" maxWidth="0.0"/>
-                <Label fx:id="avatarInitials" text="" style="-fx-font-size: 0; -fx-opacity: 0;" maxWidth="0.0"/>
-                <Label fx:id="userNameLabel"  text="" style="-fx-font-size: 0; -fx-opacity: 0;" maxWidth="0.0"/>
 
                 <Label fx:id="dateLabel" text="" style="-fx-font-size: 9px; -fx-text-fill: #A8C4B8;"/>
 
