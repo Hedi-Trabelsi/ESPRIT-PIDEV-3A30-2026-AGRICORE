@@ -76,6 +76,12 @@
                 <Button text="⚙️ Admin Panel" onAction="#navigateAdmin"
                         style="-fx-background-color:#1a237e; -fx-text-fill:white;
                -fx-background-radius:10; -fx-padding:8 14; -fx-font-weight:bold;"/>
+                <Button text="💊 Ordonnance IA" onAction="#navigateOrdonnance"
+                        style="-fx-background-color:#1a237e; -fx-text-fill:white;
+               -fx-background-radius:10; -fx-padding:8 14; -fx-font-weight:bold;"/>
+                <Button text="🧬 Resume Medical IA" onAction="#navigateResumeMedical"
+                        style="-fx-background-color:#1a237e; -fx-text-fill:white;
+               -fx-background-radius:10; -fx-padding:8 14; -fx-font-weight:bold;"/>
             </HBox>
 
             <ListView fx:id="animalListView" VBox.vgrow="ALWAYS"

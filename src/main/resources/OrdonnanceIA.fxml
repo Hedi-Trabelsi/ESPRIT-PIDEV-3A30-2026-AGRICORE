@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="740.0" prefWidth="1210.0"
+            style="-fx-background-color:#7ca76f;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.OrdonnanceIAController">
+    <children>
+
+        <!-- ══ MENU GAUCHE ══ -->
+        <VBox prefHeight="740.0" prefWidth="216.0" spacing="20.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="126.0">
+                    <Label text="LOGO" style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                </VBox>
+                <Button text="Gestion Utilisateurs" prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Equipements"  prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Maintenance"  prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Evenements"   prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Animaux"      prefWidth="200" style="-fx-background-color:white;-fx-text-fill:black;"/>
+                <Button text="Gestion Financiere"   prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+            </children>
+        </VBox>
+
+        <!-- ══ CONTENU PRINCIPAL ══ -->
+        <ScrollPane layoutX="217.0" prefHeight="740.0" prefWidth="980.0"
+                    fitToWidth="true"
+                    style="-fx-background-color:#f4f6f9;-fx-background:#f4f6f9;">
+            <VBox spacing="20" style="-fx-padding:25;">
+
+                <!-- TITRE -->
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="💊" style="-fx-font-size:32px;"/>
+                    <VBox>
+                        <Label text="Generateur Ordonnance Veterinaire IA"
+                               style="-fx-font-size:21px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                        <Label text="Powered by Groq LLaMA 3 — Dosages precis calcules selon le poids reel de l animal"
+                               style="-fx-font-size:12px;-fx-text-fill:#888;"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="&lt;- Retour" onAction="#navigateBack"
+                            style="-fx-background-color:#546e7a;-fx-text-fill:white;
+                                   -fx-font-weight:bold;-fx-padding:10 18;
+                                   -fx-background-radius:10;-fx-cursor:hand;"/>
+                </HBox>
+
+                <Separator/>
+
+                <!-- ══ 2 COLONNES ══ -->
+                <HBox spacing="20" alignment="TOP_LEFT">
+
+                    <!-- ═ FORMULAIRE GAUCHE ═ -->
+                    <VBox spacing="14" minWidth="340" maxWidth="340"
+                          style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+
+                        <Label text="📋 Informations du Patient"
+                               style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                        <Separator/>
+
+                        <!-- Animal -->
+                        <VBox spacing="4">
+                            <Label text="🐾 Animal *"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <ComboBox fx:id="comboAnimal" maxWidth="Infinity"
+                                      promptText="Choisir un animal..."
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;-fx-border-radius:8;-fx-padding:4;"/>
+                        </VBox>
+
+                        <!-- Poids -->
+                        <VBox spacing="4">
+                            <Label text="⚖️ Poids actuel (kg) *"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <TextField fx:id="poidsTf" promptText="ex: 450.0"
+                                       style="-fx-background-radius:8;-fx-padding:9;
+                                              -fx-border-color:#ddd;-fx-border-radius:8;
+                                              -fx-font-size:14px;-fx-font-weight:bold;"/>
+                            <Label text="Le poids est auto-rempli depuis le dernier suivi"
+                                   style="-fx-text-fill:#aaa;-fx-font-size:10px;"/>
+                        </VBox>
+
+                        <!-- Age -->
+                        <VBox spacing="4">
+                            <Label text="🗓️ Tranche d age"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <ComboBox fx:id="ageCombo" maxWidth="Infinity"
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;-fx-border-radius:8;"/>
+                        </VBox>
+
+                        <!-- Options spéciales -->
+                        <VBox spacing="6"
+                              style="-fx-background-color:#f5f5f5;-fx-padding:10;-fx-background-radius:10;">
+                            <Label text="⚠️ Situations particulieres"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:11px;"/>
+                            <CheckBox fx:id="checkGestante" text="🤰 Animal gestant"
+                                      style="-fx-font-size:12px;"/>
+                            <CheckBox fx:id="checkLactante" text="🥛 Animal en lactation"
+                                      style="-fx-font-size:12px;"/>
+                            <CheckBox fx:id="checkAllergies" text="🚫 Allergies medicamenteuses"
+                                      style="-fx-font-size:12px;"/>
+                            <TextField fx:id="allergiesTf" promptText="Medicaments a eviter..."
+                                       style="-fx-background-radius:6;-fx-padding:6;
+                                              -fx-border-color:#ddd;-fx-border-radius:6;-fx-font-size:11px;"/>
+                        </VBox>
+
+                        <Separator/>
+                        <Label text="🦠 Diagnostic"
+                               style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+
+                        <!-- Pathologie -->
+                        <VBox spacing="4">
+                            <Label text="Pathologie *"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <ComboBox fx:id="pathologieCombo" maxWidth="Infinity"
+                                      promptText="Choisir une pathologie..."
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;-fx-border-radius:8;"/>
+                        </VBox>
+
+                        <!-- Gravité -->
+                        <VBox spacing="4">
+                            <Label text="Gravite"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <ComboBox fx:id="graviteCombo" maxWidth="Infinity"
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;-fx-border-radius:8;"/>
+                        </VBox>
+
+                        <!-- Symptômes -->
+                        <VBox spacing="4">
+                            <Label text="Symptomes complementaires"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <TextArea fx:id="symptomesTa" prefHeight="60" wrapText="true"
+                                      promptText="Decrire les symptomes observes..."
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;
+                                             -fx-border-radius:8;-fx-font-size:12px;"/>
+                        </VBox>
+
+                        <!-- Boutons -->
+                        <Button fx:id="btnGenerer" text="💊 Generer l Ordonnance IA"
+                                onAction="#genererOrdonnance" maxWidth="Infinity"
+                                style="-fx-background-color:#1a237e;-fx-text-fill:white;
+                                       -fx-font-weight:bold;-fx-padding:13;
+                                       -fx-background-radius:10;-fx-cursor:hand;-fx-font-size:13px;"/>
+
+                        <HBox spacing="8">
+                            <Button text="📋 Copier" onAction="#copierOrdonnance"
+                                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                    style="-fx-background-color:#2e7d32;-fx-text-fill:white;
+                                           -fx-font-weight:bold;-fx-padding:10;
+                                           -fx-background-radius:10;-fx-cursor:hand;"/>
+                            <Button text="🔄" onAction="#reset"
+                                    style="-fx-background-color:#eceff1;-fx-text-fill:#546e7a;
+                                           -fx-padding:10 14;-fx-background-radius:10;-fx-cursor:hand;"/>
+                        </HBox>
+
+                        <!-- Statut + Spinner -->
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                            <ProgressIndicator fx:id="progressIndicator"
+                                               prefWidth="26" prefHeight="26"/>
+                            <Label fx:id="lblStatut" text=""
+                                   style="-fx-font-size:12px;-fx-font-weight:bold;"
+                                   wrapText="true"/>
+                        </HBox>
+
+                        <!-- Badge gratuit -->
+                        <VBox spacing="3"
+                              style="-fx-background-color:#e8f5e9;-fx-background-radius:8;-fx-padding:10;">
+                            <Label text="🆓 Groq LLaMA 3 — 100% Gratuit"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#2e7d32;-fx-font-size:11px;"/>
+                            <Label text="Dosages calcules selon le poids reel de l animal"
+                                   style="-fx-text-fill:#555;-fx-font-size:10px;"/>
+                        </VBox>
+
+                    </VBox>
+
+                    <!-- ═ ORDONNANCE DROITE ═ -->
+                    <VBox fx:id="resultBox" spacing="15" HBox.hgrow="ALWAYS">
+
+                        <!-- En-tête ordonnance style document médical -->
+                        <VBox spacing="8"
+                              style="-fx-background-color:#1a237e;-fx-background-radius:15;-fx-padding:20;">
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <Label text="💊" style="-fx-font-size:26px;"/>
+                                <VBox>
+                                    <Label text="ORDONNANCE VETERINAIRE"
+                                           style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                                    <Label text="Generee par Intelligence Artificielle — A titre indicatif"
+                                           style="-fx-font-size:10px;-fx-text-fill:#aac;"/>
+                                </VBox>
+                            </HBox>
+                            <Separator style="-fx-background-color:#ffffff44;"/>
+                            <Label fx:id="lblEnteteAnimal" text="—"
+                                   style="-fx-text-fill:white;-fx-font-size:13px;-fx-font-weight:bold;"/>
+                            <Label fx:id="lblEnteteDiag" text="—"
+                                   style="-fx-text-fill:#aac;-fx-font-size:12px;"/>
+                            <Label fx:id="lblEnteteDate" text="—"
+                                   style="-fx-text-fill:#aac;-fx-font-size:11px;"/>
+                        </VBox>
+
+                        <!-- Tableau médicaments -->
+                        <VBox spacing="0"
+                              style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:0;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+                            <HBox style="-fx-padding:15 18 8 18;">
+                                <Label text="💉 Medicaments Prescrits — Dosages calcules"
+                                       style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                            </HBox>
+                            <VBox fx:id="medicamentsBox" style="-fx-padding:0 15 15 15;"/>
+                        </VBox>
+
+                        <!-- Posologie détaillée -->
+                        <VBox spacing="8"
+                              style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:18;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+                            <Label text="🕐 Posologie Detaillee"
+                                   style="-fx-font-size:13px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                            <Separator/>
+                            <VBox fx:id="posologieBox" spacing="3"/>
+                        </VBox>
+
+                        <!-- Durée + Contrôle -->
+                        <HBox spacing="15">
+                            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:15;
+                                         -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.07),6,0,0,2);">
+                                <Label text="⏱️ Duree du Traitement"
+                                       style="-fx-font-weight:bold;-fx-text-fill:#1a237e;-fx-font-size:12px;"/>
+                                <Separator/>
+                                <Label fx:id="lblDuree" text="—" wrapText="true"
+                                       style="-fx-font-size:12px;-fx-text-fill:#333;"/>
+                            </VBox>
+                            <VBox spacing="6" HBox.hgrow="ALWAYS"
+                                  style="-fx-background-color:white;-fx-background-radius:12;-fx-padding:15;
+                                         -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.07),6,0,0,2);">
+                                <Label text="🔬 Controle Veterinaire"
+                                       style="-fx-font-weight:bold;-fx-text-fill:#1a237e;-fx-font-size:12px;"/>
+                                <Separator/>
+                                <Label fx:id="lblControle" text="—" wrapText="true"
+                                       style="-fx-font-size:12px;-fx-text-fill:#333;"/>
+                            </VBox>
+                        </HBox>
+
+                        <!-- Instructions éleveur -->
+                        <VBox spacing="8"
+                              style="-fx-background-color:#e8f5e9;-fx-background-radius:12;-fx-padding:15;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);">
+                            <Label text="👨‍🌾 Instructions pour l Eleveur"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#2e7d32;-fx-font-size:13px;"/>
+                            <Separator/>
+                            <TextArea fx:id="txtInstructions" prefHeight="100"
+                                      editable="false" wrapText="true"
+                                      style="-fx-background-color:transparent;-fx-border-color:transparent;
+                                             -fx-font-size:12px;-fx-text-fill:#333;"/>
+                        </VBox>
+
+                        <!-- Mises en garde -->
+                        <VBox spacing="8"
+                              style="-fx-background-color:#fff3e0;-fx-background-radius:12;-fx-padding:15;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.06),6,0,0,2);">
+                            <Label text="⚠️ Mises en Garde et Contre-Indications"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#e65100;-fx-font-size:13px;"/>
+                            <Separator/>
+                            <TextArea fx:id="txtMises" prefHeight="100"
+                                      editable="false" wrapText="true"
+                                      style="-fx-background-color:transparent;-fx-border-color:transparent;
+                                             -fx-font-size:12px;-fx-text-fill:#555;"/>
+                        </VBox>
+
+                        <!-- Disclaimer légal -->
+                        <HBox spacing="10" alignment="CENTER_LEFT"
+                              style="-fx-background-color:#ffebee;-fx-background-radius:10;-fx-padding:12;">
+                            <Label text="🚨" style="-fx-font-size:16px;"/>
+                            <Label text="IMPORTANT : Cette ordonnance est generee par IA a titre INDICATIF uniquement. Elle ne remplace pas un acte veterinaire officiel. Consultez obligatoirement un veterinaire diplome avant tout traitement."
+                                   style="-fx-text-fill:#c62828;-fx-font-size:11px;-fx-font-weight:bold;"
+                                   wrapText="true" maxWidth="Infinity"/>
+                        </HBox>
+
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+    </children>
+</AnchorPane>

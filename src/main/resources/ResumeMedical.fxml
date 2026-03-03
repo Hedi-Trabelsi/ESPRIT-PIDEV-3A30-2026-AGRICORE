@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="740.0" prefWidth="1210.0"
+            style="-fx-background-color:#7ca76f;"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ResumeMedicalController">
+    <children>
+
+        <!-- ══ MENU GAUCHE ══ -->
+        <VBox prefHeight="740.0" prefWidth="216.0" spacing="20.0">
+            <children>
+                <VBox alignment="CENTER" prefHeight="126.0">
+                    <Label text="LOGO" style="-fx-font-size:18px;-fx-font-weight:bold;-fx-text-fill:white;"/>
+                </VBox>
+                <Button text="Gestion Utilisateurs" prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Equipements"  prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Maintenance"  prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Evenements"   prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+                <Button text="Gestion Animaux"      prefWidth="200" style="-fx-background-color:white;-fx-text-fill:black;"/>
+                <Button text="Gestion Financiere"   prefWidth="200" style="-fx-background-color:transparent;-fx-text-fill:white;"/>
+            </children>
+        </VBox>
+
+        <!-- ══ CONTENU ══ -->
+        <ScrollPane layoutX="217.0" prefHeight="740.0" prefWidth="980.0"
+                    fitToWidth="true"
+                    style="-fx-background-color:#f4f6f9;-fx-background:#f4f6f9;">
+            <VBox spacing="20" style="-fx-padding:25;">
+
+                <!-- TITRE -->
+                <HBox alignment="CENTER_LEFT" spacing="15">
+                    <Label text="🧬" style="-fx-font-size:32px;"/>
+                    <VBox>
+                        <Label text="Resume Medical Narratif IA"
+                               style="-fx-font-size:22px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                        <Label text="Powered by Groq LLaMA 3 — Rapport medical professionnel redige par IA"
+                               style="-fx-font-size:12px;-fx-text-fill:#888;"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="&lt;- Retour" onAction="#navigateBack"
+                            style="-fx-background-color:#546e7a;-fx-text-fill:white;
+                                   -fx-font-weight:bold;-fx-padding:10 18;
+                                   -fx-background-radius:10;-fx-cursor:hand;"/>
+                </HBox>
+
+                <Separator/>
+
+                <!-- ══ 2 COLONNES ══ -->
+                <HBox spacing="20" alignment="TOP_LEFT">
+
+                    <!-- ═ CONFIGURATION GAUCHE ═ -->
+                    <VBox spacing="14" minWidth="340" maxWidth="340"
+                          style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                 -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+
+                        <Label text="⚙️ Configuration du rapport"
+                               style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#333;"/>
+
+                        <!-- Animal -->
+                        <VBox spacing="4">
+                            <Label text="🐾 Animal *"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <ComboBox fx:id="comboAnimal" maxWidth="Infinity"
+                                      promptText="Choisir un animal..."
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;
+                                             -fx-border-radius:8;-fx-padding:5;"/>
+                        </VBox>
+
+                        <!-- Période -->
+                        <VBox spacing="4">
+                            <Label text="📅 Periode d'analyse"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <ComboBox fx:id="periodeCombo" maxWidth="Infinity"
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;-fx-border-radius:8;"/>
+                        </VBox>
+
+                        <!-- Style -->
+                        <VBox spacing="4">
+                            <Label text="📝 Style du rapport"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#555;-fx-font-size:12px;"/>
+                            <ComboBox fx:id="styleCombo" maxWidth="Infinity"
+                                      style="-fx-background-radius:8;-fx-border-color:#ddd;-fx-border-radius:8;"/>
+                        </VBox>
+
+                        <Separator/>
+
+                        <!-- Sections à inclure -->
+                        <Label text="📋 Sections a inclure"
+                               style="-fx-font-weight:bold;-fx-text-fill:#444;-fx-font-size:12px;"/>
+
+                        <VBox spacing="8"
+                              style="-fx-background-color:#f5f5f5;-fx-padding:12;-fx-background-radius:10;">
+                            <CheckBox fx:id="checkConclusion"
+                                      text="✅ Conclusion medicale globale"
+                                      style="-fx-font-size:12px;"/>
+                            <CheckBox fx:id="checkPrognostic"
+                                      text="🔮 Pronostic a court/moyen terme"
+                                      style="-fx-font-size:12px;"/>
+                            <CheckBox fx:id="checkRecommandations"
+                                      text="💊 Recommandations veterinaires"
+                                      style="-fx-font-size:12px;"/>
+                        </VBox>
+
+                        <!-- Boutons -->
+                        <Button fx:id="btnGenerer" text="🧬 Generer le Resume IA"
+                                onAction="#genererResume" maxWidth="Infinity"
+                                style="-fx-background-color:#1a237e;-fx-text-fill:white;
+                                       -fx-font-weight:bold;-fx-padding:13;
+                                       -fx-background-radius:10;-fx-cursor:hand;-fx-font-size:13px;"/>
+
+                        <HBox spacing="8">
+                            <Button text="📋 Copier" onAction="#copierResume"
+                                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                                    style="-fx-background-color:#2e7d32;-fx-text-fill:white;
+                                           -fx-font-weight:bold;-fx-padding:10;
+                                           -fx-background-radius:10;-fx-cursor:hand;"/>
+                            <Button text="🔄 Reset" onAction="#reset"
+                                    style="-fx-background-color:#eceff1;-fx-text-fill:#546e7a;
+                                           -fx-padding:10 14;-fx-background-radius:10;-fx-cursor:hand;"/>
+                        </HBox>
+
+                        <!-- Statut -->
+                        <HBox alignment="CENTER" spacing="10">
+                            <ProgressIndicator fx:id="progressIndicator" prefWidth="28" prefHeight="28"/>
+                            <Label fx:id="lblStatut" text=""
+                                   style="-fx-font-size:12px;-fx-font-weight:bold;-fx-text-fill:#888;"
+                                   wrapText="true"/>
+                        </HBox>
+
+                        <!-- Info gratuit -->
+                        <VBox spacing="4"
+                              style="-fx-background-color:#e8f5e9;-fx-background-radius:8;-fx-padding:10;">
+                            <Label text="🆓 Groq LLaMA 3 — 100% Gratuit"
+                                   style="-fx-font-weight:bold;-fx-text-fill:#2e7d32;-fx-font-size:11px;"/>
+                            <Label text="console.groq.com → API Keys → Create"
+                                   style="-fx-text-fill:#555;-fx-font-size:10px;"/>
+                        </VBox>
+
+                    </VBox>
+
+                    <!-- ═ RÉSULTATS DROITE ═ -->
+                    <VBox fx:id="resultBox" spacing="15" HBox.hgrow="ALWAYS">
+
+                        <!-- Carte animal + stats -->
+                        <VBox spacing="10"
+                              style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <Label text="🐾" style="-fx-font-size:22px;"/>
+                                <VBox spacing="2">
+                                    <Label fx:id="lblAnimalHeader" text="—"
+                                           style="-fx-font-size:15px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                                    <HBox spacing="20">
+                                        <Label fx:id="lblNbSuivis" text="—"
+                                               style="-fx-font-size:12px;-fx-text-fill:#666;"/>
+                                        <Label fx:id="lblPeriode" text="—"
+                                               style="-fx-font-size:12px;-fx-text-fill:#888;"/>
+                                    </HBox>
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <VBox alignment="CENTER_RIGHT" spacing="2">
+                                    <Label text="Score Sante Moyen"
+                                           style="-fx-font-size:10px;-fx-text-fill:#888;"/>
+                                    <Label fx:id="lblScoreSante" text="—"
+                                           style="-fx-font-size:16px;-fx-font-weight:bold;"/>
+                                </VBox>
+                            </HBox>
+
+                            <Separator/>
+
+                            <VBox fx:id="statsBox" spacing="2"/>
+
+                        </VBox>
+
+                        <!-- Rapport narratif IA -->
+                        <VBox spacing="10"
+                              style="-fx-background-color:white;-fx-background-radius:15;-fx-padding:20;
+                                     -fx-effect:dropshadow(gaussian,rgba(0,0,0,0.08),8,0,0,2);">
+
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="📄 Rapport Medical Narratif — Redige par IA"
+                                       style="-fx-font-size:14px;-fx-font-weight:bold;-fx-text-fill:#1a237e;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Groq LLaMA 3 70B"
+                                       style="-fx-background-color:#e8eaf6;-fx-text-fill:#1a237e;
+                                              -fx-padding:4 10;-fx-background-radius:12;
+                                              -fx-font-size:10px;-fx-font-weight:bold;"/>
+                            </HBox>
+
+                            <TextArea fx:id="txtResume"
+                                      prefHeight="420"
+                                      editable="false"
+                                      wrapText="true"
+                                      style="-fx-font-family:'Courier New';
+                                             -fx-font-size:12px;
+                                             -fx-background-color:#fafafa;
+                                             -fx-border-color:#e0e0e0;
+                                             -fx-border-radius:10;
+                                             -fx-background-radius:10;
+                                             -fx-padding:15;
+                                             -fx-line-spacing:3;"/>
+                        </VBox>
+
+                        <!-- Avertissement -->
+                        <HBox spacing="10" alignment="CENTER_LEFT"
+                              style="-fx-background-color:#fff8e1;-fx-background-radius:10;-fx-padding:12;">
+                            <Label text="⚠️" style="-fx-font-size:16px;"/>
+                            <Label text="Ce rapport est genere par IA a titre informatif uniquement. Consultez toujours un veterinaire diplome pour tout diagnostic officiel."
+                                   style="-fx-text-fill:#f57c00;-fx-font-size:11px;-fx-font-weight:bold;"
+                                   wrapText="true"/>
+                        </HBox>
+
+                    </VBox>
+                </HBox>
+
+            </VBox>
+        </ScrollPane>
+    </children>
+</AnchorPane>
