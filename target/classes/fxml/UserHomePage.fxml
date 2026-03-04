@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<BorderPane fx:id="mainBorderPane" prefHeight="800" prefWidth="1400" styleClass="user-root-pane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.UserHomeController">
+
+    <!-- LEFT SIDEBAR - FRESH GREEN DESIGN -->
+    <left>
+        <ScrollPane fitToWidth="true" styleClass="user-sidebar-scroll-pane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+        <VBox fx:id="sidebar" prefWidth="280" spacing="15" styleClass="user-sidebar">
+            <padding>
+                <Insets bottom="30" left="20" right="20" top="30" />
+            </padding>
+
+            <!-- Logo/Brand Section -->
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <ImageView fx:id="logoImageView" fitHeight="45" fitWidth="45" styleClass="user-logo-image" />
+                <Label styleClass="user-brand-label" text="AGRICOR" />
+            </HBox>
+
+            <Separator styleClass="user-sidebar-separator" />
+
+            <!-- Profile Summary Card -->
+            <VBox alignment="CENTER" spacing="15" styleClass="user-profile-summary">
+                <StackPane>
+                    <ImageView fx:id="profileImageView" fitHeight="159.0" fitWidth="137.0" styleClass="user-profile-image" />
+                </StackPane>
+                <VBox alignment="CENTER" spacing="5">
+                    <Label fx:id="sidebarNameLabel" styleClass="user-profile-name" text="Loading..." />
+                    <Label fx:id="sidebarRoleLabel" styleClass="user-profile-badge" text="Member" />
+                </VBox>
+                <HBox alignment="CENTER" spacing="15">
+                    <Button fx:id="quickProfileButton" styleClass="user-icon-button" text="👤" />
+                    <Button fx:id="quickHelpButton" styleClass="user-icon-button" text="❓" />
+                </HBox>
+            </VBox>
+
+            <!-- Navigation Menu - 6 Main Sections -->
+            <VBox spacing="8" VBox.vgrow="ALWAYS">
+                <Label styleClass="user-menu-category" text="MAIN MENU" />
+
+                <Button fx:id="profileButton" maxWidth="Infinity" styleClass="user-nav-button-active" text="Profil">
+                    <graphic>
+                        <Label styleClass="user-nav-icon" text="👤" />
+                    </graphic>
+                </Button>
+
+                <Button fx:id="eventButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Evenements">
+                    <graphic>
+                        <Label styleClass="user-nav-icon" text="📅" />
+                    </graphic>
+                </Button>
+
+                <Button fx:id="financialButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Financiere">
+                    <graphic>
+                        <Label styleClass="user-nav-icon" text="💰" />
+                    </graphic>
+                </Button>
+
+                <Button fx:id="equipmentButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Equipements">
+                    <graphic>
+                        <Label styleClass="user-nav-icon" text="🚜" />
+                    </graphic>
+                </Button>
+
+                <Button fx:id="maintenanceButton" maxWidth="Infinity" styleClass="user-nav-button" text="Maintenance">
+                    <graphic>
+                        <Label styleClass="user-nav-icon" text="🔧" />
+                    </graphic>
+                </Button>
+
+                <Button fx:id="animalButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Animaux">
+                    <graphic>
+                        <Label styleClass="user-nav-icon" text="🐄" />
+                    </graphic>
+                </Button>
+            </VBox>
+
+            <!-- Bottom Section -->
+            <VBox spacing="10">
+                <Separator styleClass="user-sidebar-separator" />
+                <Button fx:id="logoutButton" maxWidth="Infinity" styleClass="user-logout-button" text="Deconnexion">
+                    <graphic>
+                        <Label styleClass="user-nav-icon" text="🚪" />
+                    </graphic>
+                </Button>
+            </VBox>
+        </VBox>
+        </ScrollPane>
+    </left>
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="user-topbar">
+            <padding>
+                <Insets bottom="15" left="30" right="30" top="15" />
+            </padding>
+
+            <Label fx:id="welcomeLabel" styleClass="user-welcome-label" text="Bienvenue, Agriculteur !" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Search Bar -->
+            <HBox spacing="8" styleClass="user-search-container">
+                <Label styleClass="user-search-icon" text="🔍" />
+                <TextField promptText="Rechercher..." styleClass="user-search-field" />
+            </HBox>
+
+            <!-- Notifications Button with Counter (CORRIGÉ) -->
+            <Button fx:id="notificationsButton" styleClass="notification-button">
+                <graphic>
+                    <StackPane>
+                        <Label text="🔔" style="-fx-font-size: 20px;" />
+                        <Label fx:id="count" styleClass="notification-count" text="0" visible="false" />
+                    </StackPane>
+                </graphic>
+            </Button>
+
+            <!-- User Menu -->
+            <MenuButton fx:id="userMenuButton" styleClass="user-menu-button">
+                <graphic>
+                    <HBox alignment="CENTER" spacing="8">
+                        <Circle radius="18" styleClass="user-menu-avatar" />
+                        <Label fx:id="userMenuLabel" styleClass="user-menu-label" text="User" />
+                    </HBox>
+                </graphic>
+                <items>
+                    <MenuItem fx:id="profileMenuItem" text="Mon Profil" />
+                    <MenuItem fx:id="settingsMenuItem" text="Parametres" />
+                    <MenuItem fx:id="helpMenuItem" text="Centre d'aide" />
+                    <SeparatorMenuItem />
+                    <MenuItem fx:id="logoutMenuItem" text="Deconnexion" />
+                </items>
+            </MenuButton>
+        </HBox>
+    </top>
+
+    <!-- CENTER CONTENT - DYNAMIC CONTENT AREA -->
+    <center>
+        <StackPane fx:id="contentArea" styleClass="user-content-area">
+            <!-- This will be filled with different pages -->
+        </StackPane>
+    </center>
+</BorderPane>

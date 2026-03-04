@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      spacing="20" style="-fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.NotificationController">
+
+    <VBox spacing="10" alignment="TOP_LEFT">
+        <Button onAction="#closeWindow" text="← Retour" styleClass="maint-retour-button"/>
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Demandes en Attente" styleClass="page-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </VBox>
+
+    <Separator style="-fx-opacity: 0.3;" />
+
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="search-container" HBox.hgrow="ALWAYS">
+            <TextField fx:id="searchField" promptText="Rechercher une demande..."
+                       styleClass="search-field" HBox.hgrow="ALWAYS" />
+        </HBox>
+
+        <ChoiceBox fx:id="priorityFilter" prefHeight="42.0" prefWidth="160.0" styleClass="filter-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Toutes les priorités" />
+                    <String fx:value="Faible" />
+                    <String fx:value="Normale" />
+                    <String fx:value="Urgente" />
+                </FXCollections>
+            </items>
+            <value>
+                <String fx:value="Toutes les priorités" />
+            </value>
+        </ChoiceBox>
+
+        <ChoiceBox fx:id="dateSortPicker" prefHeight="42.0" prefWidth="140.0" styleClass="filter-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Plus recent" />
+                    <String fx:value="Plus ancien" />
+                </FXCollections>
+            </items>
+            <value>
+                <String fx:value="Plus recent" />
+            </value>
+        </ChoiceBox>
+    </HBox>
+
+    <ListView fx:id="notifList" VBox.vgrow="ALWAYS" styleClass="maint-transparent-list"/>
+</VBox>

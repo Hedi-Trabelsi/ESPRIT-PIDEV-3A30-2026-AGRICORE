@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.paint.Color?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="Controller.UpdateSuiviAnimalController"
+           style="-fx-background-color: transparent;">
+
+    <VBox spacing="20" alignment="CENTER" maxWidth="550" maxHeight="700"
+          style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-color: #81C784; -fx-border-width: 2;">
+
+        <padding>
+            <Insets top="30" right="40" bottom="30" left="40"/>
+        </padding>
+
+        <effect>
+            <DropShadow blurType="GAUSSIAN" height="30" radius="14" width="30" color="#00000020"/>
+        </effect>
+
+        <HBox spacing="15" alignment="CENTER_LEFT">
+            <Label text="📝" style="-fx-font-size: 30px;"/>
+            <VBox>
+                <Label text="Modification du Suivi"
+                       style="-fx-text-fill: #2E7D32; -fx-font-size: 22px; -fx-font-weight: bold;"/>
+                <Label text="Corriger les paramètres de santé enregistrés"
+                       style="-fx-text-fill: #90A4AE; -fx-font-size: 12px;"/>
+            </VBox>
+        </HBox>
+
+        <Separator style="-fx-opacity: 0.3;"/>
+
+        <GridPane vgap="15" hgap="20">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+
+            <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                <Label text="Température (°C)" style="-fx-text-fill: #455A64; -fx-font-weight: bold;"/>
+                <TextField fx:id="tempTf" style="-fx-background-radius: 10; -fx-padding: 10; -fx-border-color: #A5D6A7; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                <Label text="Poids (kg)" style="-fx-text-fill: #455A64; -fx-font-weight: bold;"/>
+                <TextField fx:id="poidsTf" style="-fx-background-radius: 10; -fx-padding: 10; -fx-border-color: #A5D6A7; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                <Label text="Rythme Cardiaque" style="-fx-text-fill: #455A64; -fx-font-weight: bold;"/>
+                <TextField fx:id="rythmeTf" style="-fx-background-radius: 10; -fx-padding: 10; -fx-border-color: #A5D6A7; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                <Label text="Niveau d'activité" style="-fx-text-fill: #455A64; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="niveauCombo" maxWidth="Infinity" style="-fx-background-radius: 10; -fx-border-color: #A5D6A7; -fx-border-radius: 10;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="2" GridPane.columnSpan="2">
+                <Label text="État de santé général" style="-fx-text-fill: #455A64; -fx-font-weight: bold;"/>
+                <ComboBox fx:id="etatCombo" maxWidth="Infinity" style="-fx-background-radius: 10; -fx-border-color: #A5D6A7; -fx-border-radius: 10;"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.rowIndex="3" GridPane.columnSpan="2">
+                <Label text="Observations / Remarques" style="-fx-text-fill: #455A64; -fx-font-weight: bold;"/>
+                <TextArea fx:id="remarqueTf" prefHeight="80" wrapText="true"
+                          style="-fx-background-radius: 10; -fx-border-color: #A5D6A7; -fx-border-radius: 10; -fx-background-color: #FAFAFA;"/>
+            </VBox>
+        </GridPane>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button text="VALIDER LES MODIFICATIONS" onAction="#updateSuivi"
+                    maxWidth="Infinity" HBox.hgrow="ALWAYS"
+                    style="-fx-background-color: #388E3C; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 10; -fx-cursor: hand;">
+                <effect>
+                    <DropShadow blurType="ONE_PASS_BOX" height="5" radius="2" color="#00000030"/>
+                </effect>
+            </Button>
+
+            <Button text="ANNULER" onAction="#navigateShowSuiviAnimal"
+                    style="-fx-background-color: white; -fx-text-fill: #607D8B; -fx-font-weight: bold; -fx-padding: 12; -fx-background-radius: 10; -fx-border-color: #B0BEC5; -fx-cursor: hand;"/>
+        </HBox>
+
+    </VBox>
+</StackPane>

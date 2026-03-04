@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<AnchorPane prefWidth="1000.0" prefHeight="600.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.UserAnalyticsController"
+            stylesheets="@stylet.css">
+    <children>
+        <HBox spacing="0.0"
+              AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+                <VBox spacing="0.0" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS"
+                      style="-fx-padding: 20px 20px 20px 20px;">
+                    <children>
+
+                        <!-- ── Page header ── -->
+                        <HBox spacing="10.0" alignment="CENTER_LEFT"
+                              style="-fx-padding: 0 0 16px 0;">
+                            <children>
+                                <VBox spacing="2.0">
+                                    <children>
+                                        <Label fx:id="userTitle" styleClass="page-title"
+                                               text="Analyse financière"/>
+                                        <Label text="Vue d'ensemble · 30 derniers jours"
+                                               styleClass="page-subtitle"/>
+                                    </children>
+                                </VBox>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <Button text="↻  Actualiser" onAction="#refreshAnalytics" styleClass="secondary"/>
+                            </children>
+                        </HBox>
+
+                        <!-- ── TabPane ── -->
+                        <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+                            <tabs>
+
+                                <!-- ══ TAB 1: Analyse ══ -->
+                                <Tab text="📊  Analyse">
+                                    <content>
+                                        <ScrollPane fitToWidth="true"
+                                                    styleClass="analytics-scroll">
+                                            <content>
+                                                <VBox spacing="16.0"
+                                                      style="-fx-padding: 16px;">
+                                                    <children>
+
+                                                        <!-- KPI Cards -->
+                                                        <HBox spacing="12.0">
+                                                            <children>
+                                                                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="DÉPENSES" styleClass="kpi-label"/>
+                                                                        <Label fx:id="dep30Label" text="0.00 DT" styleClass="kpi-value kpi-depense"/>
+                                                                        <Label text="30 derniers jours" styleClass="kpi-sub"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="VENTES" styleClass="kpi-label"/>
+                                                                        <Label fx:id="ven30Label" text="0.00 DT" styleClass="kpi-value kpi-vente"/>
+                                                                        <Label text="30 derniers jours" styleClass="kpi-sub"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="BÉNÉFICE" styleClass="kpi-label"/>
+                                                                        <Label fx:id="benef30Label" text="0.00 DT" styleClass="kpi-value kpi-benef"/>
+                                                                        <Label text="30 derniers jours" styleClass="kpi-sub"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="TENDANCE" styleClass="kpi-label"/>
+                                                                        <Label fx:id="trendLabel" text="0%" styleClass="kpi-value kpi-trend"/>
+                                                                        <Label fx:id="avgDepenseLabel" text="moy. 0.00" styleClass="kpi-sub"/>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                        </HBox>
+
+                                                        <!-- Charts row -->
+                                                        <HBox spacing="12.0">
+                                                            <children>
+                                                                <VBox styleClass="chart-panel" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="Répartition des dépenses" styleClass="chart-panel-title"/>
+                                                                        <PieChart fx:id="depenseByTypeChart"
+                                                                                  prefHeight="220.0"
+                                                                                  legendVisible="true"/>
+                                                                    </children>
+                                                                </VBox>
+                                                                <VBox styleClass="chart-panel" HBox.hgrow="ALWAYS">
+                                                                    <children>
+                                                                        <Label text="Dépenses vs Ventes / mois" styleClass="chart-panel-title"/>
+                                                                        <BarChart fx:id="monthlyBarChart"
+                                                                                  prefHeight="220.0"
+                                                                                  legendVisible="true">
+                                                                            <xAxis><CategoryAxis/></xAxis>
+                                                                            <yAxis><NumberAxis/></yAxis>
+                                                                        </BarChart>
+                                                                    </children>
+                                                                </VBox>
+                                                            </children>
+                                                        </HBox>
+
+                                                        <!-- Forecast chart -->
+                                                        <VBox styleClass="chart-panel">
+                                                            <children>
+                                                                <Label text="Prévision budgétaire" styleClass="chart-panel-title"/>
+                                                                <LineChart fx:id="forecastLineChart"
+                                                                           prefHeight="200.0"
+                                                                           legendVisible="true">
+                                                                    <xAxis><CategoryAxis/></xAxis>
+                                                                    <yAxis><NumberAxis/></yAxis>
+                                                                </LineChart>
+                                                            </children>
+                                                        </VBox>
+
+                                                        <!-- Stats + recommendation -->
+                                                        <HBox spacing="12.0" alignment="CENTER_LEFT">
+                                                            <children>
+                                                                <HBox styleClass="stat-pill" spacing="6.0" alignment="CENTER_LEFT">
+                                                                    <children>
+                                                                        <Label text="Prévision:" styleClass="stat-pill-label"/>
+                                                                        <Label fx:id="forecastLabel" text="0.00 DT" styleClass="stat-pill-value"/>
+                                                                    </children>
+                                                                </HBox>
+                                                                <Label fx:id="recommendationLabel"
+                                                                       styleClass="recommendation-label"
+                                                                       text="" wrapText="true"
+                                                                       HBox.hgrow="ALWAYS"/>
+                                                            </children>
+                                                        </HBox>
+
+                                                    </children>
+                                                </VBox>
+                                            </content>
+                                        </ScrollPane>
+                                    </content>
+                                </Tab>
+
+                                <!-- ══ TAB 2: Anomalies (AnomalyPage.fxml) ══ -->
+                                <Tab text="⚠  Anomalies">
+                                    <content>
+                                        <AnchorPane fx:id="anomHost" prefHeight="520.0" prefWidth="860.0"/>
+                                    </content>
+                                </Tab>
+
+                            </tabs>
+                        </TabPane>
+
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+    </children>
+</AnchorPane>

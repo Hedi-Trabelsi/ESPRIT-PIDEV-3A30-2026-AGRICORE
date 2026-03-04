@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #f8f9fa;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.AdminAnimauxController">
+
+    <!-- Sub-navigation tabs -->
+    <HBox spacing="10" alignment="CENTER_LEFT"
+          style="-fx-padding: 18 25 14 25; -fx-background-color: white;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 4, 0, 0, 1);">
+        <Button text="Dashboard" onAction="#navigateDashboard"
+                style="-fx-background-color: #e8eaf6; -fx-text-fill: #546e7a;
+                       -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"/>
+        <Button text="Gestion Animaux"
+                style="-fx-background-color: #1a237e; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"/>
+        <Button text="Gestion Suivis" onAction="#navigateSuivis"
+                style="-fx-background-color: #e8eaf6; -fx-text-fill: #546e7a;
+                       -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"/>
+    </HBox>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="12"
+          style="-fx-padding: 18 25; -fx-background-color: white; -fx-border-color: #eee; -fx-border-width: 1 0 0 0;">
+        <VBox>
+            <Label text="Gestion des Animaux"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1a237e;"/>
+            <Label fx:id="lblCount" text="Chargement..."
+                   style="-fx-font-size: 12px; -fx-text-fill: #888;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <TextField fx:id="searchTf" promptText="Rechercher..." prefWidth="220"
+                   style="-fx-background-radius: 20; -fx-padding: 8 15;
+                          -fx-border-color: #e0e0e0; -fx-border-radius: 20;"/>
+    </HBox>
+
+    <!-- Content: Table + Form -->
+    <HBox spacing="0" VBox.vgrow="ALWAYS">
+
+        <!-- Table -->
+        <VBox HBox.hgrow="ALWAYS" style="-fx-padding: 20;">
+            <TableView fx:id="tableAnimaux" minHeight="450" VBox.vgrow="ALWAYS"
+                       style="-fx-background-color: white; -fx-background-radius: 12;
+                              -fx-border-color: transparent;
+                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 6, 0, 0, 2);">
+                <columns>
+                    <TableColumn fx:id="colId"      text="ID"/>
+                    <TableColumn fx:id="colCode"    text="Code Animal"/>
+                    <TableColumn fx:id="colEspece"  text="Espece"/>
+                    <TableColumn fx:id="colRace"    text="Race"/>
+                    <TableColumn fx:id="colSexe"    text="Sexe"/>
+                    <TableColumn fx:id="colDate"    text="Naissance"/>
+                    <TableColumn fx:id="colPoids"   text="Poids"/>
+                    <TableColumn fx:id="colActions" text="Actions"/>
+                </columns>
+                <placeholder>
+                    <Label text="Aucun animal trouve"
+                           style="-fx-text-fill: #bbb; -fx-font-size: 14px;"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- Right Form -->
+        <ScrollPane prefWidth="300" fitToWidth="true"
+                    style="-fx-background-color: white; -fx-background: white;
+                           -fx-border-color: #eee; -fx-border-width: 0 0 0 1;">
+            <VBox spacing="14" style="-fx-padding: 20;">
+
+                <Label fx:id="lblFormTitre" text="Ajouter un animal"
+                       style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #1a237e;"/>
+                <Separator/>
+
+                <VBox spacing="4">
+                    <Label text="Code Animal *" style="-fx-font-weight: bold; -fx-text-fill: #555; -fx-font-size: 12px;"/>
+                    <TextField fx:id="codeTf" promptText="ex: ANI001"
+                               style="-fx-background-radius: 8; -fx-padding: 9;
+                                      -fx-border-color: #ddd; -fx-border-radius: 8;"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Espece *" style="-fx-font-weight: bold; -fx-text-fill: #555; -fx-font-size: 12px;"/>
+                    <ComboBox fx:id="especeCombo" maxWidth="Infinity" promptText="Choisir..."
+                              style="-fx-background-radius: 8; -fx-border-color: #ddd; -fx-border-radius: 8;"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Race *" style="-fx-font-weight: bold; -fx-text-fill: #555; -fx-font-size: 12px;"/>
+                    <TextField fx:id="raceTf" promptText="ex: Holstein"
+                               style="-fx-background-radius: 8; -fx-padding: 9;
+                                      -fx-border-color: #ddd; -fx-border-radius: 8;"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Sexe" style="-fx-font-weight: bold; -fx-text-fill: #555; -fx-font-size: 12px;"/>
+                    <ComboBox fx:id="sexeCombo" maxWidth="Infinity" promptText="Choisir..."
+                              style="-fx-background-radius: 8; -fx-border-color: #ddd; -fx-border-radius: 8;"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Date de naissance" style="-fx-font-weight: bold; -fx-text-fill: #555; -fx-font-size: 12px;"/>
+                    <DatePicker fx:id="datePicker" maxWidth="Infinity"
+                                style="-fx-background-radius: 8; -fx-border-color: #ddd; -fx-border-radius: 8;"/>
+                </VBox>
+
+                <VBox spacing="4">
+                    <Label text="Poids (kg)" style="-fx-font-weight: bold; -fx-text-fill: #555; -fx-font-size: 12px;"/>
+                    <TextField fx:id="poidsTf" promptText="ex: 450"
+                               style="-fx-background-radius: 8; -fx-padding: 9;
+                                      -fx-border-color: #ddd; -fx-border-radius: 8;"/>
+                </VBox>
+
+                <Separator/>
+
+                <Button fx:id="btnSauvegarder" text="Ajouter"
+                        onAction="#sauvegarder" maxWidth="Infinity"
+                        style="-fx-background-color: #2e7d32; -fx-text-fill: white;
+                               -fx-font-weight: bold; -fx-padding: 12;
+                               -fx-background-radius: 10; -fx-cursor: hand;"/>
+
+                <Button text="Reinitialiser" onAction="#resetFormulaire"
+                        maxWidth="Infinity"
+                        style="-fx-background-color: #eceff1; -fx-text-fill: #546e7a;
+                               -fx-font-weight: bold; -fx-padding: 10;
+                               -fx-background-radius: 10; -fx-cursor: hand;"/>
+            </VBox>
+        </ScrollPane>
+    </HBox>
+</VBox>

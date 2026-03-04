@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      spacing="20" style="-fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.ShowMaintenanceController">
+
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Gestion des Interventions" styleClass="breadcrumb-label"/>
+            <Label text="Liste des Maintenances" styleClass="page-title"/>
+        </VBox>
+
+        <Button fx:id="addBtn" text="+ Nouvelle Maintenance" onAction="#navigateAddMaintenance"
+                styleClass="maint-primary-button"/>
+    </HBox>
+
+    <Separator style="-fx-opacity: 0.3;" />
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <HBox spacing="10" styleClass="search-container" HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+            <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                <image><Image url="@/images/chercher.png" /></image>
+            </ImageView>
+            <TextField fx:id="searchTf" promptText="Rechercher une maintenance..."
+                       HBox.hgrow="ALWAYS" styleClass="search-field"/>
+        </HBox>
+
+        <ChoiceBox fx:id="statusFilter" prefHeight="42.0" prefWidth="160.0" styleClass="filter-combo">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="Tous les statuts" />
+                    <String fx:value="Accepter" />
+                    <String fx:value="Planifier" />
+                    <String fx:value="Resolu" />
+                    <String fx:value="Refusee" />
+                </FXCollections>
+            </items>
+            <value>
+                <String fx:value="Tous les statuts" />
+            </value>
+        </ChoiceBox>
+    </HBox>
+
+    <VBox spacing="10" VBox.vgrow="ALWAYS">
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+            <content>
+                <StackPane alignment="TOP_CENTER" style="-fx-padding: 10 5 10 5;">
+                    <GridPane fx:id="gridPane" hgap="30" vgap="30" alignment="TOP_CENTER"/>
+                </StackPane>
+            </content>
+        </ScrollPane>
+    </VBox>
+</VBox>

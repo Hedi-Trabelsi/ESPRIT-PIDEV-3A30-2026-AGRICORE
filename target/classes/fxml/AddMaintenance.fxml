@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      spacing="25" style="-fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.AddMaintenanceController">
+
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="← Annuler et retourner" onMouseClicked="#cancel" styleClass="maint-back-link"/>
+            <Label text="Nouvelle Demande de Maintenance" styleClass="page-title"/>
+        </VBox>
+        <Button fx:id="Save" text="Enregistrer la demande" onAction="#saveMaintenance"
+                styleClass="maint-primary-button"/>
+    </HBox>
+
+    <Separator style="-fx-opacity: 0.3;" />
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <content>
+            <VBox spacing="30">
+                <GridPane hgap="40" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="8" GridPane.columnIndex="0">
+                            <HBox spacing="5">
+                                <Label text="TITRE DE LA MAINTENANCE" styleClass="maint-field-label"/>
+                                <Label fx:id="nomMaintenanceStar" text="*" style="-fx-text-fill: red;"/>
+                            </HBox>
+                            <TextField fx:id="nomMaintenanceTf" promptText="Ex: Réparation moteur..." styleClass="maint-form-field" />
+                        </VBox>
+                        <VBox spacing="8" GridPane.columnIndex="1">
+                            <HBox spacing="5">
+                                <Label text="PRIORITÉ" styleClass="maint-field-label"/>
+                                <Label fx:id="prioriteStar" text="*" style="-fx-text-fill: red;"/>
+                            </HBox>
+                            <ChoiceBox fx:id="priorite" maxWidth="1.7976931348623157E308" styleClass="maint-form-field" />
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <GridPane hgap="40" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="8" GridPane.columnIndex="0">
+                            <HBox spacing="5">
+                                <Label text="TYPE D'INTERVENTION" styleClass="maint-field-label"/>
+                                <Label fx:id="typeStar" text="*" style="-fx-text-fill: red;"/>
+                            </HBox>
+                            <ChoiceBox fx:id="type" maxWidth="1.7976931348623157E308" styleClass="maint-form-field" />
+                        </VBox>
+                        <VBox spacing="8" GridPane.columnIndex="1">
+                            <HBox spacing="5">
+                                <Label text="ÉQUIPEMENT" styleClass="maint-field-label"/>
+                                <Label fx:id="equipementStar" text="*" style="-fx-text-fill: red;"/>
+                            </HBox>
+                            <TextField fx:id="equipementTf" promptText="Ex: Système d'irrigation..." styleClass="maint-form-field" />
+                            <Label fx:id="equipementError" style="-fx-text-fill: red; -fx-font-size: 11px;"/>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <GridPane hgap="40" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="8" GridPane.columnIndex="0">
+                            <HBox spacing="5">
+                                <Label text="LIEU" styleClass="maint-field-label"/>
+                                <Label fx:id="lieuStar" text="*" style="-fx-text-fill: red;"/>
+                            </HBox>
+                            <TextField fx:id="lieuTf" promptText="Ex: Secteur Nord..." styleClass="maint-form-field" />
+                            <Label fx:id="lieuError" style="-fx-text-fill: red; -fx-font-size: 11px;"/>
+                        </VBox>
+                        <VBox spacing="8" GridPane.columnIndex="1">
+                            <Label text="DATE DE DÉCLARATION" styleClass="maint-field-label"/>
+                            <TextField fx:id="dateDeclarationTf" editable="false" styleClass="maint-form-field"
+                                       style="-fx-background-color: #f1f5f9; -fx-text-fill: #64748b;"/>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <VBox spacing="10">
+                    <HBox spacing="5">
+                        <Label text="DESCRIPTION DU PROBLÈME" styleClass="maint-field-label"/>
+                        <Label fx:id="descriptionStar" text="*" style="-fx-text-fill: red;"/>
+                    </HBox>
+                    <TextArea fx:id="descriptionTf" prefHeight="150.0" wrapText="true"
+                              styleClass="maint-form-field" promptText="Détaillez le problème ici..."/>
+                </VBox>
+
+                <HBox alignment="CENTER" spacing="15" styleClass="maint-info-tip">
+                    <ImageView fitHeight="45" fitWidth="45" pickOnBounds="true" preserveRatio="true">
+                        <image><Image url="@/images/demande.gif" /></image>
+                    </ImageView>
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="Une fois enregistrée, nous traitons votre demande dès sa réception pour minimiser l'arrêt de votre activité."
+                               style="-fx-text-fill: #14532d; -fx-font-size: 13px; -fx-font-style: italic;"
+                               wrapText="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

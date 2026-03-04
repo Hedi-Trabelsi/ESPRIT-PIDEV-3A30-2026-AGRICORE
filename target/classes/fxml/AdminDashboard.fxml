@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #f8f9fa;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="Controller.AdminDashboardController">
+
+    <!-- Sub-navigation tabs -->
+    <HBox spacing="10" alignment="CENTER_LEFT"
+          style="-fx-padding: 18 25 14 25; -fx-background-color: white;
+                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 4, 0, 0, 1);">
+        <Button text="Dashboard"
+                style="-fx-background-color: #1a237e; -fx-text-fill: white; -fx-font-weight: bold;
+                       -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"/>
+        <Button text="Gestion Animaux" onAction="#navigateAnimaux"
+                style="-fx-background-color: #e8eaf6; -fx-text-fill: #546e7a;
+                       -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"/>
+        <Button text="Gestion Suivis" onAction="#navigateSuivis"
+                style="-fx-background-color: #e8eaf6; -fx-text-fill: #546e7a;
+                       -fx-padding: 8 20; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-size: 13px;"/>
+    </HBox>
+
+    <!-- Content -->
+    <VBox spacing="25" style="-fx-padding: 30;">
+
+        <!-- Title -->
+        <VBox spacing="4">
+            <Label text="Tableau de Bord - Elevage"
+                   style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a237e;"/>
+            <Label text="Vue d'ensemble de votre elevage en temps reel"
+                   style="-fx-font-size: 12px; -fx-text-fill: #888;"/>
+        </VBox>
+
+        <!-- Stat Cards -->
+        <HBox spacing="15">
+
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                <Label text="Total Animaux"
+                       style="-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblTotalAnimaux" text="--"
+                       style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #1a237e;"/>
+                <Button text="Gerer" onAction="#navigateAnimaux"
+                        style="-fx-background-color: #e8eaf6; -fx-text-fill: #1a237e;
+                               -fx-padding: 5 14; -fx-background-radius: 20; -fx-cursor: hand;
+                               -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                <Label text="Total Suivis"
+                       style="-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblTotalSuivis" text="--"
+                       style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
+                <Button text="Gerer" onAction="#navigateSuivis"
+                        style="-fx-background-color: #e8f5e9; -fx-text-fill: #2e7d32;
+                               -fx-padding: 5 14; -fx-background-radius: 20; -fx-cursor: hand;
+                               -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                <Label text="Animaux Malades"
+                       style="-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblAnimauxMalades" text="--"
+                       style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #f57c00;"/>
+                <Button text="Voir" onAction="#navigateSuivis"
+                        style="-fx-background-color: #fff8e1; -fx-text-fill: #f57c00;
+                               -fx-padding: 5 14; -fx-background-radius: 20; -fx-cursor: hand;
+                               -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="8" HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+                <Label text="Etat Critique"
+                       style="-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblAnimauxCritiques" text="--"
+                       style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #c62828;"/>
+                <Button text="Urgent" onAction="#navigateSuivis"
+                        style="-fx-background-color: #ffebee; -fx-text-fill: #c62828;
+                               -fx-padding: 5 14; -fx-background-radius: 20; -fx-cursor: hand;
+                               -fx-font-size: 11px; -fx-font-weight: bold;"/>
+            </VBox>
+
+        </HBox>
+
+        <!-- Recent Activity -->
+        <VBox spacing="12"
+              style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 25;
+                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 8, 0, 0, 2);">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Activite Recente - Derniers suivis enregistres"
+                       style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Tout voir" onAction="#navigateSuivis"
+                        style="-fx-background-color: #e8eaf6; -fx-text-fill: #1a237e;
+                               -fx-padding: 6 14; -fx-background-radius: 20; -fx-cursor: hand;
+                               -fx-font-weight: bold;"/>
+            </HBox>
+            <Separator/>
+            <VBox fx:id="activiteBox" spacing="8"/>
+        </VBox>
+
+        <!-- Quick Actions -->
+        <HBox spacing="15">
+            <Button text="Ajouter un Animal" onAction="#navigateAnimaux"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    style="-fx-background-color: #1a237e; -fx-text-fill: white;
+                           -fx-font-weight: bold; -fx-padding: 15; -fx-background-radius: 12;
+                           -fx-cursor: hand; -fx-font-size: 14px;"/>
+            <Button text="Ajouter un Suivi" onAction="#navigateSuivis"
+                    HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                    style="-fx-background-color: #2e7d32; -fx-text-fill: white;
+                           -fx-font-weight: bold; -fx-padding: 15; -fx-background-radius: 12;
+                           -fx-cursor: hand; -fx-font-size: 14px;"/>
+        </HBox>
+
+    </VBox>
+</VBox>

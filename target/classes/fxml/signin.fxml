@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:id="rootPane"
+           fx:controller="Controller.SigninController"
+           prefWidth="1200" prefHeight="800"
+           styleClass="auth-root-pane"
+           stylesheets="@style.css">
+
+    <!-- Decorative Background Elements -->
+    <children>
+        <Rectangle styleClass="auth-bg-circle1" />
+        <Rectangle styleClass="auth-bg-circle2" />
+
+        <!-- Main Card -->
+        <VBox alignment="CENTER"
+              spacing="30"
+              maxWidth="450"
+              styleClass="auth-card">
+
+            <padding>
+                <Insets top="50" right="50" bottom="50" left="50"/>
+            </padding>
+
+            <!-- Logo & Title Section -->
+            <VBox alignment="CENTER" spacing="15">
+                <Label text="🌱" styleClass="auth-logo-icon"/>
+                <Label text="AGRICOR" styleClass="auth-brand-label"/>
+                <VBox alignment="CENTER" spacing="5">
+                    <Label text="Bon Retour !" styleClass="auth-title-label"/>
+                    <Label text="Connectez-vous a votre compte AGRICOR"
+                           styleClass="auth-subtitle-label"
+                           wrapText="true"
+                           alignment="CENTER"/>
+                </VBox>
+            </VBox>
+
+            <!-- Decorative Divider -->
+            <HBox alignment="CENTER" spacing="10">
+                <Line startX="0" endX="100" styleClass="auth-divider-line"/>
+                <Label text="🌾" styleClass="auth-divider-icon"/>
+                <Line startX="0" endX="100" styleClass="auth-divider-line"/>
+            </HBox>
+
+            <!-- Form Section -->
+            <VBox spacing="20" maxWidth="350">
+
+                <!-- Email Field with Icon -->
+                <VBox spacing="5">
+                    <Label text="Email" styleClass="auth-field-label" />
+                    <HBox spacing="10" styleClass="auth-field-container">
+                        <Label text="📧" styleClass="auth-field-icon"/>
+                        <TextField fx:id="emailField"
+                                   promptText="Entrez votre email"
+                                   styleClass="auth-field"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Password Field with Icon -->
+                <VBox spacing="5">
+                    <Label text="Mot de passe" styleClass="auth-field-label"/>
+                    <HBox spacing="10" styleClass="auth-field-container">
+                        <Label text="🔒" styleClass="auth-field-icon"/>
+                        <PasswordField fx:id="passwordField"
+                                       promptText="Entrez votre mot de passe"
+                                       styleClass="auth-field"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Remember Me & Forgot Password -->
+                <HBox alignment="CENTER_LEFT" spacing="10">
+                    <CheckBox text="Se souvenir de moi" styleClass="auth-checkbox"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Hyperlink text="Mot de passe oublie ?"
+                               styleClass="auth-forgot-link"
+                               onAction="#openForgotPassword"/>
+                </HBox>
+
+                <!-- Sign In Button -->
+                <Button text="Connexion"
+                        maxWidth="Infinity"
+                        prefHeight="45"
+                        styleClass="auth-primary-button"
+                        onAction="#handleSignin"/>
+
+                <!-- OR Divider -->
+                <HBox alignment="CENTER" spacing="10">
+                    <Line startX="0" endX="80" styleClass="auth-or-line"/>
+                    <Label text="OU" styleClass="auth-or-label"/>
+                    <Line startX="0" endX="80" styleClass="auth-or-line"/>
+                </HBox>
+
+                <!-- Face Recognition Button -->
+                <Button text="Connexion par reconnaissance faciale"
+                        maxWidth="Infinity"
+                        prefHeight="45"
+                        styleClass="auth-face-button"
+                        onAction="#handleFaceLogin">
+                    <graphic>
+                        <Label text="😊" style="-fx-font-size: 18px; -fx-padding: 0 10 0 0;"/>
+                    </graphic>
+                </Button>
+
+                <!-- Google Sign-In Button (NEW) -->
+                <Button text="Connexion avec Google"
+                        maxWidth="Infinity"
+                        prefHeight="45"
+                        styleClass="auth-google-button"
+                        onAction="#handleGoogleSignIn">
+                    <graphic>
+                        <HBox alignment="CENTER" spacing="5">
+                            <Label text="G" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #4285f4;"/>
+                        </HBox>
+                    </graphic>
+                </Button>
+
+                <!-- Error/Success Message -->
+                <Label fx:id="errorLabel"
+                       text=""
+                       wrapText="true"
+                       visible="false"
+                       styleClass="auth-message-label"
+                       alignment="CENTER"/>
+            </VBox>
+
+            <!-- Sign Up Link -->
+            <HBox alignment="CENTER" spacing="8">
+                <Label text="Vous n'avez pas de compte ?" styleClass="auth-footer-label"/>
+                <Hyperlink fx:id="signupLink"
+                           text="Creer un compte"
+                           styleClass="auth-signup-link"
+                           onAction="#openSignupPage"/>
+            </HBox>
+
+            <!-- Footer -->
+            <VBox alignment="CENTER" spacing="5">
+                <Label text="© 2026 AGRICOR - Agriculture Intelligente" styleClass="auth-footer-copyright"/>
+            </VBox>
+        </VBox>
+    </children>
+</StackPane>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+
+<VBox style="-fx-background-color: #f0f7ee;"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.ListeEquipementsController">
+
+    <!-- Top Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="14.0"
+          style="-fx-background-color: white; -fx-padding: 16 24; -fx-border-color: #ddeedd; -fx-border-width: 0 0 1 0; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 8, 0, 0, 2);">
+        <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+            <Label text="Liste des Équipements"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1e3a1a;" />
+            <Label text="Gérez, modifiez et suivez vos équipements agricoles"
+                   style="-fx-font-size: 12px; -fx-text-fill: #7a9c70;" />
+        </VBox>
+        <Label fx:id="labelEquipCount" text=""
+               style="-fx-font-size: 11px; -fx-text-fill: #7a9c70; -fx-font-weight: bold;" />
+        <HBox spacing="8.0" alignment="CENTER"
+              style="-fx-background-color: #f5f9f4; -fx-background-radius: 10; -fx-padding: 8 14; -fx-border-color: #c8ddc5; -fx-border-radius: 10;">
+            <Label fx:id="labelTauxEUR" text="1 TND = ... EUR"
+                   style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #2d5a25;" />
+            <Label text="|" style="-fx-text-fill: #ccc;" />
+            <Label fx:id="labelTauxUSD" text="1 TND = ... USD"
+                   style="-fx-font-size: 11px; -fx-font-weight: bold; -fx-text-fill: #1565c0;" />
+            <Label fx:id="labelMajTaux" text="" style="-fx-font-size: 9px; -fx-text-fill: #aaa;" />
+        </HBox>
+        <Button text="Stats" onAction="#afficherStats"
+                style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 9 16;" />
+        <Button text="PDF" onAction="#exporterPDF"
+                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 12px; -fx-cursor: hand; -fx-padding: 9 16;" />
+        <Button text="+ Ajouter" onAction="#goToAjout"
+                style="-fx-background-color: #4a7c40; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 13px; -fx-cursor: hand; -fx-padding: 9 20;" />
+    </HBox>
+
+    <!-- Stats Panel -->
+    <VBox fx:id="panelStats" visible="false" managed="false"
+          style="-fx-background-color: #f8fdf6; -fx-border-color: #c8ddc5; -fx-border-width: 0 0 2 0;"
+          spacing="12.0">
+        <padding><Insets top="14" right="20" bottom="16" left="20"/></padding>
+        <BarChart fx:id="barChart" prefHeight="1" prefWidth="1"
+                  visible="false" managed="false"
+                  style="-fx-background-color: transparent;">
+            <xAxis><CategoryAxis label="Type" /></xAxis>
+            <yAxis><NumberAxis label="Quantité totale" /></yAxis>
+        </BarChart>
+    </VBox>
+
+    <!-- Search / Filter Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="12.0"
+          style="-fx-background-color: #f5fbf3; -fx-padding: 14 24; -fx-border-color: #ddeedd; -fx-border-width: 0 0 1 0;">
+        <TextField fx:id="fieldSearch" promptText="Rechercher par nom ou type..."
+                   prefWidth="300.0"
+                   style="-fx-background-color: white; -fx-border-color: #c8ddc5; -fx-border-radius: 20; -fx-background-radius: 20; -fx-padding: 8 14; -fx-font-size: 13px;"
+                   onKeyReleased="#filterTable" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="Vue en grille" style="-fx-font-size: 11px; -fx-text-fill: #888;" />
+    </HBox>
+
+    <!-- GRID VIEW -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background: #f0f7ee;">
+        <content>
+            <VBox style="-fx-background-color: #f0f7ee;">
+                <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+                <children>
+                    <FlowPane fx:id="gridEquipements" hgap="16.0" vgap="16.0"
+                              prefWrapLength="950.0" style="-fx-background-color: transparent;" />
+                    <VBox fx:id="emptyPlaceholder" alignment="CENTER" spacing="12.0"
+                          visible="false" managed="false" style="-fx-padding: 80 0;">
+                        <Label text="Aucun équipement trouvé"
+                               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #9ab890;" />
+                        <Label text="Ajoutez votre premier équipement en cliquant sur '+ Ajouter'"
+                               style="-fx-font-size: 12px; -fx-text-fill: #b0c8a8;" />
+                    </VBox>
+                </children>
+            </VBox>
+        </content>
+    </ScrollPane>
+
+</VBox>

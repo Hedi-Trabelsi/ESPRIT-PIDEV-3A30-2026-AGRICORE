@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="15" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.ShowParticipantController">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20" />
+    </padding>
+
+    <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a;" text="Liste des Participants" />
+
+    <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+        <TableView fx:id="tableParticipants" style="-fx-background-color: white; -fx-background-radius: 15;">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+                <TableColumn fx:id="colIdUtilisateur" text="ID Utilisateur" prefWidth="100" />
+                <TableColumn fx:id="colIdEvennement" text="ID Événement" prefWidth="100" />
+                <TableColumn fx:id="colDateInscription" text="Date Inscription" prefWidth="120" />
+                <TableColumn fx:id="colStatut" text="Statut" prefWidth="100" />
+                <TableColumn fx:id="colMontant" text="Montant" prefWidth="80" />
+                <TableColumn fx:id="colConfirmation" text="Confirmation" prefWidth="100" />
+                <TableColumn fx:id="colNbrPlaces" text="Places" prefWidth="70" />
+                <TableColumn fx:id="colNomParticipant" text="Nom Participant" prefWidth="150" />
+            </columns>
+        </TableView>
+    </ScrollPane>
+</VBox>

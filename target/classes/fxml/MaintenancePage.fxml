@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<?import java.lang.String?>
+<ScrollPane fitToWidth="true" styleClass="user-content-scroll" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.DashboardController">
+    <VBox spacing="25" alignment="TOP_CENTER">
+        <padding>
+            <Insets top="30" right="40" bottom="40" left="40" />
+        </padding>
+
+        <!-- Header avec notifications -->
+        <HBox alignment="CENTER_LEFT" spacing="20" styleClass="page-header">
+            <VBox>
+                <Label styleClass="user-page-title" text="Maintenance" />
+                <Label styleClass="user-greeting-label" text="Gestion des interventions et maintenances" />
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+
+            <!-- Icône de notifications avec badge -->
+            <StackPane onMouseClicked="#showNotifications">
+                <ImageView fx:id="statsIcon" fitHeight="30" fitWidth="30" style="-fx-cursor: hand;" />
+                <Label fx:id="notificationBadge" styleClass="notification-badge" text="0" visible="false" />
+            </StackPane>
+
+            <!-- Bouton Statistiques -->
+            <Button onAction="#openStatsWindow" styleClass="user-secondary-button" text="📊 Statistiques" />
+
+            <!-- Bouton Nouvelle Maintenance -->
+            <Button styleClass="user-primary-button" text="+ Nouvelle maintenance" />
+        </HBox>
+
+        <!-- Filtres -->
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="filters-container">
+            <TextField fx:id="searchField" promptText="🔍 Rechercher par titre, équipement, lieu..." HBox.hgrow="ALWAYS" styleClass="search-field" />
+
+            <ChoiceBox fx:id="priorityFilter" styleClass="filter-choicebox" prefWidth="200">
+                <String fx:value="Toutes les priorités" />
+                <String fx:value="urgente" />
+                <String fx:value="normale" />
+                <String fx:value="faible" />
+            </ChoiceBox>
+
+            <ChoiceBox fx:id="dateSortPicker" styleClass="filter-choicebox" prefWidth="150">
+                <String fx:value="Plus récent" />
+                <String fx:value="Plus ancien" />
+            </ChoiceBox>
+        </HBox>
+
+        <!-- Liste des maintenances -->
+        <VBox spacing="15" styleClass="maintenances-container">
+            <Label styleClass="section-title" text="Maintenances en cours" />
+            <ListView fx:id="mainList" styleClass="maintenance-list" VBox.vgrow="ALWAYS" />
+        </VBox>
+
+        <!-- Pied de page avec stats rapides -->
+        <HBox spacing="20" alignment="CENTER" styleClass="quick-stats">
+            <VBox alignment="CENTER" spacing="5" styleClass="stat-card">
+                <Text styleClass="stat-icon" text="🔧" />
+                <Label text="En cours" styleClass="stat-label" />
+                <Label fx:id="enCoursCount" text="0" styleClass="stat-value" />
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="5" styleClass="stat-card">
+                <Text styleClass="stat-icon" text="⏳" />
+                <Label text="En attente" styleClass="stat-label" />
+                <Label fx:id="enAttenteCount" text="0" styleClass="stat-value" />
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="5" styleClass="stat-card">
+                <Text styleClass="stat-icon" text="✅" />
+                <Label text="Résolues" styleClass="stat-label" />
+                <Label fx:id="resoluesCount" text="0" styleClass="stat-value" />
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="5" styleClass="stat-card">
+                <Text styleClass="stat-icon" text="⚠️" />
+                <Label text="Urgentes" styleClass="stat-label" />
+                <Label fx:id="urgentesCount" text="0" styleClass="stat-value" />
+            </VBox>
+        </HBox>
+    </VBox>
+</ScrollPane>
