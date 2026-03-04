@@ -93,23 +93,30 @@ public class AddMaintenanceController {
                 return;
             }
 
-            // Creer l'objet Maintenance avec les nouveaux champs
-            Maintenance maintenance = new Maintenance(
-                    nomMaintenanceTf.getText(),
-                    type.getValue(),
-                    LocalDate.parse(dateDeclarationTf.getText()),
-                    descriptionTf.getText(),
-                    "En attente",
-                    0,
-                    priorite.getValue(),
-                    lieuTf.getText(),
-                    equipementTf.getText()
-            );
+            // AU LIEU DE : int idUserConnecte = UserSession.getUserId(); (QUI FAIT L'ERREUR)
 
-            // Sauvegarder
-            ms.ajouter(maintenance);
+// UTILISE ÇA :
+            Model.Utilisateur userConnecte = UserSession.getCurrentUser();
+            if (userConnecte != null) {
+                int idUserConnecte = userConnecte.getId();
 
+                // Ensuite tu crées ta maintenance normalement
+                Maintenance maintenance = new Maintenance(
+                        nomMaintenanceTf.getText(),
+                        type.getValue(),
+                        LocalDate.parse(dateDeclarationTf.getText()),
+                        descriptionTf.getText(),
+                        "En attente",
+                        idUserConnecte, // <--- C'est maintenant le bon ID !
+                        priorite.getValue(),
+                        lieuTf.getText(),
+                        equipementTf.getText()
+                );
 
+                ms.ajouter(maintenance);
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Session introuvable");
+            }
 
             // Message succes
             showAlert(Alert.AlertType.INFORMATION, "Succes", "Maintenance enregistree avec succes");

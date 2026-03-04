@@ -6,11 +6,11 @@ import com.twilio.type.PhoneNumber;
 
 public class SmsService {
 
-    public static final String ACCOUNT_SID = "AC6da5e9269f4ce2d91dd5904d26b4d75d";
-    public static final String AUTH_TOKEN = "1ef9bcbf8e7de7d223e6ac6b6068bc85";
+    public static final String ACCOUNT_SID = "ACeecfb0d7c62b60f70ea22836636a86d9";
+    public static final String AUTH_TOKEN = "0460d9e3a059d62369d9486461d7c205";
 
 
-    public static final String TWILIO_NUMBER = "+18382406798";
+    public static final String TWILIO_NUMBER = "+15077657591";
 
     public static void envoyerSms(String toPhone, String content) {
         try {

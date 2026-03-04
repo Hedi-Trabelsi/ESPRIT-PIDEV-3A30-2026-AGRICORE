@@ -18,8 +18,8 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
     @Override
     public void ajouter(Maintenance maintenance) throws SQLException {
         maintenance.setStatut("En attente");
-        // Ajout de nom_maintenance dans la requête
-        String sql = "INSERT INTO maintenance(nom_maintenance, type, date_declaration, description, statut, id_agriculteur, priorite, lieu, equipement) VALUES (?, ?, ?, ?, ?, NULL, ?, ?, ?)";
+        // On remplace NULL par ? pour id_agriculteur
+        String sql = "INSERT INTO maintenance(nom_maintenance, type, date_declaration, description, statut, id_agriculteur, priorite, lieu, equipement) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, maintenance.getNom_maintenance());
@@ -27,9 +27,11 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
         ps.setDate(3, Date.valueOf(maintenance.getDateDeclaration()));
         ps.setString(4, maintenance.getDescription());
         ps.setString(5, maintenance.getStatut());
-        ps.setString(6, maintenance.getPriorite());
-        ps.setString(7, maintenance.getLieu());
-        ps.setString(8, maintenance.getEquipement());
+        // On ajoute l'ID de l'agriculteur ici (très important !)
+        ps.setInt(6, maintenance.getIdAgriculteur());
+        ps.setString(7, maintenance.getPriorite());
+        ps.setString(8, maintenance.getLieu());
+        ps.setString(9, maintenance.getEquipement());
 
         ps.executeUpdate();
     }
@@ -104,6 +106,31 @@ public class ServiceMaintenance implements IServiceMaintenance<Maintenance>{
                     rs.getString("lieu"),
                     rs.getString("equipement")
             );
+        }
+        return null;
+    }
+    public String getEmailAgriculteur(int idAgriculteur) throws SQLException {
+        // Vérifie bien le nom de ta table (user ou agriculteur ?) et de ta colonne email
+        String sql = "SELECT email FROM user WHERE id = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, idAgriculteur);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("email");
+        }
+        return null; // Ou une adresse par défaut
+    }
+    public String getEmailByAgriculteurId(int idAgriculteur) throws SQLException {
+        // On cherche dans la table 'user' (ou 'users' selon ton nom de table)
+        String sql = "SELECT email FROM user WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, idAgriculteur);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("email");
+                }
+            }
         }
         return null;
     }

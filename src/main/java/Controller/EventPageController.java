@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import services.EvennementService;
 import services.ParticipantService;
+import services.MessageService;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -687,7 +688,6 @@ public class EventPageController {
 
         mainContentVBox.getChildren().clear();
 
-        // --- WRAPPER POUR EMPILEMENT DU POPUP ---
         StackPane stackWrapper = new StackPane();
         stackWrapper.setAlignment(Pos.CENTER);
         stackWrapper.setPrefWidth(mainContentVBox.getWidth());
@@ -697,28 +697,45 @@ public class EventPageController {
         boolean res = reservedEventIds.contains(ev.getIdEvennement());
 
         VBox detailBox = new VBox(0);
-        detailBox.setId("detailCard"); // ID pour appliquer le flou plus tard
+        detailBox.setId("detailCard");
         detailBox.setMaxWidth(750);
         detailBox.setStyle("-fx-background-color: white; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 20, 0, 0, 10);");
 
         // --- HEADER ---
         VBox header = new VBox(15);
-        header.setPadding(new Insets(30));
+        header.setPadding(new Insets(20, 30, 30, 30));
         header.setAlignment(Pos.CENTER);
         header.setStyle("-fx-background-color: " + (isPast ? "#555" : gradient) + "; -fx-background-radius: 30 30 0 0;");
 
+        HBox topBar = new HBox();
+        topBar.setAlignment(Pos.CENTER);
         Button btnBack = new Button("← Retour");
         btnBack.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;");
         btnBack.setOnAction(e -> showGestionEvenements(null));
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        Button btnCommunity = new Button("👥 Communauté");
+        btnCommunity.setStyle("-fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand; -fx-font-weight: bold;");
+
+        // Logic: Only access if registered
+        if (!res) {
+            btnCommunity.setOpacity(0.5);
+            btnCommunity.setTooltip(new Tooltip("Inscrivez-vous pour rejoindre la discussion"));
+        } else {
+            btnCommunity.setOnAction(e -> showCommunityChat(ev, gradient));
+        }
+
+        topBar.getChildren().addAll(btnBack, spacer, btnCommunity);
 
         Label title = new Label(ev.getTitre());
         title.setStyle("-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: white;");
         Label icon = new Label(getDynamicIcon(ev.getTitre()));
         icon.setStyle("-fx-font-size: 50px; -fx-text-fill: white;");
+        header.getChildren().addAll(topBar, icon, title);
 
-        header.getChildren().addAll(btnBack, icon, title);
-
-        // --- BODY GRID ---
+        // --- BODY ---
         GridPane body = new GridPane();
         body.setPadding(new Insets(30));
         body.setHgap(30);
@@ -736,7 +753,7 @@ public class EventPageController {
         rightSide.setStyle("-fx-background-color: #f8fbf8; -fx-background-radius: 20; -fx-border-color: #eef2ee; -fx-border-radius: 20;");
         rightSide.setMinWidth(280);
 
-        Label addressLabel = new Label("Recherche de l'adresse...");
+        Label addressLabel = new Label("Chargement...");
         addressLabel.setWrapText(true);
         addressLabel.setStyle("-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #2d5a27;");
         fetchReadableAddress(ev.getLieu(), addressLabel);
@@ -778,12 +795,183 @@ public class EventPageController {
         rightSide.getChildren().add(actionBtn);
         body.add(leftSide, 0, 0);
         body.add(rightSide, 1, 0);
-
         detailBox.getChildren().addAll(header, body);
-
         stackWrapper.getChildren().add(detailBox);
         mainContentVBox.getChildren().add(stackWrapper);
     }
+    private void showCommunityChat(EvennementAgricole ev, String gradient) {
+        mainContentVBox.getChildren().clear();
+
+        ParticipantService ps = new ParticipantService();
+        MessageService msgService = new MessageService();
+
+        // --- DIAGNOSTIC SESSION ---
+        int currentUserId = services.UserSession.getInstance().getUserId();
+        System.out.println("DEBUG: Tentative d'ouverture chat par User ID: " + currentUserId);
+
+        VBox layout = new VBox(25);
+        layout.setPadding(new Insets(30));
+        layout.setStyle("-fx-background-color: #f4f7f6;");
+        layout.setAlignment(Pos.TOP_CENTER);
+
+        ScrollPane globalScroll = new ScrollPane(layout);
+        globalScroll.setFitToWidth(true);
+        globalScroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+
+        // --- NAV ---
+        HBox nav = new HBox(20);
+        nav.setAlignment(Pos.CENTER_LEFT);
+        nav.setPadding(new Insets(10, 20, 10, 20));
+        nav.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 5);");
+
+        Button btnBack = new Button("←");
+        btnBack.setStyle("-fx-background-color: #1a3c1a; -fx-text-fill: white; -fx-background-radius: 50; -fx-cursor: hand;");
+        btnBack.setOnAction(e -> showEventDetails(ev, gradient));
+
+        VBox titleGroup = new VBox(2);
+        Label headerTitle = new Label(ev.getTitre());
+        headerTitle.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a;");
+        titleGroup.getChildren().addAll(headerTitle, new Label("Discussion en direct"));
+        nav.getChildren().addAll(btnBack, titleGroup);
+
+        HBox mainContent = new HBox(30);
+        mainContent.setAlignment(Pos.TOP_CENTER);
+
+        // --- SIDEBAR ---
+        VBox sideBar = new VBox(15);
+        sideBar.setPrefWidth(280);
+        sideBar.setPadding(new Insets(20));
+        sideBar.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 20, 0, 0, 10);");
+        VBox participantListContainer = new VBox(10);
+
+        try {
+            participantListContainer.getChildren().add(createMemberCard("👑 " + ps.getAdminName(), "Organisateur", "#FFF9C4", "#F57F17"));
+            for (String name : ps.getParticipantNamesForEvent(ev.getIdEvennement())) {
+                participantListContainer.getChildren().add(createMemberCard("👤 " + name, "Participant", "#F0F4F0", "#2D5A27"));
+            }
+        } catch (Exception e) { System.out.println("Erreur Sidebar: " + e.getMessage()); }
+        sideBar.getChildren().addAll(new Label("MEMBRES"), participantListContainer);
+
+        // --- CHAT WINDOW ---
+        VBox chatWindow = new VBox(0);
+        chatWindow.setPrefWidth(600);
+        chatWindow.setMaxHeight(600);
+        chatWindow.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 20, 0, 0, 10);");
+
+        VBox messageContainer = new VBox(20);
+        messageContainer.setPadding(new Insets(25));
+        ScrollPane scrollChat = new ScrollPane(messageContainer);
+        scrollChat.setFitToWidth(true);
+        scrollChat.setPrefHeight(450);
+        scrollChat.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
+
+        // Charger l'historique
+        try {
+            List<MessageService.ChatMessage> history = msgService.getGroupMessages(ev.getIdEvennement());
+            for (MessageService.ChatMessage m : history) {
+                boolean isMoi = (m.senderId == currentUserId);
+                addSmartBubble(messageContainer, isMoi ? "Moi" : m.senderName, m.content, isMoi);
+            }
+            Platform.runLater(() -> scrollChat.setVvalue(1.0));
+        } catch (SQLException e) { e.printStackTrace(); }
+
+        // --- BARRE D'ENVOI (Correction ici) ---
+        HBox inputBar = new HBox(15);
+        inputBar.setPadding(new Insets(15));
+        inputBar.setStyle("-fx-background-color: #FAFAFA; -fx-background-radius: 0 0 25 25;");
+
+        TextField inputField = new TextField();
+        inputField.setPromptText("Écrivez votre message...");
+        inputField.setStyle("-fx-background-radius: 30; -fx-background-color: white; -fx-padding: 12;");
+        HBox.setHgrow(inputField, Priority.ALWAYS);
+
+        Button btnSend = new Button("Envoyer");
+        btnSend.setStyle("-fx-background-color: #1a3c1a; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 30; -fx-padding: 10 25; -fx-cursor: hand;");
+
+        // --- ACTION D'ENVOI AVEC LOGS ---
+        btnSend.setOnAction(e -> {
+            String text = inputField.getText().trim();
+            System.out.println("DEBUG: Clic sur Envoyer. Texte: [" + text + "], UserID: " + currentUserId);
+
+            if (text.isEmpty()) {
+                System.out.println("DEBUG: Envoi annulé car texte vide.");
+                return;
+            }
+
+            if (currentUserId <= 0) {
+                System.err.println("ERREUR: Impossible d'envoyer, UserID est 0. Vérifiez votre UserSession !");
+                // Optionnel : forcez l'ID à 1 pour tester si la session bug
+                // currentUserId = 1;
+                return;
+            }
+
+            try {
+                msgService.sendMessage(currentUserId, ev.getIdEvennement(), text);
+                addSmartBubble(messageContainer, "Moi", text, true);
+                inputField.clear();
+                Platform.runLater(() -> scrollChat.setVvalue(1.0));
+                System.out.println("DEBUG: Message envoyé avec succès en BDD.");
+            } catch (SQLException ex) {
+                System.err.println("ERREUR SQL lors de l'envoi: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        });
+
+        inputBar.getChildren().addAll(inputField, btnSend);
+        chatWindow.getChildren().addAll(scrollChat, inputBar);
+        mainContent.getChildren().addAll(sideBar, chatWindow);
+        layout.getChildren().addAll(nav, mainContent);
+
+        mainContentVBox.getChildren().add(globalScroll);
+    }
+
+    // Helper: Cartes des membres (Design SideBar)
+    private HBox createMemberCard(String name, String role, String bgColor, String textColor) {
+        HBox card = new HBox(10);
+        card.setAlignment(Pos.CENTER_LEFT);
+        card.setPadding(new Insets(10));
+        card.setStyle("-fx-background-color: " + bgColor + "; -fx-background-radius: 15;");
+        VBox info = new VBox(2);
+        Label nameLbl = new Label(name);
+        nameLbl.setStyle("-fx-font-weight: bold; -fx-text-fill: " + textColor + "; -fx-font-size: 13px;");
+        Label roleLbl = new Label(role);
+        roleLbl.setStyle("-fx-font-size: 10px; -fx-text-fill: #777;");
+        info.getChildren().addAll(nameLbl, roleLbl);
+        card.getChildren().add(info);
+        return card;
+    }
+
+    // Helper: Bulles de discussion "Smart"
+    private void addSmartBubble(VBox container, String user, String text, boolean isMoi) {
+        VBox wrapper = new VBox(5);
+        wrapper.setAlignment(isMoi ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+
+        Label nameLbl = new Label(user);
+        nameLbl.setStyle("-fx-font-size: 11px; -fx-text-fill: #999; -fx-padding: 0 5 0 5;");
+
+        Label msgLbl = new Label(text);
+        msgLbl.setWrapText(true);
+        msgLbl.setMaxWidth(400);
+        msgLbl.setPadding(new Insets(12, 18, 12, 18));
+
+        if (isMoi) {
+            msgLbl.setStyle(
+                    "-fx-background-color: rgba(46, 204, 113, 0.25); " +
+                            "-fx-text-fill: #1a3c1a; " +
+                            "-fx-background-radius: 15 15 0 15;"
+            );
+
+        } else {
+            msgLbl.setStyle("-fx-background-color: #F0F0F0; -fx-text-fill: #333; -fx-background-radius: 20 20 20 2;");
+        }
+
+        wrapper.getChildren().addAll(nameLbl, msgLbl);
+        container.getChildren().add(wrapper);
+    }
+
+
+
+    // Helper for the "Bubble" design
 
     private void fetchReadableAddress(String coords, Label targetLabel) {
         new Thread(() -> {

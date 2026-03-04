@@ -8,12 +8,11 @@ public class Tache {
     private int cout_estimee;
     private int id_maintenace;
     private int evaluation; // Nouveau champ : 0 (neutre), 1 (like), -1 (dislike)
-
+    private int id_technicien;
     public Tache() {
     }
 
-    // Constructeur complet (pour la lecture depuis la DB avec évaluation)
-    public Tache(int id_tache, String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace, int evaluation) {
+    public Tache(int id_tache, String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace, int evaluation, int id_technicien) {
         this.id_tache = id_tache;
         this.nomTache = nomTache;
         this.date_prevue = date_prevue;
@@ -21,19 +20,27 @@ public class Tache {
         this.cout_estimee = cout_estimee;
         this.id_maintenace = id_maintenace;
         this.evaluation = evaluation;
+        this.id_technicien = id_technicien;
     }
 
-    // Constructeur sans ID (pour l'ajout initial, l'évaluation sera à 0 par défaut en DB)
-    public Tache(String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace) {
+    public Tache(String nomTache, String date_prevue, String desciption, int cout_estimee, int id_maintenace, int id_technicien) {
         this.nomTache = nomTache;
         this.date_prevue = date_prevue;
         this.desciption = desciption;
         this.cout_estimee = cout_estimee;
         this.id_maintenace = id_maintenace;
+        this.id_technicien = id_technicien; // Ajout
         this.evaluation = 0;
     }
 
-    // --- GETTERS & SETTERS ---
+    public int getId_technicien() {
+        return id_technicien;
+    }
+
+    public void setId_technicien(int id_technicien) {
+        this.id_technicien = id_technicien;
+    }
+// --- GETTERS & SETTERS ---
 
     public int getId_tache() {
         return id_tache;

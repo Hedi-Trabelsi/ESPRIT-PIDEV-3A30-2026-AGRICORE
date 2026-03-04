@@ -210,13 +210,13 @@ public class UserHomeController {
 
         for (Button btn : buttons) {
             if (btn != null) {
-                btn.getStyleClass().remove("user-nav-button-active");
+                btn.getStyleClass().removeAll("user-nav-button", "user-nav-button-active");
                 btn.getStyleClass().add("user-nav-button");
             }
         }
 
         if (activeButton != null) {
-            activeButton.getStyleClass().remove("user-nav-button");
+            activeButton.getStyleClass().removeAll("user-nav-button", "user-nav-button-active");
             activeButton.getStyleClass().add("user-nav-button-active");
         }
     }
@@ -232,7 +232,7 @@ public class UserHomeController {
 
             ScrollPane scroll = new ScrollPane(page);
             scroll.setFitToWidth(true);
-            scroll.setFitToHeight(true);
+            scroll.setFitToHeight(false);
             scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scroll.setStyle("-fx-background-color: transparent;");
             setPageContent(scroll);
@@ -249,7 +249,7 @@ public class UserHomeController {
             Parent page = loader.load();
             ScrollPane scroll = new ScrollPane(page);
             scroll.setFitToWidth(true);
-            scroll.setFitToHeight(true);
+            scroll.setFitToHeight(false);
             scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scroll.setStyle("-fx-background-color: transparent;");
             setPageContent(scroll);
@@ -268,7 +268,7 @@ public class UserHomeController {
             ctrl.setUser(financeUser);
             ScrollPane scroll = new ScrollPane(page);
             scroll.setFitToWidth(true);
-            scroll.setFitToHeight(true);
+            scroll.setFitToHeight(false);
             scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
             scroll.setStyle("-fx-background-color: transparent;");
             setPageContent(scroll);

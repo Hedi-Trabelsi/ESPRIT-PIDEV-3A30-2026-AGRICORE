@@ -17,14 +17,17 @@ public class ServiceTache {
 
     // Ajouter une tâche avec nomTache et evaluation (par défaut 0)
     public void ajouter(Tache tache) throws SQLException {
-        String sql = "INSERT INTO tache(nomTache, date_prevue, description, cout_estimee, id_maintenance, evaluation) VALUES (?, ?, ?, ?, ?, ?)";
+        // La requête avec 7 colonnes
+        String sql = "INSERT INTO tache(nomTache, date_prevue, description, cout_estimee, id_maintenance, evaluation, id_technicien) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, tache.getNomTache());
         ps.setString(2, tache.getDate_prevue());
         ps.setString(3, tache.getDesciption());
         ps.setInt(4, tache.getCout_estimee());
         ps.setInt(5, tache.getId_maintenace());
-        ps.setInt(6, 0); // Toujours 0 à la création
+        ps.setInt(6, tache.getEvaluation()); // Utilise la valeur de l'objet (qui est 0 par défaut)
+        ps.setInt(7, tache.getId_technicien()); // Ton ID récupéré du contrôleur
 
         ps.executeUpdate();
     }
@@ -76,15 +79,16 @@ public class ServiceTache {
                     rs.getString("description"),
                     rs.getInt("cout_estimee"),
                     rs.getInt("id_maintenance"),
-                    rs.getInt("evaluation") // Récupération de l'évaluation
+                    rs.getInt("evaluation"),
+                    rs.getInt("id_technicien") // <--- On ajoute la lecture ici
             );
             taches.add(t);
         }
-
         return taches;
     }
 
     // Lister les tâches d'une maintenance spécifique avec evaluation
+    // 3. GET BY MAINTENANCE : On met aussi à jour ici
     public List<Tache> getTachesByMaintenance(int idMaintenance) throws SQLException {
         List<Tache> taches = new ArrayList<>();
         String sql = "SELECT * FROM tache WHERE id_maintenance = ?";
@@ -100,7 +104,8 @@ public class ServiceTache {
                     rs.getString("description"),
                     rs.getInt("cout_estimee"),
                     rs.getInt("id_maintenance"),
-                    rs.getInt("evaluation") // Récupération de l'évaluation
+                    rs.getInt("evaluation"),
+                    rs.getInt("id_technicien") // <--- On ajoute la lecture ici
             );
             taches.add(t);
         }

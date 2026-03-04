@@ -203,11 +203,22 @@ public class ShowMaintenanceController {
         header.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
         header.setSpacing(10);
 
+// On récupère le rôle de l'utilisateur connecté
+        int role = UserSession.getRole();
+
         Label editBtn = new Label("✎");
         editBtn.setStyle("-fx-text-fill: #94a3b8; -fx-font-size: 18px; -fx-cursor: hand;");
 
         Label deleteBtn = new Label("🗑");
         deleteBtn.setStyle("-fx-text-fill: #fca5a5; -fx-font-size: 18px; -fx-cursor: hand;");
+
+// CONDITION : Si c'est un technicien (role 2), on cache les boutons
+        if (role == 2) {
+            editBtn.setVisible(false);
+            editBtn.setManaged(false); // Pour ne pas prendre de place dans le header
+            deleteBtn.setVisible(false);
+            deleteBtn.setManaged(false);
+        }
 
         header.getChildren().addAll(editBtn, deleteBtn);
 

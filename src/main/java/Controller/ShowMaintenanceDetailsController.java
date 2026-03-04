@@ -109,6 +109,8 @@ public class ShowMaintenanceDetailsController {
 
     private VBox createMiniTacheCard(Tache t) {
         boolean isResolu = "Resolu".equalsIgnoreCase(maintenance.getStatut());
+        // Récupération du rôle pour les conditions
+        int role = UserSession.getRole();
 
         VBox card = new VBox();
         card.setStyle("-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 20; -fx-spacing: 10; " +
@@ -133,7 +135,8 @@ public class ShowMaintenanceDetailsController {
         Label deleteIcon = new Label("🗑");
         deleteIcon.setStyle("-fx-text-fill: #fca5a5; -fx-font-size: 18px; -fx-cursor: hand;");
 
-        if (isResolu) {
+        // CONDITION : Masquer Modifier/Supprimer si c'est déjà résolu OU si l'utilisateur est un Agriculteur (Role 1)
+        if (isResolu || role == 1) {
             editIcon.setVisible(false);
             editIcon.setManaged(false);
             deleteIcon.setVisible(false);
@@ -148,7 +151,7 @@ public class ShowMaintenanceDetailsController {
         infoRow.setAlignment(Pos.CENTER_LEFT);
         Label dateTache = new Label("📅 " + t.getDate_prevue());
         dateTache.setStyle("-fx-font-size: 12px; -fx-text-fill: #64748b; -fx-font-weight: bold;");
-        Label coutTache = new Label(String.format("%.2f DT", t.getCout_estimee()));
+        Label coutTache = new Label(String.format("%.2f DT", (double) t.getCout_estimee()));
         coutTache.setStyle("-fx-background-color: #f0fdf4; -fx-text-fill: #2e7d32; -fx-padding: 2 8; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 11px;");
         infoRow.getChildren().addAll(dateTache, coutTache);
 
@@ -161,7 +164,8 @@ public class ShowMaintenanceDetailsController {
 
         // VOTE BAR
         HBox voteBar = new HBox(15);
-        if (isResolu) {
+        // CONDITION : Afficher l'évaluation seulement si c'est Résolu ET que l'utilisateur est l'Agriculteur (Role 1)
+        if (isResolu && role == 1) {
             voteBar.setAlignment(Pos.CENTER_RIGHT);
             voteBar.setStyle("-fx-padding: 5 0 0 0;");
             Label labelEval = new Label("Évaluer :");
@@ -184,7 +188,6 @@ public class ShowMaintenanceDetailsController {
                     t.setEvaluation(nouveauVote);
                     likeBtn.setStyle(nouveauVote == 1 ? styleLikeActive : styleNeutre);
                     dislikeBtn.setStyle(styleNeutre);
-                    // Recharger les tâches pour mettre à jour l'affichage
                     loadTachesAssociees();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -200,7 +203,6 @@ public class ShowMaintenanceDetailsController {
                     t.setEvaluation(nouveauVote);
                     dislikeBtn.setStyle(nouveauVote == -1 ? styleDislikeActive : styleNeutre);
                     likeBtn.setStyle(styleNeutre);
-                    // Recharger les tâches pour mettre à jour l'affichage
                     loadTachesAssociees();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -212,7 +214,10 @@ public class ShowMaintenanceDetailsController {
 
         // ASSEMBLAGE
         card.getChildren().addAll(header, infoRow, descLabel);
-        if (isResolu) card.getChildren().add(voteBar);
+        // On ajoute la barre de vote uniquement si elle contient des éléments (Role 1 + Résolu)
+        if (!voteBar.getChildren().isEmpty()) {
+            card.getChildren().add(voteBar);
+        }
 
         // EVENTS
         card.setOnMouseClicked(event -> {

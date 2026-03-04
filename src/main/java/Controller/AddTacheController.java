@@ -127,6 +127,13 @@ public class AddTacheController {
 
             // --- Fin des validations, début du traitement ---
 
+            // RÉCUPÉRATION DE L'UTILISATEUR CONNECTÉ
+            Model.Utilisateur userConnecte = UserSession.getCurrentUser();
+            if (userConnecte == null) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Session expirée. Veuillez vous reconnecter.");
+                return;
+            }
+
             Maintenance selectedMaintenance = this.maintenanceAutomatique;
             if (selectedMaintenance == null) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Aucune maintenance associée.");
@@ -136,12 +143,14 @@ public class AddTacheController {
             int cout = Integer.parseInt(coutStr);
             String nomFichierPdf = System.getProperty("user.home") + "/Documents/Rapport_Tache_" + selectedMaintenance.getId() + ".pdf";
 
+            // CRÉATION DE LA TACHE AVEC L'ID DYNAMIQUE
             Tache tache = new Tache(
                     nom.trim(),
                     datePrevueDp.getValue().toString(),
                     desc.trim(),
                     cout,
-                    selectedMaintenance.getId()
+                    selectedMaintenance.getId(),
+                    userConnecte.getId() // <--- Utilise le vrai ID de l'utilisateur connecté
             );
 
             saveBtn.setDisable(true);
@@ -157,42 +166,62 @@ public class AddTacheController {
                     // 2. Génération du PDF
                     PdfService.genererRapportTache(desc.trim(), datePrevueDp.getValue().toString(), String.valueOf(cout), nomFichierPdf);
 
-                    // --- AJOUT : ENVOI EMAIL ---
+                    // --- AJOUT : ENVOI EMAIL DYNAMIQUE ---
                     try {
-                        services.EmailService.envoyerEmailTache(
-                                "mrabetzeineb1@gmail.com",            // 1. Destinataire
-                                nom.trim(),                           // 2. NOM DE LA TACHE (L'argument manquant)
-                                selectedMaintenance.getDescription(), // 3. Description maintenance
-                                datePrevueDp.getValue().toString(),   // 4. Date
-                                String.valueOf(cout),                 // 5. Coût
-                                nomFichierPdf                         // 6. Chemin PDF
-                        );
+                        // 1. On récupère l'ID de l'agriculteur depuis la maintenance associée
+                        int idAgri = selectedMaintenance.getIdAgriculteur();
+
+                        // 2. On utilise le service pour chercher son email en BDD
+                        // Note: Assure-toi d'avoir ajouté la méthode getEmailByAgriculteurId dans ServiceMaintenance
+                        String emailAgriculteur = serviceMaintenance.getEmailByAgriculteurId(idAgri);
+
+                        if (emailAgriculteur != null && !emailAgriculteur.isEmpty()) {
+                            services.EmailService.envoyerEmailTache(
+                                    emailAgriculteur, // <--- L'email vient maintenant de la BDD !
+                                    nom.trim(),
+                                    selectedMaintenance.getDescription(),
+                                    datePrevueDp.getValue().toString(),
+                                    String.valueOf(cout),
+                                    nomFichierPdf
+                            );
+                            System.out.println("Email envoyé à l'agriculteur : " + emailAgriculteur);
+                        } else {
+                            System.out.println("Erreur : Aucun email trouvé pour l'agriculteur ID " + idAgri);
+                        }
                     } catch (Exception e) {
-                        System.out.println("Erreur Email : " + e.getMessage());
+                        System.out.println("Erreur lors de l'envoi de l'email : " + e.getMessage());
                     }
 
-                    // --- AJOUT : ENVOI SMS ---
+                    // --- AJOUT : ENVOI SMS DYNAMIQUE ---
+                    // --- AJOUT : ENVOI SMS DYNAMIQUE ---
                     try {
-                        String messageSms = "🛠 Nouvelle tâche planifiée !\n" +
-                                "Équipement: " + selectedMaintenance.getEquipement() + "\n" +
-                                "Date: " + datePrevueDp.getValue().toString() + "\n" +
-                                "Lieu: " + selectedMaintenance.getLieu();
-                        services.SmsService.envoyerSms("+21651042268", messageSms);
+                        // 1. On récupère le numéro (int) et on le convertit en String
+                        // Note : On utilise userConnecte.getPhone() car c'est ce qui apparaît dans ton ProfileController
+                        String telBrut = String.valueOf(userConnecte.getPhone());
+
+                        // 2. On prépare le numéro au format international (ex: +216XXXXXXXX)
+                        String numeroComplet = "+216" + telBrut;
+
+                        String messageSms = "Bonjour " + userConnecte.getNom() + ",\n" +
+                                "Une nouvelle tâche a été planifiée pour l'équipement : " + selectedMaintenance.getEquipement() + ".\n" +
+                                "Date prévue : " + datePrevueDp.getValue().toString();
+
+                        // 3. Appel au service Twilio
+                        services.SmsService.envoyerSms(numeroComplet, messageSms);
+
                     } catch (Exception e) {
                         System.out.println("Erreur SMS : " + e.getMessage());
                     }
 
                     javafx.application.Platform.runLater(() -> {
-                        // --- AJOUT : OUVERTURE AUTO DU PDF ---
                         try {
                             java.awt.Desktop.getDesktop().open(new java.io.File(nomFichierPdf));
                         } catch (Exception e) {
                             System.out.println("Erreur ouverture PDF : " + e.getMessage());
                         }
 
-                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche enregistrée, Rapport généré et Notifications envoyées !");
+                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Tâche enregistrée et notifications envoyées !");
 
-                        // Navigation vers ShowMaintenanceDetails
                         try {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShowMaintenanceDetails.fxml"));
                             Parent root = loader.load();

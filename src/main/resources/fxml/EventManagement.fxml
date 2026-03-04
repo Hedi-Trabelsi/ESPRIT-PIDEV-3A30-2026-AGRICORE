@@ -21,11 +21,11 @@
 <AnchorPane prefHeight="650.0" prefWidth="970.0" style="-fx-background-color: white; -fx-background-radius: 35;" stylesheets="@StyleE.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.EventManagementController">
     <children>
         <!-- Main Content Area - Full width without sidebar -->
-        <AnchorPane prefHeight="650.0" prefWidth="970.0" style="-fx-background-color: white; -fx-background-radius: 35;">
+        <AnchorPane prefHeight="650.0" prefWidth="970.0" style="-fx-background-color: white; ">
             <children>
                 <ScrollPane fitToWidth="true" prefHeight="650.0" prefWidth="970.0" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
                     <content>
-                        <VBox fx:id="mainContentVBox" alignment="TOP_CENTER" spacing="25.0" style="-fx-background-color: transparent; -fx-padding: 30;" />
+                        <VBox fx:id="mainContentVBox" alignment="TOP_CENTER" spacing="25.0" style="-fx-background-color: transparent;" />
                     </content>
                 </ScrollPane>
             </children>

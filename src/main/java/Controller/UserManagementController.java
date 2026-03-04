@@ -56,15 +56,14 @@ public class UserManagementController {
 
             // Set FlowPane properties
             if (usersGrid != null) {
-                usersGrid.setAlignment(Pos.TOP_CENTER);
+                usersGrid.setAlignment(Pos.TOP_LEFT);
                 usersGrid.setHgap(20);
                 usersGrid.setVgap(20);
-                usersGrid.setPadding(new Insets(0, 0, 0, 0));
+                usersGrid.setPadding(new Insets(10, 0, 0, 0));
             }
 
-            // Load filter options
+            // FXML already has filter items, just set default value
             if (filterCombo != null) {
-                filterCombo.getItems().addAll("Tous les roles", "Admin", "Agriculteur", "Technicien", "Fournisseur");
                 filterCombo.setValue("Tous les roles");
             }
 
@@ -128,11 +127,18 @@ public class UserManagementController {
 
     private void setupPagination() {
         if (pagination != null) {
-            pagination.setPageFactory(this::createPage);
+            // Return a tiny placeholder so the Pagination does NOT steal usersGrid
+            pagination.setPageFactory(pageIndex -> {
+                updateGrid(pageIndex);
+                Region placeholder = new Region();
+                placeholder.setMaxHeight(0);
+                placeholder.setPrefHeight(0);
+                return placeholder;
+            });
         }
     }
 
-    private FlowPane createPage(int pageIndex) {
+    private void updateGrid(int pageIndex) {
         if (usersGrid != null) {
             usersGrid.getChildren().clear();
         }
@@ -141,7 +147,7 @@ public class UserManagementController {
             if (showingLabel != null) {
                 showingLabel.setText("Affichage de 0 utilisateurs");
             }
-            return usersGrid;
+            return;
         }
 
         int fromIndex = pageIndex * CARDS_PER_PAGE;
@@ -153,14 +159,15 @@ public class UserManagementController {
                 VBox card = createUserCard(user);
                 usersGrid.getChildren().add(card);
             }
+
+            usersGrid.setAlignment(Pos.TOP_LEFT);
+            usersGrid.requestLayout();
         }
 
         if (showingLabel != null) {
-            showingLabel.setText(String.format("Affichage de %d-%d sur %d utilisateurs",
+            showingLabel.setText(String.format("Affichage %d-%d sur %d utilisateurs",
                     fromIndex + 1, toIndex, filteredData.size()));
         }
-
-        return usersGrid;
     }
 
     private VBox createUserCard(Utilisateur user) {
@@ -313,6 +320,9 @@ public class UserManagementController {
             pagination.setPageCount(Math.max(1, totalPages));
             pagination.setCurrentPageIndex(0);
         }
+        // Always refresh the grid since setCurrentPageIndex(0) won't
+        // re-trigger the page factory if it's already at 0
+        updateGrid(0);
     }
 
     private void loadAllUsers() {
@@ -321,20 +331,19 @@ public class UserManagementController {
             System.out.println("UserManagement: Loading " + users.size() + " users");
 
             Platform.runLater(() -> {
-                masterData.clear();
-                masterData.addAll(users);
-                filteredData = new FilteredList<>(masterData, p -> true);
+                // Update the master list; filteredData wraps it and auto-updates
+                masterData.setAll(users);
 
                 // Reset filters
                 if (searchField != null) searchField.clear();
                 if (filterCombo != null) filterCombo.setValue("Tous les roles");
 
-                updatePagination();
-
-                // Force grid to refresh
-                if (pagination != null) {
-                    createPage(0);
+                // Reset predicate to show all users
+                if (filteredData != null) {
+                    filteredData.setPredicate(p -> true);
                 }
+
+                updatePagination();
 
                 // Load statistics
                 updateStatistics(users);

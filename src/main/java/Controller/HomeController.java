@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import services.UserService;
@@ -26,12 +27,13 @@ public class HomeController {
     @FXML private ImageView profileImageView;
 
     // Navigation Buttons
-    @FXML private Button dashboardButton, manageUsersButton, financialButton,
+    @FXML private Button manageUsersButton, financialButton,
             animalButton, equipmentButton, eventButton, maintenanceButton,
             logoutButton;
 
     // Main content area
     @FXML private BorderPane mainBorderPane;
+    @FXML private StackPane contentArea;
 
     private Utilisateur loggedInUser;
     private UserService userService;
@@ -54,11 +56,6 @@ public class HomeController {
         loadUserManagement();
 
         // Navigation handlers
-        dashboardButton.setOnAction(e -> {
-            setActiveButton(dashboardButton);
-            loadDashboard();
-        });
-
         manageUsersButton.setOnAction(e -> {
             setActiveButton(manageUsersButton);
             loadUserManagement();
@@ -94,41 +91,26 @@ public class HomeController {
 
     private void setActiveButton(Button activeButton) {
         // Remove active class from all buttons
-        Button[] buttons = {dashboardButton, manageUsersButton, financialButton,
+        Button[] buttons = {manageUsersButton, financialButton,
                 animalButton, equipmentButton, eventButton, maintenanceButton};
 
         for (Button btn : buttons) {
             if (btn != null) {
-                btn.getStyleClass().remove("nav-button-active");
+                btn.getStyleClass().removeAll("nav-button", "nav-button-active");
                 btn.getStyleClass().add("nav-button");
             }
         }
 
         // Add active class to selected button
         if (activeButton != null) {
-            activeButton.getStyleClass().remove("nav-button");
+            activeButton.getStyleClass().removeAll("nav-button", "nav-button-active");
             activeButton.getStyleClass().add("nav-button-active");
         }
     }
 
     private void setContent(Parent view) {
-        ScrollPane scroll = new ScrollPane(view);
-        scroll.setFitToWidth(true);
-        scroll.setFitToHeight(false);
-        scroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scroll.setStyle("-fx-background-color: transparent;");
-        mainBorderPane.setCenter(scroll);
-    }
-
-    private void loadDashboard() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Dashboard.fxml"));
-            Parent dashboardView = loader.load();
-            setContent(dashboardView);
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger le tableau de bord !", Alert.AlertType.ERROR);
+        if (contentArea != null) {
+            contentArea.getChildren().setAll(view);
         }
     }
 
@@ -253,7 +235,7 @@ public class HomeController {
         // Role-based default view
         if (user.getRole() == 3) {
             // Fournisseur: disable all sidebar buttons except Equipment
-            Button[] restrictedButtons = {dashboardButton, manageUsersButton, financialButton,
+            Button[] restrictedButtons = {manageUsersButton, financialButton,
                     animalButton, eventButton, maintenanceButton};
             for (Button btn : restrictedButtons) {
                 if (btn != null) {
@@ -266,7 +248,7 @@ public class HomeController {
             loadEquipmentManagement();
         } else if (user.getRole() == 4) {
             // Financier: disable all except Financial
-            Button[] restrictedButtons = {dashboardButton, manageUsersButton, animalButton,
+            Button[] restrictedButtons = {manageUsersButton, animalButton,
                     equipmentButton, eventButton, maintenanceButton};
             for (Button btn : restrictedButtons) {
                 if (btn != null) {

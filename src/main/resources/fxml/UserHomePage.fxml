@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TextField?>
@@ -20,6 +21,7 @@
 
     <!-- LEFT SIDEBAR - FRESH GREEN DESIGN -->
     <left>
+        <ScrollPane fitToWidth="true" styleClass="user-sidebar-scroll-pane" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
         <VBox fx:id="sidebar" prefWidth="280" spacing="15" styleClass="user-sidebar">
             <padding>
                 <Insets bottom="30" left="20" right="20" top="30" />
@@ -52,37 +54,37 @@
             <VBox spacing="8" VBox.vgrow="ALWAYS">
                 <Label styleClass="user-menu-category" text="MAIN MENU" />
 
-                <Button fx:id="profileButton" styleClass="user-nav-button-active" text="Profil">
+                <Button fx:id="profileButton" maxWidth="Infinity" styleClass="user-nav-button-active" text="Profil">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="👤" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="eventButton" styleClass="user-nav-button" text="Gestion Evenements">
+                <Button fx:id="eventButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Evenements">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="📅" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="financialButton" styleClass="user-nav-button" text="Gestion Financiere">
+                <Button fx:id="financialButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Financiere">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="💰" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="equipmentButton" styleClass="user-nav-button" text="Gestion Equipements">
+                <Button fx:id="equipmentButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Equipements">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="🚜" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="maintenanceButton" styleClass="user-nav-button" text="Maintenance">
+                <Button fx:id="maintenanceButton" maxWidth="Infinity" styleClass="user-nav-button" text="Maintenance">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="🔧" />
                     </graphic>
                 </Button>
 
-                <Button fx:id="animalButton" styleClass="user-nav-button" text="Gestion Animaux">
+                <Button fx:id="animalButton" maxWidth="Infinity" styleClass="user-nav-button" text="Gestion Animaux">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="🐄" />
                     </graphic>
@@ -92,13 +94,14 @@
             <!-- Bottom Section -->
             <VBox spacing="10">
                 <Separator styleClass="user-sidebar-separator" />
-                <Button fx:id="logoutButton" styleClass="user-logout-button" text="Deconnexion">
+                <Button fx:id="logoutButton" maxWidth="Infinity" styleClass="user-logout-button" text="Deconnexion">
                     <graphic>
                         <Label styleClass="user-nav-icon" text="🚪" />
                     </graphic>
                 </Button>
             </VBox>
         </VBox>
+        </ScrollPane>
     </left>
 
     <!-- TOP BAR -->

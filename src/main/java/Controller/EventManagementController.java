@@ -333,8 +333,10 @@ public class EventManagementController {
         titleLabel.setMinHeight(45);
         titleLabel.setAlignment(Pos.CENTER);
 
-        Label locLabel = new Label("📍 " + ev.getLieu());
+        // 🔥 CHANGEMENT ICI : on affiche le nom réel du lieu via reverse geocoding
+        Label locLabel = new Label("📍 Chargement...");
         locLabel.setStyle("-fx-text-fill: #555;");
+        fetchLocationName(ev.getLieu(), locLabel);
 
         Label capacityLeft = new Label(left + " places restantes");
         capacityLeft.setStyle("-fx-text-fill: " + (left < 5 ? "#e74c3c" : "#2d5a27") + "; -fx-font-size: 11px; -fx-font-weight: bold;");
@@ -357,6 +359,50 @@ public class EventManagementController {
         VBox.setVgrow(card.getChildren().get(3), Priority.ALWAYS);
         return card;
     }
+    private void fetchLocationName(String coords, Label targetLabel) {
+        new Thread(() -> {
+            try {
+                String[] parts = coords.split(",");
+                if (parts.length < 2) {
+                    Platform.runLater(() -> targetLabel.setText("📍 " + coords));
+                    return;
+                }
+
+                String urlString = String.format(
+                        "https://nominatim.openstreetmap.org/reverse?format=json&lat=%s&lon=%s&zoom=10&addressdetails=1",
+                        parts[0].trim(),
+                        parts[1].trim()
+                );
+
+                java.net.URL url = new java.net.URL(urlString);
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("User-Agent", "JavaFX-Agricore-App");
+
+                java.util.Scanner scanner = new java.util.Scanner(conn.getInputStream(), "UTF-8").useDelimiter("\\A");
+                String response = scanner.hasNext() ? scanner.next() : "";
+                scanner.close();
+
+                String locationName = "Lieu inconnu";
+
+                if (response.contains("\"city\":\"")) {
+                    locationName = response.split("\"city\":\"")[1].split("\"")[0];
+                } else if (response.contains("\"town\":\"")) {
+                    locationName = response.split("\"town\":\"")[1].split("\"")[0];
+                } else if (response.contains("\"village\":\"")) {
+                    locationName = response.split("\"village\":\"")[1].split("\"")[0];
+                } else if (response.contains("\"county\":\"")) {
+                    locationName = response.split("\"county\":\"")[1].split("\"")[0];
+                }
+
+                String finalName = locationName;
+                Platform.runLater(() -> targetLabel.setText("📍 " + finalName));
+
+            } catch (Exception e) {
+                Platform.runLater(() -> targetLabel.setText("📍 Adresse indisponible"));
+            }
+        }).start();
+    }
+
 
     private void renderForm(EvennementAgricole targetEv) {
         resetMainView();
@@ -1008,4 +1054,6 @@ public class EventManagementController {
         a.show();
     }
 }
+
+
 

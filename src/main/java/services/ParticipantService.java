@@ -120,4 +120,29 @@ public class ParticipantService {
         }
         return totalReserved;
     }
+    public List<String> getParticipantNamesForEvent(int eventId) throws SQLException {
+        List<String> names = new ArrayList<>();
+        // On joint la table participants avec utilisateurs pour avoir les vrais noms
+        String query = "SELECT u.nom, u.prenom FROM participants p " +
+                "JOIN utilisateurs u ON p.id_utilisateur = u.id " +
+                "WHERE p.id_ev = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, eventId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            names.add(rs.getString("prenom") + " " + rs.getString("nom"));
+        }
+        return names;
+    }
+
+    public String getAdminName() throws SQLException {
+        // Récupère l'utilisateur avec le role 0 (Admin/Organisateur)
+        String query = "SELECT nom, prenom FROM utilisateurs WHERE role = 0 LIMIT 1";
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(query);
+        if (rs.next()) {
+            return rs.getString("prenom") + " " + rs.getString("nom");
+        }
+        return "Administrateur";
+    }
 }

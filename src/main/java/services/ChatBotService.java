@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ChatBotService {
 
     private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
-    private static final String API_KEY = "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";
+    private static final String API_KEY = "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";
 
     // Using Qwen model as requested
     private static final String MODEL = "qwen/qwen3-vl-235b-a22b-thinking";

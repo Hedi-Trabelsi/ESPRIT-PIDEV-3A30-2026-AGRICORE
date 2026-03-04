@@ -61,16 +61,17 @@ public class SigninController {
         String passwordEntered = passwordField.getText();
 
         if (email.isEmpty() || passwordEntered.isEmpty()) {
-            showError("Veuillez remplir tous les champs !");
+            showError("Please fill all fields!");
             return;
         }
 
         try {
             UserService userService = new UserService();
+            // Assuming read() returns the list of users from the 'user' table
             List<Utilisateur> users = userService.read();
             Utilisateur matchedUser = null;
 
-            // Find user
+            // --- 1. FIND THE USER ---
             for (Utilisateur u : users) {
                 if (u.getEmail().equalsIgnoreCase(email) && BCrypt.checkpw(passwordEntered, u.getPassword())) {
                     matchedUser = u;
@@ -79,6 +80,18 @@ public class SigninController {
             }
 
             if (matchedUser != null) {
+                // --- 2. INITIALIZE GLOBAL SESSION (CRITICAL FIX) ---
+                // This stores the ID in memory so the Chat can access it later
+                // Use .getNom() or .getName() depending on your Utilisateur model
+                services.UserSession.getInstance().initSession(
+                        matchedUser.getId(),
+                        matchedUser.getNom()
+                );
+
+                // Log for verification in your console
+                System.out.println("Login Success! Session started for User ID: " + matchedUser.getId());
+
+                // --- 3. REDIRECT BASED ON ROLE ---
                 int role = matchedUser.getRole();
                 if (role == 0 || role == 3 || role == 4) {
                     // Admin, Fournisseur, or Financier - open backend
@@ -88,22 +101,21 @@ public class SigninController {
                     openUserHomePage(matchedUser);
                 }
             } else {
-                showError("Email ou mot de passe invalide !");
+                showError("Invalid email or password!");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Erreur lors de la connexion !");
+            showError("Error during login!");
         }
     }
-
     // =========================================
     // FACE LOGIN
     // =========================================
     @FXML
     private void handleFaceLogin() {
         errorLabel.setStyle("-fx-text-fill: #1e88e5;");
-        errorLabel.setText("Ouverture de la camera...");
+        errorLabel.setText("Opening camera...");
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/FaceScan.fxml"));
@@ -111,7 +123,7 @@ public class SigninController {
 
             FaceScanController controller = loader.getController();
             controller.setFaceCapturedListener(liveImage -> {
-                Platform.runLater(() -> errorLabel.setText("Scan du visage..."));
+                Platform.runLater(() -> errorLabel.setText("Scanning face..."));
 
                 new Thread(() -> {
                     try {
@@ -136,7 +148,7 @@ public class SigninController {
                             Platform.runLater(() -> {
                                 int role = finalUser.getRole();
                                 errorLabel.setStyle("-fx-text-fill: green;");
-                                errorLabel.setText("Visage reconnu ! Bienvenue " + finalUser.getNom());
+                                errorLabel.setText("Face recognized! Welcome " + finalUser.getNom());
                                 if (role == 0 || role == 3 || role == 4) {
                                     // Admin, Fournisseur, or Financier - open backend
                                     openHomePage(finalUser);
@@ -148,25 +160,25 @@ public class SigninController {
                         } else {
                             Platform.runLater(() -> {
                                 errorLabel.setStyle("-fx-text-fill: red;");
-                                errorLabel.setText("Visage non reconnu. Reessayez.");
+                                errorLabel.setText("Face not recognized. Try again.");
                             });
                         }
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Platform.runLater(() -> showError("Erreur lors de la connexion faciale : " + e.getMessage()));
+                        Platform.runLater(() -> showError("Error during face login: " + e.getMessage()));
                     }
                 }).start();
             });
 
             Stage stage = new Stage();
-            stage.setTitle("Scan Facial");
+            stage.setTitle("Face Scan");
             stage.setScene(new Scene(root));
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Erreur d'ouverture de la camera : " + e.getMessage());
+            showError("Error opening camera: " + e.getMessage());
         }
     }
 
@@ -180,7 +192,7 @@ public class SigninController {
             Parent root = loader.load();
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Mot de passe oublie");
+            stage.setTitle("Forgot Password");
         } catch (Exception e) {
             e.printStackTrace();
             showError("Cannot load Forgot Password page!");
@@ -197,13 +209,13 @@ public class SigninController {
             controller.setSigninController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Connexion Google");
+            stage.setTitle("Google Sign-In");
             stage.setScene(new Scene(root));
             stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Impossible d'ouvrir la connexion Google : " + e.getMessage());
+            showError("Cannot open Google Sign-In: " + e.getMessage());
         }
     }
 
@@ -223,7 +235,7 @@ public class SigninController {
             Parent root = loader.load();
             Stage stage = (Stage) signupLink.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Inscription");
+            stage.setTitle("Sign Up");
         } catch (Exception e) {
             e.printStackTrace();
             showError("Cannot load Sign Up page!");
@@ -243,7 +255,7 @@ public class SigninController {
 
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("Tableau de bord Admin - " + user.getNom());
+            stage.setTitle("Admin Dashboard - " + user.getNom());
         } catch (Exception e) {
             e.printStackTrace();
             showError("Cannot load Home Page!");

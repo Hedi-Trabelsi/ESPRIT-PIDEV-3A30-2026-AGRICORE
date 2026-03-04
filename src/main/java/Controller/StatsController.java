@@ -75,7 +75,7 @@ public class StatsController {
 // On vérifie que le Node existe avant d'appliquer le style
             for (XYChart.Data<String, Number> data : series.getData()) {
                 if (data.getNode() != null) {
-                    data.getNode().setStyle("-fx-bar-fill: #f8fafc;");
+                    data.getNode().setStyle("-fx-bar-fill: #7ca76f;");
                 }
             }
 
