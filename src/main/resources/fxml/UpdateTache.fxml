@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      spacing="20" style="-fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.UpdateTacheController">
+
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="← Annuler et retourner" onMouseClicked="#cancelAction" styleClass="maint-back-link"/>
+            <Label text="Modifier la Tâche" styleClass="page-title"/>
+        </VBox>
+        <Button fx:id="saveBtn" text="Mettre à jour" onAction="#saveTache"
+                styleClass="maint-primary-button"/>
+    </HBox>
+
+    <VBox spacing="5" styleClass="maint-info-banner">
+        <HBox alignment="CENTER_LEFT">
+            <Label fx:id="maintenanceInfoLabel" text="CHARGEMENT MAINTENANCE..."
+                   style="-fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-font-size: 14px;"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="maintenanceDateLabel" text=""
+                   style="-fx-text-fill: #64748b; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+        </HBox>
+        <HBox spacing="5" alignment="CENTER_LEFT">
+            <ImageView fitHeight="30" fitWidth="30">
+                <image><Image url="@/images/localisation.gif" /></image>
+            </ImageView>
+            <Label fx:id="maintenanceDetailsLabel" text="Lieu de l'intervention"
+                   style="-fx-text-fill: #475569; -fx-font-size: 12px;"/>
+        </HBox>
+    </VBox>
+
+    <Separator style="-fx-opacity: 0.3;" />
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <content>
+            <VBox spacing="25">
+                <GridPane hgap="40">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="8" GridPane.columnIndex="0">
+                            <Label text="NOM DE LA TÂCHE" styleClass="maint-field-label"/>
+                            <TextField fx:id="nomTacheTf" styleClass="maint-form-field" />
+                        </VBox>
+                        <VBox spacing="8" GridPane.columnIndex="1">
+                            <Label text="DATE PRÉVUE" styleClass="maint-field-label"/>
+                            <DatePicker fx:id="datePrevueDp" maxWidth="1.7976931348623157E308" styleClass="maint-form-field"/>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <VBox spacing="8" maxWidth="450.0">
+                    <Label text="COÛT ESTIMÉ (DT)" styleClass="maint-field-label"/>
+                    <TextField fx:id="coutTf" styleClass="maint-form-field" />
+                </VBox>
+
+                <VBox spacing="10">
+                    <Label text="DESCRIPTION ET DIAGNOSTIC" styleClass="maint-field-label"/>
+                    <TextArea fx:id="descriptionTa" prefHeight="180.0" wrapText="true"
+                              styleClass="maint-form-field"/>
+                </VBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

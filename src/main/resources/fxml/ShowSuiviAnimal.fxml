@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" style="-fx-background-color: #f8f9fa; -fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.ShowSuiviAnimalController">
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Rechercher un suivi..." prefWidth="400"
+                   style="-fx-background-radius: 12; -fx-padding: 10; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12; -fx-font-size: 13;"/>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="Trier par" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
+        <ComboBox fx:id="triCombo" prefWidth="180"
+                  style="-fx-background-radius: 12; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12;"/>
+    </HBox>
+
+    <HBox alignment="CENTER_LEFT" spacing="15">
+        <VBox>
+            <Label text="Suivi de Sante" style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill: #2d3436;"/>
+            <Label text="Consultez et gerez l'etat de vos animaux" style="-fx-text-fill: #a0a0a0; -fx-font-size: 12;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="+ Ajouter Suivi" onAction="#navigateAddSuivi"
+                style="-fx-background-color:#7ca76f; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        <Button text="Stats" onAction="#navigateStatistiques"
+                style="-fx-background-color:#6c5ce7; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+        <Button text="Retour" onAction="#navigateBack"
+                style="-fx-background-color:#fab1a0; -fx-text-fill:#d63031; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+    </HBox>
+
+    <ListView fx:id="suiviListView" VBox.vgrow="ALWAYS"
+              style="-fx-background-radius: 15; -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 5;"/>
+</VBox>

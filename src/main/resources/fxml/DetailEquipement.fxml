@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="rootContainer"
+      xmlns="http://javafx.com/javafx/17"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.DetailEquipementController"
+      style="-fx-background-color: #f0f5ef;">
+    <!--
+        Interface construite 100% en Java dans DetailEquipementController.construireInterface()
+        → Aucun fx:id supplémentaire = zéro risque de NullPointerException
+    -->
+</VBox>

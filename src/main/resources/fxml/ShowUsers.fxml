@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+
+<!--
+  LIGHT PALETTE — 5 tones, all harmonious:
+    BG page      : #F4F7F5  (cool off-white, green undertone)
+    Surface 1    : #FFFFFF  (topbar, card hover)
+    Surface 2    : #E8F0EB  (stats bar cells)
+    Border       : #C9DDD2  (dividers, card borders)
+    Accent dark  : #1A5C38  (headings, labels, button)
+    Accent mid   : #2E8B57  (gradient, icons)
+    Accent light : #52B788  (badge border, hover hints)
+    Muted text   : #6B9A80  (secondary labels)
+    Ghost text   : #9DBFAD  (placeholders, hints)
+-->
+
+<AnchorPane
+        prefHeight="700.0" prefWidth="1160.0"
+        style="-fx-background-color: #F4F7F5;"
+        stylesheets="@shadcn.css"
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="Controller.ShowUsersController">
+
+    <children>
+        <VBox spacing="0.0"
+              AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+
+                <!-- ═══════════════════════════
+                     TOP BAR  — pure white card
+                ═══════════════════════════ -->
+                <HBox alignment="CENTER_LEFT" spacing="0.0"
+                      style="-fx-background-color: #FFFFFF;
+                     -fx-padding: 16 28 16 28;
+                     -fx-border-color: transparent transparent #C9DDD2 transparent;
+                     -fx-border-width: 0 0 1 0;
+                     -fx-effect: dropshadow(gaussian,rgba(26,92,56,0.07),8,0,0,2);">
+                    <children>
+
+                        <!-- Brand -->
+                        <HBox alignment="CENTER_LEFT" spacing="11.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <StackPane prefWidth="38.0" prefHeight="38.0"
+                                           style="-fx-background-color: linear-gradient(135deg,#1A5C38,#2E8B57);
+                                  -fx-background-radius: 10;
+                                  -fx-effect: dropshadow(gaussian,rgba(46,139,87,0.30),10,0,0,2);">
+                                    <children>
+                                        <Label text="🌿" style="-fx-font-size: 17px;"/>
+                                    </children>
+                                </StackPane>
+                                <VBox spacing="1.0">
+                                    <children>
+                                        <Label text="Utilisateurs"
+                                               style="-fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: #1A5C38;"/>
+                                        <Label fx:id="countLabel" text="membres enregistrés"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #6B9A80;"/>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+
+                        <!-- Search + refresh -->
+                        <HBox alignment="CENTER_RIGHT" spacing="9.0">
+                            <children>
+                                <StackPane>
+                                    <children>
+                                        <TextField fx:id="searchField"
+                                                   promptText="Rechercher un utilisateur…"
+                                                   style="-fx-pref-width: 230;
+                                      -fx-background-color: #F4F7F5;
+                                      -fx-background-radius: 8;
+                                      -fx-border-color: #C9DDD2;
+                                      -fx-border-radius: 8; -fx-border-width: 1;
+                                      -fx-text-fill: #1A5C38;
+                                      -fx-prompt-text-fill: #9DBFAD;
+                                      -fx-padding: 8 12 8 34;
+                                      -fx-font-size: 12px;"/>
+                                        <Label text="🔍"
+                                               style="-fx-font-size: 11px; -fx-text-fill: #9DBFAD; -fx-padding: 0 0 0 10;"
+                                               StackPane.alignment="CENTER_LEFT"/>
+                                    </children>
+                                </StackPane>
+                                <Button fx:id="refreshBtn" text="↺  Rafraîchir"
+                                        onAction="#refreshCards"
+                                        style="-fx-background-color: linear-gradient(to bottom,#2E8B57,#1A5C38);
+                               -fx-text-fill: #FFFFFF; -fx-font-weight: 700; -fx-font-size: 12px;
+                               -fx-background-radius: 8; -fx-padding: 8 17; -fx-cursor: hand;
+                               -fx-effect: dropshadow(gaussian,rgba(26,92,56,0.22),8,0,0,2);"/>
+                            </children>
+                        </HBox>
+
+                    </children>
+                </HBox>
+
+                <!-- ═══════════════════════════
+                     STATS  — Surface 2 (#E8F0EB)
+                ═══════════════════════════ -->
+                <HBox spacing="1.0"
+                      style="-fx-padding: 16 28 0 28; -fx-background-color: #F4F7F5;">
+                    <children>
+
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #E8F0EB; -fx-padding: 14 18;
+                         -fx-background-radius: 10 0 0 10;">
+                            <children>
+                                <Label text="3" style="-fx-font-size: 23px; -fx-font-weight: bold; -fx-text-fill: #1A5C38;"/>
+                                <Label text="TOTAL UTILISATEURS"
+                                       style="-fx-font-size: 9.5px; -fx-text-fill: #6B9A80; -fx-font-weight: 700;"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #E8F0EB; -fx-padding: 14 18;">
+                            <children>
+                                <Label fx:id="statActifs" text="2"
+                                       style="-fx-font-size: 23px; -fx-font-weight: bold; -fx-text-fill: #1A5C38;"/>
+                                <Label text="ACTIFS AUJOURD'HUI"
+                                       style="-fx-font-size: 9.5px; -fx-text-fill: #6B9A80; -fx-font-weight: 700;"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #E8F0EB; -fx-padding: 14 18;">
+                            <children>
+                                <Label fx:id="statDepenses" text="580"
+                                       style="-fx-font-size: 23px; -fx-font-weight: bold; -fx-text-fill: #1A5C38;"/>
+                                <Label text="DÉPENSES TOTALES (DT)"
+                                       style="-fx-font-size: 9.5px; -fx-text-fill: #6B9A80; -fx-font-weight: 700;"/>
+                            </children>
+                        </VBox>
+
+                        <VBox spacing="3.0" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #E8F0EB; -fx-padding: 14 18;
+                         -fx-background-radius: 0 10 10 0;">
+                            <children>
+                                <Label fx:id="statRoles" text="3"
+                                       style="-fx-font-size: 23px; -fx-font-weight: bold; -fx-text-fill: #1A5C38;"/>
+                                <Label text="RÔLES AGRICULTEUR"
+                                       style="-fx-font-size: 9.5px; -fx-text-fill: #6B9A80; -fx-font-weight: 700;"/>
+                            </children>
+                        </VBox>
+
+                    </children>
+                </HBox>
+
+                <!-- ═══════════════════════════
+                     SECTION HEADER
+                ═══════════════════════════ -->
+                <HBox alignment="CENTER_LEFT" spacing="11.0"
+                      style="-fx-padding: 20 28 10 28; -fx-background-color: #F4F7F5;">
+                    <children>
+                        <Label text="Tous les membres"
+                               style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #1A5C38;"/>
+                        <Region HBox.hgrow="ALWAYS"
+                                style="-fx-background-color: #C9DDD2; -fx-pref-height: 1; -fx-max-height: 1;"/>
+                        <Label fx:id="visibleBadge" text="3 affiché(s)"
+                               style="-fx-font-size: 10px; -fx-font-weight: 700;
+                          -fx-text-fill: #1A5C38;
+                          -fx-background-color: #D4EDE0;
+                          -fx-border-color: #52B788;
+                          -fx-border-radius: 20; -fx-background-radius: 20;
+                          -fx-border-width: 1; -fx-padding: 2 10;"/>
+                    </children>
+                </HBox>
+
+                <!-- ═══════════════════════════
+                     CARDS AREA
+                ═══════════════════════════ -->
+                <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                            style="-fx-background-color: transparent; -fx-background: transparent;
+                           -fx-border-color: transparent; -fx-padding: 0 28 0 28;">
+                    <content>
+                        <FlowPane fx:id="cardsPane"
+                                  hgap="14.0" vgap="14.0"
+                                  prefWrapLength="1100.0"
+                                  style="-fx-background-color: transparent; -fx-padding: 0 0 20 0;"/>
+                    </content>
+                </ScrollPane>
+
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

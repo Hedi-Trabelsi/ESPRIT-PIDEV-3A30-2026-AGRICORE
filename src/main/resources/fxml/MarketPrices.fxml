@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="720" prefHeight="450"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controller.MarketController"
+            style="-fx-background-color:#F3F7F5;">
+
+    <children>
+
+        <!-- Title -->
+        <Label text="🌿 SmartFarm Market Prices"
+               layoutX="220"
+               layoutY="20"
+               style="-fx-font-size:22px;
+                      -fx-font-weight:bold;
+                      -fx-text-fill:#16503A;" />
+
+        <!-- Table container -->
+        <VBox layoutX="60" layoutY="80"
+              prefWidth="600"
+              prefHeight="260"
+              style="-fx-background-color:white;
+                     -fx-background-radius:12;
+                     -fx-padding:15;
+                     -fx-effect:dropshadow(gaussian, rgba(0,0,0,0.08),10,0,0,3);">
+
+            <TableView fx:id="priceTable"
+                       prefWidth="570"
+                       prefHeight="230"
+                       styleClass="modern-table">
+
+                <columns>
+
+                    <TableColumn fx:id="productCol"
+                                 text="🌱 Product"
+                                 prefWidth="285"/>
+
+                    <TableColumn fx:id="priceCol"
+                                 text="💰 Market Price"
+                                 prefWidth="285"/>
+
+                </columns>
+
+            </TableView>
+
+        </VBox>
+
+        <!-- Button -->
+        <Button text="Load Market Prices"
+                layoutX="280"
+                layoutY="360"
+                prefWidth="160"
+                prefHeight="36"
+                onAction="#loadPrices"
+                style="-fx-background-color:#16503A;
+                       -fx-text-fill:white;
+                       -fx-font-size:14px;
+                       -fx-font-weight:bold;
+                       -fx-background-radius:8;
+                       -fx-cursor:hand;" />
+
+    </children>
+
+</AnchorPane>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.MaintenanceDetailController">
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <content>
+            <VBox spacing="25" style="-fx-padding: 30;">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label text="← Retour au dashboard" onMouseClicked="#goBackLabel"
+                               styleClass="maint-back-link"/>
+                        <Label text="Fiche d'intervention détaillée" styleClass="page-title"/>
+                    </VBox>
+                    <VBox alignment="CENTER_RIGHT">
+                        <Label text="BUDGET TOTAL" styleClass="maint-field-label"/>
+                        <Label fx:id="lblTotalCout" text="0.00 DT"
+                               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #1b5e20;"/>
+                    </VBox>
+                </HBox>
+
+                <Separator style="-fx-opacity: 0.3;" />
+
+                <VBox spacing="5">
+                    <Label text="NOM DE LA MAINTENANCE" styleClass="maint-field-label"/>
+                    <Label fx:id="lblNomMaintenance"
+                           style="-fx-font-size: 18px; -fx-font-weight: normal; -fx-text-fill: #1e293b;"/>
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label text="ÉQUIPEMENT" styleClass="maint-field-label"/>
+                    <Label fx:id="lblEquipement"
+                           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #1b5e20;"/>
+                </VBox>
+
+                <HBox spacing="25" alignment="TOP_LEFT">
+                    <GridPane hgap="40" vgap="25" HBox.hgrow="ALWAYS">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="200" prefWidth="250" />
+                            <ColumnConstraints minWidth="200" prefWidth="250" />
+                        </columnConstraints>
+                        <children>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                                <Label text="TYPE D'INTERVENTION" styleClass="maint-field-label"/>
+                                <Label fx:id="lblType"
+                                       style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                                <Label text="LOCALISATION" styleClass="maint-field-label"/>
+                                <Label fx:id="lblLieu"
+                                       style="-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="ÉTAT ACTUEL" styleClass="maint-field-label"/>
+                                <Label fx:id="lblStatut"
+                                       style="-fx-font-size: 13px; -fx-font-weight: bold;"/>
+                            </VBox>
+                            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <Label text="NIVEAU D'URGENCE" styleClass="maint-field-label"/>
+                                <Label fx:id="lblPriorite" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                            </VBox>
+                        </children>
+                    </GridPane>
+
+                    <Separator orientation="VERTICAL" style="-fx-opacity: 0.3;" />
+
+                    <VBox spacing="10" prefWidth="450" HBox.hgrow="ALWAYS" styleClass="maint-description-box">
+                        <Label text="DESCRIPTION INITIALE" styleClass="maint-field-label"/>
+                        <Label fx:id="lblDescription" wrapText="true"
+                               style="-fx-font-size: 14px; -fx-text-fill: #0f172a; -fx-line-spacing: 4;"
+                               text="Chargement de la description..."/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="15" styleClass="maint-perf-card">
+                    <HBox alignment="CENTER_LEFT">
+                        <VBox spacing="5">
+                            <Label text="PERFORMANCE DE L'INTERVENTION" styleClass="maint-field-label"/>
+                            <Label fx:id="lblScoreGlobal" text="Score: 0"
+                                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #0f172a;"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <VBox alignment="CENTER_RIGHT" spacing="5">
+                            <Label fx:id="lblEtatPerformance" text="NEUTRE"
+                                   style="-fx-padding: 4 10; -fx-background-radius: 5; -fx-font-weight: bold; -fx-font-size: 11px;"/>
+                        </VBox>
+                    </HBox>
+                    <HBox spacing="10" alignment="CENTER">
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #f0fdf4; -fx-padding: 10; -fx-background-radius: 8;">
+                            <Label text="POSITIFS" styleClass="maint-field-label" style="-fx-text-fill: #166534;"/>
+                            <Label fx:id="lblTotalLikes" text="0"
+                                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #166534;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #f8fafc; -fx-padding: 10; -fx-background-radius: 8;">
+                            <Label text="NEUTRES" styleClass="maint-field-label" style="-fx-text-fill: #64748b;"/>
+                            <Label fx:id="lblTotalNeutres" text="0"
+                                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #64748b;"/>
+                        </VBox>
+                        <VBox alignment="CENTER" HBox.hgrow="ALWAYS"
+                              style="-fx-background-color: #fef2f2; -fx-padding: 10; -fx-background-radius: 8;">
+                            <Label text="NÉGATIFS" styleClass="maint-field-label" style="-fx-text-fill: #991b1b;"/>
+                            <Label fx:id="lblTotalDislikes" text="0"
+                                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #991b1b;"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <Separator style="-fx-opacity: 0.3;" />
+
+                <VBox spacing="15">
+                    <Label text="Tâches planifiées" styleClass="section-title"/>
+                    <VBox fx:id="tachesContainer" spacing="12"/>
+                </VBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

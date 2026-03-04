@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.ShowMaintenanceDetailsController">
+
+    <ScrollPane fitToWidth="true" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <content>
+            <VBox spacing="20" style="-fx-padding: 30;">
+                <HBox alignment="CENTER_LEFT" spacing="20">
+                    <VBox HBox.hgrow="ALWAYS">
+                        <Label fx:id="retourLabel" text="← Retour à la liste" onMouseClicked="#navigateRetour"
+                               styleClass="maint-back-link"/>
+                        <Label text="Fiche d'intervention détaillée" styleClass="page-title"/>
+                    </VBox>
+                    <Button fx:id="btnTerminer" text="Clôturer l'intervention" onAction="#handleTerminerIntervention"
+                            styleClass="maint-primary-button"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Tâches planifiées" styleClass="section-title"/>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Label text="Total Budget :" style="-fx-text-fill: #64748b;"/>
+                    <Label fx:id="totalPrixLabel" text="0.00 DT"
+                           style="-fx-text-fill: #1e293b; -fx-font-weight: bold;" />
+                </HBox>
+
+                <Separator style="-fx-opacity: 0.3;" />
+
+                <VBox spacing="5" style="-fx-padding: 0 0 10 0;">
+                    <Label text="TITRE DE LA MAINTENANCE" styleClass="maint-field-label"/>
+                    <Label fx:id="nomMaintenanceLabel" text="Nom de l'intervention"
+                           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1b5e20;"/>
+                </VBox>
+
+                <GridPane hgap="40" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="280" prefWidth="300" />
+                        <ColumnConstraints minWidth="280" prefWidth="300" />
+                        <ColumnConstraints minWidth="280" prefWidth="300" />
+                    </columnConstraints>
+                    <children>
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" spacing="5">
+                            <Label text="TYPE D'INTERVENTION" styleClass="maint-field-label"/>
+                            <Label fx:id="typeLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" spacing="5">
+                            <Label text="STATUT ACTUEL" styleClass="maint-field-label"/>
+                            <Label fx:id="statutLabel" />
+                        </VBox>
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" spacing="5">
+                            <Label text="PRIORITÉ" styleClass="maint-field-label"/>
+                            <Label fx:id="prioriteLabel" style="-fx-font-size: 16px;"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" spacing="5">
+                            <Label text="ÉQUIPEMENT" styleClass="maint-field-label"/>
+                            <Label fx:id="equipementLabel" style="-fx-font-size: 16px; -fx-text-fill: #1e293b;"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" spacing="5">
+                            <Label text="LIEU" styleClass="maint-field-label"/>
+                            <Label fx:id="lieuLabel" style="-fx-font-size: 16px; -fx-text-fill: #1e293b;"/>
+                        </VBox>
+                        <VBox GridPane.columnIndex="2" GridPane.rowIndex="1" spacing="5">
+                            <Label text="DATE DÉCLARATION" styleClass="maint-field-label"/>
+                            <Label fx:id="dateLabel" style="-fx-font-size: 16px; -fx-text-fill: #1e293b;"/>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <VBox spacing="8" styleClass="maint-description-box">
+                    <Label text="DESCRIPTION DU PROBLÈME" styleClass="maint-field-label"/>
+                    <Label fx:id="descriptionLabel" wrapText="true"
+                           style="-fx-font-size: 14px; -fx-text-fill: #334155; -fx-line-spacing: 1.5;"/>
+                </VBox>
+
+                <Separator style="-fx-opacity: 0.3;" />
+
+                <VBox spacing="15">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="Journal des tâches associées" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button fx:id="btnPlanifier" text="+ Planifier une tâche" onAction="#navigatePlanifier"
+                                styleClass="secondary-button"/>
+                    </HBox>
+                    <VBox fx:id="tachesContainer" spacing="12" style="-fx-background-color: transparent;">
+                        <padding>
+                            <Insets bottom="10" left="5" right="10" top="5" />
+                        </padding>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

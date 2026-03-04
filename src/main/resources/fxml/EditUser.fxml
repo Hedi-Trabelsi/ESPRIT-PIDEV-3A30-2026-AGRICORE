@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="Controller.EditUserController"
+           prefWidth="600" prefHeight="700"
+           styleClass="edit-user-root"
+           stylesheets="@style.css">
+
+    <VBox spacing="20" styleClass="edit-user-card" maxWidth="500">
+        <padding>
+            <Insets top="30" right="30" bottom="30" left="30"/>
+        </padding>
+
+        <!-- Title -->
+        <Label text="Edit User" styleClass="edit-user-title"/>
+
+        <!-- Profile Image -->
+        <VBox alignment="CENTER" spacing="10">
+            <ImageView fx:id="profileImageView"
+                       fitWidth="100" fitHeight="100"
+                       styleClass="edit-user-profile"/>
+            <Button fx:id="uploadImageButton"
+                    text="Change Photo"
+                    styleClass="edit-user-upload"/>
+        </VBox>
+
+        <!-- Form -->
+        <GridPane hgap="15" vgap="12">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="50"/>
+                <ColumnConstraints percentWidth="50"/>
+            </columnConstraints>
+
+            <!-- First Name -->
+            <Label text="First Name" styleClass="edit-user-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+            <TextField fx:id="nomField" promptText="First name" styleClass="edit-user-field" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+            <!-- Last Name -->
+            <Label text="Last Name" styleClass="edit-user-label" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <TextField fx:id="prenomField" promptText="Last name" styleClass="edit-user-field" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <!-- Email -->
+            <Label text="Email" styleClass="edit-user-label" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="2"/>
+            <TextField fx:id="emailField" promptText="Email" styleClass="edit-user-field" GridPane.columnIndex="0" GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+
+            <!-- Password -->
+            <Label text="Password (leave blank to keep current)" styleClass="edit-user-label" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2"/>
+            <PasswordField fx:id="passwordField" promptText="New password" styleClass="edit-user-field" GridPane.columnIndex="0" GridPane.rowIndex="5" GridPane.columnSpan="2"/>
+
+            <!-- Date of Birth -->
+            <Label text="Date of Birth" styleClass="edit-user-label" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+            <DatePicker fx:id="datePicker" promptText="Select date" styleClass="edit-user-field" GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+
+            <!-- Gender -->
+            <Label text="Gender" styleClass="edit-user-label" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+            <ComboBox fx:id="genreBox" promptText="Select gender" styleClass="edit-user-field" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+            <!-- Address -->
+            <Label text="Address" styleClass="edit-user-label" GridPane.columnIndex="0" GridPane.rowIndex="8" GridPane.columnSpan="2"/>
+            <TextField fx:id="adresseField" promptText="Address" styleClass="edit-user-field" GridPane.columnIndex="0" GridPane.rowIndex="9" GridPane.columnSpan="2"/>
+
+            <!-- Phone -->
+            <Label text="Phone" styleClass="edit-user-label" GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+            <TextField fx:id="phoneField" promptText="Phone number" styleClass="edit-user-field" GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+
+            <!-- Role -->
+            <Label text="Role" styleClass="edit-user-label" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+            <ComboBox fx:id="roleBox" promptText="Select role" styleClass="edit-user-field" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+        </GridPane>
+
+        <!-- Error/Success Message -->
+        <Label fx:id="errorLabel"
+               text=""
+               wrapText="true"
+               visible="false"
+               styleClass="edit-user-message"/>
+
+        <!-- Buttons -->
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="saveButton" text="Save Changes" styleClass="edit-user-save"/>
+            <Button fx:id="cancelButton" text="Cancel" styleClass="edit-user-cancel"/>
+        </HBox>
+    </VBox>
+</StackPane>

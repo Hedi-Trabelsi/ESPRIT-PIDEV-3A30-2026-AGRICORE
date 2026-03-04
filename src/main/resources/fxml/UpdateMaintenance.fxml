@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="root-pane" stylesheets="@style.css"
+      spacing="25" style="-fx-padding: 30;"
+      xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="Controller.UpdateMaintenanceController">
+
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="← Annuler et retourner" onMouseClicked="#cancelUpdate" styleClass="maint-back-link"/>
+            <Label text="Modifier la Demande de Maintenance" styleClass="page-title"/>
+        </VBox>
+        <Button fx:id="updateBtn" text="Mettre à jour" onAction="#updateMaintenance"
+                styleClass="maint-primary-button"/>
+    </HBox>
+
+    <Separator style="-fx-opacity: 0.3;" />
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="content-scroll">
+        <content>
+            <VBox spacing="30">
+                <GridPane hgap="40" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="8" GridPane.columnIndex="0">
+                            <Label text="TITRE DE LA MAINTENANCE" styleClass="maint-field-label"/>
+                            <TextField fx:id="nomMaintenanceTf" promptText="Entrez le titre..." styleClass="maint-form-field" />
+                        </VBox>
+                        <VBox spacing="8" GridPane.columnIndex="1">
+                            <Label text="PRIORITÉ" styleClass="maint-field-label"/>
+                            <ChoiceBox fx:id="priorite" maxWidth="1.7976931348623157E308" styleClass="maint-form-field" />
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <GridPane hgap="40" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="8" GridPane.columnIndex="0">
+                            <Label text="TYPE D'INTERVENTION" styleClass="maint-field-label"/>
+                            <ChoiceBox fx:id="type" maxWidth="1.7976931348623157E308" styleClass="maint-form-field" />
+                        </VBox>
+                        <VBox spacing="8" GridPane.columnIndex="1">
+                            <Label text="ÉQUIPEMENT" styleClass="maint-field-label"/>
+                            <TextField fx:id="equipementTf" styleClass="maint-form-field" />
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <GridPane hgap="40" vgap="20">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" />
+                        <ColumnConstraints percentWidth="50" />
+                    </columnConstraints>
+                    <children>
+                        <VBox spacing="8" GridPane.columnIndex="0">
+                            <Label text="LIEU" styleClass="maint-field-label"/>
+                            <TextField fx:id="lieuTf" styleClass="maint-form-field" />
+                        </VBox>
+                        <VBox spacing="8" GridPane.columnIndex="1">
+                            <Label text="DATE DE DÉCLARATION" styleClass="maint-field-label"/>
+                            <TextField fx:id="dateDeclarationTf" editable="false" styleClass="maint-form-field"
+                                       style="-fx-background-color: #f1f5f9; -fx-text-fill: #64748b;"/>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <VBox spacing="10">
+                    <Label text="DESCRIPTION DU PROBLÈME" styleClass="maint-field-label"/>
+                    <TextArea fx:id="descriptionTf" prefHeight="150.0" wrapText="true"
+                              styleClass="maint-form-field"/>
+                </VBox>
+            </VBox>
+        </content>
+    </ScrollPane>
+</VBox>

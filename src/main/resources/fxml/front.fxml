@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="600.0" prefWidth="216.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #7ca76f;">
+    <children>
+        <VBox alignment="CENTER" prefHeight="126.0" prefWidth="216.0">
+            <children>
+                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@/images/logo.png" />
+                    </image>
+                </ImageView>
+            </children>
+        </VBox>
+        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0">
+            <children>
+                <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" translateX="35.0">
+                    <image>
+                        <Image url="@/images/group.png" />
+                    </image>
+                </ImageView>
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="194.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-radius: 15;" styleClass="-fx-background-color: transparent;-fx-text-fill: black;/* Hover (curseur dessus) */-fx-background-color: transparent;-fx-text-fill: black;-fx-background-insets: 0;/* pressed (clic) */-fx-background-color: white;-fx-text-fill: black;" stylesheets="@style.css" text="Mon Profil" textFill="WHITE" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0">
+            <children>
+                <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" translateX="35.0">
+                    <image>
+                        <Image url="@/images/tracktor.png" />
+                    </image>
+                </ImageView>
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="194.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-radius: 15;" styleClass="-fx-background-color: transparent;-fx-text-fill: black;/* Hover (curseur dessus) */-fx-background-color: transparent;-fx-text-fill: black;-fx-background-insets: 0;/* pressed (clic) */-fx-background-color: white;-fx-text-fill: black;" stylesheets="@style.css" text=" Équipements" textFill="WHITE" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0">
+            <children>
+                <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" translateX="35.0" x="10.0">
+                    <image>
+                        <Image url="@/images/electricity.png" />
+                    </image>
+                </ImageView>
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="194.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-radius: 15;" styleClass="-fx-background-color: transparent;-fx-text-fill: black;/* Hover (curseur dessus) */-fx-background-color: transparent;-fx-text-fill: black;-fx-background-insets: 0;/* pressed (clic) */-fx-background-color: white;-fx-text-fill: black;" stylesheets="@style.css" text=" Maintenance" textFill="WHITE" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0">
+            <children>
+                <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" translateX="35.0">
+                    <image>
+                        <Image url="@/images/booking.png" />
+                    </image>
+                </ImageView>
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="194.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-radius: 15;" styleClass="-fx-background-color: transparent;-fx-text-fill: black;/* Hover (curseur dessus) */-fx-background-color: transparent;-fx-text-fill: black;-fx-background-insets: 0;/* pressed (clic) */-fx-background-color: white;-fx-text-fill: black;" stylesheets="@style.css" text=" Événements" textFill="WHITE" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0">
+            <children>
+                <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" translateX="35.0" x="10.0">
+                    <image>
+                        <Image url="@/images/paw.png" />
+                    </image>
+                </ImageView>
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="194.0" style="-fx-background-color: transparent; -fx-background-radius: 15; -fx-border-color: transparent;" styleClass="-fx-background-color: transparent;-fx-text-fill: black;/* Hover (curseur dessus) */-fx-background-color: transparent;-fx-text-fill: black;-fx-background-insets: 0;/* pressed (clic) */-fx-background-color: white;-fx-text-fill: black;" stylesheets="@style.css" text="Mes Animaux" textFill="WHITE" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="216.0">
+            <children>
+                <ImageView fitHeight="28.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" translateX="35.0" x="10.0">
+                    <image>
+                        <Image url="@/images/money-bag.png" />
+                    </image>
+                </ImageView>
+                <Button fx:id="financeBtn" mnemonicParsing="false" prefHeight="27.0" prefWidth="194.0" style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background-radius: 15;" styleClass="-fx-background-color: transparent;-fx-text-fill: black;/* Hover (curseur dessus) */-fx-background-color: transparent;-fx-text-fill: black;-fx-background-insets: 0;/* pressed (clic) */-fx-background-color: white;-fx-text-fill: black;" stylesheets="@style.css" text=" Financière" textFill="WHITE" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

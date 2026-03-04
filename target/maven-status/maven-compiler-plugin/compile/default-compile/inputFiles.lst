@@ -28,6 +28,7 @@ C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Contro
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Controller\ListeEquipementsController.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Controller\MaintenanceDetailController.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Controller\MaintenancePageController.java
+C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Controller\MarketController.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Controller\MeteoSanteController.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Controller\NavigationUtil.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Controller\NotificationController.java
@@ -69,6 +70,7 @@ C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\Maintenance.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\Panier.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\Participant.java
+C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\ProductPrice.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\SuiviAnimal.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\Tache.java
 C:\Users\The Night TerRoR\Documents\Projet-JAVA-integration\src\main\java\Model\TypeDepense.java
