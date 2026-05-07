@@ -199,8 +199,13 @@ public class AdminAnimauxController {
 
         try {
             if (animalEnEdition == null) {
+                // Récupérer l'ID de l'utilisateur connecté
+                Controller.UserSession session = null;
+                Model.Utilisateur currentUser = Controller.UserSession.getCurrentUser();
+                int idAgriculteur = currentUser != null ? currentUser.getId() : 1;
+
                 Animal newAnimal = new Animal(
-                        0,
+                        idAgriculteur,
                         codeTf.getText().trim(),
                         especeCombo.getValue(),
                         raceTf.getText().trim(),

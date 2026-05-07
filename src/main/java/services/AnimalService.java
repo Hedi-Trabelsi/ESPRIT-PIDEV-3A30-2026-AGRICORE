@@ -22,11 +22,23 @@ public class AnimalService implements IService<Animal>{
     @Override
     public int create(Animal a) throws SQLException {
 
+        // Si idAgriculteur est 0 ou invalide, chercher le premier utilisateur existant
+        int idAgriculteur = a.getIdAgriculteur();
+        if (idAgriculteur <= 0) {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery("SELECT id FROM utilisateur LIMIT 1");
+            if (rs.next()) {
+                idAgriculteur = rs.getInt(1);
+            } else {
+                throw new SQLException("Aucun utilisateur trouve en base. Veuillez vous connecter.");
+            }
+        }
+
         String sql = "INSERT INTO animal (idAgriculteur, codeAnimal, espece, race, sexe, dateNaissance) VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-        ps.setInt(1, a.getIdAgriculteur());
+        ps.setInt(1, idAgriculteur);
         ps.setString(2, a.getCodeAnimal());
         ps.setString(3, a.getEspece());
         ps.setString(4, a.getRace());

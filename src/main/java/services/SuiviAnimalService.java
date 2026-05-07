@@ -23,8 +23,8 @@ public class SuiviAnimalService implements IService<SuiviAnimal> {
     public int create(SuiviAnimal s) throws SQLException {
         // ✅ Ordre exact des colonnes de votre table MySQL
         String sql = "INSERT INTO suivi_animal " +
-                "(idAnimal, dateSuivi, temperature, poids, rythmeCardiaque, etatSante, remarque, niveauActivite) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "(idAnimal, dateSuivi, temperature, poids, rythmeCardiaque, etatSante, remarque, niveauActitive, niveauActivite) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, s.getIdAnimal());
@@ -32,9 +32,11 @@ public class SuiviAnimalService implements IService<SuiviAnimal> {
         ps.setDouble(3, s.getTemperature());
         ps.setDouble(4, s.getPoids());
         ps.setInt(5, s.getRythmeCardiaque());
-        ps.setString(6, s.getEtatSante());       // ✅ etatSante en 6e
-        ps.setString(7, s.getRemarque());         // ✅ remarque en 7e
-        ps.setString(8, s.getNiveauActivite());   // ✅ niveauActivite en 8e
+        ps.setString(6, s.getEtatSante() != null ? s.getEtatSante() : "Bon");
+        ps.setString(7, s.getRemarque() != null ? s.getRemarque() : "");
+        String niveau = s.getNiveauActivite() != null ? s.getNiveauActivite() : "Moyen";
+        ps.setString(8, niveau);
+        ps.setString(9, niveau);
         ps.executeUpdate();
 
         ResultSet rs = ps.getGeneratedKeys();
@@ -46,17 +48,19 @@ public class SuiviAnimalService implements IService<SuiviAnimal> {
     public void update(SuiviAnimal s) throws SQLException {
         String sql = "UPDATE suivi_animal SET " +
                 "temperature=?, poids=?, rythmeCardiaque=?, " +
-                "etatSante=?, remarque=?, niveauActivite=? " +
+                "etatSante=?, remarque=?, niveauActitive=?, niveauActivite=? " +
                 "WHERE idSuivi=?";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setDouble(1, s.getTemperature());
         ps.setDouble(2, s.getPoids());
         ps.setInt(3, s.getRythmeCardiaque());
-        ps.setString(4, s.getEtatSante());
-        ps.setString(5, s.getRemarque());
-        ps.setString(6, s.getNiveauActivite());
-        ps.setInt(7, s.getIdSuivi());
+        ps.setString(4, s.getEtatSante() != null ? s.getEtatSante() : "Bon");
+        ps.setString(5, s.getRemarque() != null ? s.getRemarque() : "");
+        String niveau = s.getNiveauActivite() != null ? s.getNiveauActivite() : "Moyen";
+        ps.setString(6, niveau);
+        ps.setString(7, niveau);
+        ps.setInt(8, s.getIdSuivi());
         ps.executeUpdate();
     }
 
@@ -83,9 +87,9 @@ public class SuiviAnimalService implements IService<SuiviAnimal> {
             s.setTemperature(rs.getDouble("temperature"));
             s.setPoids(rs.getDouble("poids"));
             s.setRythmeCardiaque(rs.getInt("rythmeCardiaque"));
-            s.setEtatSante(rs.getString("etatSante"));         // ✅
-            s.setRemarque(rs.getString("remarque"));           // ✅
-            s.setNiveauActivite(rs.getString("niveauActivite")); // ✅
+            s.setEtatSante(rs.getString("etatSante"));
+            s.setRemarque(rs.getString("remarque"));
+            s.setNiveauActivite(rs.getString("niveauActitive"));
             list.add(s);
         }
         return list;
