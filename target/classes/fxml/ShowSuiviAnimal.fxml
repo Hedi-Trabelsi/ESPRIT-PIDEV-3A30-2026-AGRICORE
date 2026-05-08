@@ -2,34 +2,52 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox spacing="20" style="-fx-background-color: #f8f9fa; -fx-padding: 30;"
+<VBox spacing="15" style="-fx-background-color: #f0f7f0; -fx-padding: 25;"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="Controller.ShowSuiviAnimalController">
 
+    <!-- Barre recherche + tri -->
     <HBox spacing="15" alignment="CENTER_LEFT">
-        <TextField fx:id="searchField" promptText="Rechercher un suivi..." prefWidth="400"
-                   style="-fx-background-radius: 12; -fx-padding: 10; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12; -fx-font-size: 13;"/>
-        <Region HBox.hgrow="ALWAYS" />
-        <Label text="Trier par" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
-        <ComboBox fx:id="triCombo" prefWidth="180"
-                  style="-fx-background-radius: 12; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12;"/>
+        <TextField fx:id="searchField" promptText="Rechercher un suivi..."
+                   prefWidth="400"
+                   style="-fx-background-radius:12; -fx-padding:11;
+                          -fx-background-color:white; -fx-font-size:13px;
+                          -fx-border-color:#b2dfb2; -fx-border-radius:12;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Trier par :" style="-fx-text-fill:#4a7c59; -fx-font-weight:bold; -fx-font-size:13px;"/>
+        <ComboBox fx:id="triCombo" prefWidth="200"
+                  style="-fx-background-radius:10; -fx-background-color:white;
+                         -fx-border-color:#b2dfb2; -fx-border-radius:10; -fx-font-size:12px;"/>
     </HBox>
 
-    <HBox alignment="CENTER_LEFT" spacing="15">
-        <VBox>
-            <Label text="Suivi de Sante" style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill: #2d3436;"/>
-            <Label text="Consultez et gerez l'etat de vos animaux" style="-fx-text-fill: #a0a0a0; -fx-font-size: 12;"/>
+    <!-- Titre + boutons -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="3">
+            <Label text="Suivi de Sante"
+                   style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill:#1b5e20;"/>
+            <Label text="Consultez et gerez l'etat de sante de vos animaux"
+                   style="-fx-text-fill:#66bb6a; -fx-font-size:12px;"/>
         </VBox>
-        <Region HBox.hgrow="ALWAYS" />
+        <Region HBox.hgrow="ALWAYS"/>
         <Button text="+ Ajouter Suivi" onAction="#navigateAddSuivi"
-                style="-fx-background-color:#7ca76f; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                style="-fx-background-color:#2e7d32; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
         <Button text="Stats" onAction="#navigateStatistiques"
-                style="-fx-background-color:#6c5ce7; -fx-text-fill:white; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                style="-fx-background-color:#6a1b9a; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
         <Button text="Retour" onAction="#navigateBack"
-                style="-fx-background-color:#fab1a0; -fx-text-fill:#d63031; -fx-background-radius:12; -fx-padding: 10 20; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                style="-fx-background-color:#c62828; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
     </HBox>
 
-    <ListView fx:id="suiviListView" VBox.vgrow="ALWAYS"
-              style="-fx-background-radius: 15; -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 5;"/>
+    <!-- Grille de cartes suivis -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color:transparent; -fx-background:transparent;
+                       -fx-border-color:transparent;">
+        <FlowPane fx:id="suiviGrid" hgap="18" vgap="18"
+                  style="-fx-padding:5; -fx-background-color:transparent;"
+                  prefWrapLength="800"/>
+    </ScrollPane>
+
 </VBox>

@@ -34,11 +34,13 @@ public class AddAnimalController {
                 return;
             }
 
-            Utilisateur currentUser = UserSession.getCurrentUser();
-            int userId = currentUser != null ? currentUser.getId() : 0;
-            if (userId == 0) {
-                showAlert("Erreur", "Aucun utilisateur connecte !");
-                return;
+            // Utiliser services.UserSession (initialisé au login depuis table 'user')
+            int userId = services.UserSession.getInstance().getUserId();
+
+            // Fallback sur Controller.UserSession si disponible
+            if (userId <= 0) {
+                Utilisateur currentUser = UserSession.getCurrentUser();
+                userId = currentUser != null ? currentUser.getId() : 0;
             }
 
             Date sqlDate = Date.valueOf(datePicker.getValue());

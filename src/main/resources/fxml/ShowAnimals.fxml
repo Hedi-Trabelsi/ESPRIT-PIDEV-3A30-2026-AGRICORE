@@ -1,42 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.paint.Color?>
 
-<VBox spacing="20" style="-fx-background-color: #f8f9fa; -fx-padding: 30;"
+<VBox spacing="15" style="-fx-background-color: #f0f7f0; -fx-padding: 25;"
       xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="Controller.ShowAnimalsController">
 
+    <!-- Barre recherche + tri -->
     <HBox spacing="15" alignment="CENTER_LEFT">
-        <TextField fx:id="searchField" promptText="Rechercher par code, espece..." prefWidth="380"
-                   onKeyReleased="#searchAnimals"
-                   style="-fx-background-radius: 12; -fx-padding: 10; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 12;"/>
-        <Region HBox.hgrow="ALWAYS" />
-        <Label text="Trier par :" style="-fx-text-fill: #7f8c8d; -fx-font-weight: bold;"/>
-        <ComboBox fx:id="triCombo" prefWidth="180"
-                  style="-fx-background-radius: 10; -fx-background-color: white; -fx-border-color: #eee; -fx-border-radius: 10;"/>
+        <TextField fx:id="searchField" promptText="Rechercher par code, espece, race..."
+                   prefWidth="400" onKeyReleased="#searchAnimals"
+                   style="-fx-background-radius:12; -fx-padding:11;
+                          -fx-background-color:white; -fx-font-size:13px;
+                          -fx-border-color:#b2dfb2; -fx-border-radius:12;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Trier par :" style="-fx-text-fill:#4a7c59; -fx-font-weight:bold; -fx-font-size:13px;"/>
+        <ComboBox fx:id="triCombo" prefWidth="190"
+                  style="-fx-background-radius:10; -fx-background-color:white;
+                         -fx-border-color:#b2dfb2; -fx-border-radius:10; -fx-font-size:12px;"/>
     </HBox>
 
-    <HBox alignment="CENTER_LEFT" spacing="15">
-        <VBox>
-            <Label text="Liste des Animaux" style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill: #2d3436;"/>
-            <Label text="Gerez et suivez les membres de votre parc" style="-fx-text-fill: #a0a0a0; -fx-font-size: 12;"/>
+    <!-- Titre + boutons -->
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="3">
+            <Label text="Liste des Animaux"
+                   style="-fx-font-size:26px; -fx-font-weight:bold; -fx-text-fill:#1b5e20;"/>
+            <Label text="Gerez et suivez les membres de votre parc"
+                   style="-fx-text-fill:#66bb6a; -fx-font-size:12px;"/>
         </VBox>
-        <Region HBox.hgrow="ALWAYS" />
+        <Region HBox.hgrow="ALWAYS"/>
         <Button text="Suivi" onAction="#navigateShowSuiviAnimal"
-                style="-fx-background-color:#3498db; -fx-text-fill:white; -fx-background-radius:10; -fx-padding: 10 18; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                style="-fx-background-color:#1976d2; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
         <Button text="+ Ajouter" onAction="#navigateAddAnimal"
-                style="-fx-background-color:#7ca76f; -fx-text-fill:white; -fx-background-radius:10; -fx-padding: 10 18; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                style="-fx-background-color:#2e7d32; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
         <Button text="Stats" onAction="#navigateStatistiques"
-                style="-fx-background-color:#6a1b9a; -fx-text-fill:white; -fx-background-radius:10; -fx-padding: 10 18; -fx-font-weight: bold; -fx-cursor: hand;"/>
+                style="-fx-background-color:#6a1b9a; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
         <Button text="Meteo" onAction="#navigateMeteo"
-                style="-fx-background-color:#0288d1; -fx-text-fill:white; -fx-background-radius:10; -fx-padding:8 14; -fx-font-weight:bold;"/>
+                style="-fx-background-color:#0288d1; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
         <Button text="Nutrition IA" onAction="#navigateNutrition"
-                style="-fx-background-color:#2e7d32; -fx-text-fill:white; -fx-background-radius:10; -fx-padding:8 14; -fx-font-weight:bold;"/>
+                style="-fx-background-color:#558b2f; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
+        <Button text="💊 Ordonnance IA" onAction="#navigateOrdonnance"
+                style="-fx-background-color:#4e342e; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
+        <Button text="🧬 Resume Medical" onAction="#navigateResumeMedical"
+                style="-fx-background-color:#37474f; -fx-text-fill:white; -fx-background-radius:10;
+                       -fx-padding:10 18; -fx-font-weight:bold; -fx-cursor:hand; -fx-font-size:12px;"/>
     </HBox>
 
-    <ListView fx:id="animalListView" VBox.vgrow="ALWAYS"
-              style="-fx-background-radius: 15; -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 5;"/>
+    <!-- Grille de cartes -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                style="-fx-background-color:transparent; -fx-background:transparent;
+                       -fx-border-color:transparent;">
+        <FlowPane fx:id="animalGrid" hgap="18" vgap="18"
+                  style="-fx-padding:5; -fx-background-color:transparent;"
+                  prefWrapLength="800"/>
+    </ScrollPane>
+
 </VBox>

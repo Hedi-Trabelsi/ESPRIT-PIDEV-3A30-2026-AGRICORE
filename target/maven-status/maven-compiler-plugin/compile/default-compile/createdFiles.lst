@@ -8,6 +8,7 @@ services\CartMemoire.class
 Controller\AnomalyPageController$Row.class
 Controller\AdminAnimauxController$2.class
 services\ai\AnomalyDetectionService.class
+Controller\ResumeMedicalController$StatsMedicales.class
 Model\Tache.class
 Controller\AddTacheController.class
 Controller\ForgotPasswordController.class
@@ -50,6 +51,7 @@ Model\Commande.class
 Controller\UserCalendarController.class
 services\GoogleSignInService.class
 services\LogService.class
+Controller\ResumeMedicalController$1.class
 Controller\UserAnalyticsController.class
 Controller\AddMaintenanceController.class
 Controller\AddSuiviAnimalController$1.class
@@ -67,6 +69,7 @@ Controller\AddUserController.class
 Controller\ShowParticipantController.class
 Controller\AnomalyPageController.class
 Model\Animal.class
+Controller\EventManagementController.class
 Controller\AddSuiviAnimalController$2.class
 Controller\GoogleSignInController.class
 services\AnimalService.class
@@ -77,6 +80,7 @@ Controller\ShowAnimalsController.class
 Controller\RecommandationAlimentaireController$1.class
 Controller\AdminAnimauxController.class
 Controller\RecommandationAlimentaireController$ProfilNutri.class
+Controller\ResumeMedicalController$2.class
 services\ai\RobustAnomalyDetectionService.class
 Controller\DepenseFormController.class
 services\EquipementService.class
@@ -99,7 +103,6 @@ Model\ActionLog.class
 Controller\MaintenancePageController.class
 Controller\ForgotPasswordController$1.class
 services\IServiceMaintenance.class
-Controller\ShowAnimalsController$1.class
 services\DepenseService.class
 services\UserService.class
 Controller\RecommandationAlimentaireController$2.class
@@ -109,13 +112,14 @@ services\EmailService$1.class
 Controller\CombinedDashboardController.class
 Model\ForecastResult.class
 Controller\NavigationUtil.class
+Controller\ResumeMedicalController.class
 Controller\AddAnimalController.class
 Model\Panier.class
 Controller\UpdateTacheController.class
 Controller\SigninController.class
 services\AgricultureService.class
-Controller\ShowSuiviAnimalController$1.class
 Controller\ShowUsersController.class
+services\EquipementService$ForeignKeyRef.class
 Model\SuiviAnimal.class
 org\example\Main.class
 services\UserSession.class
@@ -127,10 +131,12 @@ services\PanierService.class
 services\ParticipantService.class
 Model\AnomalyResult.class
 services\EmailService.class
+Controller\OrdonnanceIAController$2.class
 Controller\FaceScanController$FaceCapturedListener.class
 services\MessageService$ChatMessage.class
 services\MessageService.class
 Model\ForecastPoint.class
+Controller\OrdonnanceIAController$1.class
 Controller\DashboardController.class
 services\GoogleSignInService$GoogleUserInfo.class
 Controller\TacheMaintenanceController.class
@@ -148,4 +154,5 @@ Controller\ShowSuiviAnimalController.class
 Controller\EventPageController$NotificationItem.class
 services\ai\DefaultForecastingService.class
 services\FacePPService.class
+Controller\OrdonnanceIAController.class
 Controller\StatistiquesSuiviController.class

@@ -22,22 +22,34 @@ public class AnimalService implements IService<Animal>{
     @Override
     public int create(Animal a) throws SQLException {
 
-        // Si idAgriculteur est 0 ou invalide, chercher le premier utilisateur existant
         int idAgriculteur = a.getIdAgriculteur();
+
+        // Vérifier que l'ID existe dans la table 'user' (projet web)
+        if (idAgriculteur > 0) {
+            PreparedStatement check = connection.prepareStatement(
+                "SELECT id FROM user WHERE id = ?");
+            check.setInt(1, idAgriculteur);
+            ResultSet checkRs = check.executeQuery();
+            if (!checkRs.next()) {
+                // L'ID n'existe pas dans 'user', prendre le premier disponible
+                idAgriculteur = 0;
+            }
+        }
+
+        // Si toujours invalide, prendre le premier user existant
         if (idAgriculteur <= 0) {
             Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery("SELECT id FROM utilisateur LIMIT 1");
-            if (rs.next()) {
-                idAgriculteur = rs.getInt(1);
+            ResultSet rs2 = st.executeQuery("SELECT id FROM user LIMIT 1");
+            if (rs2.next()) {
+                idAgriculteur = rs2.getInt(1);
             } else {
-                throw new SQLException("Aucun utilisateur trouve en base. Veuillez vous connecter.");
+                throw new SQLException("Aucun utilisateur trouve dans la table 'user'.");
             }
         }
 
         String sql = "INSERT INTO animal (idAgriculteur, codeAnimal, espece, race, sexe, dateNaissance) VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
         ps.setInt(1, idAgriculteur);
         ps.setString(2, a.getCodeAnimal());
         ps.setString(3, a.getEspece());

@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a52b934a-b8c4-4bcf-9466-d75d62212aa0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Controller/AgriculteurController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Controller/AgriculteurController.java" afterDir="false" />
@@ -14,11 +15,19 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/services/EquipementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/EquipementService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/services/PanierService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/PanierService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/ImageManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/ImageManager.java" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/AddAnimalController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AddAnimalController.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AddMaintenanceController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AddMaintenanceController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AddSuiviAnimalController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AddSuiviAnimalController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AddSuiviAnimalController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AddSuiviAnimalController$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AddSuiviAnimalController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AddSuiviAnimalController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AddTacheController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AddTacheController.class" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/AddUserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AddUserController.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AdminAnimauxController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AdminAnimauxController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AdminAnimauxController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AdminAnimauxController$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AdminAnimauxController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AdminAnimauxController.class" afterDir="false" />
@@ -32,19 +41,36 @@
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AgriculteurController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AgriculteurController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AgriculturePanelController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AgriculturePanelController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AjoutEquipementController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AjoutEquipementController.class" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/AnomalyPageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AnomalyPageController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ChatBotController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ChatBotController.class" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/AnomalyPageController$Row.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AnomalyPageController$Row.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/AnomalyPageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/AnomalyPageController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/ChatBotController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ChatBotController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/CombinedDashboardController$LoaderConsumer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/CombinedDashboardController$LoaderConsumer.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/CombinedDashboardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/CombinedDashboardController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/DashboardController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/DashboardController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/DashboardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/DashboardController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/DepenseFormController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/DepenseFormController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/DetailEquipementController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/DetailEquipementController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/EditUserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EditUserController.class" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/EvenementParticipantController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EvenementParticipantController.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/EventManagementController$MapBridge.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EventManagementController$MapBridge.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/EventManagementController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EventManagementController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/EventPageController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EventPageController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/EventPageController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EventPageController$2.class" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/EventPageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EventPageController.class" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/EventPageController$NotificationItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EventPageController$NotificationItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/EventPageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/EventPageController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/FaceScanController$FaceCapturedListener.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/FaceScanController$FaceCapturedListener.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/FaceScanController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/FaceScanController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/FinanceTablesController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/FinanceTablesController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ForgotPasswordController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ForgotPasswordController$1.class" afterDir="false" />
@@ -56,6 +82,10 @@
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/MaintenanceDetailController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/MaintenanceDetailController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/MaintenancePageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/MaintenancePageController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/MeteoSanteController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/MeteoSanteController.class" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/NavigationUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/NavigationUtil.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/NotificationController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/NotificationController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/NotificationController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/NotificationController$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/NotificationController$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/NotificationController$3.class" afterDir="false" />
@@ -63,6 +93,10 @@
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ProfilePageController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ProfilePageController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController$2.class" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController$ProfilNutri.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController$ProfilNutri.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/RecommandationAlimentaireController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ShowAnimalsController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ShowAnimalsController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ShowAnimalsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ShowAnimalsController.class" afterDir="false" />
@@ -72,21 +106,37 @@
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ShowParticipantController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ShowParticipantController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ShowSuiviAnimalController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ShowSuiviAnimalController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ShowSuiviAnimalController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ShowSuiviAnimalController.class" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/ShowUsersController$LC.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ShowUsersController$LC.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/ShowUsersController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/ShowUsersController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/SigninController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/SigninController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/SignupController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/SignupController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/StatistiquesSuiviController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/StatistiquesSuiviController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/StatsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/StatsController.class" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/TacheMaintenanceController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/TacheMaintenanceController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/UpdateAnimalController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UpdateAnimalController.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UpdateEvenementController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UpdateEvenementController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UpdateMaintenanceController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UpdateMaintenanceController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UpdateSuiviAnimalController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UpdateSuiviAnimalController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UpdateTacheController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UpdateTacheController.class" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserAnalyticsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserAnalyticsController.class" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserAnalyticsController$AnomRow.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserAnalyticsController$AnomRow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserAnalyticsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserAnalyticsController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserCalendarController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserCalendarController$1.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserCalendarController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserCalendarController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserCardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserCardController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserHomeController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserHomeController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserManagementController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserManagementController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserOperationsController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserOperationsController.class" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/target/classes/Controller/VenteFormController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/VenteFormController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Model/Equipement.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Equipement.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Model/EvennementAgricole.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/EvennementAgricole.class" afterDir="false" />
@@ -95,17 +145,54 @@
       <change beforePath="$PROJECT_DIR$/target/classes/Model/Tache.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Tache.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Model/TypeDepense.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/TypeDepense.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/User.class" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/UserSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/UserSession.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Controller/VenteFormController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Controller/VenteFormController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/ActionLog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/ActionLog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Animal.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Animal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/AnomalyResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/AnomalyResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Depense.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Depense.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Equipement.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Equipement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/EvennementAgricole.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/EvennementAgricole.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/ForecastPoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/ForecastPoint.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/ForecastResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/ForecastResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Maintenance.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Maintenance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Panier.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Panier.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Participant.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Participant.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/SuiviAnimal.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/SuiviAnimal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Tache.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Tache.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/TypeDepense.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/TypeDepense.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Utilisateur.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Utilisateur.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Model/Vente.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Model/Vente.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/AgricultureService$IndicatorResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/AgricultureService$IndicatorResult.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/services/AgricultureService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/AgricultureService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/AnimalService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/AnimalService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/ChatBotService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ChatBotService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/DepenseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/DepenseService.class" afterDir="false" />
+<<<<<<< Updated upstream
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/services/EmailService$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/EmailService$1.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/services/EmailService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/EmailService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/EquipementService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/EquipementService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/EvennementService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/EvennementService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/FacePPService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/FacePPService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/GoogleSignInService$GoogleUserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/GoogleSignInService$GoogleUserInfo.class" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer$RedirectHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer$RedirectHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer.class" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/services/GoogleSignInService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/GoogleSignInService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/IService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/IService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/IServiceMaintenance.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/IServiceMaintenance.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer$RedirectHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer$RedirectHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/LocalRedirectServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/LogService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/LogService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/MessageService$ChatMessage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/MessageService$ChatMessage.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/services/MessageService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/MessageService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/NotificationService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/NotificationService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/OpenAIService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/OpenAIService.class" afterDir="false" />
@@ -113,12 +200,25 @@
       <change beforePath="$PROJECT_DIR$/target/classes/services/ParticipantService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ParticipantService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/PdfService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/PdfService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/ServiceMaintenance.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ServiceMaintenance.class" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/target/classes/services/SmsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/SmsService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/SuiviAnimalService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/SuiviAnimalService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/UserService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/VenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/VenteService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/ai/DefaultAnomalyDetectionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ai/DefaultAnomalyDetectionService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/ai/DefaultForecastingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ai/DefaultForecastingService.class" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/target/classes/services/ServiceTache.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ServiceTache.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/SmsService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/SmsService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/SuiviAnimalService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/SuiviAnimalService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/UserSession.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/UserSession.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/VenteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/VenteService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/ai/AnomalyDetectionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ai/AnomalyDetectionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/ai/DefaultAnomalyDetectionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ai/DefaultAnomalyDetectionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/ai/DefaultForecastingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ai/DefaultForecastingService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/ai/ForecastingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ai/ForecastingService.class" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/target/classes/services/ai/RobustAnomalyDetectionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/ai/RobustAnomalyDetectionService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/utils/ImageManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/ImageManager.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/utils/MyDatabase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/utils/MyDatabase.class" afterDir="false" />
@@ -155,6 +255,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+<<<<<<< Updated upstream
+=======
+    "Maven.Projet-JAVA [clean].executor": "Run",
+    "Maven.Projet-JAVA [compile].executor": "Run",
+>>>>>>> Stashed changes
     "Maven.Projet-JAVA [org.openjfx:javafx-maven-plugin:0.0.8:run].executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -162,15 +267,22 @@
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
+<<<<<<< Updated upstream
     "last_opened_file_path": "C:/Users/HP/Desktop/Nouveau dossier (11)/ESPRIT-PIDEV-3A30-2026-AGRICORE",
+=======
+    "last_opened_file_path": "C:/Users/eya/Downloads/projet java",
+>>>>>>> Stashed changes
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+<<<<<<< Updated upstream
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
+=======
+>>>>>>> Stashed changes
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -179,7 +291,6 @@
     <attachedChunks>
       <set>
         <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
       </set>
     </attachedChunks>
   </component>

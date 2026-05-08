@@ -199,10 +199,12 @@ public class AdminAnimauxController {
 
         try {
             if (animalEnEdition == null) {
-                // Récupérer l'ID de l'utilisateur connecté
-                Controller.UserSession session = null;
-                Model.Utilisateur currentUser = Controller.UserSession.getCurrentUser();
-                int idAgriculteur = currentUser != null ? currentUser.getId() : 1;
+                // Récupérer l'ID de l'utilisateur connecté depuis services.UserSession
+                int idAgriculteur = services.UserSession.getInstance().getUserId();
+                if (idAgriculteur <= 0) {
+                    Model.Utilisateur currentUser = Controller.UserSession.getCurrentUser();
+                    idAgriculteur = currentUser != null ? currentUser.getId() : 0;
+                }
 
                 Animal newAnimal = new Animal(
                         idAgriculteur,
