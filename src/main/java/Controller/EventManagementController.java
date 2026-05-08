@@ -876,30 +876,29 @@ public class EventManagementController {
     private void showParticipantsForEvent(EvennementAgricole ev) {
         resetMainView();
         mainContentVBox.setPadding(new Insets(30));
-        mainContentVBox.setStyle("-fx-background-color: transparent;");
+        mainContentVBox.setStyle("-fx-background-color: white;");
 
         // --- 1. HEADER ---
         VBox topSection = new VBox(20);
-        topSection.setPadding(new Insets(0, 0, 20, 0));
         topSection.setAlignment(Pos.CENTER);
+        topSection.setPadding(new Insets(0, 0, 20, 0));
 
         HBox navBar = new HBox(15);
         navBar.setAlignment(Pos.CENTER_LEFT);
-
         Button btnBack = new Button("←");
         btnBack.setCursor(Cursor.HAND);
         btnBack.setStyle("-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 50; -fx-font-weight: bold; -fx-font-size: 16px;");
         btnBack.setOnAction(a -> showGestionEvenements());
 
-        Label titleLabel = new Label("Participants - " + ev.getTitre());
-        titleLabel.setFont(Font.font("System", FontWeight.BOLD, 24));
+        Label titleLabel = new Label("Validation Arrivées & Présences - " + ev.getTitre());
+        titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 26));
         titleLabel.setStyle("-fx-text-fill: #1a3c1a;");
         navBar.getChildren().addAll(btnBack, titleLabel);
 
         TextField searchField = new TextField();
-        searchField.setPromptText("🔍 Rechercher par code ou nom...");
+        searchField.setPromptText("🔍 Rechercher par nom de participant...");
         searchField.setPrefWidth(450);
-        searchField.setStyle("-fx-background-radius: 25; -fx-padding: 12 20; -fx-border-color: #2d5a27; -fx-background-color: white; -fx-text-fill: #333;");
+        searchField.setStyle("-fx-background-radius: 25; -fx-padding: 12 20; -fx-border-color: #2d5a27; -fx-background-color: white;");
 
         topSection.getChildren().addAll(navBar, searchField);
 
@@ -907,90 +906,223 @@ public class EventManagementController {
         FlowPane pFlow = new FlowPane(25, 25);
         pFlow.setPadding(new Insets(20));
         pFlow.setAlignment(Pos.CENTER);
+        pFlow.setStyle("-fx-background-color: transparent;");
 
         ScrollPane scroll = new ScrollPane(pFlow);
         scroll.setFitToWidth(true);
-        scroll.setStyle("-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;");
+        scroll.setStyle("-fx-background: #ffffff; -fx-background-color: #ffffff; -fx-border-color: #f0f0f0; -fx-border-radius: 10;");
         VBox.setVgrow(scroll, Priority.ALWAYS);
+
+        searchField.textProperty().addListener((obs, old, newVal) -> refreshPresenceGrid(pFlow, ev, newVal));
+        refreshPresenceGrid(pFlow, ev, "");
+
+        mainContentVBox.getChildren().addAll(topSection, scroll);
+    }
+    private void refreshPresenceGrid(FlowPane pFlow, EvennementAgricole ev, String filter) {
+        pFlow.getChildren().clear();
+
+        // Calculate actual duration based on event dates
+        long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(
+                ev.getDateDebut().toLocalDate(),
+                ev.getDateFin().toLocalDate()
+        );
+
+        final int totalDays = (daysBetween < 0) ? 1 : (int) daysBetween + 1;
 
         try {
             List<Participant> allParticipants = participantService.read().stream()
                     .filter(p -> p.getIdEvennement() == ev.getIdEvennement())
+                    .filter(p -> filter.isEmpty() || (p.getNomParticipant() != null &&
+                            p.getNomParticipant().toLowerCase().contains(filter.toLowerCase())))
                     .collect(Collectors.toList());
 
-            Runnable renderCards = () -> {
-                pFlow.getChildren().clear();
-                String filter = searchField.getText().trim().toLowerCase();
+            for (Participant p : allParticipants) {
+                VBox card = new VBox(12);
+                card.setAlignment(Pos.CENTER);
+                card.setPadding(new Insets(15));
+                card.setPrefSize(280, 420);
+                card.setStyle("-fx-background-color: #ffffff; -fx-background-radius: 20; -fx-border-color: #eee; -fx-border-radius: 20;");
+                card.setEffect(new DropShadow(10, Color.rgb(0, 0, 0, 0.08)));
 
-                for (Participant p : allParticipants) {
-                    // Search by EntryCode OR Name
-                    String name = p.getNomParticipant() != null ? p.getNomParticipant() : "";
-                    if (!filter.isEmpty() &&
-                            !p.getEntryCode().toLowerCase().contains(filter) &&
-                            !name.toLowerCase().contains(filter)) continue;
+                HBox dayBar = new HBox(10);
+                dayBar.setAlignment(Pos.CENTER);
+                ScrollPane dayScroll = new ScrollPane(dayBar);
+                dayScroll.setFitToHeight(true);
+                dayScroll.setPrefHeight(65);
+                dayScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+                dayScroll.setStyle("-fx-background: transparent; -fx-background-color: transparent; -fx-border-color: transparent;");
 
-                    // --- BUBBLE ---
-                    VBox bubble = new VBox(12);
-                    bubble.setAlignment(Pos.CENTER);
-                    bubble.setPadding(new Insets(20));
-                    bubble.setPrefSize(200, 280);
-                    bubble.setStyle("-fx-background-color: white; -fx-background-radius: 25;");
-                    bubble.setEffect(new DropShadow(15, Color.rgb(0, 0, 0, 0.1)));
+                final int[] activeDayIndex = {0};
+                VBox dynamicContent = new VBox(10);
+                dynamicContent.setAlignment(Pos.CENTER);
 
-                    // Icon
-                    StackPane iconStack = new StackPane();
-                    iconStack.getChildren().addAll(new Circle(32, Color.web("#e8f5e9")), new Label("👤"));
-                    ((Label) iconStack.getChildren().get(1)).setStyle("-fx-font-size: 30px;");
+                for (int i = 0; i < totalDays; i++) {
+                    int dayNum = i + 1;
+                    int idx = i;
+                    VBox dayBtn = new VBox(2);
+                    dayBtn.setAlignment(Pos.CENTER);
+                    dayBtn.setPadding(new Insets(5, 12, 5, 12));
+                    dayBtn.setCursor(Cursor.HAND);
 
-                    // NAME DISPLAY
-                    Label nameLabel = new Label(name.isEmpty() ? "Sans Nom" : name);
-                    nameLabel.setFont(Font.font("System", FontWeight.BOLD, 16));
-                    nameLabel.setStyle("-fx-text-fill: #1a3c1a;"); // DARK TEXT
-                    nameLabel.setWrapText(true);
-                    nameLabel.setAlignment(Pos.CENTER);
+                    Label lblJ = new Label("Jour");
+                    lblJ.setStyle("-fx-font-size: 10px; -fx-text-fill: #888;");
+                    Label lblN = new Label(String.valueOf(dayNum));
+                    lblN.setStyle("-fx-font-weight: bold;");
+                    dayBtn.getChildren().addAll(lblJ, lblN);
 
-                    // Info
-                    Label placesLabel = new Label(p.getNbrPlaces() + (p.getNbrPlaces() > 1 ? " Places" : " Place"));
-                    placesLabel.setStyle("-fx-background-color: #f1f1f1; -fx-text-fill: #555; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 4 12; -fx-background-radius: 15;");
+                    String baseStyle = "-fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: #eee;";
+                    String activeStyle = baseStyle + "-fx-background-color: #f0fdf4; -fx-border-color: #2d5a27;";
 
-                    Label codeBadge = new Label("CODE: " + p.getEntryCode());
-                    codeBadge.setStyle("-fx-text-fill: #27ae60; -fx-font-size: 10px; -fx-font-weight: bold;");
+                    dayBtn.setStyle(idx == activeDayIndex[0] ? activeStyle : baseStyle);
 
-                    // Confirm Button
-                    boolean isConfirmed = "Confirmee".equalsIgnoreCase(p.getStatutParticipation());
-                    Button btnConfirm = new Button(isConfirmed ? "Confirmé ✅" : "Confirmer");
-                    btnConfirm.setDisable(isConfirmed);
-                    btnConfirm.setPrefWidth(150);
-                    btnConfirm.setStyle(isConfirmed ?
-                            "-fx-background-color: #a5d6a7; -fx-text-fill: white; -fx-background-radius: 20;" :
-                            "-fx-background-color: #2d5a27; -fx-text-fill: white; -fx-background-radius: 20; -fx-font-weight: bold; -fx-cursor: hand;");
-
-                    btnConfirm.setOnAction(e -> {
-                        try {
-                            p.setStatutParticipation("Confirmee");
-                            participantService.update(p);
-                            logAction("CONFIRMATION", p.getIdParticipant(), "Validé: " + p.getNomParticipant());
-                            showParticipantsForEvent(ev);
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                        }
+                    dayBtn.setOnMouseClicked(e -> {
+                        activeDayIndex[0] = idx;
+                        dayBar.getChildren().forEach(n -> n.setStyle(baseStyle));
+                        dayBtn.setStyle(activeStyle);
+                        updatePresenceUI(dynamicContent, p, activeDayIndex[0], totalDays, pFlow, ev, filter);
                     });
-
-                    bubble.getChildren().addAll(iconStack, nameLabel, placesLabel, codeBadge, btnConfirm);
-                    pFlow.getChildren().add(bubble);
+                    dayBar.getChildren().add(dayBtn);
                 }
-            };
 
-            searchField.textProperty().addListener((obs, old, newVal) -> renderCards.run());
-            renderCards.run();
+                StackPane iconStack = new StackPane();
+                iconStack.getChildren().addAll(new Circle(25, Color.web("#f0fdf4")), new Label("👤"));
+                ((Label) iconStack.getChildren().get(1)).setStyle("-fx-font-size: 24px; -fx-text-fill: #2d5a27;");
 
+                Label nameLabel = new Label(p.getNomParticipant());
+                nameLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
+
+                updatePresenceUI(dynamicContent, p, activeDayIndex[0], totalDays, pFlow, ev, filter);
+
+                card.getChildren().addAll(dayScroll, new Separator(), iconStack, nameLabel, dynamicContent);
+                pFlow.getChildren().add(card);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    private void updatePresenceUI(VBox container, Participant p, int dayIdx, int totalDays, FlowPane pFlow, EvennementAgricole ev, String filter) {
+        container.getChildren().clear();
 
-        mainContentVBox.getChildren().addAll(topSection, scroll);
+        boolean isConfirmed = p.getConfirmation() != null && p.getConfirmation().trim().equalsIgnoreCase("OUI");
+        boolean isAttended = p.getStatutParticipation() != null && p.getStatutParticipation().trim().equalsIgnoreCase("attended");
+
+        if (!isConfirmed && !isAttended) {
+            // STEP 1: Unlock with Entry Code
+            Label instructionLabel = new Label("Entrez le code d'entrée:");
+            instructionLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 13px;");
+
+            TextField codeInput = new TextField();
+            codeInput.setPromptText("Code");
+            codeInput.setStyle("-fx-alignment: center; -fx-background-radius: 10; -fx-padding: 8; -fx-border-color: #ddd; -fx-border-radius: 10;");
+
+            Button btnVerify = new Button("Déverrouiller");
+            btnVerify.setCursor(javafx.scene.Cursor.HAND);
+            btnVerify.setStyle("-fx-background-color: #1a3c1a; -fx-text-fill: white; -fx-background-radius: 10; -fx-font-weight: bold; -fx-padding: 8;");
+            btnVerify.setMaxWidth(Double.MAX_VALUE);
+
+            btnVerify.setOnAction(e -> {
+                if (p.getEntryCode() != null && codeInput.getText().equals(p.getEntryCode())) {
+                    try {
+                        p.setConfirmation("OUI");
+                        participantService.update(p);
+                        updatePresenceUI(container, p, dayIdx, totalDays, pFlow, ev, filter);
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                } else {
+                    codeInput.setStyle("-fx-border-color: #e74c3c; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10;");
+                }
+            });
+            container.getChildren().addAll(instructionLabel, codeInput, btnVerify);
+        } else {
+            // STEP 2: Counter UI
+            int currentCount = p.getPresenceForDay(dayIdx);
+
+            Label dayInfo = new Label("Présence - Jour " + (dayIdx + 1));
+            dayInfo.setStyle("-fx-font-weight: bold; -fx-text-fill: #2d5a27;");
+
+            Label countDisplay = new Label(String.valueOf(currentCount));
+            countDisplay.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #1a3c1a;");
+
+            HBox controls = new HBox(20);
+            controls.setAlignment(Pos.CENTER);
+            Button btnMin = createStyleBtn("-");
+            Button btnPlu = createStyleBtn("+");
+
+            // --- UPDATED ACTIONS TO PASS totalDays ---
+            btnPlu.setOnAction(e -> {
+                if (currentCount < p.getNbrPlaces()) {
+                    saveDayPresence(p, dayIdx, currentCount + 1, totalDays);
+                    updatePresenceUI(container, p, dayIdx, totalDays, pFlow, ev, filter);
+                }
+            });
+
+            btnMin.setOnAction(e -> {
+                if (currentCount > 0) {
+                    saveDayPresence(p, dayIdx, currentCount - 1, totalDays);
+                    updatePresenceUI(container, p, dayIdx, totalDays, pFlow, ev, filter);
+                }
+            });
+
+            controls.getChildren().addAll(btnMin, countDisplay, btnPlu);
+
+            double pct = (p.getNbrPlaces() > 0) ? (currentCount * 100.0 / p.getNbrPlaces()) : 0;
+            Label pctLabel = new Label(String.format("%.0f%% de présence au guichet", pct));
+            pctLabel.setStyle("-fx-text-fill: #666; -fx-font-size: 11px;");
+
+            container.getChildren().addAll(dayInfo, controls, pctLabel);
+        }
+    }
+    private void saveDayPresence(Participant p, int dayIdx, int newVal, int totalDays) {
+        // 1. Get current token (e.g., "2|1")
+        String token = (p.getConfirmToken() == null || p.getConfirmToken().trim().isEmpty()) ? "" : p.getConfirmToken();
+
+        // 2. Split existing data
+        String[] parts = token.isEmpty() ? new String[0] : token.split("\\|", -1);
+
+        // 3. Size the array exactly to the current day index to avoid unwanted trailing pipes
+        int requiredSize = dayIdx + 1;
+        String[] updatedDays = new String[requiredSize];
+
+        // 4. Fill values: keep old ones, set the new one, and only pad if there's a gap
+        for (int i = 0; i < requiredSize; i++) {
+            if (i == dayIdx) {
+                updatedDays[i] = String.valueOf(newVal); // Set today's value
+            } else if (i < parts.length) {
+                updatedDays[i] = parts[i]; // Keep previous days
+            } else {
+                updatedDays[i] = "0"; // Fill gaps only up to today
+            }
+        }
+
+        // 5. Join: This results in "2|1|3" with no trailing pipes for future days
+        String newToken = String.join("|", updatedDays);
+
+        try {
+            p.setConfirmToken(newToken);
+            p.setStatutParticipation("attended"); // Mark as attended
+
+            // Calculate total sum for the nbr_presents column
+            int sum = 0;
+            for (String s : updatedDays) {
+                try {
+                    sum += Integer.parseInt(s);
+                } catch (NumberFormatException e) { /* ignore empty segments */ }
+            }
+            p.setNbrPresents(sum);
+
+            // 6. Persist to DB
+            participantService.update(p);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    private Button createStyleBtn(String text) {
+        Button b = new Button(text);
+        b.setStyle("-fx-background-color: #f1f3f1; -fx-text-fill: #2d5a27; -fx-font-weight: bold; -fx-background-radius: 10; -fx-min-width: 45; -fx-font-size: 18px; -fx-cursor: hand;");
+        return b;
+    }
     // ===================== 5. AUDIT LOGS VIEW =====================
     private void showAuditLogs() {
         resetMainView();

@@ -19,8 +19,16 @@ public class ParticipantService {
         }
     }
 
+    /**
+     * Creates a new participant record.
+     * Fixed the "Field 'email' doesn't have a default value" error by adding the email column.
+     */
     public int create(Participant p) throws SQLException {
-        String query = "INSERT INTO participants (id_utilisateur, id_ev, date_inscription, statut_participation, montant_payee, confirmation, nbr_places, nom_participant, entry_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO participants (id_utilisateur, id_ev, date_inscription, " +
+                "statut_participation, montant_payee, confirmation, nbr_places, " +
+                "nom_participant, email, entry_code, nbr_presents, confirm_token) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, p.getIdUtilisateur());
         ps.setInt(2, p.getIdEvennement());
@@ -30,7 +38,11 @@ public class ParticipantService {
         ps.setString(6, p.getConfirmation());
         ps.setInt(7, p.getNbrPlaces());
         ps.setString(8, p.getNomParticipant());
-        ps.setString(9, p.getEntryCode());
+        ps.setString(9, p.getEmail()); // Added email support
+        ps.setString(10, p.getEntryCode());
+        ps.setInt(11, p.getNbrPresents());
+        ps.setString(12, p.getConfirmToken());
+
         ps.executeUpdate();
 
         ResultSet rs = ps.getGeneratedKeys();
@@ -41,18 +53,40 @@ public class ParticipantService {
     }
 
     /**
-     * NOUVELLE MÉTHODE : Met à jour toutes les informations d'un participant
-     * Utilisée pour confirmer la présence (statut_participation)
+     * Updates an existing participant.
+     * Includes support for the dynamic presence tracking (nbr_presents and confirm_token).
      */
     public void update(Participant p) throws SQLException {
-        String query = "UPDATE participants SET statut_participation = ?, montant_payee = ?, confirmation = ?, nbr_places = ?, entry_code = ? WHERE id_participant = ?";
-        PreparedStatement ps = connection.prepareStatement(query);
-        ps.setString(1, p.getStatutParticipation());
-        ps.setString(2, p.getMontantPayee());
-        ps.setString(3, p.getConfirmation());
-        ps.setInt(4, p.getNbrPlaces());
-        ps.setString(5, p.getEntryCode());
-        ps.setInt(6, p.getIdParticipant());
+        String req = "UPDATE participants SET "
+                + "id_utilisateur = ?, "
+                + "id_ev = ?, "
+                + "date_inscription = ?, "
+                + "statut_participation = ?, "
+                + "montant_payee = ?, "
+                + "confirmation = ?, "
+                + "nbr_places = ?, "
+                + "nom_participant = ?, "
+                + "email = ?, "
+                + "entry_code = ?, "
+                + "nbr_presents = ?, "
+                + "confirm_token = ? "
+                + "WHERE id_participant = ?";
+
+        PreparedStatement ps = connection.prepareStatement(req);
+        ps.setInt(1, p.getIdUtilisateur());
+        ps.setInt(2, p.getIdEvennement());
+        ps.setDate(3, java.sql.Date.valueOf(p.getDateInscription()));
+        ps.setString(4, p.getStatutParticipation());
+        ps.setString(5, p.getMontantPayee());
+        ps.setString(6, p.getConfirmation());
+        ps.setInt(7, p.getNbrPlaces());
+        ps.setString(8, p.getNomParticipant());
+        ps.setString(9, p.getEmail());
+        ps.setString(10, p.getEntryCode());
+        ps.setInt(11, p.getNbrPresents());
+        ps.setString(12, p.getConfirmToken());
+        ps.setInt(13, p.getIdParticipant());
+
         ps.executeUpdate();
     }
 
@@ -89,7 +123,10 @@ public class ParticipantService {
                     rs.getString("confirmation"),
                     rs.getInt("nbr_places"),
                     rs.getString("nom_participant"),
-                    rs.getString("entry_code")
+                    rs.getString("email"),
+                    rs.getString("entry_code"),
+                    rs.getInt("nbr_presents"),
+                    rs.getString("confirm_token")
             );
             list.add(p);
         }
@@ -107,6 +144,17 @@ public class ParticipantService {
         return "Utilisateur " + userId;
     }
 
+    public String getUserEmail(int userId) throws SQLException {
+        String query = "SELECT email FROM utilisateurs WHERE id = ?";
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("email");
+        }
+        return "";
+    }
+
     public int getReservedCount(int idEvennement) throws SQLException {
         int totalReserved = 0;
         String query = "SELECT SUM(nbr_places) FROM participants WHERE id_ev = ?";
@@ -120,9 +168,9 @@ public class ParticipantService {
         }
         return totalReserved;
     }
+
     public List<String> getParticipantNamesForEvent(int eventId) throws SQLException {
         List<String> names = new ArrayList<>();
-        // On joint la table participants avec utilisateurs pour avoir les vrais noms
         String query = "SELECT u.nom, u.prenom FROM participants p " +
                 "JOIN utilisateurs u ON p.id_utilisateur = u.id " +
                 "WHERE p.id_ev = ?";
@@ -136,7 +184,6 @@ public class ParticipantService {
     }
 
     public String getAdminName() throws SQLException {
-        // Récupère l'utilisateur avec le role 0 (Admin/Organisateur)
         String query = "SELECT nom, prenom FROM utilisateurs WHERE role = 0 LIMIT 1";
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(query);

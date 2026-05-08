@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Participant;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,14 +18,15 @@ public class ShowParticipantController {
 
     @FXML private TableView<Participant> tableParticipants;
     @FXML private TableColumn<Participant, Integer> colId;
-    @FXML private TableColumn<Participant, Integer> colIdUtilisateur;
-    @FXML private TableColumn<Participant, Integer> colIdEvennement;
-    @FXML private TableColumn<Participant, String> colDateInscription;
-    @FXML private TableColumn<Participant, String> colStatut;
-    @FXML private TableColumn<Participant, String> colMontant;
-    @FXML private TableColumn<Participant, String> colConfirmation;
-    @FXML private TableColumn<Participant, Integer> colNbrPlaces;
     @FXML private TableColumn<Participant, String> colNomParticipant;
+    @FXML private TableColumn<Participant, Integer> colNbrPlaces;
+    // New Columns for Presence Tracking
+    @FXML private TableColumn<Participant, Integer> colNbrPresents;
+    @FXML private TableColumn<Participant, String> colPercentage;
+
+    @FXML private TableColumn<Participant, String> colStatut;
+    @FXML private TableColumn<Participant, String> colConfirmation;
+    @FXML private TableColumn<Participant, String> colDateInscription;
 
     private ParticipantService service;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -35,26 +37,42 @@ public class ShowParticipantController {
 
     @FXML
     public void initialize() {
+        // Standard Columns
         colId.setCellValueFactory(new PropertyValueFactory<>("idParticipant"));
-        colIdUtilisateur.setCellValueFactory(new PropertyValueFactory<>("idUtilisateur"));
-        colIdEvennement.setCellValueFactory(new PropertyValueFactory<>("idEvennement"));
+        colNomParticipant.setCellValueFactory(new PropertyValueFactory<>("nomParticipant"));
+        colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("nbrPlaces"));
+
+        // --- MULTI-DAY LOGIC COLUMNS ---
+
+        // 1. Total Presents (from the nbr_presents integer field)
+        colNbrPresents.setCellValueFactory(new PropertyValueFactory<>("nbrPresents"));
+
+        // 2. Percentage Calculation: (present_count / reserved_places) × 100
+        colPercentage.setCellValueFactory(cellData -> {
+            Participant p = cellData.getValue();
+            if (p.getNbrPlaces() > 0) {
+                double pct = (double) p.getNbrPresents() / p.getNbrPlaces() * 100;
+                return new SimpleStringProperty(String.format("%.0f%%", pct));
+            }
+            return new SimpleStringProperty("0%");
+        });
+
+        // Formatting and Other Columns
+        colStatut.setCellValueFactory(new PropertyValueFactory<>("statutParticipation"));
+        colConfirmation.setCellValueFactory(new PropertyValueFactory<>("confirmation"));
         colDateInscription.setCellValueFactory(cellData ->
-                new javafx.beans.property.SimpleStringProperty(
+                new SimpleStringProperty(
                         cellData.getValue().getDateInscription() != null ?
                                 cellData.getValue().getDateInscription().format(dateFormatter) : ""
                 )
         );
-        colStatut.setCellValueFactory(new PropertyValueFactory<>("statutParticipation"));
-        colMontant.setCellValueFactory(new PropertyValueFactory<>("montantPayee"));
-        colConfirmation.setCellValueFactory(new PropertyValueFactory<>("confirmation"));
-        colNbrPlaces.setCellValueFactory(new PropertyValueFactory<>("nbrPlaces"));
-        colNomParticipant.setCellValueFactory(new PropertyValueFactory<>("nomParticipant"));
 
         loadData();
     }
 
     private void loadData() {
         try {
+            // Service.read() should now return Participants with the nbrPresents field populated
             List<Participant> list = service.read();
             ObservableList<Participant> data = FXCollections.observableArrayList(list);
             tableParticipants.setItems(data);

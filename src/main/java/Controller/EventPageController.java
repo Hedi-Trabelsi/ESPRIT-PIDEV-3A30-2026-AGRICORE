@@ -1147,7 +1147,6 @@ public class EventPageController {
 
 
 
-
     private void showRegistrationForm(EvennementAgricole ev) {
         StackPane container = (StackPane) mainContentVBox.getChildren().get(0);
         VBox detailCard = (VBox) container.lookup("#detailCard");
@@ -1161,7 +1160,7 @@ public class EventPageController {
 
         VBox formCard = new VBox(20);
         formCard.setAlignment(Pos.CENTER);
-        formCard.setMaxSize(420, 580);
+        formCard.setMaxSize(420, 650); // Increased height for the extra field
         formCard.setPadding(new Insets(30));
         formCard.setStyle("-fx-background-color: white; -fx-background-radius: 25; " +
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 30, 0, 0, 10); " +
@@ -1179,7 +1178,10 @@ public class EventPageController {
             return;
         }
 
-        // --- CHAMPS (NOM, PLACES, TOTAL) ---
+        // --- 1. CHAMPS (NOM, EMAIL) ---
+        VBox inputsBox = new VBox(15);
+
+        // Nom Field
         VBox nameBox = new VBox(5);
         Label nameLabel = new Label("Nom du participant");
         nameLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #555;");
@@ -1188,6 +1190,19 @@ public class EventPageController {
         styleField(nameInput, "Nom complet");
         nameBox.getChildren().addAll(nameLabel, nameInput);
 
+        // Email Field (Fix for SQLException)
+        VBox emailBox = new VBox(5);
+        Label emailLabel = new Label("Email de contact");
+        emailLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #555;");
+        TextField emailInput = new TextField();
+        // Pre-fill email if your service supports it, otherwise prompt the user
+        try { emailInput.setText(partService.getUserEmail(CURRENT_USER_ID)); } catch (Exception e) {}
+        styleField(emailInput, "exemple@domaine.com");
+        emailBox.getChildren().addAll(emailLabel, emailInput);
+
+        inputsBox.getChildren().addAll(nameBox, emailBox);
+
+        // --- 2. PLACES & TOTAL ---
         VBox placesBox = new VBox(10);
         placesBox.setAlignment(Pos.CENTER_LEFT);
         Label infoPlaces = new Label("Nombre de places à réserver :");
@@ -1213,41 +1228,63 @@ public class EventPageController {
 
         placesBox.getChildren().addAll(infoPlaces, placesSpinner, remainingCountLbl);
 
-        // --- BOUTONS ---
+        // --- 3. BOUTONS ---
         Button btnSubmit = new Button("Confirmer l'inscription 🎟");
         btnSubmit.setMaxWidth(Double.MAX_VALUE);
         btnSubmit.setCursor(Cursor.HAND);
-        btnSubmit.setStyle("-fx-background-color: #1a3c1a; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 15; -fx-background-radius: 12;");
+        btnSubmit.setStyle("-fx-background-color: #1a3c1a; -fx-text-fill: white; -fx-font-weight: bold; " +
+                "-fx-padding: 15; -fx-background-radius: 12;");
 
         btnSubmit.setOnAction(e -> {
-            if (nameInput.getText().trim().isEmpty()) {
-                nameInput.setStyle("-fx-border-color: red; -fx-background-radius: 10; -fx-border-radius: 10;");
+            String name = nameInput.getText().trim();
+            String email = emailInput.getText().trim();
+
+            if (name.isEmpty() || email.isEmpty()) {
+                if (name.isEmpty()) nameInput.setStyle("-fx-border-color: red; -fx-background-radius: 10; -fx-border-radius: 10;");
+                if (email.isEmpty()) emailInput.setStyle("-fx-border-color: red; -fx-background-radius: 10; -fx-border-radius: 10;");
                 return;
             }
+
             try {
                 int nbr = placesSpinner.getValue();
                 double total = nbr * ev.getFraisInscription();
                 String code = String.valueOf((int)(Math.random() * 90000) + 10000);
-                Participant p = new Participant(CURRENT_USER_ID, ev.getIdEvennement(), LocalDate.now(),
-                        "...", String.valueOf(total), "OUI", nbr, nameInput.getText(), code);
+
+                // Assuming your Participant constructor now accepts email as the 9th parameter
+                Participant p = new Participant(
+                        CURRENT_USER_ID,        // idUtilisateur
+                        ev.getIdEvennement(),   // idEvennement
+                        LocalDate.now(),        // dateInscription
+                        "Confirmee",            // statutParticipation
+                        String.valueOf(total),  // montantPayee
+                        "confirmed",                  // confirmation
+
+                        nbr,                    // nbrPlaces
+                        name,                   // nomParticipant
+                        email,                  // email (FIX: Field no longer null)
+                        code,                   // entryCode
+                        0,                      // nbrPresents
+                        "0"                     // confirmToken
+                );
+
                 partService.create(p);
                 reservedEventIds.add(ev.getIdEvennement());
+
                 if (detailCard != null) detailCard.setEffect(null);
                 container.getChildren().remove(glassPane);
-                showQRCodePage(ev, nbr, total, nameInput.getText(), code);
-            } catch (Exception ex) { ex.printStackTrace(); }
+                showQRCodePage(ev, nbr, total, name, code);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showAlert("Erreur", "Une erreur est survenue lors de l'inscription.");
+            }
         });
 
         Button btnCancel = new Button("Annuler");
         btnCancel.setStyle("-fx-background-color: transparent; -fx-text-fill: #7f8c8d; -fx-cursor: hand; -fx-underline: true;");
+        btnCancel.setOnAction(e -> playCancelAnimation(container, glassPane, detailCard));
 
-        // --- ACTION ANNULER AVEC ANIMATION ---
-        btnCancel.setOnAction(e -> {
-            // 1. On lance l'animation "cute"
-            playCancelAnimation(container, glassPane, detailCard);
-        });
-
-        formCard.getChildren().addAll(formTitle, new Separator(), nameBox, placesBox, totalLbl, btnSubmit, btnCancel);
+        formCard.getChildren().addAll(formTitle, new Separator(), inputsBox, placesBox, totalLbl, btnSubmit, btnCancel);
         glassPane.getChildren().add(formCard);
         container.getChildren().add(glassPane);
     }
