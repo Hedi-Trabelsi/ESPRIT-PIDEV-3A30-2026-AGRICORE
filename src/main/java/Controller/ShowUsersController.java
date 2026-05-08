@@ -169,7 +169,11 @@ public class ShowUsersController {
         // Name
         String fullName = (fn + " " + ln).trim();
         Label nameLbl = new Label(fullName.isEmpty() ? "Utilisateur" : fullName);
-        nameLbl.setStyle("-fx-font-size:14px; -fx-font-weight:bold; -fx-text-fill:#1A5C38;");
+        if (user.isBanned()) {
+            nameLbl.setStyle("-fx-font-size:14px; -fx-font-weight:bold; -fx-text-fill:#A04040; -fx-strikethrough:true;");
+        } else {
+            nameLbl.setStyle("-fx-font-size:14px; -fx-font-weight:bold; -fx-text-fill:#1A5C38;");
+        }
         nameLbl.setMaxWidth(172);
 
         // Handle
@@ -185,6 +189,7 @@ public class ShowUsersController {
             case 4 -> "Financier";
             default -> "Membre";
         };
+        if (user.isBanned()) roleText = roleText + " · BANNI";
         Label roleLbl = new Label(roleText);
         roleLbl.setStyle(
                 "-fx-font-size:10px; -fx-font-weight:700;" +
@@ -221,8 +226,9 @@ public class ShowUsersController {
         Button bO = btn("🛠 Outils",   "primary", e -> openUserOperations(financeUser));
         Button bA = btn("📊 Analyses", "ghost",   e -> openUserAnalytics(financeUser));
         Button bD = btn("📋 Détails",  "ghost",   e -> openFinanceFor(financeUser));
+        Button bB = btn(user.isBanned() ? "✓ Débannir" : "🚫 Bannir", "ghost", e -> toggleBan(user));
 
-        HBox actRow = new HBox(6, bO, bA, bD);
+        HBox actRow = new HBox(6, bO, bA, bD, bB);
         actRow.setAlignment(Pos.CENTER_LEFT);
         actRow.setPadding(new Insets(11,15,15,15));
 
@@ -315,6 +321,16 @@ public class ShowUsersController {
                 "-fx-border-radius:12; -fx-border-width:1.5;" +
                 "-fx-effect:dropshadow(gaussian,rgba(46,139,87,0.20),16,0,0,5);" +
                 "-fx-cursor:hand; -fx-translate-y:-2;";
+    }
+
+    private void toggleBan(Utilisateur u) {
+        try {
+            u.setBanned(!u.isBanned());
+            us.update(u);
+            refreshCards();
+        } catch (Exception ex) {
+            new Alert(Alert.AlertType.ERROR, "Échec de la mise à jour: " + ex.getMessage()).showAndWait();
+        }
     }
 
     // ── Navigation ──────────────────────────────────────────────

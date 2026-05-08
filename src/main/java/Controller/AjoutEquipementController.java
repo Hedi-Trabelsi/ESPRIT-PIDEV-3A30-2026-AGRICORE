@@ -228,8 +228,8 @@ public class AjoutEquipementController implements Initializable {
     }
 
     /** Charge l'aperçu d'une image déjà existante (mode modification) */
-    private void chargerApercu(String nomEquipement) {
-        String chemin = ImageManager.getImagePath(nomEquipement);
+    private void chargerApercu(String filename) {
+        String chemin = ImageManager.getImagePath(filename);
         if (chemin == null) return;
         try {
             Image img = new Image(
@@ -267,8 +267,8 @@ public class AjoutEquipementController implements Initializable {
         fieldQuantite.setText(String.valueOf(eq.getQuantite()));
         mettreAJourConversion();
         lancerRechercheNews();
-        // Charger l'image existante si elle existe
-        chargerApercu(eq.getNom());
+        // Charger l'image existante si elle existe (via image_filename)
+        chargerApercu(eq.getImageFilename());
     }
 
     @FXML
@@ -278,36 +278,29 @@ public class AjoutEquipementController implements Initializable {
         String nomSaisi = fieldNom.getText().trim();
 
         try {
-            // ── Gérer l'image ─────────────────────────────────────
-            if (fichierImageChoisi != null) {
-                // Si on renomme un équipement, supprimer l'ancienne clé image
-                if (nomEquipementOriginal != null
-                        && !nomEquipementOriginal.equals(nomSaisi)) {
-                    ImageManager.supprimerImage(nomEquipementOriginal);
-                }
-                ImageManager.sauvegarderImage(nomSaisi, fichierImageChoisi);
-            } else if (nomEquipementOriginal != null
-                    && !nomEquipementOriginal.equals(nomSaisi)) {
-                // Renommage sans nouvelle image → migrer l'ancienne image
-                String ancienChemin = ImageManager.getImagePath(nomEquipementOriginal);
-                if (ancienChemin != null) {
-                    ImageManager.supprimerImage(nomEquipementOriginal);
-                    ImageManager.sauvegarderImage(nomSaisi, new File(ancienChemin));
-                }
-            } else if (ivApercu != null && !ivApercu.isVisible()
-                    && nomEquipementOriginal != null) {
-                // L'utilisateur a cliqué "Supprimer l'image" → on efface
-                ImageManager.supprimerImage(nomEquipementOriginal);
-            }
-
             // ── Sauvegarder l'équipement ─────────────────────────
             if (equipementToModify != null) {
+                String oldFilename = equipementToModify.getImageFilename();
+                String newFilename = oldFilename;
+
+                if (fichierImageChoisi != null) {
+                    // L'utilisateur a choisi une nouvelle image
+                    newFilename = ImageManager.storeImage(nomSaisi, fichierImageChoisi);
+                    if (oldFilename != null) ImageManager.deleteImage(oldFilename);
+                } else if (ivApercu != null && !ivApercu.isVisible() && oldFilename != null) {
+                    // L'utilisateur a cliqué "Supprimer l'image"
+                    ImageManager.deleteImage(oldFilename);
+                    newFilename = null;
+                }
+
                 equipementToModify.setNom(nomSaisi);
                 equipementToModify.setType(fieldType.getText().trim());
                 equipementToModify.setPrix(fieldPrix.getText().trim());
                 equipementToModify.setQuantite(Integer.parseInt(
                     fieldQuantite.getText().trim()));
                 equipementToModify.setId_fournisseur(ID_FOURNISSEUR);
+                equipementToModify.setImageFilename(newFilename);
+                equipementToModify.setUpdatedAt(java.time.LocalDateTime.now());
                 equipementService.modifier(equipementToModify);
                 showMessage("Équipement modifié avec succès !", true);
                 equipementToModify = null;
@@ -321,6 +314,11 @@ public class AjoutEquipementController implements Initializable {
                     Integer.parseInt(fieldQuantite.getText().trim()),
                     ID_FOURNISSEUR
                 );
+                if (fichierImageChoisi != null) {
+                    eq.setImageFilename(ImageManager.storeImage(nomSaisi, fichierImageChoisi));
+                }
+                eq.setActive(true);
+                eq.setUpdatedAt(java.time.LocalDateTime.now());
                 equipementService.ajouter(eq);
                 showMessage("Équipement ajouté avec succès !", true);
                 clearForm();
@@ -328,6 +326,8 @@ public class AjoutEquipementController implements Initializable {
 
         } catch (SQLException e) {
             showMessage("Erreur : " + e.getMessage(), false);
+        } catch (java.io.IOException e) {
+            showMessage("Erreur image : " + e.getMessage(), false);
         }
     }
 

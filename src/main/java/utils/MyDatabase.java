@@ -9,7 +9,7 @@ public class MyDatabase {
     private static MyDatabase instance;
     private Connection connection;
 
-    private final String URL = "jdbc:mysql://localhost:3306/projetjava"; // your DB name
+    private final String URL = "jdbc:mysql://localhost:3306/projetjava?zeroDateTimeBehavior=CONVERT_TO_NULL"; // your DB name
     private final String USER = "root"; // usually root
     private final String PASSWORD = ""; // empty by default in XAMPP
 

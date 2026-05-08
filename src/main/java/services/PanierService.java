@@ -1,7 +1,13 @@
 package services;
 
+import Model.Commande;
+import Model.Equipement;
+import Model.LigneCommande;
 import Model.Panier;
 import utils.MyDatabase;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,5 +54,87 @@ public class PanierService {
         PreparedStatement ps = connection.prepareStatement("DELETE FROM panier WHERE id_panier=?");
         ps.setInt(1, id);
         ps.executeUpdate();
+    }
+
+    public List<Panier> findByAgriculteur(int agriculteurId) throws SQLException {
+        List<Panier> list = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM panier WHERE id_agriculteur = ?")) {
+            ps.setInt(1, agriculteurId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Panier p = new Panier();
+                    p.setId_panier(rs.getInt("id_panier"));
+                    p.setId_equipement(rs.getInt("id_equipement"));
+                    p.setQuantite(rs.getInt("quantite"));
+                    p.setTotal(rs.getString("total"));
+                    p.setId_agriculteur(rs.getInt("id_agriculteur"));
+                    list.add(p);
+                }
+            }
+        }
+        return list;
+    }
+
+    public void viderPanier(int agriculteurId) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "DELETE FROM panier WHERE id_agriculteur = ?")) {
+            ps.setInt(1, agriculteurId);
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * Convertit le panier d'un agriculteur en une `commande` + lignes
+     * `ligne_commande`, décrémente le stock des équipements concernés et
+     * vide le panier. Reproduit le flow `FrontEquipementController::confirmOrder`
+     * du projet Symfony.
+     *
+     * @return l'identifiant de la commande créée, ou 0 si le panier est vide.
+     */
+    public int confirmerCommande(int agriculteurId) throws SQLException {
+        List<Panier> panier = findByAgriculteur(agriculteurId);
+        if (panier.isEmpty()) return 0;
+
+        EquipementService es = new EquipementService();
+        CommandeService cs = new CommandeService();
+        LigneCommandeService ls = new LigneCommandeService();
+
+        BigDecimal total = BigDecimal.ZERO;
+        List<LigneCommande> lignes = new ArrayList<>();
+
+        for (Panier item : panier) {
+            Equipement eq = es.findById(item.getId_equipement());
+            if (eq == null) continue;
+            BigDecimal prixUnit = parsePrix(eq.getPrix());
+            BigDecimal totalLigne = prixUnit.multiply(BigDecimal.valueOf(item.getQuantite()))
+                    .setScale(2, RoundingMode.HALF_UP);
+            lignes.add(new LigneCommande(0, eq.getId_equipement(), item.getQuantite(),
+                    prixUnit, totalLigne));
+            total = total.add(totalLigne);
+        }
+
+        if (lignes.isEmpty()) return 0;
+
+        Commande commande = new Commande(agriculteurId, total.setScale(2, RoundingMode.HALF_UP));
+        int commandeId = cs.ajouter(commande);
+
+        for (LigneCommande l : lignes) {
+            l.setCommandeId(commandeId);
+            ls.ajouter(l);
+            es.decrementerStock(l.getEquipementId(), l.getQuantite());
+        }
+
+        viderPanier(agriculteurId);
+        return commandeId;
+    }
+
+    private static BigDecimal parsePrix(String prix) {
+        if (prix == null || prix.isBlank()) return BigDecimal.ZERO;
+        try {
+            return new BigDecimal(prix.replace(",", ".").trim());
+        } catch (NumberFormatException ex) {
+            return BigDecimal.ZERO;
+        }
     }
 }

@@ -71,6 +71,9 @@
             <!-- Role -->
             <Label text="Role" styleClass="edit-user-label" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
             <ComboBox fx:id="roleBox" promptText="Select role" styleClass="edit-user-field" GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+
+            <!-- Banned toggle -->
+            <CheckBox fx:id="bannedCheck" text="Compte suspendu" styleClass="edit-user-label" GridPane.columnIndex="0" GridPane.rowIndex="12" GridPane.columnSpan="2"/>
         </GridPane>
 
         <!-- Error/Success Message -->

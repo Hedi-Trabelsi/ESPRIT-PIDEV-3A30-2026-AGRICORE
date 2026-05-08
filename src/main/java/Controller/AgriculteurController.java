@@ -144,7 +144,7 @@ public class AgriculteurController implements Initializable {
 
         // ── IMAGE ou placeholder ──────────────────────────────────
         StackPane imagePane = ImageManager.creerVignetteImage(
-            eq.getNom(), 270, 130, typeEmoji(eq.getType()), color + "18");
+            eq.getImageFilename(), 270, 130, typeEmoji(eq.getType()), color + "18");
 
         // ── Corps ─────────────────────────────────────────────────
         VBox body = new VBox(10);
@@ -235,8 +235,9 @@ public class AgriculteurController implements Initializable {
         band.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 16 16 0 0;");
 
         // ── IMAGE ou placeholder ──────────────────────────────────
+        String filename = eq != null ? eq.getImageFilename() : null;
         StackPane imagePane = ImageManager.creerVignetteImage(
-            nom, 300, 120, typeEmoji(type), color + "18");
+            filename, 300, 120, typeEmoji(type), color + "18");
 
         // ── Corps ─────────────────────────────────────────────────
         VBox body = new VBox(12);

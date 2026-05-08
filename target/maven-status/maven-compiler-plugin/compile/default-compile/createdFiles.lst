@@ -41,9 +41,11 @@ Controller\AdminSuivisController$3.class
 Model\EvennementAgricole.class
 services\ai\DefaultAnomalyDetectionService.class
 Controller\UserCardController.class
+Model\LigneCommande.class
 Controller\StatsController.class
 Controller\MarketController.class
 Controller\ShowEvennementController.class
+Model\Commande.class
 Controller\UserCalendarController.class
 services\GoogleSignInService.class
 services\LogService.class
@@ -90,6 +92,8 @@ Controller\RecommandationAlimentaireController.class
 utils\MyDatabase.class
 Controller\SignupController.class
 Controller\NotificationController$3.class
+services\CommandeService.class
+services\LigneCommandeService.class
 Controller\ProfilePageController.class
 Model\ActionLog.class
 Controller\MaintenancePageController.class

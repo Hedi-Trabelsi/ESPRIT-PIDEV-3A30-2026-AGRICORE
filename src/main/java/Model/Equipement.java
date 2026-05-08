@@ -1,5 +1,7 @@
 package Model;
 
+import java.time.LocalDateTime;
+
 public class Equipement {
 
     private int id_equipement;
@@ -8,6 +10,9 @@ public class Equipement {
     private String prix;
     private int quantite;
     private int id_fournisseur;
+    private String imageFilename;
+    private boolean isActive = true;
+    private LocalDateTime updatedAt;
 
     public Equipement() {}
 
@@ -28,53 +33,32 @@ public class Equipement {
         this.id_fournisseur = id_fournisseur;
     }
 
-    public String getNom() {
-        return nom;
-    }
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
-    public String getType() {
-        return type;
-    }
+    public String getPrix() { return prix; }
+    public void setPrix(String prix) { this.prix = prix; }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+    public int getQuantite() { return quantite; }
+    public void setQuantite(int quantite) { this.quantite = quantite; }
 
-    public String getPrix() {
-        return prix;
-    }
+    public int getId_fournisseur() { return id_fournisseur; }
+    public void setId_fournisseur(int id_fournisseur) { this.id_fournisseur = id_fournisseur; }
 
-    public void setPrix(String prix) {
-        this.prix = prix;
-    }
+    public int getId_equipement() { return id_equipement; }
+    public void setId_equipement(int id_equipement) { this.id_equipement = id_equipement; }
 
-    public int getQuantite() {
-        return quantite;
-    }
+    public String getImageFilename() { return imageFilename; }
+    public void setImageFilename(String imageFilename) { this.imageFilename = imageFilename; }
 
-    public void setQuantite(int quantite) {
-        this.quantite = quantite;
-    }
+    public boolean isActive() { return isActive; }
+    public void setActive(boolean active) { this.isActive = active; }
 
-    public int getId_fournisseur() {
-        return id_fournisseur;
-    }
-
-    public void setId_fournisseur(int id_fournisseur) {
-        this.id_fournisseur = id_fournisseur;
-    }
-
-    public int getId_equipement() {
-        return id_equipement;
-    }
-
-    public void setId_equipement(int id_equipement) {
-        this.id_equipement = id_equipement;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     @Override
     public String toString() {
@@ -84,6 +68,7 @@ public class Equipement {
                 ", prix='" + prix + '\'' +
                 ", type='" + type + '\'' +
                 ", nom='" + nom + '\'' +
+                ", imageFilename='" + imageFilename + '\'' +
                 '}';
     }
 }

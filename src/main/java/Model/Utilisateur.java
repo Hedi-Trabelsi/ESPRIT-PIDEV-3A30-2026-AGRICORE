@@ -15,6 +15,7 @@ public class Utilisateur {
     private String email;
     private String password;
     private boolean profileComplete = true;
+    private boolean banned = false;
 
     // ✅ NEW
     private byte[] image;
@@ -75,4 +76,7 @@ public class Utilisateur {
 
     public boolean isProfileComplete() { return profileComplete; }
     public void setProfileComplete(boolean profileComplete) { this.profileComplete = profileComplete; }
+
+    public boolean isBanned() { return banned; }
+    public void setBanned(boolean banned) { this.banned = banned; }
 }

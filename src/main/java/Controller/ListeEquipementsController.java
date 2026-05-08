@@ -132,12 +132,12 @@ public class ListeEquipementsController implements Initializable {
             "; -fx-background-radius: 16 16 0 0;");
 
         // ── IMAGE ou placeholder emoji ─────────────────────────────
-        // Utilise ImageManager : cherche l'image par le NOM de l'équipement
+        // image_filename est stocké en base et partagé avec le projet Symfony.
         StackPane imagePane = ImageManager.creerVignetteImage(
-            eq.getNom(),        // clé = nom de l'équipement
-            285, 140,           // largeur x hauteur de la vignette
+            eq.getImageFilename(),
+            285, 140,
             getTypeEmoji(eq.getType()),
-            bandColor + "18"    // fond placeholder = couleur de bande très transparent
+            bandColor + "18"
         );
 
         // ── Corps de la carte ──────────────────────────────────────
@@ -217,7 +217,7 @@ public class ListeEquipementsController implements Initializable {
         Equipement eqRef = eq;
         btnModif.setOnAction(e -> goToModifier(eqRef));
         // Passe aussi le nom pour pouvoir supprimer l'image associée
-        btnSuppr.setOnAction(e -> supprimerEquipement(eqRef.getId_equipement(), eqRef.getNom()));
+        btnSuppr.setOnAction(e -> supprimerEquipement(eqRef.getId_equipement()));
 
         card.setOnMouseEntered(e -> card.setStyle(
             "-fx-background-color: #fafffe; -fx-background-radius: 16;" +
@@ -329,9 +329,10 @@ public class ListeEquipementsController implements Initializable {
     // ==================== SUPPRESSION ====================
 
     /**
-     * Signature étendue : reçoit aussi le nom pour pouvoir supprimer l'image associée.
+     * Soft-delete : marque l'équipement inactif (is_active = 0) sans toucher
+     * au fichier image. Cohérent avec le comportement Symfony.
      */
-    private void supprimerEquipement(int id, String nomEquipement) {
+    private void supprimerEquipement(int id) {
         Stage dlg = new Stage();
         dlg.initModality(Modality.APPLICATION_MODAL);
         dlg.initOwner(gridEquipements.getScene().getWindow());
@@ -395,8 +396,6 @@ public class ListeEquipementsController implements Initializable {
             dlg.close();
             try {
                 equipementService.supprimer(id);
-                // ── Supprimer aussi l'image associée ─────────────────
-                ImageManager.supprimerImage(nomEquipement);
                 loadData();
             } catch (SQLException ex) { showAlert("Erreur : " + ex.getMessage()); }
         });

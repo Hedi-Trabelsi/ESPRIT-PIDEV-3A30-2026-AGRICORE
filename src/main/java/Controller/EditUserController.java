@@ -28,6 +28,7 @@ public class EditUserController {
     @FXML private ImageView profileImageView;
     @FXML private Button uploadImageButton, saveButton, cancelButton;
     @FXML private Label errorLabel;
+    @FXML private CheckBox bannedCheck;
 
     private Utilisateur currentUser;
     private UserService userService;
@@ -49,8 +50,17 @@ public class EditUserController {
     }
 
     private void setupComboBoxes() {
-        genreBox.getItems().addAll("Male", "Female");
+        genreBox.getItems().addAll("Homme", "Femme");
         roleBox.getItems().addAll("Agriculteur", "Technicien", "Fournisseur");
+    }
+
+    private static String normalizeGenre(String raw) {
+        if (raw == null) return null;
+        return switch (raw.trim().toLowerCase()) {
+            case "male", "m", "homme" -> "Homme";
+            case "female", "f", "femme" -> "Femme";
+            default -> raw;
+        };
     }
 
     private void setupButtonHandlers() {
@@ -76,10 +86,14 @@ public class EditUserController {
         nomField.setText(currentUser.getNom());
         prenomField.setText(currentUser.getPrenom());
         emailField.setText(currentUser.getEmail());
-        genreBox.setValue(currentUser.getGenre());
+        genreBox.setValue(normalizeGenre(currentUser.getGenre()));
         adresseField.setText(currentUser.getAdresse());
         phoneField.setText(String.valueOf(currentUser.getPhone()));
         datePicker.setValue(currentUser.getDateNaissance());
+
+        if (bannedCheck != null) {
+            bannedCheck.setSelected(currentUser.isBanned());
+        }
 
         // Set role
         roleBox.setValue(switch (currentUser.getRole()) {
@@ -255,6 +269,10 @@ public class EditUserController {
         // Update password if provided
         if (!passwordField.getText().isEmpty()) {
             currentUser.setPassword(BCrypt.hashpw(passwordField.getText(), BCrypt.gensalt()));
+        }
+
+        if (bannedCheck != null) {
+            currentUser.setBanned(bannedCheck.isSelected());
         }
     }
 

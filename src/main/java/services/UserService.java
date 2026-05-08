@@ -18,8 +18,10 @@ public class UserService implements IService<Utilisateur> {
 
     @Override
     public int create(Utilisateur u) throws SQLException {
-        String query = "INSERT INTO `user` (nom, prenom, date, adresse, role, numeroT, email, image, password, genre) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        u.setProfileComplete(computeProfileComplete(u));
+
+        String query = "INSERT INTO `user` (nom, prenom, date, adresse, role, numeroT, email, image, password, genre, profile_complete, banned) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -48,6 +50,8 @@ public class UserService implements IService<Utilisateur> {
 
             ps.setString(9, u.getPassword());       // password
             ps.setString(10, u.getGenre());         // genre
+            ps.setBoolean(11, u.isProfileComplete());
+            ps.setBoolean(12, u.isBanned());
 
             ps.executeUpdate();
 
@@ -63,7 +67,9 @@ public class UserService implements IService<Utilisateur> {
 
     @Override
     public void update(Utilisateur u) throws SQLException {
-        String query = "UPDATE `user` SET nom=?, prenom=?, date=?, adresse=?, role=?, numeroT=?, email=?, image=?, password=?, genre=? WHERE id=?";
+        u.setProfileComplete(computeProfileComplete(u));
+
+        String query = "UPDATE `user` SET nom=?, prenom=?, date=?, adresse=?, role=?, numeroT=?, email=?, image=?, password=?, genre=?, profile_complete=?, banned=? WHERE id=?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
 
@@ -92,7 +98,9 @@ public class UserService implements IService<Utilisateur> {
 
             ps.setString(9, u.getPassword());        // password
             ps.setString(10, u.getGenre());          // genre
-            ps.setInt(11, u.getId());                 // id (WHERE clause)
+            ps.setBoolean(11, u.isProfileComplete());
+            ps.setBoolean(12, u.isBanned());
+            ps.setInt(13, u.getId());                 // id (WHERE clause)
 
             ps.executeUpdate();
         }
@@ -126,24 +134,7 @@ public class UserService implements IService<Utilisateur> {
              ResultSet rs = st.executeQuery(query)) {
 
             while (rs.next()) {
-                // FIX: Handle null date when reading from database
-                Date sqlDate = rs.getDate("date");
-                LocalDate dateNaissance = sqlDate != null ? sqlDate.toLocalDate() : null;
-
-                Utilisateur u = new Utilisateur(
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        dateNaissance,
-                        rs.getString("genre"),
-                        rs.getString("adresse"),
-                        rs.getInt("numeroT"),
-                        rs.getInt("role"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getBytes("image")
-                );
-                u.setId(rs.getInt("id"));
-                list.add(u);
+                list.add(mapRow(rs));
             }
         }
 
@@ -156,27 +147,52 @@ public class UserService implements IService<Utilisateur> {
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    Date sqlDate = rs.getDate("date");
-                    LocalDate dateNaissance = sqlDate != null ? sqlDate.toLocalDate() : null;
-
-                    Utilisateur u = new Utilisateur(
-                            rs.getString("nom"),
-                            rs.getString("prenom"),
-                            dateNaissance,
-                            rs.getString("genre"),
-                            rs.getString("adresse"),
-                            rs.getInt("numeroT"),
-                            rs.getInt("role"),
-                            rs.getString("email"),
-                            rs.getString("password"),
-                            rs.getBytes("image")
-                    );
-                    u.setId(rs.getInt("id"));
-                    return u;
-                }
+                if (rs.next()) return mapRow(rs);
             }
         }
         return null;
+    }
+
+    public Utilisateur findById(int id) throws SQLException {
+        String query = "SELECT * FROM `user` WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapRow(rs);
+            }
+        }
+        return null;
+    }
+
+    private static Utilisateur mapRow(ResultSet rs) throws SQLException {
+        Date sqlDate = rs.getDate("date");
+        LocalDate dateNaissance = sqlDate != null ? sqlDate.toLocalDate() : null;
+
+        Utilisateur u = new Utilisateur(
+                rs.getString("nom"),
+                rs.getString("prenom"),
+                dateNaissance,
+                rs.getString("genre"),
+                rs.getString("adresse"),
+                rs.getInt("numeroT"),
+                rs.getInt("role"),
+                rs.getString("email"),
+                rs.getString("password"),
+                rs.getBytes("image")
+        );
+        u.setId(rs.getInt("id"));
+
+        // profile_complete and banned were added to the schema by the Symfony side;
+        // getBoolean returns false when the column is NULL, which is the correct default.
+        u.setProfileComplete(rs.getBoolean("profile_complete"));
+        u.setBanned(rs.getBoolean("banned"));
+        return u;
+    }
+
+    private static boolean computeProfileComplete(Utilisateur u) {
+        return u.getDateNaissance() != null
+                && u.getGenre() != null && !u.getGenre().isBlank()
+                && u.getAdresse() != null && !u.getAdresse().isBlank()
+                && u.getPhone() > 0;
     }
 }

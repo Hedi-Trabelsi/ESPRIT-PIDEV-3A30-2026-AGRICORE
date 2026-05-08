@@ -80,6 +80,11 @@ public class SigninController {
             }
 
             if (matchedUser != null) {
+                if (matchedUser.isBanned()) {
+                    showError("Votre compte a été suspendu. Contactez l'administrateur.");
+                    return;
+                }
+
                 // --- 2. INITIALIZE GLOBAL SESSION (CRITICAL FIX) ---
                 // This stores the ID in memory so the Chat can access it later
                 // Use .getNom() or .getName() depending on your Utilisateur model
@@ -145,6 +150,13 @@ public class SigninController {
 
                         if (matchedUser != null) {
                             final Utilisateur finalUser = matchedUser;
+                            if (finalUser.isBanned()) {
+                                Platform.runLater(() -> {
+                                    errorLabel.setStyle("-fx-text-fill: red;");
+                                    errorLabel.setText("Votre compte a été suspendu. Contactez l'administrateur.");
+                                });
+                                return;
+                            }
                             Platform.runLater(() -> {
                                 int role = finalUser.getRole();
                                 errorLabel.setStyle("-fx-text-fill: green;");

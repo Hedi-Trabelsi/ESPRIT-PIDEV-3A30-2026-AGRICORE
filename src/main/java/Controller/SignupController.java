@@ -43,7 +43,7 @@ public class SignupController {
     @FXML
     public void initialize() {
         errorLabel.setVisible(false);
-        genreBox.getItems().addAll("Male", "Female");
+        genreBox.getItems().addAll("Homme", "Femme");
         roleBox.getItems().addAll("Agriculteur", "Technicien", "Fournisseur");
         signInLink.setOnAction(e -> openSignInPage());
     }
