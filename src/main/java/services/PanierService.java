@@ -34,6 +34,38 @@ public class PanierService {
         ps.executeUpdate();
     }
 
+    public void ajouterOuIncrementer(int agriculteurId, int equipementId, int quantite) throws SQLException {
+        if (quantite <= 0) return;
+
+        EquipementService es = new EquipementService();
+        Equipement eq = es.findById(equipementId);
+        if (eq == null || !eq.isActive() || eq.getQuantite() <= 0) return;
+
+        Panier existing = findOneByAgriculteurAndEquipement(agriculteurId, equipementId);
+        int newQuantity = quantite;
+        if (existing != null) {
+            newQuantity += existing.getQuantite();
+        }
+        newQuantity = Math.min(newQuantity, eq.getQuantite());
+
+        BigDecimal lineTotal = parsePrix(eq.getPrix())
+                .multiply(BigDecimal.valueOf(newQuantity))
+                .setScale(2, RoundingMode.HALF_UP);
+
+        if (existing == null) {
+            ajouter(new Panier(equipementId, newQuantity, lineTotal.toPlainString(), agriculteurId));
+            return;
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE panier SET quantite = ?, total = ? WHERE id_panier = ?")) {
+            ps.setInt(1, newQuantity);
+            ps.setString(2, lineTotal.toPlainString());
+            ps.setInt(3, existing.getId_panier());
+            ps.executeUpdate();
+        }
+    }
+
     public List<Panier> afficher() throws SQLException {
         List<Panier> list = new ArrayList<>();
         ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM panier");
@@ -56,6 +88,29 @@ public class PanierService {
         ps.executeUpdate();
     }
 
+    public void supprimerParEquipement(int agriculteurId, int equipementId) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "DELETE FROM panier WHERE id_agriculteur = ? AND id_equipement = ?")) {
+            ps.setInt(1, agriculteurId);
+            ps.setInt(2, equipementId);
+            ps.executeUpdate();
+        }
+    }
+
+    public Panier findOneByAgriculteurAndEquipement(int agriculteurId, int equipementId) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM panier WHERE id_agriculteur = ? AND id_equipement = ? LIMIT 1")) {
+            ps.setInt(1, agriculteurId);
+            ps.setInt(2, equipementId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapPanier(rs);
+                }
+            }
+        }
+        return null;
+    }
+
     public List<Panier> findByAgriculteur(int agriculteurId) throws SQLException {
         List<Panier> list = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(
@@ -63,13 +118,7 @@ public class PanierService {
             ps.setInt(1, agriculteurId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Panier p = new Panier();
-                    p.setId_panier(rs.getInt("id_panier"));
-                    p.setId_equipement(rs.getInt("id_equipement"));
-                    p.setQuantite(rs.getInt("quantite"));
-                    p.setTotal(rs.getString("total"));
-                    p.setId_agriculteur(rs.getInt("id_agriculteur"));
-                    list.add(p);
+                    list.add(mapPanier(rs));
                 }
             }
         }
@@ -106,6 +155,9 @@ public class PanierService {
         for (Panier item : panier) {
             Equipement eq = es.findById(item.getId_equipement());
             if (eq == null) continue;
+            if (!eq.isActive() || eq.getQuantite() < item.getQuantite()) {
+                throw new SQLException("Stock insuffisant pour " + eq.getNom());
+            }
             BigDecimal prixUnit = parsePrix(eq.getPrix());
             BigDecimal totalLigne = prixUnit.multiply(BigDecimal.valueOf(item.getQuantite()))
                     .setScale(2, RoundingMode.HALF_UP);
@@ -136,5 +188,15 @@ public class PanierService {
         } catch (NumberFormatException ex) {
             return BigDecimal.ZERO;
         }
+    }
+
+    private static Panier mapPanier(ResultSet rs) throws SQLException {
+        Panier p = new Panier();
+        p.setId_panier(rs.getInt("id_panier"));
+        p.setId_equipement(rs.getInt("id_equipement"));
+        p.setQuantite(rs.getInt("quantite"));
+        p.setTotal(rs.getString("total"));
+        p.setId_agriculteur(rs.getInt("id_agriculteur"));
+        return p;
     }
 }

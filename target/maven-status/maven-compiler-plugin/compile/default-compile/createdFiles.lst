@@ -67,7 +67,6 @@ Controller\AddUserController.class
 Controller\ShowParticipantController.class
 Controller\AnomalyPageController.class
 Model\Animal.class
-Controller\EventManagementController.class
 Controller\AddSuiviAnimalController$2.class
 Controller\GoogleSignInController.class
 services\AnimalService.class

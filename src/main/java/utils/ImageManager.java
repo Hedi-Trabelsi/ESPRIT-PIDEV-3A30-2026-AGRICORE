@@ -34,15 +34,33 @@ public class ImageManager {
      * dossier que celui configuré dans `config/packages/vich_uploader.yaml`
      * du projet Symfony associé.
      */
-    private static final Path UPLOAD_DIR = Paths.get(
-            "C:", "Users", "SBS", "Documents",
-            "ESPRIT-PIWEB-3A30-2026-AGRICORE", "public", "uploads", "equipements");
+    private static final Path UPLOAD_DIR = resolveUploadDir();
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
     static {
         try { Files.createDirectories(UPLOAD_DIR); }
         catch (IOException ignored) {}
+    }
+
+    private static Path resolveUploadDir() {
+        Path cwd = Paths.get("").toAbsolutePath().normalize();
+        Path parent = cwd.getParent();
+        if (parent != null) {
+            Path siblingSymfony = parent.resolve("Nouveau dossier (12)")
+                    .resolve("ESPRIT-PIWEB-3A30-2026-AGRICORE")
+                    .resolve("public").resolve("uploads").resolve("equipements");
+            if (Files.exists(siblingSymfony) || Files.exists(siblingSymfony.getParent())) {
+                return siblingSymfony;
+            }
+        }
+
+        return cwd.getParent() != null && cwd.getParent().getParent() != null
+                ? cwd.getParent().getParent()
+                    .resolve("Nouveau dossier (12)")
+                    .resolve("ESPRIT-PIWEB-3A30-2026-AGRICORE")
+                    .resolve("public").resolve("uploads").resolve("equipements")
+                : cwd.resolve("public").resolve("uploads").resolve("equipements");
     }
 
     /**
@@ -58,6 +76,14 @@ public class ImageManager {
         String ext = obtenirExtension(sourceFichier.getName());
         String slug = slug(nomEquipement);
         if (slug.isEmpty()) slug = "equipement";
+
+        if (".webp".equals(ext)) {
+            String pngFilename = slug + "-" + randomHex(11) + ".png";
+            Path pngTarget = UPLOAD_DIR.resolve(pngFilename);
+            if (writeJavaFxImageAsPng(sourceFichier.toPath(), pngTarget, 1200, 900)) {
+                return pngFilename;
+            }
+        }
 
         String filename = slug + "-" + randomHex(11) + ext;
         Path target = UPLOAD_DIR.resolve(filename);
@@ -76,6 +102,13 @@ public class ImageManager {
     public static String getImagePath(String filename) {
         if (filename == null || filename.isBlank()) return null;
         Path p = UPLOAD_DIR.resolve(filename);
+        if (Files.exists(p) && filename.toLowerCase(Locale.ROOT).endsWith(".webp")) {
+            Path cachedPng = UPLOAD_DIR.resolve(filename.substring(0, filename.length() - 5) + ".png");
+            if (Files.exists(cachedPng)) return cachedPng.toAbsolutePath().toString();
+            if (writeJavaFxImageAsPng(p, cachedPng, 1200, 900)) {
+                return cachedPng.toAbsolutePath().toString();
+            }
+        }
         return Files.exists(p) ? p.toAbsolutePath().toString() : null;
     }
 
@@ -91,7 +124,7 @@ public class ImageManager {
     public static byte[] readAndResizeForBlob(File source, int maxDim) throws IOException {
         if (source == null) return null;
         java.awt.image.BufferedImage src = javax.imageio.ImageIO.read(source);
-        if (src == null) throw new IOException("Format d'image non reconnu : " + source.getName());
+        if (src == null) return null;
         double ratio = Math.min((double) maxDim / src.getWidth(), (double) maxDim / src.getHeight());
         if (ratio > 1.0) ratio = 1.0;
         int w = Math.max(1, (int) (src.getWidth()  * ratio));
@@ -220,5 +253,22 @@ public class ImageManager {
         if (nomFichier == null) return ".jpg";
         int idx = nomFichier.lastIndexOf('.');
         return idx >= 0 ? nomFichier.substring(idx).toLowerCase(Locale.ROOT) : ".jpg";
+    }
+
+    private static boolean writeJavaFxImageAsPng(Path source, Path target, double maxWidth, double maxHeight) {
+        try {
+            Image fxImage = new Image(source.toUri().toString(), maxWidth, maxHeight, true, true, false);
+            if (fxImage.isError() || fxImage.getWidth() <= 0 || fxImage.getHeight() <= 0) {
+                return false;
+            }
+            java.awt.image.BufferedImage buffered = javafx.embed.swing.SwingFXUtils.fromFXImage(fxImage, null);
+            if (buffered == null) {
+                return false;
+            }
+            Files.createDirectories(target.getParent());
+            return javax.imageio.ImageIO.write(buffered, "png", target.toFile());
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 }

@@ -300,9 +300,9 @@ public class AjoutEquipementController implements Initializable {
             if (equipementToModify != null) {
                 if (fichierImageChoisi != null) {
                     // Nouvelle image → resize + stocker en BLOB
+                    equipementToModify.setImageFilename(ImageManager.storeImage(nomSaisi, fichierImageChoisi));
                     equipementToModify.setImage(ImageManager.readAndResizeForBlob(fichierImageChoisi, 800));
                     // L'ancien filename Vich devient obsolète une fois qu'on a un BLOB
-                    equipementToModify.setImageFilename(null);
                 } else if (ivApercu != null && !ivApercu.isVisible()) {
                     // L'utilisateur a cliqué "Supprimer l'image"
                     equipementToModify.setImage(null);
@@ -330,6 +330,7 @@ public class AjoutEquipementController implements Initializable {
                     ID_FOURNISSEUR
                 );
                 if (fichierImageChoisi != null) {
+                    eq.setImageFilename(ImageManager.storeImage(nomSaisi, fichierImageChoisi));
                     eq.setImage(ImageManager.readAndResizeForBlob(fichierImageChoisi, 800));
                 }
                 eq.setActive(true);

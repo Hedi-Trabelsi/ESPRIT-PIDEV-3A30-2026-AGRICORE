@@ -472,13 +472,17 @@ public class DetailEquipementController implements Initializable {
         btnOk.setOnAction(e -> {
             int qty    = spinner.getValue();
             double tot = prixUnit * qty;
-            services.CartMemoire.getInstance().add(
-                AgriculteurController.ID_AGRICULTEUR,
-                equipement.getId_equipement(),
-                qty);
-            if (parentController != null) parentController.loadPanier();
-            dlg.close();
-            afficherToast(equipement.getNom(), qty, tot);
+            try {
+                panierService.ajouterOuIncrementer(
+                    AgriculteurController.getAgriculteurId(),
+                    equipement.getId_equipement(),
+                    qty);
+                if (parentController != null) parentController.loadPanier();
+                dlg.close();
+                afficherToast(equipement.getNom(), qty, tot);
+            } catch (SQLException ex) {
+                showAlert("Erreur", "Impossible d'ajouter au panier : " + ex.getMessage());
+            }
         });
 
         actions.getChildren().addAll(btnCancel, btnOk);

@@ -72,11 +72,18 @@ public class AgriculteurController implements Initializable {
     private ObservableList<Panier>     panierList        = FXCollections.observableArrayList();
     private List<Equipement>           allEquipements;
 
-    static final int    ID_AGRICULTEUR   = 1;
+    private static final int DEFAULT_ID_AGRICULTEUR = 1;
     private static final String EXCHANGE_API_KEY = "0c3f3b97f846b6f5ced36eff";
 
     double tauxEUR = 0.2981;
     double tauxUSD = 0.3213;
+
+    static int getAgriculteurId() {
+        Model.Utilisateur currentUser = UserSession.getCurrentUser();
+        return currentUser != null && currentUser.getId() > 0
+                ? currentUser.getId()
+                : DEFAULT_ID_AGRICULTEUR;
+    }
 
     // ═══════════════════════════════════════════════════════════════
     @Override
@@ -198,10 +205,7 @@ public class AgriculteurController implements Initializable {
 
     void loadPanier() {
         try {
-            // Cart lives in memory (mirrors Symfony's session-based CartService).
-            // We materialise it as Panier DTOs so the existing UI keeps working.
-            panierList.setAll(services.CartMemoire.getInstance()
-                    .snapshotForUi(ID_AGRICULTEUR, equipementService));
+            panierList.setAll(panierService.findByAgriculteur(getAgriculteurId()));
             renderPanierGrid(panierList);
             updatePanierSummary();
         } catch (SQLException e) {
@@ -312,8 +316,12 @@ public class AgriculteurController implements Initializable {
     }
 
     private void retirerDuPanier(int equipementId) {
-        services.CartMemoire.getInstance().remove(ID_AGRICULTEUR, equipementId);
-        loadPanier();
+        try {
+            panierService.supprimerParEquipement(getAgriculteurId(), equipementId);
+            loadPanier();
+        } catch (SQLException e) {
+            showAlert("Erreur", "Impossible de retirer l'equipement du panier : " + e.getMessage());
+        }
     }
 
     @FXML
@@ -393,7 +401,7 @@ public class AgriculteurController implements Initializable {
             dlg.close();
             genererPDF();
             try {
-                int commandeId = services.CartMemoire.getInstance().checkout(ID_AGRICULTEUR);
+                int commandeId = panierService.confirmerCommande(getAgriculteurId());
                 if (commandeId > 0) {
                     showAlert("Commande créée", "Votre commande #" + commandeId + " a été enregistrée.");
                 }
@@ -461,7 +469,7 @@ public class AgriculteurController implements Initializable {
                 fillRect(cs, cVertCl, mx, y - 44f, 4f, 44f);
                 text(cs, fontBold, 13f, cVert, mx + 12f, y - 17f, "BON DE COMMANDE  N  " + numFull);
                 text(cs, fontReg, 8f, cGrisTxt, mx + 12f, y - 31f,
-                    "Date : " + date + "   |   Statut : Confirmee   |   Agriculteur ID : " + ID_AGRICULTEUR);
+                    "Date : " + date + "   |   Statut : Confirmee   |   Agriculteur ID : " + getAgriculteurId());
                 y -= 58f;
                 float[] colX = {mx, mx+20f, mx+192f, mx+262f, mx+312f, mx+372f, mx+432f};
                 String[] heads = {"#","Equipement","Type","Prix unit.","Qte","Total TND","Total EUR"};
