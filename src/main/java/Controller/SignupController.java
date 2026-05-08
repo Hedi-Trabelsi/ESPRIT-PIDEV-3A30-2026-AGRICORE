@@ -58,9 +58,9 @@ public class SignupController {
 
         File file = fileChooser.showOpenDialog(uploadImageButton.getScene().getWindow());
         if (file != null) {
-            try (FileInputStream fis = new FileInputStream(file)) {
-                profileImageBytes = fis.readAllBytes();
-                Image image = new Image(file.toURI().toString());
+            try {
+                profileImageBytes = resizeForStorage(javax.imageio.ImageIO.read(file));
+                Image image = new Image(new ByteArrayInputStream(profileImageBytes));
                 profileImageView.setImage(image);
                 showSuccess("Image chargee avec succes !");
             } catch (Exception e) {
@@ -68,6 +68,27 @@ public class SignupController {
                 showError("Echec du chargement de l'image.");
             }
         }
+    }
+
+    /**
+     * Downscale to max 200x200 (preserving aspect ratio) and re-encode as JPEG so the
+     * BLOB sent to MySQL stays under the default `max_allowed_packet` (1 MB on XAMPP).
+     * Mirrors {@code EditUserController#resizeImage} so both flows produce comparably-sized rows.
+     */
+    private static byte[] resizeForStorage(java.awt.image.BufferedImage src) throws IOException {
+        if (src == null) throw new IOException("Format d'image non supporte.");
+        final int maxW = 200, maxH = 200;
+        double ratio = Math.min((double) maxW / src.getWidth(), (double) maxH / src.getHeight());
+        int w = Math.max(1, (int) (src.getWidth()  * ratio));
+        int h = Math.max(1, (int) (src.getHeight() * ratio));
+        java.awt.image.BufferedImage out = new java.awt.image.BufferedImage(w, h,
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.Graphics2D g = out.createGraphics();
+        g.drawImage(src, 0, 0, w, h, null);
+        g.dispose();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        javax.imageio.ImageIO.write(out, "jpg", baos);
+        return baos.toByteArray();
     }
 
     @FXML
@@ -193,8 +214,10 @@ public class SignupController {
             if (userInfo.getPictureUrl() != null && !userInfo.getPictureUrl().isEmpty()) {
                 new Thread(() -> {
                     try {
-                        byte[] imageBytes = downloadImageFromUrl(userInfo.getPictureUrl());
-                        if (imageBytes != null) {
+                        byte[] raw = downloadImageFromUrl(userInfo.getPictureUrl());
+                        if (raw != null) {
+                            byte[] imageBytes = resizeForStorage(
+                                javax.imageio.ImageIO.read(new ByteArrayInputStream(raw)));
                             profileImageBytes = imageBytes;
                             Image image = new Image(new ByteArrayInputStream(imageBytes));
                             javafx.application.Platform.runLater(() -> {
@@ -229,10 +252,12 @@ public class SignupController {
 
             String randomPassword = BCrypt.hashpw(userInfo.getId() + System.currentTimeMillis(), BCrypt.gensalt());
 
-            byte[] imageBytes = downloadImageFromUrl(userInfo.getPictureUrl());
-
-            if (imageBytes == null) {
+            byte[] rawBytes = downloadImageFromUrl(userInfo.getPictureUrl());
+            byte[] imageBytes;
+            if (rawBytes == null) {
                 imageBytes = createDefaultAvatar(userInfo.getFirstName());
+            } else {
+                imageBytes = resizeForStorage(javax.imageio.ImageIO.read(new ByteArrayInputStream(rawBytes)));
             }
 
             // FIX: Use default values instead of null

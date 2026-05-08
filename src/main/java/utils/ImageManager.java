@@ -84,6 +84,77 @@ public class ImageManager {
     }
 
     /**
+     * Resize an image (loaded from a File) to fit within {@code maxDim}x{@code maxDim}
+     * and return JPEG-encoded bytes ready for storage in `equipements.image`.
+     * Keeps the BLOB compact (under MySQL's default `max_allowed_packet`).
+     */
+    public static byte[] readAndResizeForBlob(File source, int maxDim) throws IOException {
+        if (source == null) return null;
+        java.awt.image.BufferedImage src = javax.imageio.ImageIO.read(source);
+        if (src == null) throw new IOException("Format d'image non reconnu : " + source.getName());
+        double ratio = Math.min((double) maxDim / src.getWidth(), (double) maxDim / src.getHeight());
+        if (ratio > 1.0) ratio = 1.0;
+        int w = Math.max(1, (int) (src.getWidth()  * ratio));
+        int h = Math.max(1, (int) (src.getHeight() * ratio));
+        java.awt.image.BufferedImage out = new java.awt.image.BufferedImage(
+                w, h, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.Graphics2D g = out.createGraphics();
+        g.drawImage(src, 0, 0, w, h, null);
+        g.dispose();
+        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+        javax.imageio.ImageIO.write(out, "jpg", baos);
+        return baos.toByteArray();
+    }
+
+    /**
+     * Build a JavaFX vignette from raw image bytes (BLOB in DB). Falls back to
+     * the file-based path if bytes are null. Falls back to an emoji placeholder
+     * if both are missing.
+     */
+    public static StackPane creerVignetteFromBytes(byte[] bytes, String filenameFallback,
+                                                    double width, double height,
+                                                    String emoji, String couleurBg) {
+        StackPane container = new StackPane();
+        container.setPrefSize(width, height);
+        container.setMaxSize(width, height);
+        container.setMinSize(width, height);
+
+        Image img = null;
+        if (bytes != null && bytes.length > 0) {
+            try {
+                img = new Image(new java.io.ByteArrayInputStream(bytes), width, height, true, true);
+            } catch (Exception ignored) {}
+        }
+        if (img == null || img.isError()) {
+            String chemin = getImagePath(filenameFallback);
+            if (chemin != null) {
+                try {
+                    img = new Image(new File(chemin).toURI().toString(), width, height, true, true);
+                } catch (Exception ignored) {}
+            }
+        }
+        if (img != null && !img.isError()) {
+            ImageView iv = new ImageView(img);
+            iv.setFitWidth(width);
+            iv.setFitHeight(height);
+            iv.setPreserveRatio(true);
+            iv.setSmooth(true);
+            iv.setClip(new Rectangle(width, height));
+            container.setStyle("-fx-background-color: #f0f5ef;");
+            container.getChildren().add(iv);
+            return container;
+        }
+
+        container.setStyle(
+                "-fx-background-color: " + (couleurBg != null ? couleurBg : "#e8f2e6") + ";");
+        Label lbl = new Label(emoji != null ? emoji : "📦");
+        lbl.setStyle("-fx-font-size: " + (int)(height * 0.42) + "px;");
+        container.setAlignment(Pos.CENTER);
+        container.getChildren().add(lbl);
+        return container;
+    }
+
+    /**
      * Construit une vignette JavaFX à partir du nom de fichier stocké en base.
      * Si le fichier est manquant, retombe sur un placeholder emoji.
      */

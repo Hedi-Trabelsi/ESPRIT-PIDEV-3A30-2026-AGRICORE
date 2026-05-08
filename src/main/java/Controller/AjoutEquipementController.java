@@ -227,24 +227,42 @@ public class AjoutEquipementController implements Initializable {
             "-fx-border-style: dashed; -fx-padding: 12;");
     }
 
-    /** Charge l'aperçu d'une image déjà existante (mode modification) */
-    private void chargerApercu(String filename) {
-        String chemin = ImageManager.getImagePath(filename);
-        if (chemin == null) return;
-        try {
-            Image img = new Image(
-                new File(chemin).toURI().toString(), 240, 150, true, true);
+    /** Charge l'aperçu d'une image déjà existante (mode modification).
+     *  Préfère le BLOB en base ; retombe sur le fichier disque (legacy Vich). */
+    private void chargerApercu(Equipement eq) {
+        if (eq == null) return;
+        Image img = null;
+        String label = null;
+
+        byte[] bytes = eq.getImage();
+        if (bytes != null && bytes.length > 0) {
+            try {
+                img = new Image(new ByteArrayInputStream(bytes), 240, 150, true, true);
+                label = "📁 image stockée  (existante)";
+            } catch (Exception ignored) {}
+        }
+        if (img == null) {
+            String chemin = ImageManager.getImagePath(eq.getImageFilename());
+            if (chemin != null) {
+                try {
+                    img = new Image(new File(chemin).toURI().toString(), 240, 150, true, true);
+                    label = "📁 " + new File(chemin).getName() + "  (image existante)";
+                } catch (Exception ignored) {}
+            }
+        }
+
+        if (img != null && !img.isError()) {
             ivApercu.setImage(img);
             ivApercu.setVisible(true);
             lblPlaceholder.setVisible(false);
-            lblNomFichier.setText("📁 " + new File(chemin).getName() + "  (image existante)");
+            lblNomFichier.setText(label);
             lblNomFichier.setVisible(true);
             btnSupprimerImg.setVisible(true);
             panneauImage.setStyle(
                 "-fx-background-color: #eef7ec; -fx-background-radius: 12;" +
                 "-fx-border-color: #4a7c40; -fx-border-radius: 12;" +
                 "-fx-border-style: solid; -fx-padding: 12;");
-        } catch (Exception ignored) {}
+        }
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -267,8 +285,8 @@ public class AjoutEquipementController implements Initializable {
         fieldQuantite.setText(String.valueOf(eq.getQuantite()));
         mettreAJourConversion();
         lancerRechercheNews();
-        // Charger l'image existante si elle existe (via image_filename)
-        chargerApercu(eq.getImageFilename());
+        // Charger l'image existante si elle existe (BLOB ou ancien fichier Vich)
+        chargerApercu(eq);
     }
 
     @FXML
@@ -280,17 +298,15 @@ public class AjoutEquipementController implements Initializable {
         try {
             // ── Sauvegarder l'équipement ─────────────────────────
             if (equipementToModify != null) {
-                String oldFilename = equipementToModify.getImageFilename();
-                String newFilename = oldFilename;
-
                 if (fichierImageChoisi != null) {
-                    // L'utilisateur a choisi une nouvelle image
-                    newFilename = ImageManager.storeImage(nomSaisi, fichierImageChoisi);
-                    if (oldFilename != null) ImageManager.deleteImage(oldFilename);
-                } else if (ivApercu != null && !ivApercu.isVisible() && oldFilename != null) {
+                    // Nouvelle image → resize + stocker en BLOB
+                    equipementToModify.setImage(ImageManager.readAndResizeForBlob(fichierImageChoisi, 800));
+                    // L'ancien filename Vich devient obsolète une fois qu'on a un BLOB
+                    equipementToModify.setImageFilename(null);
+                } else if (ivApercu != null && !ivApercu.isVisible()) {
                     // L'utilisateur a cliqué "Supprimer l'image"
-                    ImageManager.deleteImage(oldFilename);
-                    newFilename = null;
+                    equipementToModify.setImage(null);
+                    equipementToModify.setImageFilename(null);
                 }
 
                 equipementToModify.setNom(nomSaisi);
@@ -299,7 +315,6 @@ public class AjoutEquipementController implements Initializable {
                 equipementToModify.setQuantite(Integer.parseInt(
                     fieldQuantite.getText().trim()));
                 equipementToModify.setId_fournisseur(ID_FOURNISSEUR);
-                equipementToModify.setImageFilename(newFilename);
                 equipementToModify.setUpdatedAt(java.time.LocalDateTime.now());
                 equipementService.modifier(equipementToModify);
                 showMessage("Équipement modifié avec succès !", true);
@@ -315,7 +330,7 @@ public class AjoutEquipementController implements Initializable {
                     ID_FOURNISSEUR
                 );
                 if (fichierImageChoisi != null) {
-                    eq.setImageFilename(ImageManager.storeImage(nomSaisi, fichierImageChoisi));
+                    eq.setImage(ImageManager.readAndResizeForBlob(fichierImageChoisi, 800));
                 }
                 eq.setActive(true);
                 eq.setUpdatedAt(java.time.LocalDateTime.now());

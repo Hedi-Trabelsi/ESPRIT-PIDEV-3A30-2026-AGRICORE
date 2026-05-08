@@ -4,6 +4,7 @@ Controller\UserManagementController.class
 services\NotificationService.class
 Controller\VenteFormController.class
 Controller\UpdateMaintenanceController.class
+services\CartMemoire.class
 Controller\AnomalyPageController$Row.class
 Controller\AdminAnimauxController$2.class
 services\ai\AnomalyDetectionService.class

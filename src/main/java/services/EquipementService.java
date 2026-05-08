@@ -17,8 +17,8 @@ public class EquipementService {
     }
 
     public int ajouter(Equipement e) throws SQLException {
-        String sql = "INSERT INTO equipements (nom, type, prix, quantite, id_fournisseur, image_filename, is_active, updated_at) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO equipements (nom, type, prix, quantite, id_fournisseur, image_filename, is_active, updated_at, image) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, e.getNom());
             ps.setString(2, e.getType());
@@ -30,6 +30,8 @@ public class EquipementService {
             ps.setBoolean(7, e.isActive());
             LocalDateTime now = e.getUpdatedAt() != null ? e.getUpdatedAt() : LocalDateTime.now();
             ps.setTimestamp(8, Timestamp.valueOf(now));
+            if (e.getImage() != null) ps.setBytes(9, e.getImage());
+            else ps.setNull(9, Types.BLOB);
 
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
@@ -72,7 +74,7 @@ public class EquipementService {
     }
 
     public void modifier(Equipement e) throws SQLException {
-        String sql = "UPDATE equipements SET nom=?, type=?, prix=?, quantite=?, id_fournisseur=?, image_filename=?, is_active=?, updated_at=? WHERE id_equipement=?";
+        String sql = "UPDATE equipements SET nom=?, type=?, prix=?, quantite=?, id_fournisseur=?, image_filename=?, is_active=?, updated_at=?, image=? WHERE id_equipement=?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, e.getNom());
             ps.setString(2, e.getType());
@@ -84,7 +86,9 @@ public class EquipementService {
             ps.setBoolean(7, e.isActive());
             LocalDateTime now = e.getUpdatedAt() != null ? e.getUpdatedAt() : LocalDateTime.now();
             ps.setTimestamp(8, Timestamp.valueOf(now));
-            ps.setInt(9, e.getId_equipement());
+            if (e.getImage() != null) ps.setBytes(9, e.getImage());
+            else ps.setNull(9, Types.BLOB);
+            ps.setInt(10, e.getId_equipement());
             ps.executeUpdate();
         }
     }
@@ -130,6 +134,12 @@ public class EquipementService {
         e.setActive(rs.getBoolean("is_active"));
         Timestamp ts = rs.getTimestamp("updated_at");
         if (ts != null) e.setUpdatedAt(ts.toLocalDateTime());
+        try {
+            byte[] bytes = rs.getBytes("image");
+            if (bytes != null) e.setImage(bytes);
+        } catch (SQLException ignored) {
+            // `image` column not present yet (migration not run) — fall back to filename only.
+        }
         return e;
     }
 }

@@ -470,20 +470,15 @@ public class DetailEquipementController implements Initializable {
                 "-fx-cursor: hand; -fx-padding: 10 28;");
         });
         btnOk.setOnAction(e -> {
-            try {
-                int qty    = spinner.getValue();
-                double tot = prixUnit * qty;
-                Panier panier = new Panier(
-                    equipement.getId_equipement(), qty,
-                    String.format("%.2f", tot),
-                    AgriculteurController.ID_AGRICULTEUR);
-                panierService.ajouter(panier);
-                if (parentController != null) parentController.loadPanier();
-                dlg.close();
-                afficherToast(equipement.getNom(), qty, tot);
-            } catch (SQLException ex) {
-                showAlert("Erreur BD", ex.getMessage());
-            }
+            int qty    = spinner.getValue();
+            double tot = prixUnit * qty;
+            services.CartMemoire.getInstance().add(
+                AgriculteurController.ID_AGRICULTEUR,
+                equipement.getId_equipement(),
+                qty);
+            if (parentController != null) parentController.loadPanier();
+            dlg.close();
+            afficherToast(equipement.getNom(), qty, tot);
         });
 
         actions.getChildren().addAll(btnCancel, btnOk);

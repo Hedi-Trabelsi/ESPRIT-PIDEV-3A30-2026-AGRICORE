@@ -13,6 +13,7 @@ public class Equipement {
     private String imageFilename;
     private boolean isActive = true;
     private LocalDateTime updatedAt;
+    private byte[] image;
 
     public Equipement() {}
 
@@ -59,6 +60,9 @@ public class Equipement {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
 
     @Override
     public String toString() {

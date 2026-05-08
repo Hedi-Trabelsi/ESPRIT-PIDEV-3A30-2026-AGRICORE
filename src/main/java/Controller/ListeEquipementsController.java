@@ -132,9 +132,10 @@ public class ListeEquipementsController implements Initializable {
             "; -fx-background-radius: 16 16 0 0;");
 
         // ── IMAGE ou placeholder emoji ─────────────────────────────
-        // image_filename est stocké en base et partagé avec le projet Symfony.
-        StackPane imagePane = ImageManager.creerVignetteImage(
-            eq.getImageFilename(),
+        // L'image est stockée en BLOB (colonne `image`) et partagée avec
+        // le projet Symfony. Fallback sur l'ancien `image_filename` si BLOB vide.
+        StackPane imagePane = ImageManager.creerVignetteFromBytes(
+            eq.getImage(), eq.getImageFilename(),
             285, 140,
             getTypeEmoji(eq.getType()),
             bandColor + "18"

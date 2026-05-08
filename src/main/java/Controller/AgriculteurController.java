@@ -143,8 +143,9 @@ public class AgriculteurController implements Initializable {
         band.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 16 16 0 0;");
 
         // ── IMAGE ou placeholder ──────────────────────────────────
-        StackPane imagePane = ImageManager.creerVignetteImage(
-            eq.getImageFilename(), 270, 130, typeEmoji(eq.getType()), color + "18");
+        StackPane imagePane = ImageManager.creerVignetteFromBytes(
+            eq.getImage(), eq.getImageFilename(),
+            270, 130, typeEmoji(eq.getType()), color + "18");
 
         // ── Corps ─────────────────────────────────────────────────
         VBox body = new VBox(10);
@@ -197,9 +198,10 @@ public class AgriculteurController implements Initializable {
 
     void loadPanier() {
         try {
-            List<Panier> list = panierService.afficher();
-            panierList.setAll(list.stream()
-                .filter(p -> p.getId_agriculteur() == ID_AGRICULTEUR).toList());
+            // Cart lives in memory (mirrors Symfony's session-based CartService).
+            // We materialise it as Panier DTOs so the existing UI keeps working.
+            panierList.setAll(services.CartMemoire.getInstance()
+                    .snapshotForUi(ID_AGRICULTEUR, equipementService));
             renderPanierGrid(panierList);
             updatePanierSummary();
         } catch (SQLException e) {
@@ -235,9 +237,10 @@ public class AgriculteurController implements Initializable {
         band.setStyle("-fx-background-color: " + color + "; -fx-background-radius: 16 16 0 0;");
 
         // ── IMAGE ou placeholder ──────────────────────────────────
+        byte[] eqBytes = eq != null ? eq.getImage() : null;
         String filename = eq != null ? eq.getImageFilename() : null;
-        StackPane imagePane = ImageManager.creerVignetteImage(
-            filename, 300, 120, typeEmoji(type), color + "18");
+        StackPane imagePane = ImageManager.creerVignetteFromBytes(
+            eqBytes, filename, 300, 120, typeEmoji(type), color + "18");
 
         // ── Corps ─────────────────────────────────────────────────
         VBox body = new VBox(12);
@@ -292,7 +295,7 @@ public class AgriculteurController implements Initializable {
         btnRetirer.setStyle("-fx-background-color: #fdf0f0; -fx-text-fill: #e74c3c;" +
             "-fx-background-radius: 9; -fx-font-size: 12px; -fx-font-weight: bold;" +
             "-fx-cursor: hand; -fx-padding: 9 0; -fx-border-color: #fac0c0; -fx-border-radius: 9;");
-        btnRetirer.setOnAction(e -> retirerDuPanier(p.getId_panier()));
+        btnRetirer.setOnAction(e -> retirerDuPanier(p.getId_equipement()));
         btnRetirer.setOnMouseEntered(e -> btnRetirer.setStyle(
             "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 9;" +
             "-fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 9 0;"));
@@ -308,9 +311,9 @@ public class AgriculteurController implements Initializable {
         return card;
     }
 
-    private void retirerDuPanier(int id) {
-        try { panierService.supprimer(id); loadPanier(); }
-        catch (SQLException e) { showAlert("Erreur", "Impossible de retirer : " + e.getMessage()); }
+    private void retirerDuPanier(int equipementId) {
+        services.CartMemoire.getInstance().remove(ID_AGRICULTEUR, equipementId);
+        loadPanier();
     }
 
     @FXML
@@ -386,7 +389,19 @@ public class AgriculteurController implements Initializable {
         btnYes.setStyle("-fx-background-color:linear-gradient(to right,#1e3a1a,#4a7c40);" +
             "-fx-text-fill:white;-fx-background-radius:10;-fx-font-size:13px;" +
             "-fx-font-weight:bold;-fx-cursor:hand;-fx-padding:10 22;");
-        btnYes.setOnAction(e -> { dlg.close(); genererPDF(); });
+        btnYes.setOnAction(e -> {
+            dlg.close();
+            genererPDF();
+            try {
+                int commandeId = services.CartMemoire.getInstance().checkout(ID_AGRICULTEUR);
+                if (commandeId > 0) {
+                    showAlert("Commande créée", "Votre commande #" + commandeId + " a été enregistrée.");
+                }
+                loadPanier();
+            } catch (SQLException ex) {
+                showAlert("Erreur", "Échec lors de l'enregistrement de la commande : " + ex.getMessage());
+            }
+        });
         actions.getChildren().addAll(btnNo, btnYes);
 
         root.getChildren().addAll(hdr, body, actions);
