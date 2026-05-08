@@ -6,7 +6,14 @@
       "Read(//c/Program Files/Java/**)",
       "Read(//c/Program Files/**)",
       "Read(//c/Program Files \\(x86\\)/**)",
-      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2025.2.1/plugins/maven/lib/maven3/bin/mvn.cmd\" -version)"
+      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2025.2.1/plugins/maven/lib/maven3/bin/mvn.cmd\" -version)",
+      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2025.2.1/plugins/maven/lib/maven3/bin/mvn.cmd\" -q clean compile)",
+      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2025.2.1/plugins/maven/lib/maven3/bin/mvn.cmd\" compile)",
+      "Bash(python -c \"import xml.etree.ElementTree as ET; ET.parse\\(r'C:\\\\Users\\\\SBS\\\\Documents\\\\Nouveau dossier \\(4\\)\\\\ESPRIT-PIDEV-3A30-2026-AGRICORE\\\\src\\\\main\\\\resources\\\\fxml\\\\gestion_utilisateur.fxml'\\); print\\('signup OK'\\)\")",
+      "Bash(python -c \"import xml.etree.ElementTree as ET; ET.parse\\(r'C:\\\\Users\\\\SBS\\\\Documents\\\\Nouveau dossier \\(4\\)\\\\ESPRIT-PIDEV-3A30-2026-AGRICORE\\\\src\\\\main\\\\resources\\\\fxml\\\\signin.fxml'\\); print\\('signin OK'\\)\")",
+      "Bash(python -c \"import xml.etree.ElementTree as ET; ET.parse\\(r'C:\\\\Users\\\\SBS\\\\Documents\\\\Nouveau dossier \\(4\\)\\\\ESPRIT-PIDEV-3A30-2026-AGRICORE\\\\src\\\\main\\\\resources\\\\fxml\\\\EditUser.fxml'\\); print\\('EditUser OK'\\)\")",
+      "Bash(\"/c/Program Files/JetBrains/IntelliJ IDEA 2025.2.1/plugins/maven/lib/maven3/bin/mvn.cmd\" clean compile)",
+      "Bash(python *)"
     ]
   }
 }

@@ -16,8 +16,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import java.net.URL?>
 
-<BorderPane fx:id="mainBorderPane" prefHeight="800" prefWidth="1400" styleClass="user-root-pane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.UserHomeController">
+<BorderPane fx:id="mainBorderPane" prefHeight="800" prefWidth="1400" styleClass="user-root-pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.UserHomeController">
+    <stylesheets>
+        <URL value="@style.css"/>
+        <URL value="@user-pro.css"/>
+    </stylesheets>
 
     <!-- LEFT SIDEBAR - FRESH GREEN DESIGN -->
     <left>

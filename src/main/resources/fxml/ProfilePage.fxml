@@ -13,8 +13,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
 
 <ScrollPane fitToWidth="true" styleClass="profile-content-scroll" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ProfilePageController">
+    <stylesheets>
+        <URL value="@style.css"/>
+        <URL value="@user-pro.css"/>
+    </stylesheets>
     <VBox alignment="TOP_CENTER" spacing="30">
         <padding>
             <Insets bottom="40" left="40" right="40" top="30" />

@@ -45,7 +45,7 @@ public class EditUserController {
             setupButtonHandlers();
             errorLabel.setVisible(false);
         } catch (Exception e) {
-            showError("Failed to initialize: " + e.getMessage());
+            showError("Échec de l'initialisation : " + e.getMessage());
         }
     }
 
@@ -144,11 +144,11 @@ public class EditUserController {
             profileImageView.setImage(img);
             isImageChanged = true;
 
-            showSuccess("Image uploaded and optimized successfully!");
+            showSuccess("Image chargée et optimisée avec succès !");
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Failed to load image: " + e.getMessage());
+            showError("Impossible de charger l'image : " + e.getMessage());
         }
     }
 
@@ -188,7 +188,7 @@ public class EditUserController {
             try {
                 phone = Integer.parseInt(phoneField.getText().trim());
             } catch (NumberFormatException e) {
-                showError("Invalid phone number!");
+                showError("Numéro de téléphone invalide !");
                 return;
             }
 
@@ -198,7 +198,7 @@ public class EditUserController {
             // Save to database
             userService.update(currentUser);
 
-            showSuccess("User updated successfully!");
+            showSuccess("Utilisateur mis à jour avec succès !");
 
             // Notify parent and close
             if (onUserUpdated != null) {
@@ -225,7 +225,7 @@ public class EditUserController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Error updating user: " + e.getMessage());
+            showError("Erreur lors de la mise à jour : " + e.getMessage());
         }
     }
 
@@ -236,7 +236,7 @@ public class EditUserController {
                 genreBox.getValue() == null ||
                 roleBox.getValue() == null ||
                 datePicker.getValue() == null) {
-            showError("Please fill all required fields!");
+            showError("Veuillez remplir tous les champs obligatoires !");
             return false;
         }
         return true;

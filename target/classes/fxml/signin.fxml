@@ -5,17 +5,29 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
+<?import java.net.URL?>
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:id="rootPane"
            fx:controller="Controller.SigninController"
            prefWidth="1200" prefHeight="800"
-           styleClass="auth-root-pane"
-           stylesheets="@style.css">
+           styleClass="auth-root-pane">
+    <stylesheets>
+        <URL value="@style.css"/>
+        <URL value="@user-pro.css"/>
+    </stylesheets>
 
     <!-- Decorative Background Elements -->
     <children>
         <Rectangle styleClass="auth-bg-circle1" />
         <Rectangle styleClass="auth-bg-circle2" />
+
+        <!-- Scrollable + centering wrapper so the card stays centered when the
+             window is wide and scrolls (instead of clipping) when it's small. -->
+        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="auth-scroll-pane">
+            <VBox alignment="CENTER" styleClass="auth-scroll-content">
+                <padding>
+                    <Insets top="40" right="20" bottom="40" left="20"/>
+                </padding>
 
         <!-- Main Card -->
         <VBox alignment="CENTER"
@@ -142,5 +154,7 @@
                 <Label text="© 2026 AGRICOR - Agriculture Intelligente" styleClass="auth-footer-copyright"/>
             </VBox>
         </VBox>
+            </VBox>
+        </ScrollPane>
     </children>
 </StackPane>

@@ -37,8 +37,11 @@ public class ShowUsersController {
     @FXML private Label     statActifs;
     @FXML private Label     statDepenses;
     @FXML private Label     statRoles;
+    @FXML private ComboBox<String> statusFilter;
 
     private List<Utilisateur> allUsers;
+    /** "Tous" | "Actifs" | "Bannis" — drives the status filter. */
+    private String statusMode = "Tous";
 
     /*
      * LIGHT PALETTE — 5 tones, unified
@@ -53,41 +56,57 @@ public class ShowUsersController {
      *   ghost text   #9DBFAD
      */
 
-    // Avatar gradients — vivid, stand out on light bg
+    // Avatar gradients — agricultural palette: forest, leaf, wheat, earth, moss, sage
     private static final String[] AV = {
-            "linear-gradient(135deg,#1A6B45,#2E8B57)",
-            "linear-gradient(135deg,#1D5A8E,#2980D4)",
-            "linear-gradient(135deg,#7B2E6B,#C44FA0)",
-            "linear-gradient(135deg,#8B5213,#D48A3A)",
-            "linear-gradient(135deg,#2C5282,#4299E1)",
-            "linear-gradient(135deg,#276749,#52B788)"
+            "linear-gradient(135deg,#1F4E3B,#4A8B6F)",
+            "linear-gradient(135deg,#2E5E47,#7FB89A)",
+            "linear-gradient(135deg,#8C6A47,#C9A96E)",
+            "linear-gradient(135deg,#4A6B3E,#8FAE6E)",
+            "linear-gradient(135deg,#3E8266,#7FB89A)",
+            "linear-gradient(135deg,#5C7A56,#A8C8B8)"
     };
 
-    // Stripe: soft, semi-transparent to not overwhelm light cards
+    // Stripe: soft, leaf-toned gradients
     private static final String[] STRIPES = {
-            "linear-gradient(to right,#52B788,#A8DCBE,transparent)",
-            "linear-gradient(to right,#2980D4,#90C3F8,transparent)",
-            "linear-gradient(to right,#C44FA0,#EAA8D4,transparent)",
-            "linear-gradient(to right,#D48A3A,#F0C080,transparent)",
-            "linear-gradient(to right,#4299E1,#90CAF9,transparent)",
-            "linear-gradient(to right,#2E8B57,#7ECBA0,transparent)"
+            "linear-gradient(to right,#4A8B6F,#C7DDD0,transparent)",
+            "linear-gradient(to right,#7FB89A,#EAF2EC,transparent)",
+            "linear-gradient(to right,#C9A96E,#E8DCC4,transparent)",
+            "linear-gradient(to right,#8FAE6E,#D4DCB4,transparent)",
+            "linear-gradient(to right,#3E8266,#A8C8B8,transparent)",
+            "linear-gradient(to right,#A8C8B8,#EAF2EC,transparent)"
     };
 
-    // Role badge: [text, background, border] — all soft tones
+    // Role badge: [text, background, border] — muted earthy/leaf tones
     private static final String[][] ROLE = {
-            {"#1A5C38", "#D4EDE0", "#52B788"},
-            {"#1D4D8E", "#DBEAFE", "#93C5FD"},
-            {"#7B2E6B", "#FAE8F5", "#DDA0CC"},
-            {"#8B4513", "#FEF0DC", "#F5C888"},
-            {"#2C5282", "#DBEAFE", "#93C5FD"},
-            {"#1A5C38", "#D4EDE0", "#52B788"}
+            {"#1F4E3B", "#EAF2EC", "#4A8B6F"},
+            {"#2E5E47", "#EAF2EC", "#7FB89A"},
+            {"#8C6A47", "#FAF6EC", "#C9A96E"},
+            {"#4A6B3E", "#F0F4E8", "#8FAE6E"},
+            {"#3E8266", "#EAF2EC", "#7FB89A"},
+            {"#1F4E3B", "#EAF2EC", "#A8C8B8"}
     };
 
     @FXML
     void initialize() {
+        if (statusFilter != null) {
+            statusFilter.getItems().setAll("Tous", "Actifs", "Bannis");
+            statusFilter.setValue("Tous");
+            statusFilter.valueProperty().addListener((obs, o, n) -> {
+                statusMode = n != null ? n : "Tous";
+                renderFiltered(searchField != null ? searchField.getText() : null);
+            });
+        }
         refreshCards();
         if (searchField != null)
             searchField.textProperty().addListener((obs, o, n) -> renderFiltered(n));
+    }
+
+    private boolean matchesStatus(Utilisateur u) {
+        return switch (statusMode) {
+            case "Actifs" -> !u.isBanned();
+            case "Bannis" -> u.isBanned();
+            default -> true;
+        };
     }
 
     @FXML
@@ -103,10 +122,13 @@ public class ShowUsersController {
 
     private void updateStats() {
         int n = allUsers.size();
+        long banned = allUsers.stream().filter(Utilisateur::isBanned).count();
+        long active = n - banned;
         if (countLabel != null)
             countLabel.setText(n + " membre" + (n > 1 ? "s" : "") + " enregistré" + (n > 1 ? "s" : ""));
         if (statRoles  != null) statRoles.setText(String.valueOf(n));
-        if (statActifs != null) statActifs.setText(String.valueOf(Math.max(1, n - 1)));
+        if (statActifs != null) statActifs.setText(String.valueOf(active));
+        if (statDepenses != null) statDepenses.setText(String.valueOf(banned));
     }
 
     private void renderFiltered(String query) {
@@ -114,6 +136,7 @@ public class ShowUsersController {
         String q = query == null ? "" : query.trim().toLowerCase();
         int idx = 0, visible = 0;
         for (Utilisateur u : allUsers) {
+            if (!matchesStatus(u)) continue;
             String name = ((u.getPrenom() != null ? u.getPrenom() : "") + " "
                     + (u.getNom()    != null ? u.getNom()    : "")).toLowerCase();
             if (q.isEmpty() || name.contains(q)) {
@@ -305,32 +328,50 @@ public class ShowUsersController {
         return b;
     }
 
-    // Card states
+    // Card states — paper surface with subtle shadow, leaf border on hover
     private String cNormal() {
-        return "-fx-background-color:#FFFFFF;" +       // pure white card
-                "-fx-background-radius:12;" +
-                "-fx-border-color:#C9DDD2;" +           // soft sage border
-                "-fx-border-radius:12; -fx-border-width:1;" +
-                "-fx-effect:dropshadow(gaussian,rgba(26,92,56,0.09),10,0,0,3);" +
+        return "-fx-background-color:#FDFDFB;" +
+                "-fx-background-radius:16;" +
+                "-fx-border-color:#DCE8E0;" +
+                "-fx-border-radius:16; -fx-border-width:1;" +
+                "-fx-effect:dropshadow(gaussian,rgba(14,44,32,0.08),18,0.05,0,6);" +
                 "-fx-cursor:hand;";
     }
     private String cHover() {
-        return "-fx-background-color:#FFFFFF;" +
-                "-fx-background-radius:12;" +
-                "-fx-border-color:#2E8B57;" +           // accent border on hover
-                "-fx-border-radius:12; -fx-border-width:1.5;" +
-                "-fx-effect:dropshadow(gaussian,rgba(46,139,87,0.20),16,0,0,5);" +
-                "-fx-cursor:hand; -fx-translate-y:-2;";
+        return "-fx-background-color:#FDFDFB;" +
+                "-fx-background-radius:16;" +
+                "-fx-border-color:#4A8B6F;" +
+                "-fx-border-radius:16; -fx-border-width:1.5;" +
+                "-fx-effect:dropshadow(gaussian,rgba(74,139,111,0.22),22,0.08,0,8);" +
+                "-fx-cursor:hand; -fx-translate-y:-3;";
     }
 
     private void toggleBan(Utilisateur u) {
-        try {
-            u.setBanned(!u.isBanned());
-            us.update(u);
-            refreshCards();
-        } catch (Exception ex) {
-            new Alert(Alert.AlertType.ERROR, "Échec de la mise à jour: " + ex.getMessage()).showAndWait();
-        }
+        boolean banning = !u.isBanned();
+        String fullName = ((u.getPrenom() != null ? u.getPrenom() : "") + " "
+                         + (u.getNom() != null ? u.getNom() : "")).trim();
+        if (fullName.isEmpty()) fullName = "cet utilisateur";
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle(banning ? "Suspendre le compte" : "Réactiver le compte");
+        confirm.setHeaderText((banning ? "Suspendre " : "Réactiver ") + fullName + " ?");
+        confirm.setContentText(banning
+                ? "L'utilisateur ne pourra plus se connecter (mot de passe ou Face ID) tant qu'il est suspendu. Vous pourrez le réactiver à tout moment."
+                : "L'utilisateur pourra à nouveau se connecter et accéder à son compte.");
+        ButtonType okBtn = new ButtonType(banning ? "🚫 Suspendre" : "✓ Réactiver", javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelBtn = new ButtonType("Annuler", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(okBtn, cancelBtn);
+
+        confirm.showAndWait().ifPresent(response -> {
+            if (response != okBtn) return;
+            try {
+                u.setBanned(banning);
+                us.update(u);
+                refreshCards();
+            } catch (Exception ex) {
+                new Alert(Alert.AlertType.ERROR, "Échec de la mise à jour: " + ex.getMessage()).showAndWait();
+            }
+        });
     }
 
     // ── Navigation ──────────────────────────────────────────────
