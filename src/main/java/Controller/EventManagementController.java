@@ -964,23 +964,31 @@ public class EventManagementController {
                     dayBtn.setPadding(new Insets(5, 12, 5, 12));
                     dayBtn.setCursor(Cursor.HAND);
 
+                    // Label for "Jour"
                     Label lblJ = new Label("Jour");
-                    lblJ.setStyle("-fx-font-size: 10px; -fx-text-fill: #888;");
+                    lblJ.setStyle("-fx-font-size: 10px; -fx-text-fill: black;");
+
+                    // Label for the day number (The one appearing white in your image)
                     Label lblN = new Label(String.valueOf(dayNum));
-                    lblN.setStyle("-fx-font-weight: bold;");
+                    // Added -fx-text-fill: black !important; logic to ensure it stays black
+                    lblN.setStyle("-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: black;");
+
                     dayBtn.getChildren().addAll(lblJ, lblN);
 
-                    String baseStyle = "-fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: #eee;";
-                    String activeStyle = baseStyle + "-fx-background-color: #f0fdf4; -fx-border-color: #2d5a27;";
+                    // Define base styles - ensuring the border is also visible
+                    String baseStyle = "-fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: #ccc; -fx-background-color: white;";
+                    String activeStyle = "-fx-border-radius: 15; -fx-background-radius: 15; -fx-background-color: #f0fdf4; -fx-border-color: #2d5a27; -fx-border-width: 2;";
 
                     dayBtn.setStyle(idx == activeDayIndex[0] ? activeStyle : baseStyle);
 
                     dayBtn.setOnMouseClicked(e -> {
                         activeDayIndex[0] = idx;
+                        // When clicking, reset all buttons to baseStyle and set this one to activeStyle
                         dayBar.getChildren().forEach(n -> n.setStyle(baseStyle));
                         dayBtn.setStyle(activeStyle);
                         updatePresenceUI(dynamicContent, p, activeDayIndex[0], totalDays, pFlow, ev, filter);
                     });
+
                     dayBar.getChildren().add(dayBtn);
                 }
 
