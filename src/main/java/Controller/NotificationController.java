@@ -493,18 +493,35 @@ public class NotificationController {
     void closeWindow(ActionEvent event) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/Dashboard.fxml"));
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            stage.getScene().setRoot(root);
-        } catch (Exception e) { e.printStackTrace(); }
+
+            // ❌ ancien code supprimé: setRoot(root)
+            // ✔ on charge dans la zone centrale pour garder la sidebar
+
+            NavigationUtil.loadInContentArea(
+                    (javafx.scene.Node) event.getSource(),
+                    root
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @FXML
     void navigateBack() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/fxml/ShowAnimals.fxml"));
-            Stage stage = (Stage) lblStatut.getScene().getWindow();
-            stage.getScene().setRoot(root);
-        } catch (Exception e) { showAlert(e.getMessage()); }
+
+            // ❌ ancien code supprimé: setRoot(root)
+            // ✔ on garde la sidebar intacte
+
+            NavigationUtil.loadInContentArea(
+                    lblStatut.getScene().getRoot(),
+                    root
+            );
+
+        } catch (Exception e) {
+            showAlert(e.getMessage());
+        }
     }
 
     // ==================== UTILITY METHODS ====================

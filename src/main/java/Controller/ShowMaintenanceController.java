@@ -73,6 +73,15 @@ public class ShowMaintenanceController {
             // 1. On récupère TOUT
             List<Maintenance> allMaintenances = serviceMaintenance.afficher();
 
+            int role = UserSession.getRole();
+
+            if (role == 1 && UserSession.getCurrentUser() != null) {
+                int userId = UserSession.getCurrentUser().getId();
+                allMaintenances = allMaintenances.stream()
+                        .filter(m -> m.getIdAgriculteur() == userId)
+                        .collect(Collectors.toList());
+            }
+
             // 2. On récupère les DEUX valeurs de filtre
             String filterText = (searchTf.getText() == null) ? "" : searchTf.getText().toLowerCase().trim();
             String selectedStatus = (statusFilter != null) ? statusFilter.getValue() : "Tous les statuts";
@@ -144,7 +153,18 @@ public class ShowMaintenanceController {
     private void loadMaintenances() {
         try {
             List<Maintenance> maintenanceList = serviceMaintenance.afficher();
-            displayList(maintenanceList); // Utilise la méthode d'affichage
+
+            int role = UserSession.getRole();
+
+            if (role == 1 && UserSession.getCurrentUser() != null) {
+                int userId = UserSession.getCurrentUser().getId();
+                maintenanceList = maintenanceList.stream()
+                        .filter(m -> m.getIdAgriculteur() == userId)
+                        .collect(Collectors.toList());
+            }
+
+            displayList(maintenanceList);
+
         } catch (SQLException e) {
             showAlert("Erreur", "Impossible de charger les maintenances: " + e.getMessage());
         }
