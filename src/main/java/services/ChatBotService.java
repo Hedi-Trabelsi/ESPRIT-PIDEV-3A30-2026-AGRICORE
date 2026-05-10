@@ -15,15 +15,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class ChatBotService {
 
-    private static final String API_URL = "https://openrouter.ai/api/v1/chat/completions";
-    private static final String API_KEY = "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";
-
-    // Using Qwen model as requested
-    private static final String MODEL = "qwen/qwen3-vl-235b-a22b-thinking";
-
-    // Site info for OpenRouter rankings (optional but recommended)
-    private static final String SITE_URL = "http://localhost:8080";
-    private static final String SITE_NAME = "AGRICOR App";
+    // Groq + Llama 3.3 — same provider/key/model as the Symfony chatbot
+    // (see Symfony `.env.local` GROQ_API_KEY and `UtilisateurController::apiChat`).
+    private static final String API_URL = "https://api.groq.com/openai/v1/chat/completions";
+    private static final String API_KEY = "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";
+    private static final String MODEL   = "llama-3.3-70b-versatile";
 
     private static final String SYSTEM_PROMPT = """
             Tu es l'assistant virtuel d'AGRICOR, une application de gestion agricole intelligente.
@@ -94,19 +90,17 @@ public class ChatBotService {
                     messages.put(conversationHistory.get(i));
                 }
 
-                // Build request body
+                // Build request body — matches Symfony's apiChat payload shape
                 JSONObject requestBody = new JSONObject();
                 requestBody.put("model", MODEL);
                 requestBody.put("messages", messages);
-                requestBody.put("max_tokens", 200);
+                requestBody.put("max_tokens", 300);
                 requestBody.put("temperature", 0.7);
 
                 HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create(API_URL))
                         .header("Content-Type", "application/json")
                         .header("Authorization", "Bearer " + API_KEY)
-                        .header("HTTP-Referer", SITE_URL)
-                        .header("X-OpenRouter-Title", SITE_NAME)
                         .POST(HttpRequest.BodyPublishers.ofString(requestBody.toString()))
                         .timeout(Duration.ofSeconds(25))
                         .build();

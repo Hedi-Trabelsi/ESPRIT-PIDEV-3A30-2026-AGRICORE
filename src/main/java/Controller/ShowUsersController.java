@@ -245,18 +245,29 @@ public class ShowUsersController {
         System.out.println("[DEBUG] ShowUsers - Building card for user id=" + user.getId() + " name=" + user.getPrenom() + " " + user.getNom());
         User financeUser = new User(user.getId(), user.getPrenom(), user.getNom());
 
-        // Action buttons — Calendrier excluded from this view
+        // Action buttons — Calendrier excluded from this view.
+        // Three regular actions on row 1; the ban toggle gets its own full-width
+        // row with strong styling so admins can't miss it.
         Button bO = btn("🛠 Outils",   "primary", e -> openUserOperations(financeUser));
         Button bA = btn("📊 Analyses", "ghost",   e -> openUserAnalytics(financeUser));
         Button bD = btn("📋 Détails",  "ghost",   e -> openFinanceFor(financeUser));
-        Button bB = btn(user.isBanned() ? "✓ Débannir" : "🚫 Bannir", "ghost", e -> toggleBan(user));
 
-        HBox actRow = new HBox(6, bO, bA, bD, bB);
+        HBox actRow = new HBox(6, bO, bA, bD);
         actRow.setAlignment(Pos.CENTER_LEFT);
-        actRow.setPadding(new Insets(11,15,15,15));
+        actRow.setPadding(new Insets(11,15,8,15));
+
+        Button bBan = new Button(user.isBanned() ? "✓  Débannir le compte" : "🚫  Suspendre le compte");
+        bBan.setMaxWidth(Double.MAX_VALUE);
+        bBan.setStyle(banButtonStyle(user.isBanned(), false));
+        bBan.setOnMouseEntered(e -> bBan.setStyle(banButtonStyle(user.isBanned(), true)));
+        bBan.setOnMouseExited(e  -> bBan.setStyle(banButtonStyle(user.isBanned(), false)));
+        bBan.setOnAction(e -> toggleBan(user));
+
+        HBox banRow = new HBox(bBan);
+        banRow.setPadding(new Insets(0,15,15,15));
 
         // Assemble
-        VBox card = new VBox(0, stripe, cardBody, metaRow, actRow);
+        VBox card = new VBox(0, stripe, cardBody, metaRow, actRow, banRow);
         card.setPrefWidth(288);
         card.setStyle(cNormal());
 
@@ -326,6 +337,28 @@ public class ShowUsersController {
         b.setOnMouseEntered(e -> b.setStyle(fh));
         b.setOnMouseExited(e  -> b.setStyle(fn));
         return b;
+    }
+
+    /**
+     * Visual style for the ban / unban full-width button.
+     * Banned users → green "Débannir" CTA. Active users → red "Suspendre" CTA.
+     */
+    private String banButtonStyle(boolean isBanned, boolean hover) {
+        String base = "-fx-text-fill: white;" +
+                "-fx-font-size: 12.5px;" +
+                "-fx-font-weight: 700;" +
+                "-fx-background-radius: 8;" +
+                "-fx-padding: 9 0;" +
+                "-fx-cursor: hand;" +
+                "-fx-border-width: 0;";
+        if (isBanned) {
+            return base + "-fx-background-color: linear-gradient(to bottom,"
+                    + (hover ? "#3FA478,#2E7B58" : "#3E8266,#1F4E3B") + ");"
+                    + "-fx-effect: dropshadow(gaussian, rgba(31,78,59,0.30), 10, 0.05, 0, 3);";
+        }
+        return base + "-fx-background-color: linear-gradient(to bottom,"
+                + (hover ? "#D14538,#A63329" : "#B5413A,#8C2E27") + ");"
+                + "-fx-effect: dropshadow(gaussian, rgba(181,65,58,0.32), 10, 0.05, 0, 3);";
     }
 
     // Card states — paper surface with subtle shadow, leaf border on hover

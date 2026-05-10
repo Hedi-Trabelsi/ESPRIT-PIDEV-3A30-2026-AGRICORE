@@ -286,6 +286,11 @@ public class SignupController {
             System.out.println("User created successfully with ID: " + userId);
             System.out.println("Email: " + user.getEmail());
 
+            // Mirror the password-login path: init both session holders so the
+            // chatbot and any services-package consumers can read the user id.
+            services.UserSession.getInstance().initSession(user.getId(), user.getNom());
+            Controller.UserSession.setCurrentUser(user);
+
             openUserHomePageWithNotification(user);
 
         } catch (Exception e) {
@@ -371,6 +376,11 @@ public class SignupController {
     }
 
     public void autoLoginExistingUser(Utilisateur user) {
+        // Init both session holders so all downstream features (chat, profile,
+        // ban check, etc.) get a valid user id regardless of which login path was used.
+        services.UserSession.getInstance().initSession(user.getId(), user.getNom());
+        Controller.UserSession.setCurrentUser(user);
+
         int role = user.getRole();
         if (role == 0 || role == 3 || role == 4) {
             // Backend

@@ -174,9 +174,9 @@ public class UserManagementController {
         VBox card = new VBox(8);
         card.getStyleClass().add("user-card");
         card.setPrefWidth(280);
-        card.setPrefHeight(320);
+        card.setPrefHeight(380);
         card.setMaxWidth(280);
-        card.setMaxHeight(320);
+        card.setMaxHeight(380);
         card.setAlignment(Pos.TOP_CENTER);
         card.setPadding(new Insets(12, 12, 12, 12));
 
@@ -198,16 +198,24 @@ public class UserManagementController {
             setDefaultAvatar(photoView, user.getNom());
         }
 
-        // User name
+        // User name (struck through if banned, with a red 'BANNI' tag appended)
         Label nameLabel = new Label(user.getNom() + " " + user.getPrenom());
         nameLabel.getStyleClass().add("card-name");
         nameLabel.setWrapText(true);
         nameLabel.setAlignment(Pos.CENTER);
         nameLabel.setMaxWidth(250);
+        if (user.isBanned()) {
+            nameLabel.setStyle("-fx-strikethrough: true; -fx-text-fill: #B5413A;");
+        }
 
-        // Role badge
-        Label roleLabel = new Label(getRoleText(user.getRole()));
+        // Role badge (+ banned badge when applicable)
+        Label roleLabel = new Label(user.isBanned()
+                ? getRoleText(user.getRole()) + "  ·  🚫 BANNI"
+                : getRoleText(user.getRole()));
         roleLabel.getStyleClass().add("card-role");
+        if (user.isBanned()) {
+            roleLabel.setStyle("-fx-text-fill: #B5413A; -fx-font-weight: bold;");
+        }
         roleLabel.setAlignment(Pos.CENTER);
 
         // Email
@@ -228,8 +236,10 @@ public class UserManagementController {
         infoGrid.setVgap(3);
         infoGrid.setAlignment(Pos.CENTER);
 
-        // Gender
-        Label genderIcon = new Label(user.getGenre() != null && user.getGenre().equals("Male") ? "👨" : "👩");
+        // Gender — handle both legacy "Male"/"Female" rows and the current "Homme"/"Femme" convention
+        String g = user.getGenre() != null ? user.getGenre().trim().toLowerCase() : "";
+        boolean isMale = g.equals("homme") || g.equals("male") || g.equals("m");
+        Label genderIcon = new Label(isMale ? "👨" : "👩");
         genderIcon.getStyleClass().add("card-icon");
 
         Label genderLabel = new Label(user.getGenre() != null ? user.getGenre() : "N/A");
@@ -267,7 +277,7 @@ public class UserManagementController {
         addressLabel.setAlignment(Pos.CENTER);
         addressLabel.setPadding(new Insets(3, 0, 3, 0));
 
-        // Action buttons
+        // Action buttons — Modifier + Supprimer on row 1, ban toggle full-width on row 2
         HBox actionBox = new HBox(8);
         actionBox.setAlignment(Pos.CENTER);
         actionBox.setPadding(new Insets(3, 0, 0, 0));
@@ -284,6 +294,17 @@ public class UserManagementController {
 
         actionBox.getChildren().addAll(updateBtn, deleteBtn);
 
+        Button banBtn = new Button(user.isBanned() ? "✓  Débannir le compte" : "🚫  Suspendre le compte");
+        banBtn.setMaxWidth(Double.MAX_VALUE);
+        banBtn.setStyle(banButtonStyle(user.isBanned(), false));
+        banBtn.setOnMouseEntered(e -> banBtn.setStyle(banButtonStyle(user.isBanned(), true)));
+        banBtn.setOnMouseExited(e  -> banBtn.setStyle(banButtonStyle(user.isBanned(), false)));
+        banBtn.setOnAction(e -> handleToggleBan(user));
+
+        VBox actionsStack = new VBox(6, actionBox, banBtn);
+        actionsStack.setAlignment(Pos.CENTER);
+        actionsStack.setPadding(new Insets(3, 0, 0, 0));
+
         card.getChildren().addAll(
                 photoView,
                 nameLabel,
@@ -292,10 +313,68 @@ public class UserManagementController {
                 separator,
                 infoGrid,
                 addressLabel,
-                actionBox
+                actionsStack
         );
 
+        if (user.isBanned()) {
+            card.setStyle("-fx-border-color: #B5413A; -fx-border-width: 1.5; -fx-border-radius: 12;");
+        }
+
         return card;
+    }
+
+    private String banButtonStyle(boolean isBanned, boolean hover) {
+        String base = "-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: 700;" +
+                "-fx-background-radius: 8; -fx-padding: 8 0; -fx-cursor: hand; -fx-border-width: 0;";
+        if (isBanned) {
+            return base + "-fx-background-color: linear-gradient(to bottom,"
+                    + (hover ? "#3FA478,#2E7B58" : "#3E8266,#1F4E3B") + ");"
+                    + "-fx-effect: dropshadow(gaussian, rgba(31,78,59,0.30), 8, 0.05, 0, 2);";
+        }
+        return base + "-fx-background-color: linear-gradient(to bottom,"
+                + (hover ? "#D14538,#A63329" : "#B5413A,#8C2E27") + ");"
+                + "-fx-effect: dropshadow(gaussian, rgba(181,65,58,0.32), 8, 0.05, 0, 2);";
+    }
+
+    private void handleToggleBan(Utilisateur user) {
+        boolean banning = !user.isBanned();
+        String fullName = ((user.getPrenom() != null ? user.getPrenom() : "") + " "
+                         + (user.getNom() != null ? user.getNom() : "")).trim();
+        if (fullName.isEmpty()) fullName = "cet utilisateur";
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle(banning ? "Suspendre le compte" : "Réactiver le compte");
+        confirm.setHeaderText((banning ? "Suspendre " : "Réactiver ") + fullName + " ?");
+        confirm.setContentText(banning
+                ? "L'utilisateur ne pourra plus se connecter (mot de passe ou Face ID, ni côté Symfony) tant qu'il est suspendu. Vous pourrez le réactiver à tout moment."
+                : "L'utilisateur pourra à nouveau se connecter et accéder à son compte.");
+
+        ButtonType okBtn = new ButtonType(banning ? "🚫 Suspendre" : "✓ Réactiver",
+                ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelBtn = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+        confirm.getButtonTypes().setAll(okBtn, cancelBtn);
+
+        if (usersGrid != null && usersGrid.getScene() != null) {
+            confirm.initOwner(usersGrid.getScene().getWindow());
+        }
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == okBtn) {
+            try {
+                user.setBanned(banning);
+                userService.update(user);
+                Platform.runLater(() -> {
+                    loadAllUsers();
+                    showAlert("Succès",
+                            banning ? "Compte suspendu. L'utilisateur ne peut plus se connecter."
+                                    : "Compte réactivé. L'utilisateur peut se reconnecter.",
+                            Alert.AlertType.INFORMATION);
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showAlert("Erreur", "Échec de la mise à jour : " + ex.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
     }
 
     private void setDefaultAvatar(ImageView imageView, String name) {

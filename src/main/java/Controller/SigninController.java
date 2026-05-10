@@ -157,6 +157,12 @@ public class SigninController {
                                 });
                                 return;
                             }
+                            // Init both session holders so the chatbot and any
+                            // services that read services.UserSession also work
+                            // after a face login (mirrors the password-login path).
+                            services.UserSession.getInstance().initSession(
+                                    finalUser.getId(), finalUser.getNom());
+                            Controller.UserSession.setCurrentUser(finalUser);
                             Platform.runLater(() -> {
                                 int role = finalUser.getRole();
                                 errorLabel.setStyle("-fx-text-fill: green;");
