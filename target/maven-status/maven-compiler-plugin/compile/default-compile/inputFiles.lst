@@ -1,120 +1,120 @@
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddAnimalController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddMaintenanceController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddSuiviAnimalController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddTacheController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddUserController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AdminAnimauxController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AdminDashboardController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AdminSuivisController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AgriculteurController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AgriculturePanelController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AjoutEquipementController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AnomalyPageController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ChatBotController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\CombinedDashboardController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\DashboardController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\DepenseFormController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\DetailEquipementController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EditUserController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EvenementParticipantController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EventManagementController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EventPageController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\FaceScanController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\FinanceTablesController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ForgotPasswordController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\GoogleSignInController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\GoogleSignupCompleteController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\HomeController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ListeEquipementsController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MaintenanceDetailController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MaintenancePageController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MarketController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MeteoSanteController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\NavigationUtil.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\NotificationController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\OrdonnanceIAController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ProfilePageController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\RecommandationAlimentaireController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ResumeMedicalController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowAnimalsController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowEvennementController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowMaintenanceController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowMaintenanceDetailsController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowParticipantController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowSuiviAnimalController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowUsersController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\SigninController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\SignupController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\StatistiquesSuiviController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\StatsController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\TacheMaintenanceController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateAnimalController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateEvenementController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateMaintenanceController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateSuiviAnimalController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateTacheController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserAnalyticsController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserCalendarController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserCardController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserHomeController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserManagementController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserOperationsController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserSession.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\VenteFormController.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ActionLog.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Animal.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\AnomalyResult.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Commande.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Depense.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Equipement.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\EvennementAgricole.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ForecastPoint.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ForecastResult.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\LigneCommande.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Maintenance.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Panier.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Participant.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ProductPrice.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\SuiviAnimal.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Tache.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\TypeDepense.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\User.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Utilisateur.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Vente.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\org\example\Main.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\AgricultureService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\AnomalyDetectionService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\DefaultAnomalyDetectionService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\DefaultForecastingService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\ForecastingService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\RobustAnomalyDetectionService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\AnimalService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\CartMemoire.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ChatBotService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\CommandeService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\DepenseService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\EmailService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\EquipementService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\EvennementService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\FacePPService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\GoogleSignInService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\IService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\IServiceMaintenance.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\LigneCommandeService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\LocalRedirectServer.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\LogService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\MessageService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\NotificationService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\OpenAIService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\PanierService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ParticipantService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\PdfService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ServiceMaintenance.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ServiceTache.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\SmsService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\SuiviAnimalService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\UserService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\UserSession.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\VenteService.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\utils\ImageManager.java
-C:\Users\Chirazbouslimi\Desktop\java2\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\utils\MyDatabase.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddAnimalController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddMaintenanceController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddSuiviAnimalController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddTacheController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AddUserController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AdminAnimauxController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AdminDashboardController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AdminSuivisController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AgriculteurController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AgriculturePanelController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AjoutEquipementController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\AnomalyPageController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ChatBotController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\CombinedDashboardController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\DashboardController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\DepenseFormController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\DetailEquipementController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EditUserController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EvenementParticipantController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EventManagementController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\EventPageController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\FaceScanController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\FinanceTablesController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ForgotPasswordController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\GoogleSignInController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\GoogleSignupCompleteController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\HomeController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ListeEquipementsController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MaintenanceDetailController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MaintenancePageController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MarketController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\MeteoSanteController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\NavigationUtil.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\NotificationController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\OrdonnanceIAController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ProfilePageController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\RecommandationAlimentaireController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ResumeMedicalController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowAnimalsController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowEvennementController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowMaintenanceController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowMaintenanceDetailsController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowParticipantController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowSuiviAnimalController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\ShowUsersController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\SigninController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\SignupController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\StatistiquesSuiviController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\StatsController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\TacheMaintenanceController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateAnimalController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateEvenementController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateMaintenanceController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateSuiviAnimalController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UpdateTacheController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserAnalyticsController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserCalendarController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserCardController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserHomeController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserManagementController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserOperationsController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\UserSession.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Controller\VenteFormController.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ActionLog.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Animal.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\AnomalyResult.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Commande.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Depense.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Equipement.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\EvennementAgricole.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ForecastPoint.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ForecastResult.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\LigneCommande.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Maintenance.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Panier.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Participant.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\ProductPrice.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\SuiviAnimal.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Tache.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\TypeDepense.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\User.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Utilisateur.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\Model\Vente.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\org\example\Main.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\AgricultureService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\AnomalyDetectionService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\DefaultAnomalyDetectionService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\DefaultForecastingService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\ForecastingService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ai\RobustAnomalyDetectionService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\AnimalService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\CartMemoire.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ChatBotService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\CommandeService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\DepenseService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\EmailService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\EquipementService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\EvennementService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\FacePPService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\GoogleSignInService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\IService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\IServiceMaintenance.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\LigneCommandeService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\LocalRedirectServer.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\LogService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\MessageService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\NotificationService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\OpenAIService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\PanierService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ParticipantService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\PdfService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ServiceMaintenance.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\ServiceTache.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\SmsService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\SuiviAnimalService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\UserService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\UserSession.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\services\VenteService.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\utils\ImageManager.java
+C:\Users\Chirazbouslimi\Desktop\final java\ESPRIT-PIDEV-3A30-2026-AGRICORE\src\main\java\utils\MyDatabase.java
