@@ -1,10 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
 
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.FaceScanController">
-    <ImageView fx:id="cameraView" fitWidth="320" fitHeight="240"/>
-    <Button text="Capture Face" fx:id="captureButton" onAction="#handleCapture"/>
-</VBox>
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="Controller.FaceScanController"
+           styleClass="face-scan-root"
+           prefWidth="820" prefHeight="760">
+    <stylesheets>
+        <URL value="@style.css"/>
+        <URL value="@user-pro.css"/>
+    </stylesheets>
+
+    <VBox alignment="CENTER" spacing="22" maxWidth="700">
+        <padding><Insets top="36" right="36" bottom="36" left="36"/></padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="14" styleClass="face-scan-header">
+            <Region styleClass="face-scan-brand-mark"/>
+            <VBox spacing="2">
+                <Label text="Reconnaissance Faciale" styleClass="face-scan-title"/>
+                <Label text="Authentification biométrique sécurisée" styleClass="face-scan-subtitle"/>
+            </VBox>
+        </HBox>
+
+        <StackPane styleClass="face-scan-frame">
+            <ImageView fx:id="cameraView" fitWidth="640" fitHeight="480" preserveRatio="true"/>
+
+            <Region fx:id="scanLine" styleClass="face-scan-line" mouseTransparent="true"/>
+
+            <Region styleClass="face-scan-corner-tl" mouseTransparent="true"
+                    StackPane.alignment="TOP_LEFT">
+                <StackPane.margin><Insets top="14" left="14"/></StackPane.margin>
+            </Region>
+            <Region styleClass="face-scan-corner-tr" mouseTransparent="true"
+                    StackPane.alignment="TOP_RIGHT">
+                <StackPane.margin><Insets top="14" right="14"/></StackPane.margin>
+            </Region>
+            <Region styleClass="face-scan-corner-bl" mouseTransparent="true"
+                    StackPane.alignment="BOTTOM_LEFT">
+                <StackPane.margin><Insets bottom="14" left="14"/></StackPane.margin>
+            </Region>
+            <Region styleClass="face-scan-corner-br" mouseTransparent="true"
+                    StackPane.alignment="BOTTOM_RIGHT">
+                <StackPane.margin><Insets bottom="14" right="14"/></StackPane.margin>
+            </Region>
+        </StackPane>
+
+        <HBox alignment="CENTER" spacing="10">
+            <Region fx:id="statusDot" styleClass="face-scan-status-dot"/>
+            <Label fx:id="statusLabel" text="Initialisation de la caméra..." styleClass="face-scan-status"/>
+        </HBox>
+
+        <HBox alignment="CENTER" spacing="14">
+            <Button fx:id="cancelButton" text="Annuler" styleClass="face-scan-cancel" onAction="#handleClose"/>
+            <Button fx:id="captureButton" text="Capturer" styleClass="face-scan-capture" onAction="#handleCapture"/>
+        </HBox>
+    </VBox>
+</StackPane>

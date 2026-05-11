@@ -1,7 +1,7 @@
 package Controller;
 
 import Model.Utilisateur;
-import services.FacePPService;
+import services.FaceAuthService;
 import services.UserService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -28,6 +28,10 @@ public class SigninController {
     public void initialize() {
         errorLabel.setVisible(false);
         // Don't set action here since it's already in FXML
+
+        // Start a one-time background sync of users into the Face++ FaceSet
+        // so the first face-login click only has to issue a single /search.
+        FaceAuthService.kickoffBackgroundSync();
     }
 
     void openUserHomePage(Utilisateur user) {
@@ -133,20 +137,15 @@ public class SigninController {
                 new Thread(() -> {
                     try {
                         UserService userService = new UserService();
-                        List<Utilisateur> users = userService.read();
 
-                        Utilisateur matchedUser = null;
-
-                        for (Utilisateur u : users) {
-                            byte[] storedImage = u.getImage();
-                            if (storedImage == null) continue;
-
-                            double confidence = FacePPService.compareFaces(liveImage, storedImage);
-                            if (confidence >= 80.0) {
-                                matchedUser = u;
-                                break;
-                            }
-                        }
+                        // Login is a single /search call. The FaceSet is
+                        // populated by the background sync started in initialize().
+                        // If the user isn't registered yet, search returns -1
+                        // and we ask them to retry.
+                        int matchedId = FaceAuthService.searchUser(liveImage);
+                        Utilisateur matchedUser = (matchedId > 0)
+                                ? userService.findById(matchedId)
+                                : null;
 
                         if (matchedUser != null) {
                             final Utilisateur finalUser = matchedUser;
@@ -157,9 +156,8 @@ public class SigninController {
                                 });
                                 return;
                             }
-                            // Init both session holders so the chatbot and any
-                            // services that read services.UserSession also work
-                            // after a face login (mirrors the password-login path).
+                            // Mirror the password-login session bootstrap so the
+                            // chatbot and other services.UserSession consumers work.
                             services.UserSession.getInstance().initSession(
                                     finalUser.getId(), finalUser.getNom());
                             Controller.UserSession.setCurrentUser(finalUser);
@@ -168,10 +166,8 @@ public class SigninController {
                                 errorLabel.setStyle("-fx-text-fill: green;");
                                 errorLabel.setText("Face recognized! Welcome " + finalUser.getNom());
                                 if (role == 0 || role == 3 || role == 4) {
-                                    // Admin, Fournisseur, or Financier - open backend
                                     openHomePage(finalUser);
                                 } else {
-                                    // Agriculteur or Technicien - open frontend
                                     openUserHomePage(finalUser);
                                 }
                             });

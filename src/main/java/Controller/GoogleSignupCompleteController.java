@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import services.FaceAuthService;
 import services.GoogleSignInService;
 import services.UserService;
 import org.mindrot.jbcrypt.BCrypt;
@@ -136,7 +137,10 @@ public class GoogleSignupCompleteController {
             );
 
             UserService userService = new UserService();
-            userService.create(user);
+            int newId = userService.create(user);
+            user.setId(newId);
+
+            registerFaceAsync(user);
 
             showSuccess("Compte créé avec succès!");
 
@@ -177,7 +181,10 @@ public class GoogleSignupCompleteController {
             );
 
             UserService userService = new UserService();
-            userService.create(user);
+            int newId = userService.create(user);
+            user.setId(newId);
+
+            registerFaceAsync(user);
 
             // Log the user in as Agriculteur
             signinController.openUserHomePage(user);
@@ -189,6 +196,17 @@ public class GoogleSignupCompleteController {
             e.printStackTrace();
             showError("Erreur: " + e.getMessage());
         }
+    }
+
+    private static void registerFaceAsync(Utilisateur user) {
+        if (user.getId() <= 0 || user.getImage() == null || user.getImage().length == 0) return;
+        new Thread(() -> {
+            try {
+                FaceAuthService.registerUser(user.getId(), user.getImage());
+            } catch (Exception ex) {
+                System.err.println("Face registration failed for " + user.getEmail() + ": " + ex.getMessage());
+            }
+        }, "face-register-google").start();
     }
 
     private void showError(String message) {

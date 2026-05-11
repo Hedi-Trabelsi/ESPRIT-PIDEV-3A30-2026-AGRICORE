@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.mindrot.jbcrypt.BCrypt;
 import Model.Utilisateur;
+import services.FaceAuthService;
 import services.GoogleSignInService;
 import services.UserService;
 
@@ -142,7 +143,10 @@ public class SignupController {
             Utilisateur user = new Utilisateur(nom, prenom, dateNaissance, genre, adresse, phone, role, email, hashedPassword, profileImageBytes);
 
             UserService userService = new UserService();
-            userService.create(user);
+            int newUserId = userService.create(user);
+            user.setId(newUserId);
+
+            registerFaceAsync(user);
 
             showSuccess("Compte cree avec succes ! Veuillez patienter...");
             PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -153,6 +157,17 @@ public class SignupController {
             e.printStackTrace();
             showError("Erreur lors de la création !");
         }
+    }
+
+    private static void registerFaceAsync(Utilisateur user) {
+        if (user.getId() <= 0 || user.getImage() == null || user.getImage().length == 0) return;
+        new Thread(() -> {
+            try {
+                FaceAuthService.registerUser(user.getId(), user.getImage());
+            } catch (Exception ex) {
+                System.err.println("Face registration failed for " + user.getEmail() + ": " + ex.getMessage());
+            }
+        }, "face-register-signup").start();
     }
 
     private void showError(String message) {

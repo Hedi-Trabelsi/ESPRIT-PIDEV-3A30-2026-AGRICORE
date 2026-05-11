@@ -15,6 +15,7 @@ Controller\ForgotPasswordController.class
 Controller\UpdateSuiviAnimalController.class
 Controller\AddSuiviAnimalController.class
 Controller\UpdateEvenementController.class
+services\FacePPService$SearchResult.class
 services\AgricultureService$IndicatorResult.class
 Controller\ListeEquipementsController.class
 services\PdfService.class
@@ -121,12 +122,14 @@ services\AgricultureService.class
 Controller\ShowUsersController.class
 services\EquipementService$ForeignKeyRef.class
 Model\SuiviAnimal.class
+services\FaceRegistry.class
 org\example\Main.class
 services\UserSession.class
 Controller\EvenementParticipantController.class
 Controller\UserOperationsController.class
 Controller\FaceScanController.class
 Controller\EventManagementController$MapBridge.class
+services\FaceAuthService.class
 services\PanierService.class
 services\ParticipantService.class
 Model\AnomalyResult.class

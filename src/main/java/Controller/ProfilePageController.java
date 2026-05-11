@@ -40,6 +40,9 @@ public class ProfilePageController {
 
     // Buttons
     @FXML private Button editProfileDetailButton;
+    @FXML private Button webPlatformButton;
+
+    private static final String WEB_PLATFORM_URL = "https://127.0.0.1:8000";
 
     private Utilisateur loggedInUser;
     private UserHomeController userHomeController;
@@ -59,6 +62,27 @@ public class ProfilePageController {
                 }
             });
         }
+
+        if (webPlatformButton != null) {
+            webPlatformButton.setOnAction(e -> openWebPlatform());
+        }
+    }
+
+    private void openWebPlatform() {
+        try {
+            if (java.awt.Desktop.isDesktopSupported()
+                    && java.awt.Desktop.getDesktop().isSupported(java.awt.Desktop.Action.BROWSE)) {
+                java.awt.Desktop.getDesktop().browse(java.net.URI.create(WEB_PLATFORM_URL));
+                return;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        // Fallback: copy URL to clipboard so the user can paste into their browser
+        javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
+        content.putString(WEB_PLATFORM_URL);
+        javafx.scene.input.Clipboard.getSystemClipboard().setContent(content);
+        showAlert("Plateforme web", "Le lien a été copié dans le presse-papiers : " + WEB_PLATFORM_URL);
     }
 
     public void setUserData(Utilisateur user) {

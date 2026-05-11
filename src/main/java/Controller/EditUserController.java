@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.mindrot.jbcrypt.BCrypt;
+import services.FaceAuthService;
 import services.UserService;
 
 import javax.imageio.ImageIO;
@@ -197,6 +198,21 @@ public class EditUserController {
 
             // Save to database
             userService.update(currentUser);
+
+            // If the photo changed, re-register the face with Face++ in the background
+            // so face-login keeps matching this user.
+            if (isImageChanged && profileImageBytes != null && currentUser.getId() > 0) {
+                final int uid = currentUser.getId();
+                final byte[] img = profileImageBytes;
+                new Thread(() -> {
+                    try {
+                        FaceAuthService.registerUser(uid, img);
+                    } catch (Exception ex) {
+                        System.err.println("Face re-registration failed for user "
+                                + uid + ": " + ex.getMessage());
+                    }
+                }, "face-reregister-edit").start();
+            }
 
             showSuccess("Utilisateur mis à jour avec succès !");
 

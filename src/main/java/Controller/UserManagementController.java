@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import services.FaceAuthService;
 import services.UserService;
 
 import java.io.ByteArrayInputStream;
@@ -497,6 +498,9 @@ public class UserManagementController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 userService.delete(user.getId());
+                final int deletedId = user.getId();
+                new Thread(() -> FaceAuthService.unregisterUser(deletedId),
+                        "face-unregister-delete").start();
                 Platform.runLater(() -> {
                     loadAllUsers();
                     showAlert("Succes", "Utilisateur supprime avec succes !", Alert.AlertType.INFORMATION);

@@ -25,6 +25,50 @@
             <Insets bottom="40" left="40" right="40" top="30" />
         </padding>
 
+        <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+             Web platform promo — hero card linking to the Symfony app
+             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
+        <HBox styleClass="web-promo-card" alignment="CENTER_LEFT" spacing="32">
+            <!-- LEFT: copy + CTA -->
+            <VBox spacing="14" maxWidth="460" HBox.hgrow="ALWAYS">
+                <Label text="PLATEFORME WEB" styleClass="web-promo-chip" />
+                <Label text="AGRICORE, partout avec vous." styleClass="web-promo-headline" wrapText="true" />
+                <Label text="Pilotez votre exploitation depuis n'importe quel navigateur — tableaux de bord, rapports et équipes, synchronisés avec votre compte."
+                       styleClass="web-promo-subtext" wrapText="true" />
+                <HBox spacing="14" alignment="CENTER_LEFT">
+                    <Button fx:id="webPlatformButton" text="Ouvrir la plateforme  →" styleClass="web-promo-cta-primary" />
+                    <Label text="https://127.0.0.1:8000" styleClass="web-promo-url" />
+                </HBox>
+                <HBox spacing="22" alignment="CENTER_LEFT">
+                    <Label text="●  Synchronisé en temps réel" styleClass="web-promo-bullet" />
+                    <Label text="●  Aucun téléchargement" styleClass="web-promo-bullet" />
+                </HBox>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS" minWidth="20" />
+
+            <!-- RIGHT: faux browser preview -->
+            <VBox styleClass="web-promo-browser" alignment="TOP_LEFT">
+                <HBox styleClass="web-promo-browser-topbar" alignment="CENTER_LEFT" spacing="8">
+                    <Region styleClass="web-promo-dot-red" />
+                    <Region styleClass="web-promo-dot-yellow" />
+                    <Region styleClass="web-promo-dot-green" />
+                    <Region HBox.hgrow="ALWAYS" minWidth="14" />
+                    <Label text="agricore.app" styleClass="web-promo-browser-addr" />
+                    <Region HBox.hgrow="ALWAYS" minWidth="14" />
+                </HBox>
+                <VBox styleClass="web-promo-browser-body" spacing="12">
+                    <HBox spacing="10">
+                        <Region styleClass="web-promo-tile-a" HBox.hgrow="ALWAYS" />
+                        <Region styleClass="web-promo-tile-b" HBox.hgrow="ALWAYS" />
+                    </HBox>
+                    <Region styleClass="web-promo-bar" />
+                    <Region styleClass="web-promo-bar-narrow" />
+                    <Region styleClass="web-promo-bar" />
+                </VBox>
+            </VBox>
+        </HBox>
+
         <!-- Header with Welcome Message -->
         <VBox alignment="CENTER" spacing="8">
             <Label styleClass="profile-welcome-title" text="Mon Profil" />
