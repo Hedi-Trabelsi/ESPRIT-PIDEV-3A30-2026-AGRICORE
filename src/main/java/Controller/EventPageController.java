@@ -865,35 +865,30 @@ public class EventPageController {
     private void showEventDetails(EvennementAgricole ev, String gradient) {
         mainContentVBox.getChildren().clear();
 
-        // --- WRAPPER FOR MODAL SUPPORT ---
-        // We use a StackPane so the registration form can float on top
+        // 1. Root Container for Modal Support
         StackPane stackRoot = new StackPane();
         stackRoot.setAlignment(Pos.TOP_CENTER);
 
+        // 2. Main Scrollable Content
         VBox layout = new VBox(25);
+        layout.setId("detailCard"); // CRITICAL: Used by showRegistrationForm for blur
         layout.setPadding(new Insets(30));
         layout.setStyle("-fx-background-color: #f4f7f6;");
         layout.setAlignment(Pos.TOP_CENTER);
-
-        // ID needed for the blur effect in showRegistrationForm
-        layout.setId("detailCard");
 
         ScrollPane globalScroll = new ScrollPane(layout);
         globalScroll.setFitToWidth(true);
         globalScroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
 
-        // --- BARRE DE NAVIGATION ---
+        // --- NAVIGATION BAR ---
         HBox nav = new HBox(20);
         nav.setAlignment(Pos.CENTER_LEFT);
         nav.setPadding(new Insets(10, 20, 10, 20));
-        nav.setStyle("-fx-background-color: white; -fx-background-radius: 20; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 5);");
+        nav.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 15, 0, 0, 5);");
 
         Button btnBack = new Button("←");
         btnBack.setStyle("-fx-background-color: #1a3c1a; -fx-text-fill: white; -fx-background-radius: 50; -fx-cursor: hand;");
-        btnBack.setOnAction(e -> {
-            // Logic to return to list
-        });
+        btnBack.setOnAction(e -> { /* Logic to return to list */ });
 
         VBox titleGroup = new VBox(2);
         Label headerTitle = new Label("Détails de l'événement");
@@ -901,12 +896,11 @@ public class EventPageController {
         titleGroup.getChildren().addAll(headerTitle, new Label("Informations complètes"));
         nav.getChildren().addAll(btnBack, titleGroup);
 
-        // --- CONTENU PRINCIPAL ---
+        // --- MAIN CARD ---
         VBox detailsCard = new VBox(20);
         detailsCard.setPadding(new Insets(30));
         detailsCard.setMaxWidth(800);
-        detailsCard.setStyle("-fx-background-color: white; -fx-background-radius: 25; " +
-                "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 20, 0, 0, 10);");
+        detailsCard.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 20, 0, 0, 10);");
 
         HBox topRow = new HBox(20);
         topRow.setAlignment(Pos.CENTER_LEFT);
@@ -917,8 +911,6 @@ public class EventPageController {
         badge.setStyle("-fx-background-color: #E8F5E9; -fx-text-fill: #2E7D32; -fx-padding: 5 15; -fx-background-radius: 15; -fx-font-weight: bold;");
         topRow.getChildren().addAll(title, badge);
 
-        Label descLabel = new Label("Description");
-        descLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 16px;");
         Text descText = new Text(ev.getDescription());
         descText.setWrappingWidth(700);
         descText.setStyle("-fx-fill: #555; -fx-font-size: 14px;");
@@ -929,30 +921,40 @@ public class EventPageController {
         infoGrid.add(createDetailItem("📅 Date", ev.getDate().toString()), 0, 0);
         infoGrid.add(createDetailItem("📍 Lieu", ev.getLieu()), 1, 0);
 
-        // --- ACTIONS ---
+        // --- ACTIONS LOGIC ---
         HBox actions = new HBox(15);
         actions.setPadding(new Insets(20, 0, 0, 0));
 
-        // 1. CHAT BUTTON
         Button btnChat = new Button("Rejoindre la discussion");
-        btnChat.setStyle("-fx-background-color: #e8f5e9; -fx-text-fill: #1a3c1a; -fx-font-weight: bold; " +
-                "-fx-background-radius: 30; -fx-padding: 12 30; -fx-cursor: hand;");
+        btnChat.setStyle("-fx-background-color: #e8f5e9; -fx-text-fill: #1a3c1a; -fx-font-weight: bold; -fx-background-radius: 30; -fx-padding: 12 30; -fx-cursor: hand;");
         btnChat.setOnAction(e -> showCommunityChat(ev, gradient));
 
-        // 2. PARTICIPATE BUTTON (Calls your form)
-        Button btnParticipate = new Button("S'inscrire à l'événement 🎟");
-        btnParticipate.setStyle("-fx-background-color: #1a3c1a; -fx-text-fill: white; -fx-font-weight: bold; " +
-                "-fx-background-radius: 30; -fx-padding: 12 30; -fx-cursor: hand;");
+        Button btnAction = new Button();
+        btnAction.setStyle("-fx-font-weight: bold; -fx-background-radius: 30; -fx-padding: 12 30; -fx-cursor: hand;");
 
-        // CALLING YOUR FORM HERE
-        btnParticipate.setOnAction(e -> showRegistrationForm(ev));
+        // TOGGLE: Participate or Cancel
+        if (reservedEventIds.contains(ev.getIdEvennement())) {
+            btnAction.setText("Annuler l'inscription ✕");
+            btnAction.setStyle(btnAction.getStyle() + "-fx-background-color: #e74c3c; -fx-text-fill: white;");
+            btnAction.setOnAction(e -> {
+                try {
+                    partService.deleteParticipation(CURRENT_USER_ID, ev.getIdEvennement());
+                    reservedEventIds.remove(ev.getIdEvennement());
+                    showEventDetails(ev, gradient); // Refresh UI
+                } catch (Exception ex) {
+                    showAlert("Erreur", "Impossible d'annuler l'inscription.");
+                }
+            });
+        } else {
+            btnAction.setText("S'inscrire à l'événement 🎟");
+            btnAction.setStyle(btnAction.getStyle() + "-fx-background-color: #1a3c1a; -fx-text-fill: white;");
+            btnAction.setOnAction(e -> showRegistrationForm(ev));
+        }
 
-        actions.getChildren().addAll(btnChat, btnParticipate);
+        actions.getChildren().addAll(btnChat, btnAction);
+        detailsCard.getChildren().addAll(topRow, new Separator(), new Label("Description"), descText, infoGrid, actions);
 
-        detailsCard.getChildren().addAll(topRow, new Separator(), descLabel, descText, infoGrid, actions);
         layout.getChildren().addAll(nav, detailsCard);
-
-        // Add the scrollpane to the stackroot, then stackroot to main content
         stackRoot.getChildren().add(globalScroll);
         mainContentVBox.getChildren().add(stackRoot);
     }

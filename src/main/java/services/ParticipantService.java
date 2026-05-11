@@ -192,4 +192,13 @@ public class ParticipantService {
         }
         return "Administrateur";
     }
+
+    public void deleteParticipation(int userId, int eventId) throws SQLException {
+        String query = "DELETE FROM participants WHERE id_utilisateur = ? AND id_ev = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, eventId);
+            ps.executeUpdate();
+        }
+    }
 }
